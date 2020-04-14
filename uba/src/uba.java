@@ -22,6 +22,7 @@ import RabbitClient.ConnectRabbit;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import javax.swing.JMenuBar;
 
 
 public class uba {
@@ -57,11 +58,11 @@ public class uba {
 	 */
 	public uba() throws IOException, TimeoutException {
 	
-		
+		/*
 		ConnectRabbit myRabbit = new ConnectRabbit("11.50.0.8", 5672, "vh_switch", "pulsar_atm", "p4ssw0rd", 3);
 		
 		myRabbit.OpenConnection("11.50.0.8", 5672, "pulsar_atm", "p4ssw0rd", "vh_switch", true, 32000);
-		
+		*/
 		
 		
 		logger.debug("this is an DEBUG message");
@@ -161,6 +162,7 @@ public class uba {
 		cbLoopBack.setBounds(514, 23, 87, 24);
 		panel_conexion.add(cbLoopBack);
 		
+				
 	
 		JPanel panel_estatus = new JPanel();
 		panel_estatus.setBorder(new TitledBorder(null, "Estatus", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -334,38 +336,83 @@ public class uba {
 		panel_comandos.add(lblNewLabel_2_1);
 		
 		JButton btnOptionalFuncReq = new JButton("Optional Func (85h)");
+		btnOptionalFuncReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x85, protocol.jcmMessage,true);	
+			}
+		});
 		btnOptionalFuncReq.setBounds(10, 192, 179, 25);
 		panel_comandos.add(btnOptionalFuncReq);
 		
 		JButton btnEnableDisDenomReq = new JButton("En/Des Denom (80h)");
+		btnEnableDisDenomReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x80, protocol.jcmMessage,true);	
+			}
+		});
 		btnEnableDisDenomReq.setBounds(10, 155, 179, 25);
 		panel_comandos.add(btnEnableDisDenomReq);
 		
 		JButton btnInhibitReq = new JButton("Inhibit (83h)");
+		btnInhibitReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x83, protocol.jcmMessage,true);	
+			}
+		});
 		btnInhibitReq.setBounds(609, 155, 157, 25);
 		panel_comandos.add(btnInhibitReq);
 		
 		JButton btnDirectionReq = new JButton("Direction (84h)");
+		btnDirectionReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x84, protocol.jcmMessage,true);	
+			}
+		});
 		btnDirectionReq.setBounds(778, 155, 167, 25);
 		panel_comandos.add(btnDirectionReq);
 		
 		JButton btnSecurotyDenomReq = new JButton("Security Denom (81h)");
+		btnSecurotyDenomReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x81, protocol.jcmMessage,true);	
+			}
+		});
 		btnSecurotyDenomReq.setBounds(201, 155, 179, 25);
 		panel_comandos.add(btnSecurotyDenomReq);
 		
 		JButton btnCommunicationModeReq = new JButton("Communication Mode (82h)");
+		btnCommunicationModeReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x82, protocol.jcmMessage,true);	
+			}
+		});
 		btnCommunicationModeReq.setBounds(392, 155, 205, 25);
 		panel_comandos.add(btnCommunicationModeReq);
 		
 		JButton btnVersionRequest = new JButton("Version Request (88h)");
+		btnVersionRequest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x88, protocol.jcmMessage,true);	
+			}
+		});
 		btnVersionRequest.setBounds(201, 192, 179, 25);
 		panel_comandos.add(btnVersionRequest);
 		
 		JButton btnBootVersionrequest = new JButton("Boot Version Request (89h)");
+		btnBootVersionrequest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x89, protocol.jcmMessage,true);	
+			}
+		});
 		btnBootVersionrequest.setBounds(392, 192, 205, 25);
 		panel_comandos.add(btnBootVersionrequest);
 		
 		JButton btnCurrencyAssingRequest = new JButton("Currency Assing Req (8Ah)");
+		btnCurrencyAssingRequest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x8A, protocol.jcmMessage,true);	
+			}
+		});
 		btnCurrencyAssingRequest.setBounds(609, 192, 205, 25);
 		panel_comandos.add(btnCurrencyAssingRequest);
 		
@@ -374,6 +421,11 @@ public class uba {
 		panel_comandos.add(lblNewLabel_2_1_1);
 		
 		JButton btnStatusRequestExt = new JButton("Stat Req Ext (+1Ah)");
+		btnStatusRequestExt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x1a, (byte)0x1, (byte)0x2, protocol.jcmMessage);
+			}
+		});
 		btnStatusRequestExt.setBounds(10, 255, 163, 25);
 		panel_comandos.add(btnStatusRequestExt);
 		
@@ -388,24 +440,36 @@ public class uba {
 		
 		JButton btnPayOut = new JButton("Pay Out (+4Ah)");
 		btnPayOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x4a, (byte)0x1, (byte)0x2, protocol.jcmMessage);
-								
+			public void actionPerformed(ActionEvent e) {				
+				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x4a, (byte)0x1, (byte)0x2, protocol.jcmMessage);								
 			}
 		});
 		btnPayOut.setBounds(349, 255, 205, 25);
 		panel_comandos.add(btnPayOut);
 		
 		JButton btnCollect = new JButton("Collect (+4Bh+Data)");
+		btnCollect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnCollect.setBounds(566, 255, 179, 25);
 		panel_comandos.add(btnCollect);
 		
 		JButton btnClear = new JButton("Clear (+4Ch)");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x4C, (byte)0x1, (byte)0x2, protocol.jcmMessage);
+			}
+		});
 		btnClear.setBounds(756, 255, 144, 25);
 		panel_comandos.add(btnClear);
 		
 		JButton btnEmergencyStop = new JButton("Emergency Stop (+4Dh)");
+		btnEmergencyStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x4D, (byte)0x1, (byte)0x2, protocol.jcmMessage);
+			}
+		});
 		btnEmergencyStop.setBounds(10, 292, 187, 25);
 		panel_comandos.add(btnEmergencyStop);
 		
@@ -413,7 +477,7 @@ public class uba {
 		btnUnitInformationRequest.setBounds(612, 329, 205, 25);
 		panel_comandos.add(btnUnitInformationRequest);
 		
-		JButton btnRecycleRefillModeSetting = new JButton("Recycle\u00A0Refill\u00A0Mode\u00A0Setting (D4h+Data)");
+		JButton btnRecycleRefillModeSetting = new JButton("Recycle Refill Mode Setting (D4h+Data)");
 		btnRecycleRefillModeSetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -438,6 +502,10 @@ public class uba {
 		panel_comandos.add(btnCurrentCountSetting);
 		
 		JButton btnRecycleCurrencyReqSetting = new JButton("Recycle Currency Req (+90h)");
+		btnRecycleCurrencyReqSetting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnRecycleCurrencyReqSetting.setBounds(10, 390, 205, 25);
 		panel_comandos.add(btnRecycleCurrencyReqSetting);
 		
