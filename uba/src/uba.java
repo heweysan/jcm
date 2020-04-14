@@ -18,6 +18,7 @@ import java.lang.System;
 
 import com.google.gson.Gson;
 
+import RabbitClient.ConnectRabbit;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -56,6 +57,13 @@ public class uba {
 	 */
 	public uba() throws IOException, TimeoutException {
 	
+		
+		ConnectRabbit myRabbit = new ConnectRabbit("11.50.0.8", 5672, "vh_switch", "pulsar_atm", "p4ssw0rd", 3);
+		
+		myRabbit.OpenConnection("11.50.0.8", 5672, "pulsar_atm", "p4ssw0rd", "vh_switch", true, 32000);
+		
+		
+		
 		logger.debug("this is an DEBUG message");
 		logger.info("this is an INFO message");
 		logger.warn("this is an WARN message");
@@ -73,6 +81,10 @@ public class uba {
       
 		System.out.println(gson.toJson(myEntry));
 			
+		Config myConf = new Config();
+		myConf.getPulsarParam("HostRabbit");
+		
+		
 		initialize();		
 	}
 
@@ -270,6 +282,11 @@ public class uba {
 		panel_comandos.add(btnHold);
 		
 		JButton btnWait = new JButton("Wait (45h)");
+		btnWait.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0x45, protocol.jcmMessage,true);	
+			}
+		});
 		btnWait.setBounds(869, 28, 117, 25);
 		panel_comandos.add(btnWait);
 		
@@ -277,7 +294,12 @@ public class uba {
 		lblNewLabel_2.setBounds(10, 66, 167, 14);
 		panel_comandos.add(lblNewLabel_2);
 		
-		JButton btnEnableDisDenom = new JButton("En/Des Denom (C0h)");
+		JButton btnEnableDisDenom = new JButton("En/Des Denom (C0h)"); //+DATA
+		btnEnableDisDenom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)5, (byte)0xC0, protocol.jcmMessage,true);	
+			}
+		});
 		btnEnableDisDenom.setBounds(10, 92, 167, 25);
 		panel_comandos.add(btnEnableDisDenom);
 		
@@ -356,6 +378,11 @@ public class uba {
 		panel_comandos.add(btnStatusRequestExt);
 		
 		JButton btnStack3 = new JButton("Stack-3 (49h)");
+		btnStack3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)0x5, (byte)0x49, protocol.jcmMessage,false);
+			}
+		});
 		btnStack3.setBounds(185, 255, 152, 25);
 		panel_comandos.add(btnStack3);
 		
