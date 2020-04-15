@@ -25,6 +25,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	private state flg1 = state.SYNC;
 	
 	private byte lastMsg = 0x0;
+	private byte lastTx = 0x0;
+	
 	
 	uart(){
 
@@ -48,8 +50,16 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	public void serialTx(byte[] msg) {		
         try {
+        	/*
             if(msg[2] != 0x11)
             	System.out.println(baitsToString("uart->serialTx", msg));
+            */
+            if(msg[2] != lastTx) {
+            	lastTx = msg[2];
+            	System.out.println(baitsToString("\nuart->serialTx", msg));
+            }
+            else
+            	System.out.print(".");
             
             outputStream.write(msg,0,msg[1]);
         

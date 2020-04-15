@@ -118,7 +118,7 @@ public class uba {
 		
 		JPanel panel_conexion = new JPanel();
 		panel_conexion.setBorder(new TitledBorder(null, "Puerto Serial", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_conexion.setBounds(0, 3, 620, 100);
+		panel_conexion.setBounds(0, 3, 637, 100);
 		frame.getContentPane().add(panel_conexion);
 		panel_conexion.setLayout(null);
 		
@@ -149,14 +149,18 @@ public class uba {
 		panel_conexion.add(comboBox_1);
 		
 		JPanel panel_firmware = new JPanel();
-		panel_firmware.setBounds(12, 52, 501, 44);
+		panel_firmware.setBounds(12, 52, 615, 44);
 		panel_conexion.add(panel_firmware);
 		panel_firmware.setBorder(new TitledBorder(null, "Firmware:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_firmware.setLayout(null);
 		
 		final JLabel label = new JLabel("");
-		label.setBounds(85, 17, 389, 15);
+		label.setBounds(10, 18, 329, 15);
 		panel_firmware.add(label);
+		
+		final JLabel lblRecyclerVersion = new JLabel("");
+		lblRecyclerVersion.setBounds(364, 18, 225, 14);
+		panel_firmware.add(lblRecyclerVersion);
 		
 		final JCheckBox cbLoopBack = new JCheckBox("LoopBack\r\n");
 		cbLoopBack.setBounds(514, 23, 87, 24);
@@ -316,6 +320,7 @@ public class uba {
 		JButton btnInhibit = new JButton("Inhibit (C3h)");
 		btnInhibit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("INHIBIT");
 				protocol.jcmMessage[3] = 0x01;
 				srlprt.id003_format((byte)0x6, (byte)0xC3, protocol.jcmMessage,false);
 			}
@@ -356,6 +361,7 @@ public class uba {
 		JButton btnInhibitReq = new JButton("Inhibit (83h)");
 		btnInhibitReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println(" CONSULTA DE INHIBIT");
 				srlprt.id003_format((byte)5, (byte)0x83, protocol.jcmMessage,true);	
 			}
 		});
@@ -423,7 +429,7 @@ public class uba {
 		JButton btnStatusRequestExt = new JButton("Stat Req Ext (+1Ah)");
 		btnStatusRequestExt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x1a, (byte)0x1, (byte)0x2, protocol.jcmMessage);
+				srlprt.id003_format_ext((byte)0x7, (byte)0xf0, (byte)0x20, (byte)0x1a, (byte)0x1, (byte)0x2, protocol.jcmMessage);
 			}
 		});
 		btnStatusRequestExt.setBounds(10, 255, 163, 25);
@@ -441,7 +447,7 @@ public class uba {
 		JButton btnPayOut = new JButton("Pay Out (+4Ah)");
 		btnPayOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x4a, (byte)0x1, (byte)0x2, protocol.jcmMessage);								
+				srlprt.id003_format_ext((byte)0x9, (byte)0xf0, (byte)0x20, (byte)0x4a, (byte)0x1, (byte)0x1, protocol.jcmMessage);								
 			}
 		});
 		btnPayOut.setBounds(349, 255, 205, 25);
@@ -474,6 +480,11 @@ public class uba {
 		panel_comandos.add(btnEmergencyStop);
 		
 		JButton btnUnitInformationRequest = new JButton("Unit Information Req (92h)");
+		btnUnitInformationRequest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format((byte)0x5,  (byte)0x92,  protocol.jcmMessage,false);
+			}
+		});
 		btnUnitInformationRequest.setBounds(612, 329, 205, 25);
 		panel_comandos.add(btnUnitInformationRequest);
 		
@@ -494,6 +505,15 @@ public class uba {
 		panel_comandos.add(btnRecycleCountSetting);
 		
 		JButton btnRecycleCurrencySetting = new JButton("Recycle Currency Setting (+D0h+Data)");
+		btnRecycleCurrencySetting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				protocol.jcmMessage[7] = 0x01;
+				protocol.jcmMessage[8] = 0x20;  //0x02:20 0x04:50 0x08:100  0x10:200   0x20:500; 
+				protocol.jcmMessage[9] = 0x00;
+				protocol.jcmMessage[10] = 0x02;
+				srlprt.id003_format_ext((byte)0x0D, (byte)0xf0, (byte)0x20, (byte)0xD0, (byte) 0x20, (byte)0x0, protocol.jcmMessage);
+			}
+		});
 		btnRecycleCurrencySetting.setBounds(201, 292, 256, 25);
 		panel_comandos.add(btnRecycleCurrencySetting);
 		
@@ -504,12 +524,18 @@ public class uba {
 		JButton btnRecycleCurrencyReqSetting = new JButton("Recycle Currency Req (+90h)");
 		btnRecycleCurrencyReqSetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x07, (byte)0xf0, (byte)0x20, (byte)0x90, (byte) 0x40, (byte)0x0, protocol.jcmMessage);
 			}
 		});
 		btnRecycleCurrencyReqSetting.setBounds(10, 390, 205, 25);
 		panel_comandos.add(btnRecycleCurrencyReqSetting);
 		
 		JButton btnRecycleCurrencySetting_1_1 = new JButton("Recycle Software Version Req (+93h)");
+		btnRecycleCurrencySetting_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x07, (byte)0xf0, (byte)0x20, (byte)0x93, (byte) 0x00, (byte)0x0, protocol.jcmMessage);
+			}
+		});
 		btnRecycleCurrencySetting_1_1.setBounds(671, 390, 256, 25);
 		panel_comandos.add(btnRecycleCurrencySetting_1_1);
 		
@@ -522,6 +548,11 @@ public class uba {
 		panel_comandos.add(btnRecycleKeySetting_1);
 		
 		JButton btnRecycleCurrencyReqSetting_1_1 = new JButton("Recycle Count Req (+92h)");
+		btnRecycleCurrencyReqSetting_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				srlprt.id003_format((byte)0x5, (byte)0x92, protocol.jcmMessage,false);
+			}
+		});
 		btnRecycleCurrencyReqSetting_1_1.setBounds(461, 390, 187, 25);
 		panel_comandos.add(btnRecycleCurrencyReqSetting_1_1);
 		
@@ -530,20 +561,36 @@ public class uba {
 		panel_comandos.add(btnRecycleCurrencySetting_1_1_1);
 		
 		JButton btnRecycleCurrencySetting_1_1_1_1 = new JButton("Total Count Req (+A0h)");
+		btnRecycleCurrencySetting_1_1_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x07, (byte)0xf0, (byte)0x20, (byte)0xA0, (byte) 0x00, (byte)0x0, protocol.jcmMessage);
+			}
+		});
 		btnRecycleCurrencySetting_1_1_1_1.setBounds(235, 427, 224, 25);
 		panel_comandos.add(btnRecycleCurrencySetting_1_1_1_1);
 		
 		JButton btnRecycleCurrencySetting_1_1_1_1_1 = new JButton("Total Count Clear (+A1h)");
+		btnRecycleCurrencySetting_1_1_1_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x07, (byte)0xf0, (byte)0x20, (byte)0xA1, (byte) 0x00, (byte)0x0, protocol.jcmMessage);
+			}
+		});
 		btnRecycleCurrencySetting_1_1_1_1_1.setBounds(479, 427, 210, 25);
 		panel_comandos.add(btnRecycleCurrencySetting_1_1_1_1_1);
 		
-		JButton btnRecycleCurrencySetting_1_1_1_1_1_1 = new JButton("Current Coount Req (+A2h)");
+		JButton btnRecycleCurrencySetting_1_1_1_1_1_1 = new JButton("Current Count Req (+A2h)");
+		btnRecycleCurrencySetting_1_1_1_1_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				srlprt.id003_format_ext((byte)0x07, (byte)0xf0, (byte)0x20, (byte)0xA2, (byte) 0x00, (byte)0x0, protocol.jcmMessage);
+			}
+		});
 		btnRecycleCurrencySetting_1_1_1_1_1_1.setBounds(701, 427, 236, 25);
 		panel_comandos.add(btnRecycleCurrencySetting_1_1_1_1_1_1);
 		
 		JButton btnReinhibitch = new JButton("REInhibit (C3h)");
 		btnReinhibitch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("RE INHIBIT");
 				protocol.jcmMessage[3] = 0x00;
 				srlprt.id003_format((byte)0x6, (byte)0xC3, protocol.jcmMessage,false);
 			}
@@ -578,6 +625,9 @@ public class uba {
 	        	lblNewLabel_1.setText(String.format("%d Pesos", uart.bill));
 	        }else if (evt.getSource() == "clearbill"){
 	        	lblNewLabel_1.setText("");
+	        }
+	        else if (evt.getSource() == "recyclerVersion"){
+	        	lblRecyclerVersion.setText(new String(uart.recyclerVersion));
 	        }
 
 	      }

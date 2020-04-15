@@ -1,14 +1,15 @@
 import java.util.Arrays;
 
 public class protocol extends kermit{
-	public static byte[] jcmMessage = new byte[10];
+	public static byte[] jcmMessage = new byte[15];
 	public static int bill;
 	static byte[] version 	= new byte[50];	
+	static byte[] recyclerVersion 	= new byte[50];	
 	static boolean accept	= false;
 	static boolean rturn 	= false;
 	
 	public byte lastMsg = 0x0;
-	
+	private byte lastProtocol = 0x0;
 	public static final byte SYNC 						= (byte) 0xFC;
 	
 	/* ---------------------------------- */
@@ -185,8 +186,14 @@ public class protocol extends kermit{
 	
 	void id003_format(byte LNG, byte CMD, byte[] DATA, boolean zeroData ){
 		
-		if(CMD != 0x11)
-			System.out.println("protocol id003_format " + baitsToString("",DATA));
+		/*
+		if(CMD != lastProtocol) {
+			lastProtocol = CMD;
+			System.out.println("\nprotocol id003_format " + baitsToString("",DATA));
+		}
+		else
+			System.out.print("+");
+		*/
 		
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
@@ -209,7 +216,7 @@ public class protocol extends kermit{
 	
 	void id003_format_ext(byte LNG, byte EXT_CMD, byte UNIT, byte CMD, byte DATA1, byte DATA2,  byte[] DATA){
 		
-		System.out.println("protocol id003_format LNG [" + Integer.toHexString(LNG) + "] CMD [" + Integer.toHexString(CMD) + "] " + baitsToString("",DATA));
+		System.out.println("protocol id003_format_ext LNG [" + Integer.toHexString(LNG) + "] CMD [" + Integer.toHexString(CMD) + "] " + baitsToString("",DATA));
 		
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
@@ -218,10 +225,12 @@ public class protocol extends kermit{
 		DATA[4] = CMD;
 		DATA[5] = DATA1;
 		DATA[6] = DATA2;
-		DATA[7] = 0;
+		/*
+		if(DATA[7] == 0x0)
+			DATA[7] = 0;
 		DATA[8] = 0;
 		DATA[9] = 0;
-		
+		*/
 		int chkres = this.crc_kermit(DATA, (byte)(LNG - 2));
 		
 		DATA[LNG-2] = (byte) (chkres & 0xFF);
@@ -268,6 +277,9 @@ public class protocol extends kermit{
     	}
         switch(jcmResponse[2]){
         
+	        case 0x4b: // 0x50 ACK
+	        	if(mostrar) System.out.println(baitsToString("protocol processing INVALID COMMAND", jcmResponse));
+	        	break;
             case ACK: // 0x50 ACK
             	if(mostrar) System.out.println(baitsToString("protocol processing ACK", jcmResponse));
             	id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //STATUS_REQUEST
@@ -357,7 +369,7 @@ public class protocol extends kermit{
             	break;
             	
             case SR_INHIBIT: //0x1A DISABLE (INHIBIT)
-            	id003_format((byte)7, (byte) 0xC5, jcmMessage,true); // CMD_OPTIONAL_FUNCTION
+            	if(mostrar) System.out.println(baitsToString("protocol processing DISABLE (INHIBIT)", jcmResponse));
             	break;
             	
             case SR_INITIALIZE: // 0x1B INITIALIZE
@@ -485,18 +497,20 @@ public class protocol extends kermit{
             	id003_format((byte)5, (byte) 0x83, jcmMessage,true); // SSR_INHIBIT_ACCEPTOR
             	break;
             case SCR_DIRECTION: //0xC4 CMD_DIRECTION
+            	if(mostrar) System.out.println(baitsToString("protocol processing CMD_DIRECTION", jcmResponse));
             	//TODO: Checar el DATA            		
-            	id003_format((byte)7, (byte) 0xC5, jcmMessage,true); // CMD_OPTIONAL_FUNCTION
+            	id003_format((byte)5, (byte) 0x50, jcmMessage,true); // ACK
             	break;
             case SCR_OPTIONAL_FUNCTION: //0xC5 CMD_DIRECTION
-            	//TODO: Checar el DATA            		
-            	id003_format((byte)7, (byte) 0xC5, jcmMessage,true); // CMD_OPTIONAL_FUNCTION
+            	//TODO: Checar el DATA       
+            	if(mostrar) System.out.println(baitsToString("protocol processing SCR_OPTIONAL_FUNCTION", jcmResponse));            	
             	break;            	
             case SSRR_ENABLE_DENOM: //0x80 SSR_EN_DIS_DENOMI
             	//TODO: Checar el DATA
             	id003_format((byte)5, (byte) SSRR_SECURITY, jcmMessage,true); // SSRR_ENABLE_DENOM
             	break;
             case SSRR_SECURITY: // 0x81 SSRR_SECURITY
+            	if(mostrar) System.out.println(baitsToString("protocol processing SSRR_SECURITY", jcmResponse));
             	//TODO: Checar el DATA
             	id003_format((byte)5, (byte) 0x85, jcmMessage,true); // SSR_OPTIONAL_FUNCTION
             	break;         
@@ -509,6 +523,7 @@ public class protocol extends kermit{
             	id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST
             	break;
             case SSRR_DIRECTION: // 0x84 SSRR_DIRECTION
+            	if(mostrar) System.out.println(baitsToString("protocol processing SSRR_DIRECTION", jcmResponse));
             	//TODO: Checar el DATA
             	id003_format((byte)6, (byte) 0xC3, jcmMessage,true); // SSRR_DIRECTION
             	break;
@@ -531,7 +546,6 @@ public class protocol extends kermit{
             	id003_format((byte)7, (byte) 0xC0, jcmMessage,true); // CMD_EN_DIS_DENOMI
             	break;
             	
-            	
             case 0x40: // POWER_UP            	
             	if(mostrar) System.out.println(baitsToString("protocol processing POWER UP", jcmResponse));
             	id003_format((byte)5, (byte) 0x40, jcmMessage,true); // RESET_ 
@@ -540,6 +554,37 @@ public class protocol extends kermit{
             	if(mostrar) System.out.println(baitsToString("protocol processing POWER_UP_WITH_BILL_IN_ACCEPTOR", jcmResponse));
             	break;
             
+            case (byte)0xF0: // ALGUN EXTENDED
+            	
+            	
+            	switch(jcmResponse[4]) {
+	            	case (byte)0xA0:
+	            		if(mostrar) System.out.println(baitsToString("protocol processing  TOTAL COUNT REQUEST", jcmResponse));
+	            		break;
+	            	
+	            	case (byte)0xA2:
+	            		if(mostrar) System.out.println(baitsToString("protocol processing  CURRENT COUNT REQUEST", jcmResponse));
+	            		break;
+	            	case (byte)0x93:
+	            		if(mostrar) System.out.println(baitsToString("protocol processing Recycler Software Version Request", jcmResponse));
+            			System.arraycopy(jcmResponse, 5, protocol.recyclerVersion, 0,jcmResponse[1]-7);
+            			
+            			MyClass.fireMyEvent(new MyEvent("recyclerVersion"));
+            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //
+	            		break;
+	            	default:
+	            		if(mostrar) System.out.println(baitsToString("protocol processing Algun Extended", jcmResponse));
+	            		break;
+            	}
+            	
+            	break;	
+            case (byte)0x92: // UNIT INFORMATION RESPONSE
+            	if(mostrar) System.out.println(baitsToString("protocol processing UNIT INFORMATION RESPONSE", jcmResponse));
+            	//TODO: Checar el DATA   
+            	
+            	break;	
+            	
+            	
             default:
             	id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST
             	break;

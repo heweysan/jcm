@@ -1,5 +1,5 @@
-2020-04-10 20:34:10,260 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
-2020-04-10 20:34:10,268 INFO uba [AWT-EventQueue-0] this is an INFO message
-2020-04-10 20:34:10,268 WARN uba [AWT-EventQueue-0] this is an WARN message
-2020-04-10 20:34:10,268 ERROR uba [AWT-EventQueue-0] this is an ERROR message
-2020-04-10 20:34:10,268 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-04-14 21:06:55,319 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-04-14 21:06:55,328 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-04-14 21:06:55,328 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-04-14 21:06:55,328 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-04-14 21:06:55,328 FATAL uba [AWT-EventQueue-0] this is an FATAL message
