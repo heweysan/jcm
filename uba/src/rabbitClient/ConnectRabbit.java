@@ -1,4 +1,4 @@
-package RabbitClient;
+package rabbitClient;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
@@ -91,6 +91,19 @@ public class ConnectRabbit  {
 		
 		try (Connection connection = factory.newConnection();
 		    Channel channel = connection.createChannel()) {
+			
+			/*
+			//creamos los headers
+			MessageProperties props = MessagePropertiesBuilder.newInstance().setContentType(MessageProperties.CONTENT_TYPE_JSON).build();
+			props.setHeader("headerKey1", "headerValue1");
+
+			Message msg = new Message("{'body':'value1','body2':value2}".getBytes(), props);        
+
+			
+			
+			rabbitTemplate.send("exchange.direct.one", new String(), msg);
+			*/
+			
 			//BasicProperties basicProperties = new BasicProperties.Builder().headers(headers);
 			
 			

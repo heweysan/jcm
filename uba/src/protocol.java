@@ -162,7 +162,9 @@ public class protocol extends kermit{
 	public static final byte SSRR_E_TOTAL_COUNT 				= (byte) 0xA0;	//F0 +DATA
 	public static final byte SSRR_E_TOTAL_COUNT_CLEAR 			= (byte) 0xA1;	//F0 +DATA
 	public static final byte SSRR_E_CURRENT_COUNT 				= (byte) 0xA2;	//F0 +DATA
-		
+	
+	public static final byte INVALID_COMMAND					= (byte) 0x4B;	
+	
 	
 	protocol (){
 		jcmMessage[0]= (byte)0xFC;  //SYNC siempre FC
@@ -277,7 +279,7 @@ public class protocol extends kermit{
     	}
         switch(jcmResponse[2]){
         
-	        case 0x4b: // 0x50 ACK
+	        case INVALID_COMMAND: // 0x4b Invalid Command
 	        	if(mostrar) System.out.println(baitsToString("protocol processing INVALID COMMAND", jcmResponse));
 	        	break;
             case ACK: // 0x50 ACK
@@ -564,7 +566,8 @@ public class protocol extends kermit{
 	            	
 	            	case (byte)0xA2:
 	            		if(mostrar) System.out.println(baitsToString("protocol processing  CURRENT COUNT REQUEST", jcmResponse));
-	            		break;
+	            	id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
+	            	break;
 	            	case (byte)0x93:
 	            		if(mostrar) System.out.println(baitsToString("protocol processing Recycler Software Version Request", jcmResponse));
             			System.arraycopy(jcmResponse, 5, protocol.recyclerVersion, 0,jcmResponse[1]-7);

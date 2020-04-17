@@ -1,8 +1,11 @@
+package rabbitClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServerEntry {
 
+		
 	private String Agent;
 	
 	private String Command;
