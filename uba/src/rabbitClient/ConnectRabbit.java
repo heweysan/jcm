@@ -5,19 +5,12 @@ import com.rabbitmq.client.Connection;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
-
-import com.rabbitmq.client.AMQP.BasicProperties;
-
-import sun.font.CreatedFontTracker;
-
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.ExceptionHandler;
-
 
 
 public class ConnectRabbit  {
 	
-	private final static String QUEUE_NAME = "CIXXGS0020";
+	//private final static String QUEUE_NAME = "CIXXGS0020";
 
 	private String Server;
 	private int Port;

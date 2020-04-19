@@ -24,8 +24,6 @@ public class ServerEntry {
 	
 	private List<String> Values = new ArrayList<String>();
 	
-	//private String[] Values;
-	
 	public String getAgent() {
 		return Agent;
 	}

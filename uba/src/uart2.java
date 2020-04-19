@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.*;
 import javax.comm.*;
 import gnu.io.*;
-import java.text.Format;
 
 public class uart2 extends protocol implements Runnable, SerialPortEventListener{
 	

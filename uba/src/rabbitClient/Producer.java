@@ -12,8 +12,8 @@ public class Producer {
   
 private static String exchange = "ex.agents.topic";
 private static String routingKey = "agent.event.eja";
-private static String routingKeyStaled = "";
-private static int staledTime = 300;
+//private static String routingKeyStaled = "";
+//private static int staledTime = 300;
  
 
  public void publish(String jsonMessage){

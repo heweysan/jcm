@@ -2,11 +2,11 @@ import java.io.*;
 import java.util.*;
 import javax.comm.*;
 import gnu.io.*;
-import java.text.Format;
 
 public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	
+	@SuppressWarnings("rawtypes")
 	static Enumeration portList;
 	static CommPortIdentifier portId;
 	static SerialPort serialPort;
@@ -24,7 +24,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	private enum state{ SYNC, LENGTH, DATA, CHK}
 	private state flg1 = state.SYNC;
 	
-	private byte lastMsg = 0x0;
+	//private byte lastMsg = 0x0;
 	private byte lastTx = 0x0;
 	
 	

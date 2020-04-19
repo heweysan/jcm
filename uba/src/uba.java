@@ -9,6 +9,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeoutException;
 import gnu.io.*;
+//import rabbitClient.Demo;
+import rabbitClient.WriteToJournal;
+
 import javax.comm.*;
 import java.io.*;
 import java.awt.event.ActionListener;
@@ -21,12 +24,14 @@ import com.google.gson.Gson;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import javax.swing.JMenuBar;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
+
+import pentomino.common.*;
+import rabbitClient.*;
 
 
 public class uba {
@@ -53,6 +58,9 @@ public class uba {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				WriteToJournal.JcmWriteToJournal("", 0, 0, "", "", "");
+				
 			}
 		});
 	}

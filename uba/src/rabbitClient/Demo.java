@@ -1,15 +1,14 @@
 package rabbitClient;
 
-import com.google.gson.Gson;
 
 public class Demo {
 	
-	private static Gson gson = new Gson();
-	
+	/*
 	private static String exchange = "ex.agents.topic";
 	private static String routingKey = "agent.event.eja";
 	private static String routingKeyStaled = "";
 	private static int staledTime = 300;
+	*/
 	
 	/*EVENT HEADERS */
 	/*
@@ -27,7 +26,7 @@ public class Demo {
 		
 			
 		   WriteToJournal.JcmWriteToJournal("JCM_EVENT", 10, 20, "1", "2", "3");
-			
+		   
 			
 		   
 		  

@@ -9,7 +9,7 @@ public class protocol extends kermit{
 	static boolean rturn 	= false;
 	
 	public byte lastMsg = 0x0;
-	private byte lastProtocol = 0x0;
+	//private byte lastProtocol = 0x0;
 	public static final byte SYNC 						= (byte) 0xFC;
 	
 	/* ---------------------------------- */

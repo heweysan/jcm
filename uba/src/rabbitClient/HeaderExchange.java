@@ -15,10 +15,11 @@ public class HeaderExchange {
  public static String QUEUE_NAME_3 = "header-queue-3";
  
 	private static String exchange = "ex.agents.topic";
+	/*
 	private static String routingKey = "agent.event.eja";
 	private static String routingKeyStaled = "";
 	private static int staledTime = 300;
-  
+  */
  public static String ROUTING_KEY = "";
   
  public void createExchangeAndQueue(){
