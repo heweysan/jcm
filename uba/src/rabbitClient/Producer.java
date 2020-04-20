@@ -12,13 +12,13 @@ public class Producer {
   
 private static String exchange = "ex.agents.topic";
 private static String routingKey = "agent.event.eja";
-//private static String routingKeyStaled = "";
-//private static int staledTime = 300;
  
 
  public void publish(String jsonMessage){
    Map<String,Object> map = null;
-   BasicProperties props = null; 
+   BasicProperties props = null;
+         
+   
    try{
        Connection conn = RabbitMQConnection.getConnection();
        if(conn != null){

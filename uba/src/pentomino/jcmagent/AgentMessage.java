@@ -1,4 +1,4 @@
-package rabbitClient;
+package pentomino.jcmagent;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ public class AgentMessage {
     public long Timestamp;
     public List<String> Values;
     public String AtmId;
+    
 	
     
     
@@ -29,7 +30,12 @@ public class AgentMessage {
             Values = entry.getValues();
             Command = entry.getCommand();
             AtmId = atmId;
-        }
-        
+        }        
     }
+
+
+
+	public AgentMessage() {
+		// TODO Auto-generated constructor stub
+	}
 }

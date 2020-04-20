@@ -1,4 +1,4 @@
-package rabbitClient;
+package pentomino.jcmagent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,14 @@
 package rabbitClient;
 
 
+
+import pentomino.common.AccountType;
+import pentomino.common.DeviceEvent;
+import pentomino.common.DeviceType;
+import pentomino.common.TransactionType;
+import pentomino.config.Configuration;
+import pentomino.jcmagent.RaspiAgent;
+
 public class Demo {
 	
 	/*
@@ -21,25 +29,17 @@ public class Demo {
 	
 	
 	 public static void main(String args[]){
-	   try{
-	      
-		
-			
-		   WriteToJournal.JcmWriteToJournal("JCM_EVENT", 10, 20, "1", "2", "3");
+		 
+		 try{
+			 
+			 System.out.println(DeviceEvent.DEP_CashInEndOk.getNumVal());
+			 RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita",AccountType.Administrative,TransactionType.CashManagement);
 		   
-			
-		   
-		  
-	     // produce.publish();
-	  
-	      // Consume
-	      /*
-	      Receiver receive = new Receiver();
-	      receive.receive();
-	      */
-	   }catch(Exception e){
-	     e.printStackTrace();
-	   }
+			 RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk,"12321");		   
+		     
+		 }catch(Exception e){
+			 e.printStackTrace();
+		 }
 	 }
 	 
-	}
+}

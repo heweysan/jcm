@@ -9,8 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeoutException;
 import gnu.io.*;
-//import rabbitClient.Demo;
-import rabbitClient.WriteToJournal;
 
 import javax.comm.*;
 import java.io.*;
@@ -31,6 +29,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
 
 import pentomino.common.*;
+import pentomino.jcmagent.ServerEntry;
+import pentomino.jcmagent.WriteToJournal;
+//import rabbitClient.Demo;
 import rabbitClient.*;
 
 
@@ -59,7 +60,7 @@ public class uba {
 					e.printStackTrace();
 				}
 				
-				WriteToJournal.JcmWriteToJournal("", 0, 0, "", "", "");
+				WriteToJournal.JcmWriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita",AccountType.Administrative,TransactionType.CashManagement);
 				
 			}
 		});
@@ -96,8 +97,7 @@ public class uba {
       
 		System.out.println(gson.toJson(myEntry));
 			
-		Config myConf = new Config();
-		myConf.getPulsarParam("HostRabbit");
+		
 		
 		
 		initialize();		
