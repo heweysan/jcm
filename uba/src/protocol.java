@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import pentomino.common.jcmOperation;
+
 public class protocol extends kermit{
 	public static byte[] jcmMessage = new byte[15];
 	public static int bill;
@@ -7,6 +9,9 @@ public class protocol extends kermit{
 	static byte[] recyclerVersion 	= new byte[50];	
 	static boolean accept	= false;
 	static boolean rturn 	= false;
+	
+	public static jcmOperation currentOpertion = jcmOperation.None;
+	
 	
 	public byte lastMsg = 0x0;
 	//private byte lastProtocol = 0x0;
@@ -188,15 +193,7 @@ public class protocol extends kermit{
 	
 	void id003_format(byte LNG, byte CMD, byte[] DATA, boolean zeroData ){
 		
-		/*
-		if(CMD != lastProtocol) {
-			lastProtocol = CMD;
-			System.out.println("\nprotocol id003_format " + baitsToString("",DATA));
-		}
-		else
-			System.out.print("+");
-		*/
-		
+				
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
 		DATA[2] = CMD;
@@ -372,6 +369,29 @@ public class protocol extends kermit{
             	
             case SR_INHIBIT: //0x1A DISABLE (INHIBIT)
             	if(mostrar) System.out.println(baitsToString("protocol processing DISABLE (INHIBIT)", jcmResponse));
+            	
+            	if(protocol.currentOpertion == jcmOperation.Reset) {
+            		protocol.currentOpertion = jcmOperation.None;
+            		/*
+            		System.out.println("Sending ACK");
+            		id003_format((byte)5, ACK, jcmMessage,true); //STATUS_REQUEST
+            		*/
+            		System.out.println("RE INHIBIT");
+    				protocol.jcmMessage[3] = 0x00;
+    				id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+            	}
+            	if(protocol.currentOpertion == jcmOperation.Dispense) {
+            		//Validamos si hay que dispensar mas o no            		
+            		
+            		//Por ahorita solo uno
+            		protocol.currentOpertion = jcmOperation.None;
+            		
+            		//Rehabilitamos el aceptador
+            		protocol.jcmMessage[3] = 0x00;
+    				id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+            		
+            	}
+            	
             	break;
             	
             case SR_INITIALIZE: // 0x1B INITIALIZE
@@ -405,7 +425,7 @@ public class protocol extends kermit{
             	
             case SR_PAY_STAY: //0x24 PAY STAY
             	if(mostrar) System.out.println(baitsToString("protocol processing PAY STAY", jcmResponse)); 
-            	id003_format((byte)5, ACK, jcmMessage,true); // ACK
+            	id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); // STATUS_REQUEST
             	break;
             	
             case SR_RETURN_TO_BOX: //0x25 RETURN TO BOX
@@ -432,6 +452,12 @@ public class protocol extends kermit{
             	
             case SR_ERR_RECYCLER_ERROR: //0x4C  RECYCLER ERROR
             	if(mostrar) System.out.println(baitsToString("protocol processing SR_ERR_RECYCLER_ERROR", jcmResponse));            	
+            	
+            	//TODO: REVISAR EL DATA
+            	
+            	//MAndamos el clear
+            	id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
+						protocol.jcmMessage);
             	break;
            
             	
@@ -501,7 +527,9 @@ public class protocol extends kermit{
             case SCR_DIRECTION: //0xC4 CMD_DIRECTION
             	if(mostrar) System.out.println(baitsToString("protocol processing CMD_DIRECTION", jcmResponse));
             	//TODO: Checar el DATA            		
-            	id003_format((byte)5, (byte) 0x50, jcmMessage,true); // ACK
+            	id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, SSR_E_SOFTWARE_VERSION, (byte) 0x00, (byte) 0x0,
+						protocol.jcmMessage);
+            	//id003_format((byte)5, (byte) 0x50, jcmMessage,true); // ACK
             	break;
             case SCR_OPTIONAL_FUNCTION: //0xC5 CMD_DIRECTION
             	//TODO: Checar el DATA       
@@ -522,7 +550,32 @@ public class protocol extends kermit{
             case (byte)SSRR_INHIBIT: //0x83 SSR_INHIBIT_ACCEPTOR
             	//TODO: Checar el DATA
             	if(mostrar) System.out.println(baitsToString("protocol processing SSR INHIBIT ACCEPTOR", jcmResponse));            	
-            	id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST
+            	
+            	//Checamos que tipo de operacion estamos haciendo.
+            	switch(currentOpertion) {
+            	
+            	case None:
+            		id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST
+            		break;
+            		
+            	case Dispense:
+            		System.out.println("Procesando Dispense");
+            		
+            		id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) 0x1, (byte) 0x1,
+    						protocol.jcmMessage);
+            	
+            		
+            		break;
+            	case Reset:
+            		System.out.println("Procesando Reset");
+            		id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST
+            		break;
+            	default:
+            		id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST
+            		break;            	
+            	}
+            	
+            	
             	break;
             case SSRR_DIRECTION: // 0x84 SSRR_DIRECTION
             	if(mostrar) System.out.println(baitsToString("protocol processing SSRR_DIRECTION", jcmResponse));

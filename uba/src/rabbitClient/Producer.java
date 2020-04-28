@@ -32,7 +32,6 @@ private static String routingKey = "agent.event.eja";
          props = props.builder().headers(map).build();
          channel.basicPublish(exchange, routingKey,true, props, jsonMessage.getBytes());
          System.out.println(" Message Sent '" + jsonMessage + "'"); 
-
          
          channel.close();
          conn.close();

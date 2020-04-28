@@ -120,7 +120,7 @@ public class RaspiAgent {
 		
 		System.out.println(gson.toJson(agentMsg));
 		
-		//RaspiAgent.SendCommandToRabbit(agentMsg);
+		RaspiAgent.SendCommandToRabbit(agentMsg);
 			
 		
 	}
@@ -145,7 +145,7 @@ public class RaspiAgent {
 		
 		System.out.println(gson.toJson(agentMsg));
 		
-		//RaspiAgent.SendCommandToRabbit(agentMsg);
+		RaspiAgent.SendCommandToRabbit(agentMsg);
 	}
 		
 	
