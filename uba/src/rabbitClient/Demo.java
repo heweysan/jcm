@@ -12,8 +12,13 @@ public class Demo {
 			 System.out.println(DeviceEvent.DEP_CashInEndOk.getNumVal());
 			 //RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita 2",AccountType.Administrative,TransactionType.CashManagement);
 		   
-			 RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk,"Monto Incorrecto Java Jcm");		   
+			 //RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk,"Monto Incorrecto Java Jcm");		   
 		     
+			 Receiver myRec = new Receiver();
+			 
+			 myRec.SetupRabbitListener();
+			 
+			 
 		 }catch(Exception e){
 			 e.printStackTrace();
 		 }

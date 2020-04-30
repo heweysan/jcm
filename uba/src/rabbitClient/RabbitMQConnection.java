@@ -1,5 +1,7 @@
 package rabbitClient;
 
+import java.util.HashMap;
+
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
  
@@ -21,4 +23,9 @@ public class RabbitMQConnection {
     return conn;
   }
  
+  
+
+  
+  
+  
 }
