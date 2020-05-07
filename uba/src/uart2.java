@@ -1,9 +1,16 @@
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.io.*;
 import java.util.*;
 import javax.comm.*;
 import gnu.io.*;
 
 public class uart2 extends protocol implements Runnable, SerialPortEventListener{
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = LogManager.getLogger(uart2.class.getName());
 	
 	
 	static Enumeration portList;
@@ -24,7 +31,7 @@ public class uart2 extends protocol implements Runnable, SerialPortEventListener
 	private state flg1 = state.SYNC;
 	
 	uart2(){
-
+		logger.debug("uart2");
 	}
 	
 	public void run() {

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class Configuration {
+public class Config {
 
 	private static Connection conn = null;
 	
@@ -34,7 +34,7 @@ public class Configuration {
 		String retVal = defValue;		
 		String sql = "SELECT Value FROM PulsarParams WHERE Key = ?  COLLATE NOCASE;";		
 		
-		Configuration.connect();
+		Config.connect();
 		
 		try (PreparedStatement pstmt  = conn.prepareStatement(sql)){
 	            
@@ -70,7 +70,7 @@ public class Configuration {
 		String retVal = defValue;		
 		String sql = "SELECT Value FROM Directives WHERE Key = ?  COLLATE NOCASE;";
 		
-		Configuration.connect();
+		Config.connect();
 		
 		try (PreparedStatement pstmt  = conn.prepareStatement(sql)){
 	            
@@ -108,7 +108,7 @@ public class Configuration {
 		String sql = "SELECT Value FROM Entries WHERE Key = ?  COLLATE NOCASE;";
 		
 		System.out.println(sql);
-		Configuration.connect();
+		Config.connect();
 		
 		try (PreparedStatement pstmt  = conn.prepareStatement(sql)){
 	            

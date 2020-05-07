@@ -3,7 +3,7 @@ package pentomino.jcmagent;
 import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.TransactionType;
-import pentomino.config.Configuration;
+import pentomino.config.Config;
 import rabbitClient.Producer;
 import rabbitClient.RabbitMQConnection;
 
@@ -36,7 +36,7 @@ public class RaspiAgent {
 					, "", "Timeout", 1006, "");
 		*/
 		
-		String atmId = Configuration.GetDirective("AtmId", "");
+		String atmId = Config.GetDirective("AtmId", "");
 		
 		WriteToJournal(evt, 0, 0, authId, "", accountId, "0", "MXN", "",  "",
 				atmId, extraData, acctType, type,"", "", 0, "");
@@ -141,7 +141,7 @@ public class RaspiAgent {
 		agentMsg.Id = java.util.UUID.randomUUID().toString();
 		agentMsg.Timestamp = java.lang.System.currentTimeMillis();
 		agentMsg.Data = data;
-		agentMsg.AtmId = Configuration.GetDirective("AtmId", "");
+		agentMsg.AtmId = Config.GetDirective("AtmId", "");
 		
 		System.out.println(gson.toJson(agentMsg));
 		
@@ -156,20 +156,20 @@ public class RaspiAgent {
 		
 		//TODO: Todo el mecanismo por si no esta disponoble rabbit y el queue, etc.
 		
-		String exchange = Configuration.GetDirective("BusinessAmqpExchange", null);
+		String exchange = Config.GetDirective("BusinessAmqpExchange", null);
 		
-		String routingKey = Configuration.GetDirective(String.format("%sEventRoutingKey", payload.Agent),
+		String routingKey = Config.GetDirective(String.format("%sEventRoutingKey", payload.Agent),
 				String.format("agent.event.%s",payload.Agent.toLowerCase()));
 			
 		
 		String routingKeyStaled = "";  
 		if (payload.Agent.equalsIgnoreCase("hma"))
-            routingKeyStaled = Configuration.GetDirective(String.format("Staled%sEventRoutingKey", payload.Agent),
+            routingKeyStaled = Config.GetDirective(String.format("Staled%sEventRoutingKey", payload.Agent),
             		String.format("agent.event.%s.staled", payload.Agent.toLowerCase()));
         else
-            routingKeyStaled = Configuration.GetDirective(String.format("Staled%sEventRoutingKey", payload.Agent),"");
+            routingKeyStaled = Config.GetDirective(String.format("Staled%sEventRoutingKey", payload.Agent),"");
         
-        String staledTime = Configuration.GetDirective("HmaMsgStaledSeconds", "300");
+        String staledTime = Config.GetDirective("HmaMsgStaledSeconds", "300");
 		
      // Publish
         

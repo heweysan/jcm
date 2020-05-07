@@ -10,6 +10,10 @@ public class protocol extends kermit{
 	static boolean accept	= false;
 	static boolean rturn 	= false;
 	
+	//Las denominaciones que recicla cada JCM
+	public static String recyclerOneA = "";
+	public static String recyclerOneB = "";
+		
 	public static jcmOperation currentOpertion = jcmOperation.None;
 	
 	
@@ -371,14 +375,17 @@ public class protocol extends kermit{
             	if(mostrar) System.out.println(baitsToString("protocol processing DISABLE (INHIBIT)", jcmResponse));
             	
             	if(protocol.currentOpertion == jcmOperation.Reset) {
-            		protocol.currentOpertion = jcmOperation.None;
+            		
+            		//Pedimos que billetes recicla el JCM
+            		id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, protocol.jcmMessage);
+            		
             		/*
-            		System.out.println("Sending ACK");
-            		id003_format((byte)5, ACK, jcmMessage,true); //STATUS_REQUEST
-            		*/
+            		protocol.currentOpertion = jcmOperation.None;
+            		            		
             		System.out.println("RE INHIBIT");
     				protocol.jcmMessage[3] = 0x00;
     				id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+    				*/
             	}
             	if(protocol.currentOpertion == jcmOperation.Dispense) {
             		//Validamos si hay que dispensar mas o no            		
@@ -563,8 +570,6 @@ public class protocol extends kermit{
             		
             		id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) 0x1, (byte) 0x1,
     						protocol.jcmMessage);
-            	
-            		
             		break;
             	case Reset:
             		System.out.println("Procesando Reset");
@@ -603,7 +608,7 @@ public class protocol extends kermit{
             	
             case 0x40: // POWER_UP            	
             	if(mostrar) System.out.println(baitsToString("protocol processing POWER UP", jcmResponse));
-            	id003_format((byte)5, (byte) 0x40, jcmMessage,true); // RESET_ 
+            	 id003_format((byte)5, (byte) 0x40, jcmMessage,true); // RESET_      // SAN TODO AQUI: 
             	break;
             case 0x41:  // POWER_UP_WITH_BILL_IN_ACCEPTOR * POWER_UP_WITH_BILL_IN_STACKER            	
             	if(mostrar) System.out.println(baitsToString("protocol processing POWER_UP_WITH_BILL_IN_ACCEPTOR", jcmResponse));
@@ -628,6 +633,28 @@ public class protocol extends kermit{
             			MyClass.fireMyEvent(new MyEvent("recyclerVersion"));
             			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //
 	            		break;
+	            	case (byte)0x90:
+	            		if(mostrar) System.out.println(baitsToString("protocol processing RECYCLE CURRENCY REQUEST", jcmResponse));
+	            		
+	            	if(protocol.currentOpertion == jcmOperation.Reset) {
+	            		
+	            		protocol.currentOpertion = jcmOperation.None;
+	            		            		
+	            		System.out.println("RE INHIBIT");
+	    				protocol.jcmMessage[3] = 0x00;
+	    				id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+	    				
+	            	}
+	            	
+	            		//0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
+	            		//sacamos que billetes esta reciclando:
+	            	
+	            		hexToDenom(jcmResponse[5]);
+	            	
+	            		hexToDenom(jcmResponse[7]);
+	            		
+	            		MyClass.fireMyEvent(new MyEvent("recyclerBillsA"));
+	            		break;
 	            	default:
 	            		if(mostrar) System.out.println(baitsToString("protocol processing Algun Extended", jcmResponse));
 	            		break;
@@ -648,10 +675,43 @@ public class protocol extends kermit{
 
     }
     
+    private static void hexToDenom(byte Data) {
+    	switch(Data) {
+		case (byte)0x02:
+			System.out.println("\t Reciclador2 [20]");
+			recyclerOneB = "$20";
+			break;
+		case (byte)0x04:
+			System.out.println("\t Reciclador2 [50]");
+			recyclerOneB = "$50";
+			break;
+		case (byte)0x08:
+			System.out.println("\t Reciclador2 [100]");
+			recyclerOneB = "$100";
+			break;
+		case (byte)0x10:
+			System.out.println("\t Reciclador2 [200]");
+			recyclerOneB = "$200";
+			break;
+		case (byte)0x20:
+			System.out.println("\t Reciclador2 [500]");
+			recyclerOneB = "$500";
+			break;
+    	}
+    }
+    
     public static String baitsToString(String texto, byte[] baits) {
     	String result = texto;
+    	
+    	int total = baits[1] & 0xFF;
+    	int count = 0;
+    	System.out.println("Numerito [" + count + "]" );
+    	
     	for (byte theByte : baits){
     		result += " [" + Integer.toHexString(theByte) + "] ";
+    		count++;
+    		if(count >= total)
+    			break;
         }
     	return result;
     }

@@ -1,7 +1,5 @@
 package rabbitClient;
 
-import java.util.HashMap;
-
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
  
@@ -17,6 +15,7 @@ public class RabbitMQConnection {
         factory.setHost("11.50.0.7");
         factory.setPort(5672);
         conn = factory.newConnection();
+        
     }catch(Exception e){
         e.printStackTrace();
     }

@@ -1,5 +1,92 @@
-2020-04-19 02:00:17,067 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
-2020-04-19 02:00:17,079 INFO uba [AWT-EventQueue-0] this is an INFO message
-2020-04-19 02:00:17,079 WARN uba [AWT-EventQueue-0] this is an WARN message
-2020-04-19 02:00:17,079 ERROR uba [AWT-EventQueue-0] this is an ERROR message
-2020-04-19 02:00:17,079 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:08:05,087 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:08:05,096 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:08:05,096 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:08:05,096 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:08:05,096 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:28:44,676 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:28:44,678 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:28:44,678 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:28:44,679 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:28:44,680 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:30:35,877 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:30:35,880 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:30:35,880 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:30:35,880 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:30:35,880 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:35:46,662 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:35:46,665 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:35:46,665 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:35:46,665 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:35:46,665 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:36:16,144 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:36:16,147 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:36:16,147 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:36:16,147 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:36:16,147 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:38:03,318 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:38:03,321 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:38:03,321 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:38:03,321 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:38:03,321 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:38:47,084 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:38:47,087 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:38:47,087 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:38:47,087 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:38:47,087 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:49:55,570 DEBUG uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 21:49:55,573 INFO uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 21:49:55,573 WARN uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 21:49:55,573 ERROR uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 21:49:55,573 FATAL uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 21:49:55,750 DEBUG uart [AWT-EventQueue-0] UART MEEEEN
+2020-05-05 21:49:55,750 DEBUG uart [AWT-EventQueue-0] UART MEEEEN
+2020-05-05 22:14:26,915 | DEBUG | uba [AWT-EventQueue-0] this is an DEBUG message
+2020-05-05 22:14:26,918 | INFO | uba [AWT-EventQueue-0] this is an INFO message
+2020-05-05 22:14:26,918 | WARN | uba [AWT-EventQueue-0] this is an WARN message
+2020-05-05 22:14:26,918 | ERROR | uba [AWT-EventQueue-0] this is an ERROR message
+2020-05-05 22:14:26,918 | FATAL | uba [AWT-EventQueue-0] this is an FATAL message
+2020-05-05 22:15:02,688 | DEBUG | uba | [AWT-EventQueue-0] | this is an DEBUG message
+2020-05-05 22:15:02,690 | INFO | uba | [AWT-EventQueue-0] | this is an INFO message
+2020-05-05 22:15:02,690 | WARN | uba | [AWT-EventQueue-0] | this is an WARN message
+2020-05-05 22:15:02,690 | ERROR | uba | [AWT-EventQueue-0] | this is an ERROR message
+2020-05-05 22:15:02,691 | FATAL | uba | [AWT-EventQueue-0] | this is an FATAL message
+2020-05-05 22:15:42,309|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:15:42,312|INFO|uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:15:42,312|WARN|uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:15:42,312|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:15:42,312|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:16:28,420|DEBUG|uba|{1.}|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:16:28,423|INFO|uba|{1.}|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:16:28,423|WARN|uba|{1.}|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:16:28,423|ERROR|uba|{1.}|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:16:28,423|FATAL|uba|{1.}|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:16:53,301|DEBUG|uba|{1.}[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:16:53,304|INFO|uba|{1.}[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:16:53,304|WARN|uba|{1.}[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:16:53,304|ERROR|uba|{1.}[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:16:53,304|FATAL|uba|{1.}[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:20:02,578|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:20:02,580|INFO|uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:20:02,581|WARN|uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:20:02,581|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:20:02,581|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:20:39,177|uba|DEBUG|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:20:39,180|uba|INFO|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:20:39,180|uba|WARN|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:20:39,180|uba|ERROR|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:20:39,180|uba|FATAL|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:25:07,445|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:25:07,448|INFO|uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:25:07,448|WARN|uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:25:07,448|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:25:07,448|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:27:53,605|DEBUG  |uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:27:53,608|INFO   |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:27:53,608|WARN   |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:27:53,608|ERROR  |uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:27:53,608|FATAL  |uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-05 22:28:21,152|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-05 22:28:21,154|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-05 22:28:21,155|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-05 22:28:21,155|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-05 22:28:21,155|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message

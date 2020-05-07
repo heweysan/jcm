@@ -3,8 +3,6 @@ package rabbitClient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
-
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -12,10 +10,9 @@ import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-import pentomino.config.Configuration;
+import pentomino.config.Config;
  
 public class Receiver {
   
@@ -51,8 +48,8 @@ public class Receiver {
 	 
 	 //ListenForCommands();
 	 
-	 String exchange = Configuration.GetDirective("BusinessCommandTopic", "command.atm.topic");
-	 String atmId = Configuration.GetDirective("AtmId", "");
+	 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
+	 String atmId = Config.GetDirective("AtmId", "");
 	 
 	 
 	 /*
@@ -110,13 +107,12 @@ public class Receiver {
 	         System.out.println(" [x] Received '" + body + "'");
 	         System.out.println(" [x] replyToQueue '" + replyToQueue + "'");
 	         
-	         
-	         /* ESTO SE AHCE EN OTRO LADO */
+	         	         
+	         /* ESTO SE HACE EN OTRO LADO */
 	         String response =  "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"CI99XE0001\", \"Files\":[\"javaDummyFile1.zip\",\"javaDummyFile2.txt\"]}}";
 	         
-	        Producer myProd = new Producer(); 
-	        myProd.SendResponse(response, "", replyToQueue, null,
-                     message.getProperties().getCorrelationId(), replyToQueue);
+	         Producer myProd = new Producer(); 
+	         myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);
 	         
 	         
 	     };
@@ -133,9 +129,9 @@ public class Receiver {
  
  public void ListenForCommands() {
 	 
-	 String atmId = Configuration.GetDirective("AtmId", "");
-	 String exchange = Configuration.GetDirective("BusinessCommandTopic", "command.atm.topic");
-	 String topicQueue = Configuration.GetDirective("BusinessCommandTopicQueue", "dta.command." + atmId);
+	 String atmId = Config.GetDirective("AtmId", "");
+	 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
+	 String topicQueue = Config.GetDirective("BusinessCommandTopicQueue", "dta.command." + atmId);
 	 String routingKeys[] = new String[] { "command.dta." + atmId, "*.dta.broadcast" };
 	 
 	 

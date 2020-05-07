@@ -1,20 +1,35 @@
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.io.*;
 import java.util.*;
 import javax.comm.*;
 import gnu.io.*;
 
 public class uart extends protocol implements Runnable, SerialPortEventListener{
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = LogManager.getLogger(uart.class.getName());
 	
 	
 	@SuppressWarnings("rawtypes")
+	static Enumeration portList;
+	public CommPortIdentifier portId;
+	public SerialPort serialPort;
+	public OutputStream outputStream;
+	public InputStream inputStream;
+	public int baud;
+	public String port;
+	/*
 	static Enumeration portList;
 	static CommPortIdentifier portId;
 	static SerialPort serialPort;
     static OutputStream outputStream;
     static InputStream inputStream;
-    static String messageString = "Hello, world!\n";
-    static int baud;
-    
+	static int baud;
+    */
+	
 	Thread readThread;
     
     private byte[] bty = new byte[100];
@@ -29,6 +44,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	
 	uart(){
+				
 
 	}
 	
@@ -39,9 +55,9 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 				serialTx(uart.jcmMessage); 
 				
 				if(uart.jcmMessage[2] == ACK){
-					this.id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //STATUS_REQUEST
+					this.id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //0X11
 				}
-				Thread.sleep(200); //original 200
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				System.out.println(e);
 			}
@@ -50,10 +66,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	public void serialTx(byte[] msg) {		
         try {
-        	/*
-            if(msg[2] != 0x11)
-            	System.out.println(baitsToString("uart->serialTx", msg));
-            */
+        
             if(msg[2] != lastTx) {
             	lastTx = msg[2];
             	System.out.println(baitsToString("\nuart->serialTx", msg));
@@ -75,11 +88,11 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 		uart.portList =  CommPortIdentifier.getPortIdentifiers();
 		
 		while (uart.portList.hasMoreElements()) {
-			uart.portId = (CommPortIdentifier) uart.portList.nextElement();
+			//uart.portId = (CommPortIdentifier) uart.portList.nextElement();
+			portId = (CommPortIdentifier) uart.portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                if (portId.getName().equals(prt)) {
-                
-                	// [0]          
+                if (portId.getName().equals(prt)) {                
+                	         
                     try {
                     	System.out.println("Abriendo puerto");
                         serialPort = (SerialPort) portId.open("srlport", 2000);
@@ -107,14 +120,14 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     serialPort.notifyOnDataAvailable(true);
                     try {
                     	System.out.println("Setting Port Params");
-                        serialPort.setSerialPortParams(uart.baud/*9600*/,
+                        serialPort.setSerialPortParams(baud/*uart.baud*//*9600*/,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
                             SerialPort.PARITY_EVEN);
                     } catch (UnsupportedCommOperationException e) {
                     	e.printStackTrace();
                     }
-                    // [0]         
+                           
                     try {
                     	System.out.println("adding event listener");
             			serialPort.addEventListener(this);
