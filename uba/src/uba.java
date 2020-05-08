@@ -140,7 +140,7 @@ public class uba {
 		panelPrincipal.setLayout(null);
 
 		JPanel panel_estatus = new JPanel();
-		panel_estatus.setBounds(10, 11, 850, 538);
+		panel_estatus.setBounds(10, 11, 850, 497);
 		panelPrincipal.add(panel_estatus);
 		panel_estatus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_estatus.setLayout(null);
@@ -274,7 +274,7 @@ public class uba {
 										btnReiniciarJcm1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JPanel panelRetiro = new JPanel();
-		panelRetiro.setBounds(10, 563, 850, 244);
+		panelRetiro.setBounds(10, 778, 850, 244);
 		panelPrincipal.add(panelRetiro);
 		panelRetiro.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRetiro.setLayout(null);
@@ -442,6 +442,12 @@ public class uba {
 		btn1.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btn1.setBounds(10, 11, 200, 200);
 		panelPinPad.add(btn1);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setBounds(10, 519, 840, 248);
+		panelPrincipal.add(panel);
+		panel.setLayout(null);
 
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
