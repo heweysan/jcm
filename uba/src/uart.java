@@ -3,8 +3,8 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.io.*;
 import java.util.*;
-import javax.comm.*;
 import gnu.io.*;
+import gnu.io.SerialPortEventListener;
 
 public class uart extends protocol implements Runnable, SerialPortEventListener{
 	/**
@@ -21,15 +21,9 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	public InputStream inputStream;
 	public int baud;
 	public String port;
-	/*
-	static Enumeration portList;
-	static CommPortIdentifier portId;
-	static SerialPort serialPort;
-    static OutputStream outputStream;
-    static InputStream inputStream;
-	static int baud;
-    */
+	public int id = -1;
 	
+
 	Thread readThread;
     
     private byte[] bty = new byte[100];
@@ -45,16 +39,21 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	uart(){
 				
-
+		
+	}
+	
+	uart(int identificador){
+		System.out.println("uart constructor [" + identificador + "]");
+		jcmId = identificador;
 	}
 	
 	public void run() {
 	
 		while(true){
 			try {
-				serialTx(uart.jcmMessage); 
+				serialTx(jcmMessage); 
 				
-				if(uart.jcmMessage[2] == ACK){
+				if(jcmMessage[2] == ACK){
 					this.id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //0X11
 				}
 				Thread.sleep(200);
@@ -64,15 +63,23 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 		}
 	}
 	
+	public int tempCont = 0;
+	
 	public void serialTx(byte[] msg) {		
         try {
         
             if(msg[2] != lastTx) {
             	lastTx = msg[2];
-            	System.out.println(baitsToString("\nuart->serialTx", msg));
+            	System.out.println(baitsToString("\n[" + id + "] uart->serialTx", msg));
             }
-            else
-            	System.out.print(".");
+            else {
+            	tempCont++;
+            	if(tempCont == 10) {
+            		System.out.print(".");
+            		tempCont = 0;
+            	}
+            }
+            	
             
             outputStream.write(msg,0,msg[1]);
         
@@ -85,24 +92,24 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	public void openPort (String prt){
 		
 		System.out.println("uart->openPort [" + prt + "]" );
-		uart.portList =  CommPortIdentifier.getPortIdentifiers();
+		portList =  CommPortIdentifier.getPortIdentifiers();
 		
-		while (uart.portList.hasMoreElements()) {
+		while (portList.hasMoreElements()) {
 			//uart.portId = (CommPortIdentifier) uart.portList.nextElement();
-			portId = (CommPortIdentifier) uart.portList.nextElement();
+			portId = (CommPortIdentifier) portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
                 if (portId.getName().equals(prt)) {                
                 	         
                     try {
-                    	System.out.println("Abriendo puerto");
+                    	System.out.println("[" + id + "] Abriendo puerto");
                         serialPort = (SerialPort) portId.open("srlport", 2000);
                     } 
                     catch (PortInUseException e) {
-                    	System.out.println("PortInUseException");
+                    	System.out.println("[" + id + "] PortInUseException");
                     }
                     
                     try {
-                    	System.out.println("getInputstream");
+                    	System.out.println("[" + id + "] getInputstream");
                         inputStream = serialPort.getInputStream();
                     } 
                     catch (IOException e) {
@@ -110,7 +117,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     }
                     
                     try {
-                    	System.out.println("getOutputStream");
+                    	System.out.println("[" + id + "] getOutputStream");
                         outputStream = serialPort.getOutputStream();
                     } 
                     catch (IOException e) {
@@ -119,7 +126,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     
                     serialPort.notifyOnDataAvailable(true);
                     try {
-                    	System.out.println("Setting Port Params");
+                    	System.out.println("[" + id + "] Setting Port Params");
                         serialPort.setSerialPortParams(baud/*uart.baud*//*9600*/,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
@@ -129,7 +136,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     }
                            
                     try {
-                    	System.out.println("adding event listener");
+                    	System.out.println("[" + id + "] adding event listener");
             			serialPort.addEventListener(this);
             		} catch (TooManyListenersException e) {
             			e.printStackTrace();
@@ -206,12 +213,12 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	}
 
 	public void reiniciar() {
-		System.out.println("uart reiniciar");
+		System.out.println("[" + id + "] uart reiniciar");
 		this.id003_format((byte)5, (byte) 0x40, jcmMessage,true);		
 	}
 	
 	
-	public static String baitsToString(String texto, byte[] baits) {
+	public String baitsToString(String texto, byte[] baits) {
     	String result = texto;
     	for (byte theByte : baits){
     		result += " [" + Integer.toHexString(theByte) + "] ";
@@ -220,13 +227,13 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
     }
 
 	public void reciclar() {
-		System.out.println("uart reciclar");
-		uart.jcmMessage[2] = (byte) 0XFC;
+		System.out.println("[" + id + "] uart reciclar");
+		jcmMessage[2] = (byte) 0XFC;
 	}
 
 	public void estatus() {
-		System.out.println("uart estatus");
-		uart.jcmMessage[2] = 0X11;
+		System.out.println("[" + id + "] uart estatus");
+		jcmMessage[2] = 0X11;
 		
 	}
 

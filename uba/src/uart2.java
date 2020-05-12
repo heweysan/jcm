@@ -3,7 +3,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.io.*;
 import java.util.*;
-import javax.comm.*;
+//import javax.comm.*;
 import gnu.io.*;
 
 public class uart2 extends protocol implements Runnable, SerialPortEventListener{
@@ -138,7 +138,7 @@ public class uart2 extends protocol implements Runnable, SerialPortEventListener
 	        	System.out.println("uart2 serialEvent DATA_AVAILABLE");
 	        	
 	        	this.id003_format((byte)5, (byte) 0x50, jcmMessage,true);
-	        	serialTx(uart2.jcmMessage); 
+	        	serialTx(jcmMessage); 
 				
 					        	
 	        	
@@ -188,7 +188,7 @@ public class uart2 extends protocol implements Runnable, SerialPortEventListener
 	        }
 	}
 
-	public static String baitsToString(String texto, byte[] baits) {
+	public String baitsToString(String texto, byte[] baits) {
     	String result = texto;
     	for (byte theByte : baits){
     		result += " [" + Integer.toHexString(theByte) + "] ";

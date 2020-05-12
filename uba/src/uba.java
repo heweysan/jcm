@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeoutException;
 import gnu.io.*;
 
-import javax.comm.*;
+//import javax.comm.*;
 import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -65,9 +65,10 @@ public class uba {
 
 	private static int iMonotoDispensar = 0;
 	private static boolean validAuthorization = false;
-	
+
 	uart[] jcms = new uart[2];
 	int contador = 0;
+
 
 	/**
 	 * Launch the application.
@@ -94,7 +95,7 @@ public class uba {
 	public uba() throws IOException, TimeoutException {
 
 		//https://logging.apache.org/log4j/2.x/manual/layouts.html
-		
+
 		logger.debug("this is an DEBUG message");
 		logger.info("this is an INFO message");
 		logger.warn("this is an WARN message");
@@ -108,7 +109,8 @@ public class uba {
 
 		t2.start();
 
-		initialize();
+		initialize();	
+
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class uba {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
 		frame.setTitle("RedBlu JCM Driver (ID003)");
-		frame.setBounds(100, 100, 1920, 1100);
+		frame.setBounds(100, 100, 1920, 1084);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
@@ -131,7 +133,7 @@ public class uba {
 		String[] BaudArray = { "9600", "19200", "38400" };
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 1904, 1061);
+		tabbedPane.setBounds(0, 0, 1904, 1050);
 		frame.getContentPane().add(tabbedPane);
 
 		JPanel panelPrincipal = new JPanel();
@@ -140,141 +142,149 @@ public class uba {
 		panelPrincipal.setLayout(null);
 
 		JPanel panel_estatus = new JPanel();
-		panel_estatus.setBounds(10, 11, 850, 497);
+		panel_estatus.setBounds(10, 11, 850, 438);
 		panelPrincipal.add(panel_estatus);
 		panel_estatus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_estatus.setLayout(null);
 
 		JPanel panelJCM2 = new JPanel();
-		panelJCM2.setBounds(440, 11, 400, 473);
+		panelJCM2.setBounds(440, 11, 400, 414);
 		panel_estatus.add(panelJCM2);
 		panelJCM2.setLayout(null);
 		panelJCM2.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
-		JLabel lblRecycler2 = new JLabel("JCM2 RECYCLE BILLS");
-		lblRecycler2.setBounds(10, 288, 380, 53);
+		JLabel lblRecycler2 = new JLabel(".");
+		lblRecycler2.setBounds(10, 225, 380, 53);
 		panelJCM2.add(lblRecycler2);
 		lblRecycler2.setFont(new Font("Tahoma", Font.BOLD, 26));
 
 		JLabel lblTitleReciclador2 = new JLabel("Reciclador 2");
 		lblTitleReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTitleReciclador2.setBounds(10, 11, 380, 28);
+		lblTitleReciclador2.setBounds(10, 11, 144, 28);
 		panelJCM2.add(lblTitleReciclador2);
 
 		JLabel lblBilleteIngresado2 = new JLabel("$0");
 		lblBilleteIngresado2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblBilleteIngresado2.setBounds(164, 416, 226, 46);
+		lblBilleteIngresado2.setBounds(164, 350, 226, 46);
 		panelJCM2.add(lblBilleteIngresado2);
 
 		JLabel lblTxtBill2 = new JLabel("Billete:");
 		lblTxtBill2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblTxtBill2.setBounds(10, 416, 144, 46);
+		lblTxtBill2.setBounds(10, 350, 144, 46);
 		panelJCM2.add(lblTxtBill2);
 
 		JLabel lblContadores2 = new JLabel("100x20 100x50 x100x100 100x200 100x500");
-		lblContadores2.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblContadores2.setBounds(10, 352, 380, 53);
+		lblContadores2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblContadores2.setBounds(10, 290, 380, 53);
 		panelJCM2.add(lblContadores2);
-		
+
 		JButton btnReiniciarJcm2 = new JButton("REINICIAR");
+		btnReiniciarJcm2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentOperation = jcmOperation.Reset;
+				jcms[1].currentOpertion = jcmOperation.Reset;
+				jcms[1].id003_format((byte) 5, (byte) 0x40, jcms[1].jcmMessage, true);
+			}
+		});
 		btnReiniciarJcm2.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnReiniciarJcm2.setBounds(181, 11, 209, 59);
 		panelJCM2.add(btnReiniciarJcm2);
-		
+
 		JPanel panel_firmware2 = new JPanel();
 		panel_firmware2.setLayout(null);
 		panel_firmware2.setBorder(new TitledBorder(null, "Firmware:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_firmware2.setBounds(10, 93, 380, 59);
+		panel_firmware2.setBounds(10, 85, 380, 59);
 		panelJCM2.add(panel_firmware2);
-		
-		JLabel label_1 = new JLabel(".");
-		label_1.setBounds(10, 18, 329, 30);
-		panel_firmware2.add(label_1);
-		
+
+		JLabel firmwareLabel2 = new JLabel(".");
+		firmwareLabel2.setBounds(10, 18, 360, 30);
+		panel_firmware2.add(firmwareLabel2);
+
 		JPanel panelRecycler2 = new JPanel();
 		panelRecycler2.setLayout(null);
 		panelRecycler2.setBorder(new TitledBorder(
-										new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(128, 128, 128)), "Recycler:",
-										TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelRecycler2.setBounds(10, 163, 380, 59);
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(128, 128, 128)), "Recycler:",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panelRecycler2.setBounds(10, 155, 380, 59);
 		panelJCM2.add(panelRecycler2);
-		
-		JLabel lblRecyclerVersion_1 = new JLabel(".");
-		lblRecyclerVersion_1.setBounds(10, 19, 225, 29);
-		panelRecycler2.add(lblRecyclerVersion_1);
+
+		JLabel lblRecyclerVersion2 = new JLabel(".");
+		lblRecyclerVersion2.setBounds(10, 19, 360, 29);
+		panelRecycler2.add(lblRecyclerVersion2);
 
 		JPanel panelJCM1 = new JPanel();
-		panelJCM1.setBounds(10, 11, 400, 473);
+		panelJCM1.setBounds(10, 11, 400, 414);
 		panel_estatus.add(panelJCM1);
 		panelJCM1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelJCM1.setLayout(null);
 
-		JLabel lblRecycler1 = new JLabel("JCM1 RECYCLE BILLS");
-		lblRecycler1.setBounds(10, 288, 380, 53);
+		JLabel lblRecycler1 = new JLabel(".");
+		lblRecycler1.setBounds(10, 225, 380, 53);
 		panelJCM1.add(lblRecycler1);
 		lblRecycler1.setFont(new Font("Tahoma", Font.BOLD, 26));
 
 		JLabel lblTitleReciclador1 = new JLabel("Reciclador 1");
 		lblTitleReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTitleReciclador1.setBounds(10, 11, 380, 28);
+		lblTitleReciclador1.setBounds(10, 11, 161, 28);
 		panelJCM1.add(lblTitleReciclador1);
 
 		JLabel lblTxtBill1 = new JLabel("Billete:");
-		lblTxtBill1.setBounds(10, 416, 144, 46);
+		lblTxtBill1.setBounds(10, 350, 144, 46);
 		panelJCM1.add(lblTxtBill1);
 		lblTxtBill1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		final JLabel lblBilleteIngresado1 = new JLabel("$0");
-		lblBilleteIngresado1.setBounds(164, 416, 226, 46);
+		lblBilleteIngresado1.setBounds(164, 350, 226, 46);
 		panelJCM1.add(lblBilleteIngresado1);
 		lblBilleteIngresado1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JLabel lblContadores1 = new JLabel("100x20 100x50 x100x100 100x200 100x500");
-		lblContadores1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblContadores1.setBounds(10, 352, 380, 53);
+		lblContadores1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblContadores1.setBounds(10, 290, 380, 53);
 		panelJCM1.add(lblContadores1);
-		
-		
-		
-		
-		
+
+
+
+
+
 		JPanel panel_firmware1 = new JPanel();
-		panel_firmware1.setBounds(10, 95, 380, 59);
+		panel_firmware1.setBounds(10, 85, 380, 59);
 		panelJCM1.add(panel_firmware1);
 		panel_firmware1
 		.setBorder(new TitledBorder(null, "Firmware:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_firmware1.setLayout(null);
-		
-				final JLabel label = new JLabel(".");
-				label.setBounds(10, 18, 329, 30);
-				panel_firmware1.add(label);
-				
-						JPanel panelRecycler1 = new JPanel();
-						panelRecycler1.setBounds(10, 165, 380, 59);
-						panelJCM1.add(panelRecycler1);
-						panelRecycler1.setLayout(null);
-						panelRecycler1.setBorder(new TitledBorder(
-								new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(128, 128, 128)), "Recycler:",
-								TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-						
-								final JLabel lblRecyclerVersion = new JLabel(".");
-								lblRecyclerVersion.setBounds(10, 19, 225, 29);
-								panelRecycler1.add(lblRecyclerVersion);
-								
-										JButton btnReiniciarJcm1 = new JButton("REINICIAR");
-										btnReiniciarJcm1.setBounds(181, 11, 209, 59);
-										panelJCM1.add(btnReiniciarJcm1);
-										btnReiniciarJcm1.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent e) {
-												currentOperation = jcmOperation.Reset;
-												protocol.currentOpertion = jcmOperation.Reset;
-												jcms[0].id003_format((byte) 5, (byte) 0x40, protocol.jcmMessage, true);
-											}
-										});
-										btnReiniciarJcm1.setFont(new Font("Tahoma", Font.BOLD, 30));
+
+		final JLabel firmwareLabel1 = new JLabel(".");
+		firmwareLabel1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		firmwareLabel1.setBounds(10, 18, 360, 30);
+		panel_firmware1.add(firmwareLabel1);
+
+		JPanel panelRecycler1 = new JPanel();
+		panelRecycler1.setBounds(10, 155, 380, 59);
+		panelJCM1.add(panelRecycler1);
+		panelRecycler1.setLayout(null);
+		panelRecycler1.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(128, 128, 128)), "Recycler:",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+
+		final JLabel lblRecyclerVersion1 = new JLabel(".");
+		lblRecyclerVersion1.setBounds(10, 19, 360, 29);
+		panelRecycler1.add(lblRecyclerVersion1);
+
+		JButton btnReiniciarJcm1 = new JButton("REINICIAR");
+		btnReiniciarJcm1.setBounds(181, 11, 209, 59);
+		panelJCM1.add(btnReiniciarJcm1);
+		btnReiniciarJcm1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentOperation = jcmOperation.Reset;
+				jcms[0].currentOpertion = jcmOperation.Reset;
+				jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
+			}
+		});
+		btnReiniciarJcm1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JPanel panelRetiro = new JPanel();
-		panelRetiro.setBounds(10, 778, 850, 244);
+		panelRetiro.setBounds(10, 719, 850, 257);
 		panelPrincipal.add(panelRetiro);
 		panelRetiro.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRetiro.setLayout(null);
@@ -309,12 +319,96 @@ public class uba {
 
 		final JLabel lblAutorizacion = new JLabel(".\r\n");
 		lblAutorizacion.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblAutorizacion.setBounds(336, 128, 49, 95);
+		lblAutorizacion.setBounds(336, 128, 243, 95);
 		panelRetiro.add(lblAutorizacion);
 
 		JButton btnDispensar = new JButton("Retirar");
 		btnDispensar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				//Revisamos que tanto billetes podemos dispensar
+				int solicitado =  Integer.parseInt(montoDispensar);
+				int jcm1Total = 0;
+				int jcm2Total = 0;
+				
+				//revisamos del JCM 1
+				
+				//cuantos de  jcm1 cass 1 
+				
+				System.out.println("JCM1 Cass1Denom [" + jcms[0].contadores.Cass1Denom + "][" + jcms[0].contadores.Cass1Available + "]");
+				System.out.println("JCM1 Cass2Denom [" + jcms[0].contadores.Cass2Denom + "][" + jcms[0].contadores.Cass2Available + "]");
+				
+				System.out.println("JCM2 Cass1Denom [" + jcms[1].contadores.Cass1Denom + "][" + jcms[1].contadores.Cass1Available + "]");
+				System.out.println("JCM2 Cass2Denom [" + jcms[1].contadores.Cass2Denom + "][" + jcms[1].contadores.Cass2Available + "]");
+				
+				jcm1Total += jcms[0].contadores.Cass1Denom * jcms[0].contadores.Cass1Available;
+				jcm1Total += jcms[0].contadores.Cass2Denom * jcms[0].contadores.Cass2Available;				
+				
+				jcm2Total += jcms[1].contadores.Cass1Denom * jcms[1].contadores.Cass1Available;
+				jcm2Total += jcms[1].contadores.Cass2Denom * jcms[1].contadores.Cass2Available;
+				
+				
+				System.out.println("jcm1Total [" + jcm1Total + "] jcm2Total [" + jcm2Total + "]");
+				
+				
+				jcms[0].jcmCass1 = solicitado / jcms[0].contadores.Cass1Denom;
+																				
+				//Reviamos si necestia mas de los que tiene
+				if(jcms[0].jcmCass1 > jcms[0].contadores.Cass1Available) {
+					jcms[0].jcmCass1 = jcms[0].contadores.Cass1Available;
+				}
+				System.out.println("" + jcms[0].jcmCass1);
+				
+				solicitado = solicitado - (jcms[0].jcmCass1 * jcms[0].contadores.Cass1Denom);
+				
+				System.out.println("Faltante [" + solicitado + "]");
+				
+				
+				jcms[0].jcmCass2 = solicitado / jcms[0].contadores.Cass2Denom;
+				System.out.println("" + jcms[0].jcmCass2);
+																
+				//Reviamos si necestia mas de los que tiene
+				if(jcms[0].jcmCass2 > jcms[0].contadores.Cass2Available) {
+					jcms[0].jcmCass2 = jcms[0].contadores.Cass2Available;
+				}
+				
+				solicitado = solicitado - (jcms[0].jcmCass2 * jcms[0].contadores.Cass2Denom);
+				
+				System.out.println("Faltante [" + solicitado + "]");
+				
+				//revisamos del JCM 2
+				
+				//cuantos de  jcm2 cass 1 
+				
+				jcm2Total += jcms[1].contadores.Cass1Denom * jcms[1].contadores.Cass1Available;
+								
+				jcms[1].jcmCass1 = solicitado / jcms[1].contadores.Cass1Denom;
+				System.out.println("" + jcms[1].jcmCass1);
+																
+				//Reviamos si necestia mas de los que tiene
+				if(jcms[1].jcmCass1 > jcms[1].contadores.Cass1Available) {
+					jcms[1].jcmCass1 = jcms[1].contadores.Cass1Available;
+				}
+				
+				solicitado = solicitado - (jcms[1].jcmCass1 * jcms[1].contadores.Cass1Denom);
+				
+				System.out.println("Faltante [" + solicitado + "]");
+				
+				jcms[1].jcmCass2 = solicitado / jcms[1].contadores.Cass2Denom;
+				System.out.println("" + jcms[1].jcmCass2);
+																
+				//Reviamos si necestia mas de los que tiene
+				if(jcms[1].jcmCass2 > jcms[1].contadores.Cass2Available) {
+					jcms[1].jcmCass2 = jcms[1].contadores.Cass2Available;
+				}
+				
+				solicitado = solicitado - (jcms[1].jcmCass2 * jcms[1].contadores.Cass2Denom);
+				
+				
+				System.out.println("jcm1cass1 [" + jcms[0].jcmCass1 + "] jcm1cass2 [" + jcms[0].jcmCass2 + "] jcm2cass1 [" + jcms[1].jcmCass1 + "]jcm2cass2 [" + jcms[1].jcmCass2 + "]" );
+				
+				System.out.println("Faltante [" + solicitado + "]");
+				
 				// Primero deshabilitamos el que acepte billetes
 
 				if (((montoDispensar.length() > 6) || Long.parseLong(montoDispensar) > maxDispenseAmmount
@@ -339,17 +433,33 @@ public class uba {
 				validAuthorization = false;
 
 				// Iniciamos el dispensado
-
-				protocol.currentOpertion = jcmOperation.Dispense;
-
-				// primero el inhibit
-				protocol.jcmMessage[3] = 0x01;
-				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+				
+				//Checamos para JCM1
+				if(jcms[0].jcmCass1 > 0 || jcms[0].jcmCass2 > 0) {	
+					
+					System.out.println("Deshabilitamos JCM1 para dispense");
+					jcms[0].currentOpertion = jcmOperation.Dispense;
+	
+					// primero el inhibit
+					jcms[0].jcmMessage[3] = 0x01;
+					jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+				}
+				
+				//Checamos para JCM2
+				if(jcms[1].jcmCass1 > 0 || jcms[1].jcmCass2 > 0) {
+					
+					System.out.println("Deshabilitamos JCM2 para dispense");
+					jcms[1].currentOpertion = jcmOperation.Dispense;
+	
+					// primero el inhibit
+					jcms[1].jcmMessage[3] = 0x01;
+					jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
+				}			
 
 			}
 		});
 		btnDispensar.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnDispensar.setBounds(602, 123, 238, 100);
+		btnDispensar.setBounds(602, 125, 238, 100);
 		panelRetiro.add(btnDispensar);
 
 		JPanel panelPinPad = new JPanel();
@@ -442,10 +552,10 @@ public class uba {
 		btn1.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btn1.setBounds(10, 11, 200, 200);
 		panelPinPad.add(btn1);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel.setBounds(10, 519, 840, 248);
+		panel.setBounds(10, 460, 850, 248);
 		panelPrincipal.add(panel);
 		panel.setLayout(null);
 
@@ -553,9 +663,25 @@ public class uba {
 		panelComandos.setLayout(null);
 
 		JPanel panel_comandos = new JPanel();
-		panel_comandos.setBounds(10, 113, 1646, 706);
+		panel_comandos.setBounds(10, 113, 1860, 706);
 		panelComandos.add(panel_comandos);
 		panel_comandos.setLayout(null);
+
+
+
+		JCheckBox chckbxReciclador1 = new JCheckBox("Reciclador 1");
+		chckbxReciclador1.setSelected(true);
+
+		chckbxReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		chckbxReciclador1.setBounds(18, 24, 148, 51);
+		panelComandos.add(chckbxReciclador1);
+
+		JCheckBox chckbxReciclador2 = new JCheckBox("Reciclador 2");		
+		chckbxReciclador2.setSelected(true);
+		chckbxReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		chckbxReciclador2.setBounds(194, 24, 148, 51);
+		panelComandos.add(chckbxReciclador2);
+
 
 		JButton btnStatusReq = new JButton("Stat Req (11h)");
 		btnStatusReq.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -563,7 +689,7 @@ public class uba {
 		btnStatusReq.setBounds(10, 11, 157, 50);
 		btnStatusReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x11, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x11, jcms[0].jcmMessage, true);
 			}
 		});
 
@@ -575,10 +701,10 @@ public class uba {
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				currentOperation = jcmOperation.Reset;
-				jcms[0].id003_format((byte) 5, (byte) 0x40, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
 			}
 		});
-		btnReset.setBounds(282, 11, 144, 50);
+		btnReset.setBounds(318, 11, 167, 50);
 		panel_comandos.add(btnReset);
 
 		JButton btnAck = new JButton("Ack (50h)");
@@ -586,11 +712,11 @@ public class uba {
 		btnAck.setBackground(Color.ORANGE);
 		btnAck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x50, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x50, jcms[0].jcmMessage, true);
 			}
 		});
 		btnAck.setLocation(177, 11);
-		btnAck.setSize(95, 50);
+		btnAck.setSize(131, 50);
 		panel_comandos.add(btnAck);
 
 		JButton btnStack1 = new JButton("Stack-1 (41h)");
@@ -598,10 +724,10 @@ public class uba {
 		btnStack1.setBackground(Color.ORANGE);
 		btnStack1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x41, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x41, jcms[0].jcmMessage, true);
 			}
 		});
-		btnStack1.setBounds(436, 11, 117, 50);
+		btnStack1.setBounds(507, 11, 144, 50);
 		panel_comandos.add(btnStack1);
 
 		JButton btnStack2 = new JButton("Stack-2 (42h)");
@@ -609,10 +735,10 @@ public class uba {
 		btnStack2.setBackground(Color.ORANGE);
 		btnStack2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x42, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x42, jcms[0].jcmMessage, true);
 			}
 		});
-		btnStack2.setBounds(565, 11, 122, 50);
+		btnStack2.setBounds(666, 11, 157, 50);
 		panel_comandos.add(btnStack2);
 
 		JButton btnReturn = new JButton("Return (43h)");
@@ -620,10 +746,10 @@ public class uba {
 		btnReturn.setBackground(Color.ORANGE);
 		btnReturn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x43, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x43, jcms[0].jcmMessage, true);
 			}
 		});
-		btnReturn.setBounds(699, 11, 116, 50);
+		btnReturn.setBounds(833, 11, 144, 50);
 		panel_comandos.add(btnReturn);
 
 		JButton btnHold = new JButton("Hold (44h)");
@@ -631,10 +757,10 @@ public class uba {
 		btnHold.setBackground(Color.ORANGE);
 		btnHold.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x44, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x44, jcms[0].jcmMessage, true);
 			}
 		});
-		btnHold.setBounds(827, 11, 108, 50);
+		btnHold.setBounds(987, 11, 144, 50);
 		panel_comandos.add(btnHold);
 
 		JButton btnWait = new JButton("Wait (45h)");
@@ -642,10 +768,10 @@ public class uba {
 		btnWait.setBackground(Color.ORANGE);
 		btnWait.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x45, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x45, jcms[0].jcmMessage, true);
 			}
 		});
-		btnWait.setBounds(947, 11, 117, 50);
+		btnWait.setBounds(1153, 11, 145, 50);
 		panel_comandos.add(btnWait);
 
 		JLabel lblNewLabel_2 = new JLabel("Setting Commands +Data");
@@ -657,10 +783,10 @@ public class uba {
 		btnEnableDisDenom.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnEnableDisDenom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0xC0, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0xC0, jcms[0].jcmMessage, true);
 			}
 		});
-		btnEnableDisDenom.setBounds(732, 119, 167, 50);
+		btnEnableDisDenom.setBounds(762, 119, 203, 50);
 		panel_comandos.add(btnEnableDisDenom);
 
 		JButton btnSecurotyDenom = new JButton("Security Denom (C1h)");
@@ -669,7 +795,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnSecurotyDenom.setBounds(911, 119, 171, 50);
+		btnSecurotyDenom.setBounds(975, 119, 213, 50);
 		panel_comandos.add(btnSecurotyDenom);
 
 		JButton btnCommunicationMode = new JButton("Communication Mode (C2h)");
@@ -678,7 +804,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnCommunicationMode.setBounds(207, 119, 205, 50);
+		btnCommunicationMode.setBounds(207, 119, 234, 50);
 		panel_comandos.add(btnCommunicationMode);
 
 		JButton btnInhibit = new JButton("Inhibit (C3h)");
@@ -687,11 +813,11 @@ public class uba {
 		btnInhibit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("INHIBIT");
-				protocol.jcmMessage[3] = 0x01;
-				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+				jcms[0].jcmMessage[3] = 0x01;
+				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
 			}
 		});
-		btnInhibit.setBounds(422, 119, 146, 50);
+		btnInhibit.setBounds(445, 119, 146, 50);
 		panel_comandos.add(btnInhibit);
 
 		JButton btnDirection = new JButton("Direction (C4h)");
@@ -700,7 +826,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnDirection.setBounds(1092, 119, 125, 50);
+		btnDirection.setBounds(1216, 119, 157, 50);
 		panel_comandos.add(btnDirection);
 
 		JButton btnOptionalFunc = new JButton("Optional Func (C5h)");
@@ -722,10 +848,10 @@ public class uba {
 		btnOptionalFuncReq.setBackground(Color.ORANGE);
 		btnOptionalFuncReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x85, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x85, jcms[0].jcmMessage, true);
 			}
 		});
-		btnOptionalFuncReq.setBounds(945, 223, 179, 50);
+		btnOptionalFuncReq.setBounds(1059, 225, 200, 50);
 		panel_comandos.add(btnOptionalFuncReq);
 
 		JButton btnEnableDisDenomReq = new JButton("En/Des Denom (80h)");
@@ -733,10 +859,10 @@ public class uba {
 		btnEnableDisDenomReq.setBackground(Color.ORANGE);
 		btnEnableDisDenomReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x80, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x80, jcms[0].jcmMessage, true);
 			}
 		});
-		btnEnableDisDenomReq.setBounds(10, 223, 179, 50);
+		btnEnableDisDenomReq.setBounds(10, 225, 179, 50);
 		panel_comandos.add(btnEnableDisDenomReq);
 
 		JButton btnInhibitReq = new JButton("Inhibit (83h)");
@@ -745,10 +871,10 @@ public class uba {
 		btnInhibitReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(" CONSULTA DE INHIBIT");
-				jcms[0].id003_format((byte) 5, (byte) 0x83, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x83, jcms[0].jcmMessage, true);
 			}
 		});
-		btnInhibitReq.setBounds(601, 223, 157, 50);
+		btnInhibitReq.setBounds(712, 225, 157, 50);
 		panel_comandos.add(btnInhibitReq);
 
 		JButton btnDirectionReq = new JButton("Direction (84h)");
@@ -756,10 +882,10 @@ public class uba {
 		btnDirectionReq.setBackground(Color.ORANGE);
 		btnDirectionReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x84, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x84, jcms[0].jcmMessage, true);
 			}
 		});
-		btnDirectionReq.setBounds(768, 225, 167, 50);
+		btnDirectionReq.setBounds(882, 225, 167, 50);
 		panel_comandos.add(btnDirectionReq);
 
 		JButton btnSecurotyDenomReq = new JButton("Security Denom (81h)");
@@ -767,10 +893,10 @@ public class uba {
 		btnSecurotyDenomReq.setBackground(Color.ORANGE);
 		btnSecurotyDenomReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x81, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x81, jcms[0].jcmMessage, true);
 			}
 		});
-		btnSecurotyDenomReq.setBounds(199, 223, 179, 50);
+		btnSecurotyDenomReq.setBounds(199, 225, 213, 50);
 		panel_comandos.add(btnSecurotyDenomReq);
 
 		JButton btnCommunicationModeReq = new JButton("Communication Mode (82h)");
@@ -778,10 +904,10 @@ public class uba {
 		btnCommunicationModeReq.setBackground(Color.ORANGE);
 		btnCommunicationModeReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x82, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x82, jcms[0].jcmMessage, true);
 			}
 		});
-		btnCommunicationModeReq.setBounds(386, 223, 205, 50);
+		btnCommunicationModeReq.setBounds(468, 225, 234, 50);
 		panel_comandos.add(btnCommunicationModeReq);
 
 		JButton btnVersionRequest = new JButton("Version Request (88h)");
@@ -789,10 +915,10 @@ public class uba {
 		btnVersionRequest.setBackground(Color.ORANGE);
 		btnVersionRequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x88, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x88, jcms[0].jcmMessage, true);
 			}
 		});
-		btnVersionRequest.setBounds(1134, 223, 179, 50);
+		btnVersionRequest.setBounds(1269, 225, 218, 50);
 		panel_comandos.add(btnVersionRequest);
 
 		JButton btnBootVersionrequest = new JButton("Boot Version Request (89h)");
@@ -800,10 +926,10 @@ public class uba {
 		btnBootVersionrequest.setBackground(Color.ORANGE);
 		btnBootVersionrequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x89, protocol.jcmMessage, true);
+				jcms[0].id003_format((byte) 5, (byte) 0x89, jcms[0].jcmMessage, true);
 			}
 		});
-		btnBootVersionrequest.setBounds(10, 285, 205, 50);
+		btnBootVersionrequest.setBounds(10, 285, 256, 50);
 		panel_comandos.add(btnBootVersionrequest);
 
 		JLabel lblNewLabel_2_1_1 = new JLabel("RECYCLER / EXTENSION (F0h + )");
@@ -817,10 +943,10 @@ public class uba {
 		btnStatusRequestExt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x7, (byte) 0xf0, (byte) 0x20, (byte) 0x1a, (byte) 0x1, (byte) 0x2,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnStatusRequestExt.setBounds(528, 457, 163, 50);
+		btnStatusRequestExt.setBounds(559, 459, 194, 50);
 		panel_comandos.add(btnStatusRequestExt);
 
 		JButton btnStack3 = new JButton("Stack-3 (49h)");
@@ -828,10 +954,10 @@ public class uba {
 		btnStack3.setBackground(Color.ORANGE);
 		btnStack3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 0x5, (byte) 0x49, protocol.jcmMessage, false);
+				jcms[0].id003_format((byte) 0x5, (byte) 0x49, jcms[0].jcmMessage, false);
 			}
 		});
-		btnStack3.setBounds(701, 457, 157, 50);
+		btnStack3.setBounds(779, 459, 157, 50);
 		panel_comandos.add(btnStack3);
 
 		JButton btnPayOut = new JButton("Pay Out (+4Ah)");
@@ -840,10 +966,10 @@ public class uba {
 		btnPayOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) 0x1, (byte) 0x1,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnPayOut.setBounds(873, 457, 161, 50);
+		btnPayOut.setBounds(958, 459, 161, 50);
 		panel_comandos.add(btnPayOut);
 
 		JButton btnCollect = new JButton("Collect (+4Bh+Data)");
@@ -861,7 +987,7 @@ public class uba {
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
 		btnClear.setBounds(195, 399, 144, 50);
@@ -873,10 +999,10 @@ public class uba {
 		btnEmergencyStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnEmergencyStop.setBounds(351, 399, 187, 50);
+		btnEmergencyStop.setBounds(351, 399, 197, 50);
 		panel_comandos.add(btnEmergencyStop);
 
 		JButton btnUnitInformationRequest = new JButton("Unit Information Req (92h)");
@@ -884,10 +1010,10 @@ public class uba {
 		btnUnitInformationRequest.setBackground(Color.ORANGE);
 		btnUnitInformationRequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 0x5, (byte) 0x92, protocol.jcmMessage, false);
+				jcms[0].id003_format((byte) 0x5, (byte) 0x92, jcms[0].jcmMessage, false);
 			}
 		});
-		btnUnitInformationRequest.setBounds(313, 459, 205, 50);
+		btnUnitInformationRequest.setBounds(313, 459, 236, 50);
 		panel_comandos.add(btnUnitInformationRequest);
 
 		JButton btnRecycleRefillModeSetting = new JButton("Recycle Refill Mode Setting (D4h+Data)");
@@ -896,7 +1022,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnRecycleRefillModeSetting.setBounds(1314, 399, 289, 50);
+		btnRecycleRefillModeSetting.setBounds(1487, 399, 348, 50);
 		panel_comandos.add(btnRecycleRefillModeSetting);
 
 		JButton btnRecycleKeySetting = new JButton("Recycle Key Setting (+D1h+Data)");
@@ -905,7 +1031,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnRecycleKeySetting.setBounds(814, 399, 244, 50);
+		btnRecycleKeySetting.setBounds(867, 399, 289, 50);
 		panel_comandos.add(btnRecycleKeySetting);
 
 		JButton btnRecycleCountSetting = new JButton("Recycle Count Setting (+D2h+Data)");
@@ -915,7 +1041,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnRecycleCountSetting.setBounds(1068, 399, 236, 50);
+		btnRecycleCountSetting.setBounds(1162, 399, 315, 50);
 		panel_comandos.add(btnRecycleCountSetting);
 
 		JButton btnRecycleCurrencySetting = new JButton("Recycle Currency Setting (+D0h+Data)");
@@ -923,15 +1049,15 @@ public class uba {
 		btnRecycleCurrencySetting.setBackground(Color.ORANGE);
 		btnRecycleCurrencySetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				protocol.jcmMessage[7] = 0x01;
-				protocol.jcmMessage[8] = 0x20; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
-				protocol.jcmMessage[9] = 0x00;
-				protocol.jcmMessage[10] = 0x02;
-				jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x20, (byte) 0x0,
-						protocol.jcmMessage);
+				jcms[0].jcmMessage[7] = 0x01;
+				jcms[0].jcmMessage[8] = 0x10; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
+				jcms[0].jcmMessage[9] = 0x00;
+				jcms[0].jcmMessage[10] = 0x02;
+				jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x08, (byte) 0x0,
+						jcms[0].jcmMessage);
 			}
 		});
-		btnRecycleCurrencySetting.setBounds(548, 399, 256, 50);
+		btnRecycleCurrencySetting.setBounds(558, 399, 299, 50);
 		panel_comandos.add(btnRecycleCurrencySetting);
 
 		JButton btnCurrentCountSetting = new JButton("Current Count\u00A0Setting (E2h+Data)");
@@ -949,10 +1075,10 @@ public class uba {
 		btnRecycleCurrencyReqSetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnRecycleCurrencyReqSetting.setBounds(689, 569, 205, 50);
+		btnRecycleCurrencyReqSetting.setBounds(736, 569, 236, 50);
 		panel_comandos.add(btnRecycleCurrencyReqSetting);
 
 		JButton btnRecycleSoftwareVersionReq = new JButton("Recycle Software Version Req (+93h)");
@@ -961,10 +1087,10 @@ public class uba {
 		btnRecycleSoftwareVersionReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x93, (byte) 0x00, (byte) 0x0,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnRecycleSoftwareVersionReq.setBounds(1342, 569, 256, 50);
+		btnRecycleSoftwareVersionReq.setBounds(1516, 569, 334, 50);
 		panel_comandos.add(btnRecycleSoftwareVersionReq);
 
 		JLabel lblNewLabel_2_1_2 = new JLabel("Setting Status Request (F0h + )");
@@ -978,7 +1104,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnRecycleKeySettingReq.setBounds(904, 569, 224, 50);
+		btnRecycleKeySettingReq.setBounds(994, 569, 262, 50);
 		panel_comandos.add(btnRecycleKeySettingReq);
 
 		JButton btnRecycleCountReq = new JButton("Recycle Count Req (+92h)");
@@ -986,10 +1112,11 @@ public class uba {
 		btnRecycleCountReq.setBackground(Color.ORANGE);
 		btnRecycleCountReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 0x5, (byte) 0x92, protocol.jcmMessage, false);
+				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x92, (byte) 0x00, (byte) 0x0,
+						jcms[0].jcmMessage);
 			}
 		});
-		btnRecycleCountReq.setBounds(1140, 569, 187, 50);
+		btnRecycleCountReq.setBounds(1270, 569, 236, 50);
 		panel_comandos.add(btnRecycleCountReq);
 
 		JButton btnRecycleRefillModeReq = new JButton("Recycle Refill Mode Req (+94h)");
@@ -998,7 +1125,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnRecycleRefillModeReq.setBounds(10, 569, 218, 50);
+		btnRecycleRefillModeReq.setBounds(10, 569, 270, 50);
 		panel_comandos.add(btnRecycleRefillModeReq);
 
 		JButton btnTotalCountReq = new JButton("Total Count Req (+A0h)");
@@ -1007,10 +1134,10 @@ public class uba {
 		btnTotalCountReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA0, (byte) 0x00, (byte) 0x0,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnTotalCountReq.setBounds(235, 569, 224, 50);
+		btnTotalCountReq.setBounds(301, 569, 205, 50);
 		panel_comandos.add(btnTotalCountReq);
 
 		JButton btnTotalCountClear = new JButton("Total Count Clear (+A1h)");
@@ -1019,10 +1146,10 @@ public class uba {
 		btnTotalCountClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA1, (byte) 0x00, (byte) 0x0,
-						protocol.jcmMessage);
+						jcms[0].jcmMessage);
 			}
 		});
-		btnTotalCountClear.setBounds(469, 569, 210, 50);
+		btnTotalCountClear.setBounds(516, 569, 210, 50);
 		panel_comandos.add(btnTotalCountClear);
 
 		JButton btnCurrentCountReq = new JButton("Current Count Req (+A2h)");
@@ -1030,10 +1157,15 @@ public class uba {
 		btnCurrentCountReq.setBackground(Color.ORANGE);
 		btnCurrentCountReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
-						protocol.jcmMessage);
+				if(chckbxReciclador1.isSelected())
+					jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
+							jcms[0].jcmMessage);
+				if(chckbxReciclador2.isSelected())
+					jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
+							jcms[1].jcmMessage);
 			}
-		});
+		});		
+
 		btnCurrentCountReq.setBounds(10, 630, 236, 50);
 		panel_comandos.add(btnCurrentCountReq);
 
@@ -1043,99 +1175,114 @@ public class uba {
 		btnReinhibitch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("RE INHIBIT");
-				protocol.jcmMessage[3] = 0x00;
-				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, protocol.jcmMessage, false);
+				jcms[0].jcmMessage[3] = 0x00;
+				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
 			}
 		});
-		btnReinhibitch.setBounds(578, 119, 144, 50);
+		btnReinhibitch.setBounds(608, 119, 144, 50);
 		panel_comandos.add(btnReinhibitch);
 
 		JButton btnCurrencyAssingRequest = new JButton("Currency Assing Req (8Ah)");
 		btnCurrencyAssingRequest.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnCurrencyAssingRequest.setBounds(1326, 223, 224, 50);
+		btnCurrencyAssingRequest.setBounds(1496, 223, 224, 50);
 		panel_comandos.add(btnCurrencyAssingRequest);
 		btnCurrencyAssingRequest.setBackground(Color.ORANGE);
-		
-		JCheckBox chckbxReciclador1 = new JCheckBox("Reciclador 1");
-		chckbxReciclador1.setSelected(true);
-		
-		chckbxReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		chckbxReciclador1.setBounds(18, 24, 148, 51);
-		panelComandos.add(chckbxReciclador1);
-		
-		JCheckBox chckbxReciclador2 = new JCheckBox("Reciclador 2");		
-		chckbxReciclador2.setSelected(true);
-		chckbxReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		chckbxReciclador2.setBounds(194, 24, 148, 51);
-		panelComandos.add(chckbxReciclador2);
+
+
+
+
 		btnCurrencyAssingRequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				if(chckbxReciclador1.isSelected())
-					jcms[0].id003_format((byte) 5, (byte) 0x8A, protocol.jcmMessage, true);
+					jcms[0].id003_format((byte) 5, (byte) 0x8A, jcms[0].jcmMessage, true);
 				if(chckbxReciclador2.isSelected())
-					jcms[1].id003_format((byte) 5, (byte) 0x8A, protocol.jcmMessage, true);
+					jcms[1].id003_format((byte) 5, (byte) 0x8A, jcms[1].jcmMessage, true);
 			}
 		});
 
 		/* ------ BORRAR ------------ */
-		
+
 		MyClass c = new MyClass();
 		c.addMyEventListener(new MyEventListener() {
 			public void myEventOccurred(MyEvent evt) {
-				System.out.println("myEventOccurred");
-				if (evt.getSource() == "version") {
-					label.setText(new String(uart.version));
-				} else if (evt.getSource() == "bill") {
-					lblBilleteIngresado1.setText(String.format("%d", uart.bill));
-				} else if (evt.getSource() == "clearbill") {
+				System.out.println("myEventOccurred [" + evt.getSource() + "]");
+
+				switch(evt.getSource().toString()) {
+				case "version1":
+					firmwareLabel1.setText(new String(jcms[0].version));
+					break;
+				case "version2":
+					firmwareLabel2.setText(new String(jcms[1].version));
+					break;					
+				case "bill1":
+					lblBilleteIngresado1.setText(String.format("%d", jcms[0].bill));
+					break;
+				case "bill2":
+					lblBilleteIngresado2.setText(String.format("%d", jcms[1].bill));
+					break;					
+				case "clearbill1":
 					lblBilleteIngresado1.setText("");
-				} else if (evt.getSource() == "recyclerVersion") {
-					lblRecyclerVersion.setText(new String(uart.recyclerVersion));
-				} else if (evt.getSource() == "recyclerBillsA") {
-					lblRecycler1.setText(uart.recyclerOneA + " " + uart.recyclerOneB);
+					break;
+				case "clearbill2":
+					lblBilleteIngresado2.setText("");
+					break;					
+				case "recyclerVersion1":
+					lblRecyclerVersion1.setText(new String(jcms[0].recyclerVersion));
+					break;
+				case "recyclerVersion2":
+					lblRecyclerVersion2.setText(new String(jcms[1].recyclerVersion));
+					break;					
+				case "recyclerBillsA1":
+					lblRecycler1.setText(jcms[0].recyclerOneA + " " + jcms[0].recyclerOneB);
+					break;
+				case "recyclerBillsA2":
+					lblRecycler2.setText(jcms[1].recyclerOneA + " " + jcms[1].recyclerOneB);
+					break;
+				case "recyclerContadores1":
+					lblContadores1.setText(jcms[0].recyclerContadores);
+					break;
+				case "recyclerContadores2":
+					lblContadores2.setText(jcms[1].recyclerContadores);
+					break;
 				}
+
 
 			}
 		});
 		// ![2]
 
-		
-		
-		
+
+
+
 		//Identificamos los puertos disponibles
 		uart.portList = CommPortIdentifier.getPortIdentifiers();
 		contador = 0;
-		
+
 		while (uart.portList.hasMoreElements()) {
-									
+
 			CommPortIdentifier commPort = (CommPortIdentifier) uart.portList.nextElement();
-					
-			
-        	//Checamos que sea un com{x} port
-			if (commPort.getName().toUpperCase().contains("COM")) {
-				
-				jcms[contador] = new uart();
+
+
+			//Checamos que sea un com{x} port
+			if (commPort.getName().toUpperCase().contains("COM")  || commPort.getName().toUpperCase().contains("TTYUSB") ) {
+
+				System.out.println("Puerto [" + commPort.getName().toUpperCase() + "]");
+
+				jcms[contador] = new uart(contador + 1);
 				jcms[contador].portId = commPort;
 				jcms[contador].baud = 9600;
-				jcms[contador].openPort(commPort.getName().toString());				
+				jcms[contador].id = contador + 1;
+				//jcms[contador].openPort(commPort.getName().toString());
+
 				contador++;
-			}
-			
-			
-			/*
-			uart.portId = (CommPortIdentifier) uart.portList.nextElement();
-						
-			//if (uart.portId.getName().equals("COM5")) 
-        	//Checamos que sea un com{x} port
-			if (uart.portId.getName().toUpperCase().contains("COM")) {
-				cbPuerto.addItem(uart.portId.getName().toString());
-				
-				//Abrimos la conexion
-				uart.baud = 9600;
-				srlprt1.openPort(uart.portId.getName().toString());
-			}
-			*/			
+			}			
 		}
+
+		//Inicializamos los UARTS
+		for(int i = 0; i < contador; i++) {
+			jcms[i].openPort(jcms[i].portId.getName().toString());
+		}
+
 	}
 
 	public static String baitsToString(String texto, byte[] baits) {
@@ -1165,6 +1312,7 @@ public class uba {
 			if (asteriscos.length() > 5)
 				return;
 
+			autorizacionDispensar += digito;
 			asteriscos += "*";
 			lblAutorizacion.setText(asteriscos);
 		}

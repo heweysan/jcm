@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/cUPS/stax-1.2.0.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/cUPS/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/cUPS/xpp3-1.1.3.3.jar"/>
+	<classpathentry kind="lib" path="D:/Repos/JavaJars/gnu.io/RXTXcomm-2.2pre2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
