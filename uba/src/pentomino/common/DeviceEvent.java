@@ -218,7 +218,20 @@ public enum DeviceEvent {
     DEP_Diagnosis (8224),
 	DEP_CashInCanceled (8228),  //Not necessarily a CashIn failed
     DEP_DiagnoserReset (8229),        
-    DEP_CashUnitStatus (8231);
+    DEP_CashUnitStatus (8231),
+	
+	
+    //region EPP (3072 - 4095)
+    EPP_OpenFailed (3072),
+    EPP_RegisterFailed (3073),
+    EPP_LockFailed (3074),
+    EPP_ResetFailed (3075),
+    EPP_CabinetOpen (3076),
+    EPP_CabinetClosed (3077),
+    EPP_Keypress (3078),
+    EPP_KeypressFinished (3079),
+    EPP_PINEntered (3080),
+    EPP_NumberEntered (3081);
 	
 	
 	 private int numVal;

@@ -44,10 +44,14 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	uart(int identificador){
 		System.out.println("uart constructor [" + identificador + "]");
+		logger.debug("uart constructor [" + identificador + "]");
 		jcmId = identificador;
 	}
 	
 	public void run() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("run() - start"); //$NON-NLS-1$
+		}
 	
 		while(true){
 			try {
@@ -58,6 +62,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 				}
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
+				logger.error("run()", e); //$NON-NLS-1$
+
 				System.out.println(e);
 			}
 		}
@@ -65,7 +71,11 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	public int tempCont = 0;
 	
-	public void serialTx(byte[] msg) {		
+	public void serialTx(byte[] msg) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("serialTx(byte[]) - start"); //$NON-NLS-1$
+		}
+		
         try {
         
             if(msg[2] != lastTx) {
@@ -84,12 +94,20 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
             outputStream.write(msg,0,msg[1]);
         
         } catch (IOException e) {
+			logger.error("serialTx(byte[])", e); //$NON-NLS-1$
+
         	e.printStackTrace();
         }
        
+		if (logger.isDebugEnabled()) {
+			logger.debug("serialTx(byte[]) - end"); //$NON-NLS-1$
+		}
 	}
 	
 	public void openPort (String prt){
+		if (logger.isDebugEnabled()) {
+			logger.debug("openPort(String) - start"); //$NON-NLS-1$
+		}
 		
 		System.out.println("uart->openPort [" + prt + "]" );
 		portList =  CommPortIdentifier.getPortIdentifiers();
@@ -105,6 +123,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                         serialPort = (SerialPort) portId.open("srlport", 2000);
                     } 
                     catch (PortInUseException e) {
+						logger.error("openPort(String)", e); //$NON-NLS-1$
+
                     	System.out.println("[" + id + "] PortInUseException");
                     }
                     
@@ -113,6 +133,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                         inputStream = serialPort.getInputStream();
                     } 
                     catch (IOException e) {
+						logger.error("openPort(String)", e); //$NON-NLS-1$
+
                     	System.out.println(e);
                     }
                     
@@ -121,6 +143,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                         outputStream = serialPort.getOutputStream();
                     } 
                     catch (IOException e) {
+						logger.error("openPort(String)", e); //$NON-NLS-1$
+
                     	e.printStackTrace();
                     }
                     
@@ -132,6 +156,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                             SerialPort.STOPBITS_1,
                             SerialPort.PARITY_EVEN);
                     } catch (UnsupportedCommOperationException e) {
+						logger.error("openPort(String)", e); //$NON-NLS-1$
+
                     	e.printStackTrace();
                     }
                            
@@ -139,6 +165,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     	System.out.println("[" + id + "] adding event listener");
             			serialPort.addEventListener(this);
             		} catch (TooManyListenersException e) {
+						logger.error("openPort(String)", e); //$NON-NLS-1$
+
             			e.printStackTrace();
             		}
                     
@@ -149,9 +177,16 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
             }
         }
 	  
+		if (logger.isDebugEnabled()) {
+			logger.debug("openPort(String) - end"); //$NON-NLS-1$
+		}
      }
 	
 	public void serialEvent(SerialPortEvent event){
+		if (logger.isDebugEnabled()) {
+			logger.debug("serialEvent(SerialPortEvent) - start"); //$NON-NLS-1$
+		}
+
 			//System.out.println("serialEvent");
 	       switch(event.getEventType()) {
 	        case SerialPortEvent.BI:
@@ -207,34 +242,71 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	                    
 	                }
 
-	            } catch (IOException e) {System.out.println(e);}
+	            } catch (IOException e) {
+					logger.error("serialEvent(SerialPortEvent)", e); //$NON-NLS-1$
+					System.out.println(e);}
 	            break;
 	        }
-	}
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("serialEvent(SerialPortEvent) - end"); //$NON-NLS-1$
+			}
+		}
 
 	public void reiniciar() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("reiniciar() - start"); //$NON-NLS-1$
+		}
+
 		System.out.println("[" + id + "] uart reiniciar");
 		this.id003_format((byte)5, (byte) 0x40, jcmMessage,true);		
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("reiniciar() - end"); //$NON-NLS-1$
+		}
 	}
 	
 	
 	public String baitsToString(String texto, byte[] baits) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("baitsToString(String, byte[]) - start"); //$NON-NLS-1$
+		}
+
     	String result = texto;
     	for (byte theByte : baits){
     		result += " [" + Integer.toHexString(theByte) + "] ";
         }
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("baitsToString(String, byte[]) - end"); //$NON-NLS-1$
+		}
     	return result;
     }
 
 	public void reciclar() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("reciclar() - start"); //$NON-NLS-1$
+		}
+
 		System.out.println("[" + id + "] uart reciclar");
 		jcmMessage[2] = (byte) 0XFC;
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("reciclar() - end"); //$NON-NLS-1$
+		}
 	}
 
 	public void estatus() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("estatus() - start"); //$NON-NLS-1$
+		}
+
 		System.out.println("[" + id + "] uart estatus");
 		jcmMessage[2] = 0X11;
 		
+		if (logger.isDebugEnabled()) {
+			logger.debug("estatus() - end"); //$NON-NLS-1$
+		}
 	}
 
 	public void statusRequest() {

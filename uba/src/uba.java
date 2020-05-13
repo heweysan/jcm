@@ -2,12 +2,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.border.TitledBorder;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeoutException;
 import gnu.io.*;
 
@@ -16,6 +15,8 @@ import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+
 import java.lang.System;
 import java.text.DecimalFormat;
 
@@ -25,8 +26,8 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
 
 import pentomino.common.*;
@@ -37,14 +38,28 @@ import javax.swing.JTabbedPane;
 import javax.swing.Icon;
 import javax.swing.border.BevelBorder;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.awt.Dialog.ModalityType;
+import java.awt.Frame;
+import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 
 
 
 public class uba {
+	
+	private static PinpadMode pinpadMode = PinpadMode.None;
+	
+	private static String retiroUser = "";
+	private static String retiroPassword = "";
+	private static String retiroClave = "";
+	private static String depositoUser = "";
+	private static String depositoPassword = "";
+	
+	private static int referenciaNumerica = 0;
+	private static int montoRetiro = 0;
 
 	private static Gson gson = new Gson();
 
@@ -52,14 +67,13 @@ public class uba {
 
 	private static String montoDispensar = "0";
 	private static String autorizacionDispensar = "";
+	private static String autorizacionDispensarCopia = "";
 	private static String asteriscos = "";
-
+	
 	private static jcmOperation currentOperation = jcmOperation.None;
 
-	static long maxDispenseAmmount = 5000;
-
-	private JFrame frame;
-
+	private JFrame mainFrame;
+	
 	private static boolean retiroMonto = false;
 	private static boolean retiroAutorizacion = false;
 
@@ -68,8 +82,11 @@ public class uba {
 
 	uart[] jcms = new uart[2];
 	int contador = 0;
+	private JTextField textFieldDepositoUser;
+	private JTextField textFieldDepositoPassword;
 
-
+	//final Tio miTio = new Tio();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -78,7 +95,7 @@ public class uba {
 			public void run() {
 				try {
 					uba window = new uba();
-					window.frame.setVisible(true);
+					window.mainFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -109,6 +126,10 @@ public class uba {
 
 		t2.start();
 
+		/*
+		Thread tioThread = new Thread(miTio, "Tio Thread");
+		tioThread.start();	
+		*/
 		initialize();	
 
 	}
@@ -118,23 +139,20 @@ public class uba {
 	 */
 	private void initialize() {
 
-		frame = new JFrame();
-		frame.getContentPane().setBackground(Color.DARK_GRAY);
-		frame.setTitle("RedBlu JCM Driver (ID003)");
-		frame.setBounds(100, 100, 1920, 1084);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.setLocationRelativeTo(null);
-
-		final uart srlprt1 = new uart();
-		final uart srlprt2 = new uart(); // HEWEY SAN AQUI: Pruebas recepcion
-		//final uart2 srlprt2 = new uart2(); // HEWEY SAN AQUI: Pruebas recepcion
-
+		mainFrame = new JFrame();
+		mainFrame.getContentPane().setBackground(Color.DARK_GRAY);
+		mainFrame.setTitle("RedBlu JCM Driver (ID003)");
+		mainFrame.setBounds(100, 100, 1920, 1084);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.getContentPane().setLayout(null);
+		mainFrame.setLocationRelativeTo(null);
+		
+		
 		String[] BaudArray = { "9600", "19200", "38400" };
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 1904, 1050);
-		frame.getContentPane().add(tabbedPane);
+		mainFrame.getContentPane().add(tabbedPane);
 
 		JPanel panelPrincipal = new JPanel();
 		tabbedPane.addTab("Principal", (Icon) null, panelPrincipal, null);
@@ -142,13 +160,13 @@ public class uba {
 		panelPrincipal.setLayout(null);
 
 		JPanel panel_estatus = new JPanel();
-		panel_estatus.setBounds(10, 11, 850, 438);
+		panel_estatus.setBounds(10, 11, 850, 403);
 		panelPrincipal.add(panel_estatus);
 		panel_estatus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_estatus.setLayout(null);
 
 		JPanel panelJCM2 = new JPanel();
-		panelJCM2.setBounds(440, 11, 400, 414);
+		panelJCM2.setBounds(440, 11, 400, 381);
 		panel_estatus.add(panelJCM2);
 		panelJCM2.setLayout(null);
 		panelJCM2.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -165,17 +183,17 @@ public class uba {
 
 		JLabel lblBilleteIngresado2 = new JLabel("$0");
 		lblBilleteIngresado2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblBilleteIngresado2.setBounds(164, 350, 226, 46);
+		lblBilleteIngresado2.setBounds(164, 330, 226, 46);
 		panelJCM2.add(lblBilleteIngresado2);
 
 		JLabel lblTxtBill2 = new JLabel("Billete:");
 		lblTxtBill2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblTxtBill2.setBounds(10, 350, 144, 46);
+		lblTxtBill2.setBounds(10, 330, 144, 46);
 		panelJCM2.add(lblTxtBill2);
 
 		JLabel lblContadores2 = new JLabel("100x20 100x50 x100x100 100x200 100x500");
 		lblContadores2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblContadores2.setBounds(10, 290, 380, 53);
+		lblContadores2.setBounds(10, 280, 380, 37);
 		panelJCM2.add(lblContadores2);
 
 		JButton btnReiniciarJcm2 = new JButton("REINICIAR");
@@ -213,7 +231,7 @@ public class uba {
 		panelRecycler2.add(lblRecyclerVersion2);
 
 		JPanel panelJCM1 = new JPanel();
-		panelJCM1.setBounds(10, 11, 400, 414);
+		panelJCM1.setBounds(10, 11, 400, 381);
 		panel_estatus.add(panelJCM1);
 		panelJCM1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelJCM1.setLayout(null);
@@ -229,21 +247,31 @@ public class uba {
 		panelJCM1.add(lblTitleReciclador1);
 
 		JLabel lblTxtBill1 = new JLabel("Billete:");
-		lblTxtBill1.setBounds(10, 350, 144, 46);
+		lblTxtBill1.setBounds(10, 330, 144, 46);
 		panelJCM1.add(lblTxtBill1);
 		lblTxtBill1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		final JLabel lblBilleteIngresado1 = new JLabel("$0");
-		lblBilleteIngresado1.setBounds(164, 350, 226, 46);
+		lblBilleteIngresado1.setBounds(164, 330, 226, 46);
 		panelJCM1.add(lblBilleteIngresado1);
 		lblBilleteIngresado1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JLabel lblContadores1 = new JLabel("100x20 100x50 x100x100 100x200 100x500");
 		lblContadores1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblContadores1.setBounds(10, 290, 380, 53);
+		lblContadores1.setBounds(10, 280, 380, 37);
 		panelJCM1.add(lblContadores1);
 
-
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_1.setBounds(10, 948, 850, 63);
+		panelPrincipal.add(panel_1);
+		panel_1.setLayout(null);
+		
+		final JLabel lblMensajes = new JLabel(".");
+		lblMensajes.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblMensajes.setBounds(10, 11, 830, 41);
+		panel_1.add(lblMensajes);
 
 
 
@@ -284,26 +312,14 @@ public class uba {
 		btnReiniciarJcm1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JPanel panelRetiro = new JPanel();
-		panelRetiro.setBounds(10, 719, 850, 257);
+		panelRetiro.setBounds(10, 680, 850, 257);
 		panelPrincipal.add(panelRetiro);
 		panelRetiro.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRetiro.setLayout(null);
 
-		JButton btnMonto = new JButton("Monto");
-		btnMonto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				retiroMonto = true;
-				retiroAutorizacion = false;
-
-			}
-		});
-		btnMonto.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnMonto.setBounds(10, 11, 275, 100);
-		panelRetiro.add(btnMonto);
-
 		final JLabel lblMonto = new JLabel("$000,000");
 		lblMonto.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblMonto.setBounds(336, 14, 287, 95);
+		lblMonto.setBounds(553, 11, 287, 95);
 		panelRetiro.add(lblMonto);
 
 		JButton btnAutorizacion = new JButton("Autorizaci\u00F3n");
@@ -311,6 +327,7 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 				retiroMonto = false;
 				retiroAutorizacion = true;
+				pinpadMode = PinpadMode.retiroClave;
 			}
 		});
 		btnAutorizacion.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -319,15 +336,59 @@ public class uba {
 
 		final JLabel lblAutorizacion = new JLabel(".\r\n");
 		lblAutorizacion.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblAutorizacion.setBounds(336, 128, 243, 95);
+		lblAutorizacion.setBounds(304, 128, 275, 95);
 		panelRetiro.add(lblAutorizacion);
 
+		JPanel panelDev = new JPanel();
+		tabbedPane.addTab("New tab", null, panelDev, null);
+		panelDev.setLayout(null);
+		
+		
 		JButton btnDispensar = new JButton("Retirar");
 		btnDispensar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				
+				//Redone for larger OK button
+		         JOptionPane theOptionPane = new JOptionPane("MI MENSAJE FELIZ",JOptionPane.INFORMATION_MESSAGE);
+		         JPanel buttonPanel = (JPanel)theOptionPane.getComponent(1);
+		        // get the handle to the ok button
+		        JButton buttonOk = (JButton)buttonPanel.getComponent(0);
+		        // set the text
+		        buttonOk.setText(" OK ");
+		        buttonOk.setPreferredSize(new Dimension(200,100));  //Set Button size here
+		        buttonOk.validate();
+		        JDialog theDialog = theOptionPane.createDialog(null,"MI TITULO");
+		        theDialog.setVisible(true);  //present your new optionpane to the world.
+				
+		        
+		        //Checamos que tenga algo de dinero.
+		        if(jcms[0].contadores.Cass1Available == 0 && jcms[0].contadores.Cass2Available == 0 && jcms[1].contadores.Cass1Available == 0 && jcms[1].contadores.Cass2Available == 0){
+		        	
+		        }
+				
+				 JScrollPane scrollpane = new JScrollPane(); 
+			       String categories[] = { "1. Problem One Problem One Problem One Problem One Problem One Problem One Problem One Problem One Problem One", "2. Problem Two", "3. Extended Family", "4. Extended Family", "5. Extended Family"
+			               ,"6. Extended Family","7. Extended Family","8. Extended Family","9. Extended Family"};
+			       JList list = new JList(categories);
+
+			       scrollpane = new JScrollPane(list);
+
+			       JPanel panel = new JPanel(); 
+			       panelPrincipal.add(scrollpane);
+			       scrollpane.setViewportView(list);
+			       JOptionPane.showMessageDialog(null, scrollpane, "Error List",  
+			                                              JOptionPane.PLAIN_MESSAGE);
+				
+				if (autorizacionDispensar.length() == 0 || !autorizacionDispensar.equalsIgnoreCase(Integer.toString(referenciaNumerica))) {
+					lblMensajes.setText("Autorizacón inválida, favor de verificar.");
+					JOptionPane.showMessageDialog(mainFrame, "Autorizacón inválida, favor de verificar.", "No se puede dispensar.", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				
 				//Revisamos que tanto billetes podemos dispensar
-				int solicitado =  Integer.parseInt(montoDispensar);
+				int solicitado =  montoRetiro;
 				int jcm1Total = 0;
 				int jcm2Total = 0;
 				
@@ -410,19 +471,8 @@ public class uba {
 				System.out.println("Faltante [" + solicitado + "]");
 				
 				// Primero deshabilitamos el que acepte billetes
-
-				if (((montoDispensar.length() > 6) || Long.parseLong(montoDispensar) > maxDispenseAmmount
-						|| Long.parseLong(montoDispensar) == 0)) {
-					JOptionPane.showMessageDialog(frame, "Monto inválido, favor de verificar.", "No se puede dispensar",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-
-				if (autorizacionDispensar.length() == 0) {
-					JOptionPane.showMessageDialog(frame, "Autorizacón inválida, favor de verificar.",
-							"No se puede dispensar", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+				
+				
 
 				System.out.println("Retirar");
 
@@ -461,6 +511,11 @@ public class uba {
 		btnDispensar.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnDispensar.setBounds(602, 125, 238, 100);
 		panelRetiro.add(btnDispensar);
+		
+		JLabel lblReferencia = new JLabel(".\r\n");
+		lblReferencia.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblReferencia.setBounds(10, 11, 275, 95);
+		panelRetiro.add(lblReferencia);
 
 		JPanel panelPinPad = new JPanel();
 		panelPinPad.setBackground(Color.GRAY);
@@ -537,6 +592,11 @@ public class uba {
 		panelPinPad.add(btnBorrar);
 
 		JButton btnConfirmar = new JButton("CONFIRMAR");
+		btnConfirmar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pinpadMode = PinpadMode.None;
+			}
+		});
 		btnConfirmar.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnConfirmar.setBackground(Color.GREEN);
 		btnConfirmar.setBounds(709, 473, 300, 200);
@@ -553,11 +613,98 @@ public class uba {
 		btn1.setBounds(10, 11, 200, 200);
 		panelPinPad.add(btn1);
 
-		JPanel panel = new JPanel();
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel.setBounds(10, 460, 850, 248);
-		panelPrincipal.add(panel);
-		panel.setLayout(null);
+		JPanel panelDeposito = new JPanel();
+		panelDeposito.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelDeposito.setBounds(10, 422, 850, 247);
+		panelPrincipal.add(panelDeposito);
+		panelDeposito.setLayout(null);
+		
+		JPanel panelUserLogin = new JPanel();
+		panelUserLogin.setBackground(Color.ORANGE);
+		panelUserLogin.setBounds(0, 0, 800, 600);
+		panelUserLogin.setLayout(null);
+		
+		
+		
+		JLabel lblNewLabel = new JLabel("Ingresa tu n\u00FAmero de usuario y contrase\u00F1a");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblNewLabel.setBounds(63, 31, 540, 66);
+		panelUserLogin.add(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("USUARIO");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pinpadMode = PinpadMode.depositoUser;
+			}
+		});
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		btnNewButton.setBounds(26, 113, 276, 102);
+		panelUserLogin.add(btnNewButton);
+		
+		textFieldDepositoUser = new JTextField();
+		textFieldDepositoUser.setHorizontalAlignment(SwingConstants.CENTER);
+		textFieldDepositoUser.setText("007007");
+		textFieldDepositoUser.setFont(new Font("Tahoma", Font.BOLD, 22));
+		textFieldDepositoUser.setBounds(331, 114, 407, 102);
+		panelUserLogin.add(textFieldDepositoUser);
+		textFieldDepositoUser.setColumns(10);
+		
+		JButton btnContrasea = new JButton("CONTRASE\u00D1A");
+		btnContrasea.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pinpadMode = PinpadMode.depositoPassword;
+			}
+		});
+		btnContrasea.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		btnContrasea.setBounds(26, 241, 276, 102);
+		panelUserLogin.add(btnContrasea);
+		
+		textFieldDepositoPassword = new JTextField();
+		textFieldDepositoPassword.setText("007007");
+		textFieldDepositoPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		textFieldDepositoPassword.setFont(new Font("Tahoma", Font.BOLD, 22));
+		textFieldDepositoPassword.setColumns(10);
+		textFieldDepositoPassword.setBounds(331, 242, 407, 102);
+		panelUserLogin.add(textFieldDepositoPassword);
+		
+		JButton btnNewButton_1 = new JButton("INGRESAR");
+		
+		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnNewButton_1.setBounds(387, 372, 351, 115);
+		panelUserLogin.add(btnNewButton_1);
+	
+		
+		final JDialog loginDialog = new JDialog(mainFrame,"LOGIN", true);
+		loginDialog.setAlwaysOnTop(true);
+		loginDialog.setModalityType(ModalityType.MODELESS);
+		loginDialog.setBounds(20, 20, 800, 800);
+		
+		loginDialog.getContentPane().setLayout(null);
+		//loginDialog.getContentPane().add(panelUserLogin);
+		
+		
+		JButton btnDeposito = new JButton("Depositar");
+		btnDeposito.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
+				
+				
+				loginDialog.setVisible(true);
+				
+			}
+		});
+		btnDeposito.setFont(new Font("Tahoma", Font.BOLD, 40));
+		btnDeposito.setBounds(10, 15, 367, 168);
+		panelDeposito.add(btnDeposito);
+		
+		JLabel lblTxtUser = new JLabel("Usuario:");
+		lblTxtUser.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblTxtUser.setBounds(409, 23, 143, 46);
+		panelDeposito.add(lblTxtUser);
+		
+		// TODO: HEWEY AQUI!
+		loginDialog.getContentPane().add(panelUserLogin);
+		//panelDev.add(panelUserLogin);
+		
 
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -620,41 +767,76 @@ public class uba {
 		});
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				if (retiroMonto) {
-
-					if (montoDispensar.length() == 0 || Long.parseLong(montoDispensar) == 0)
+				
+				switch(pinpadMode) {
+				case None:
+					break;
+				case depositoUser:
+					if (depositoUser.length() ==  0)
 						return;
-
-					montoDispensar = montoDispensar.substring(0, montoDispensar.length() - 1);
-					lblMonto.setText(customFormat("$###,###.###", Long.parseLong(montoDispensar)));
-				}
-
-				if (retiroAutorizacion) {
-
-					if (autorizacionDispensar.length() == 0)
+					depositoUser = depositoUser.substring(0, depositoUser.length() - 1);
+										
+					textFieldDepositoUser.setText(depositoUser);
+					
+					break;
+				case depositoPassword:
+					
+					if (depositoPassword.length()  ==  0)
 						return;
-
+					depositoPassword = depositoPassword.substring(0, depositoPassword.length() - 1);
+					
+					textFieldDepositoPassword.setText(depositoPassword);
+					break;
+				case retiroUser:
+					break;
+				case retiroPassword:
+					break;
+				case retiroClave:
+					if (autorizacionDispensar.length() ==  0)
+						return;
 					autorizacionDispensar = autorizacionDispensar.substring(0, autorizacionDispensar.length() - 1);
+					
 					lblAutorizacion.setText(autorizacionDispensar);
-
+					break;
+					default:
+						break;
+						
 				}
+				
+				
 
 			}
 		});
 
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (retiroMonto) {
-
-					montoDispensar = "0";
-					lblMonto.setText("");
-				}
-
-				if (retiroAutorizacion) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case depositoUser:
+														
+					textFieldDepositoUser.setText("");
+					
+					break;
+				case depositoPassword:
+					
+					
+					
+					textFieldDepositoPassword.setText("");
+					break;
+				case retiroUser:
+					break;
+				case retiroPassword:
+					break;
+				case retiroClave:
+			
+					
 					lblAutorizacion.setText("");
-				}
-
+					break;
+					default:
+						break;
+						
+				}	
 			}
 		});
 
@@ -1187,6 +1369,67 @@ public class uba {
 		btnCurrencyAssingRequest.setBounds(1496, 223, 224, 50);
 		panel_comandos.add(btnCurrencyAssingRequest);
 		btnCurrencyAssingRequest.setBackground(Color.ORANGE);
+		
+		JButton btnCierraBoveda = new JButton("CIERRA BOVEDA");
+		btnCierraBoveda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//miTio.cierraBoveda();
+			}
+		});
+		btnCierraBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCierraBoveda.setBounds(301, 632, 203, 48);
+		panel_comandos.add(btnCierraBoveda);
+		
+		JButton btnAbreBoveda = new JButton("ABRE BOVEDA");
+		btnAbreBoveda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//miTio.abreBoveda();
+			}
+		});
+		btnAbreBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAbreBoveda.setBounds(526, 630, 203, 48);
+		panel_comandos.add(btnAbreBoveda);
+		
+		JButton btnSolicitaRetiro = new JButton("SOLICITA RETIRO");
+		btnSolicitaRetiro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				referenciaNumerica = getRandomDoubleBetweenRange(111111,999999);
+				montoRetiro = getRandomDoubleBetweenRange(20,5000);
+				lblReferencia.setText(Integer.toString(referenciaNumerica));
+				lblMonto.setText(customFormat("$###,###.###", montoRetiro));
+			}
+		});
+		btnSolicitaRetiro.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnSolicitaRetiro.setBounds(779, 630, 203, 48);
+		panel_comandos.add(btnSolicitaRetiro);
+		
+		JButton btnCierraBoveda21 = new JButton("CIERRA BOVEDA 21");
+		btnCierraBoveda21.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//miTio.cierraBoveda21();
+			}
+		});
+		btnCierraBoveda21.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCierraBoveda21.setBounds(1059, 632, 203, 48);
+		panel_comandos.add(btnCierraBoveda21);
+		
+		JButton btnAbreBoveda21 = new JButton("ABRE BOVEDA 21");
+		btnAbreBoveda21.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//miTio.abreBoveda21();
+			}
+		});
+		btnAbreBoveda21.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAbreBoveda21.setBounds(1284, 630, 203, 48);
+		panel_comandos.add(btnAbreBoveda21);
+		
+		
+		
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loginDialog.setVisible(false);
+			}
+		});
 
 
 
@@ -1299,22 +1542,51 @@ public class uba {
 	}
 
 	private void textoMontoValidacion(String digito, JLabel lblMonto, JLabel lblAutorizacion) {
-		if (retiroMonto) {
-			if (((montoDispensar.length() > 6) || Long.parseLong(montoDispensar) > maxDispenseAmmount))
+		
+		switch(pinpadMode) {
+		case None:
+			break;
+		case depositoUser:
+			if (depositoUser.length() > 7)
 				return;
-
-			montoDispensar += digito;
-			lblMonto.setText(customFormat("$###,###.###", Long.parseLong(montoDispensar)));
-			return;
-		}
-
-		if (retiroAutorizacion) {
-			if (asteriscos.length() > 5)
+			depositoUser += digito;
+			
+			textFieldDepositoUser.setText(depositoUser);
+			
+			break;
+		case depositoPassword:
+			
+			if (depositoPassword.length() > 7)
+				return;
+			depositoPassword += digito;
+			
+			textFieldDepositoPassword.setText(depositoPassword);
+			break;
+		case retiroUser:
+			break;
+		case retiroPassword:
+			break;
+		case retiroClave:
+			if (autorizacionDispensar.length() > 5)
 				return;
 
 			autorizacionDispensar += digito;
-			asteriscos += "*";
-			lblAutorizacion.setText(asteriscos);
-		}
+			
+			lblAutorizacion.setText(autorizacionDispensar);
+			break;
+			default:
+				break;
+				
+		}		
+		
+	}
+	
+	
+	public static int getRandomDoubleBetweenRange(double min, double max){
+
+	    int x = (int) ((Math.random()*((max-min)+1))+min);
+
+	    return x;
+
 	}
 }

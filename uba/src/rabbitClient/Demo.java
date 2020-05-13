@@ -26,9 +26,6 @@ public class Demo {
 			
 			Transactions cmTrans = new Transactions();
 			
-			
-			
-			
 			 RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita 2",AccountType.Administrative,TransactionType.CashManagement);
 		   
 			 RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk,"Monto Incorrecto Java Jcm");		   

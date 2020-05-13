@@ -17,7 +17,7 @@ public class Config {
         	if(conn != null && !conn.isClosed())
     			return;
            
-            String url = "jdbc:sqlite:C:/Users/hewey/Desktop/Pentomino.Config.db3";
+            String url = "jdbc:sqlite:./Pentomino.Config.db3";
            
             conn = DriverManager.getConnection(url);           
             
