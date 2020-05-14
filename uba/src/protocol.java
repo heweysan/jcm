@@ -421,7 +421,14 @@ public class protocol extends kermit{
             	
             case SR_INITIALIZE: // 0x1B INITIALIZE
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing INITIALIZE", jcmResponse,jcmResponse[1]));
-            	id003_format((byte)5, (byte) 0x88, jcmMessage,true); //SSR_VERSION_REQUEST
+            	
+            	if(currentOpertion == jcmOperation.Reset) {            	
+            		id003_format((byte)5, (byte) 0x88, jcmMessage,true); //SSR_VERSION_REQUEST
+            	}
+            	else {
+            		id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //STATUS_REQUEST
+            	}
+            		
             	break;
             	
             case SR_PAYING: // 0x20 PAYING
@@ -639,7 +646,8 @@ public class protocol extends kermit{
             	
             case 0x40: // POWER_UP            	
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing POWER UP", jcmResponse,jcmResponse[1]));
-            	 id003_format((byte)5, (byte) 0x40, jcmMessage,true); // RESET_      // SAN TODO AQUI: 
+            	//TODO: AQUI REVISAR AQUI 
+            	//id003_format((byte)5, (byte) 0x40, jcmMessage,true); // RESET_      // SAN TODO AQUI: 
             	break;
             case 0x41:  // POWER_UP_WITH_BILL_IN_ACCEPTOR * POWER_UP_WITH_BILL_IN_STACKER            	
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing POWER_UP_WITH_BILL_IN_ACCEPTOR", jcmResponse,jcmResponse[1]));
@@ -710,7 +718,7 @@ public class protocol extends kermit{
 	            		System.arraycopy(jcmResponse, 5, recyclerVersion, 0,jcmResponse[1]-7);
             			
             			EventListenerClass.fireMyEvent(new MyEvent("recyclerVersion"+jcmId));
-            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //
+            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //Si lo pedimos aqui va a decir que esta Initializing y lo va a hacer de nuevo y de nuevo y de neuvo hasta que termine el initialice
             			            			
             			RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version,"jcm[" + jcmId + "] " + new String(recyclerVersion).trim());
             			

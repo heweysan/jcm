@@ -130,7 +130,7 @@ public class RaspiAgent {
 		String str = fullEvt.toString();
 
 		List<String> list = Arrays.asList(str.split("_"));
-		System.out.println(list);
+		//System.out.println(list);
 		 
 		AgentMessage agentMsg = new AgentMessage(); //CIXXGS0020 
 	        
@@ -143,7 +143,7 @@ public class RaspiAgent {
 		agentMsg.Data = data;
 		agentMsg.AtmId = Config.GetDirective("AtmId", "");
 		
-		System.out.println(gson.toJson(agentMsg));
+		//System.out.println(gson.toJson(agentMsg));
 		
 		RaspiAgent.SendCommandToRabbit(agentMsg);
 	}
@@ -189,7 +189,7 @@ public class RaspiAgent {
               map.put("acq-channelId","red-blu");
               props = props.builder().headers(map).build();
               channel.basicPublish(exchange, routingKey,true, props, gson.toJson(payload).getBytes());
-              System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
+              //System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
               
               channel.close();
               conn.close();
