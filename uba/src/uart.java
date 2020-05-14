@@ -80,11 +80,11 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
         
             if(msg[2] != lastTx) {
             	lastTx = msg[2];
-            	System.out.println(baitsToString("\n[" + id + "] uart->serialTx", msg));
+            	System.out.println(baitsToString("\n[" + id + "] uart->serialTx", msg, msg[1]));
             }
             else {
             	tempCont++;
-            	if(tempCont == 10) {
+            	if(tempCont == 50) { //Cada n * 200 ms;   50 = 10 secs
             		System.out.print(".");
             		tempCont = 0;
             	}
@@ -265,23 +265,6 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 			logger.debug("reiniciar() - end"); //$NON-NLS-1$
 		}
 	}
-	
-	
-	public String baitsToString(String texto, byte[] baits) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("baitsToString(String, byte[]) - start"); //$NON-NLS-1$
-		}
-
-    	String result = texto;
-    	for (byte theByte : baits){
-    		result += " [" + Integer.toHexString(theByte) + "] ";
-        }
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("baitsToString(String, byte[]) - end"); //$NON-NLS-1$
-		}
-    	return result;
-    }
 
 	public void reciclar() {
 		if (logger.isDebugEnabled()) {

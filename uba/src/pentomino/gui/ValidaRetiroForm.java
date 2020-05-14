@@ -16,13 +16,13 @@ import javax.swing.SwingConstants;
 
 public class ValidaRetiroForm {
 
-	public static JTextField textFieldReferenciaNumerica;
-	public static JTextField textFieldDepositoPassword;
+	
+	public static JDialog validationDialog;
+	public static JTextField textFieldConfirmacion;
 	public static JButton btnConfirmacion = new JButton("CONFIRMACI\u00D3N");
-	public static JButton btnRetiroSubmit = new JButton("ACEPTAR");
-	public static JDialog loginDialog;
-	private static final JButton btnRetiroCancelar = new JButton("CANCELAR");
-	private static final JLabel lblMonto = new JLabel("$2,500.00");
+	public static JButton btnAceptar = new JButton("ACEPTAR");	
+	private static final JButton btnCancelar = new JButton("CANCELAR");
+	
 	
 	/**
 	 * @wbp.parser.entryPoint
@@ -32,6 +32,8 @@ public class ValidaRetiroForm {
 		
 		ImagePanel panelUserLogin = new ImagePanel(new ImageIcon("ScrPlaceholder.png").getImage());
 		
+		JTextField textFieldReferenciaNumerica;
+		JLabel lblMonto = new JLabel("$2,500.00");
 		
 		//JPanel panelUserLogin = new JPanel();
 		panelUserLogin.setBackground(Color.LIGHT_GRAY);
@@ -65,37 +67,37 @@ public class ValidaRetiroForm {
 		btnConfirmacion.setBounds(10, 95, 400, 200);
 		panelUserLogin.add(btnConfirmacion);
 		
-		textFieldDepositoPassword = new JTextField();
-		textFieldDepositoPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldDepositoPassword.setFont(new Font("Tahoma", Font.BOLD, 32));
-		textFieldDepositoPassword.setColumns(10);
-		textFieldDepositoPassword.setBounds(433, 203, 400, 91);
-		panelUserLogin.add(textFieldDepositoPassword);
-		btnRetiroSubmit.setBackground(Color.GREEN);
+		textFieldConfirmacion = new JTextField();
+		textFieldConfirmacion.setHorizontalAlignment(SwingConstants.CENTER);
+		textFieldConfirmacion.setFont(new Font("Tahoma", Font.BOLD, 32));
+		textFieldConfirmacion.setColumns(10);
+		textFieldConfirmacion.setBounds(433, 203, 400, 91);
+		panelUserLogin.add(textFieldConfirmacion);
+		btnAceptar.setBackground(Color.GREEN);
 		
 				
-		btnRetiroSubmit.addActionListener(new ActionListener() {
+		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
-		btnRetiroSubmit.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnRetiroSubmit.setBounds(441, 340, 400, 200);
-		panelUserLogin.add(btnRetiroSubmit);
+		btnAceptar.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnAceptar.setBounds(441, 340, 400, 200);
+		panelUserLogin.add(btnAceptar);
 		
-		loginDialog = new JDialog(mainFrame,"VALIDACION RETIRO", true);
+		validationDialog = new JDialog(mainFrame,"VALIDACION RETIRO", true);
 		
-		loginDialog.setAlwaysOnTop(true);
-		loginDialog.setModalityType(ModalityType.MODELESS);
-		loginDialog.setBounds(10, 10, 870, 602);
+		validationDialog.setAlwaysOnTop(true);
+		validationDialog.setModalityType(ModalityType.MODELESS);
+		validationDialog.setBounds(10, 10, 870, 602);
 		
-		loginDialog.getContentPane().setLayout(null);
-		loginDialog.getContentPane().add(panelUserLogin);	
-		btnRetiroCancelar.setBackground(Color.RED);
-		btnRetiroCancelar.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnRetiroCancelar.setBounds(10, 340, 400, 200);
+		validationDialog.getContentPane().setLayout(null);
+		validationDialog.getContentPane().add(panelUserLogin);	
+		btnCancelar.setBackground(Color.RED);
+		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnCancelar.setBounds(10, 340, 400, 200);
 		
-		panelUserLogin.add(btnRetiroCancelar);
+		panelUserLogin.add(btnCancelar);
 		lblMonto.setForeground(Color.WHITE);
 		lblMonto.setFont(new Font("Tahoma", Font.BOLD, 26));
 		lblMonto.setBounds(372, 33, 461, 24);
@@ -104,7 +106,7 @@ public class ValidaRetiroForm {
 		panelUserLogin.add(lblMonto);
 		
 		
-		return loginDialog;
+		return validationDialog;
 	}
 	
 

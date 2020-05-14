@@ -86,6 +86,17 @@ public class Tio implements Runnable{
        
 		logger.debug("Tio starting....");
 		
+		
+		
+		if(gpio.isShutdown()) {
+			System.out.println("TIO GPIO IS SHUTDOWN");
+		}
+		gpio.shutdown();
+		
+		if(gpio.isShutdown()) {
+			System.out.println("TIO GPIO IS SHUTDOWN 2");
+		}
+		
 		GpioFactory.setDefaultProvider(new RaspiGpioProvider(RaspiPinNumberingScheme.BROADCOM_PIN_NUMBERING));
 	     
 		

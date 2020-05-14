@@ -1,74 +1,66 @@
+import java.awt.Color;
 import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.border.TitledBorder;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.util.concurrent.TimeoutException;
-import gnu.io.*;
-
-
-import java.io.*;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
-import javax.swing.JCheckBox;
-import java.lang.System;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.concurrent.TimeoutException;
 
-import com.google.gson.Gson;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import java.awt.Font;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
-import pentomino.common.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
+import gnu.io.CommPortIdentifier;
+import pentomino.common.PinpadMode;
+import pentomino.common.Tio;
+import pentomino.common.jcmOperation;
 import pentomino.gui.LoginForm;
 import pentomino.gui.ValidaRetiroForm;
-
-import javax.swing.JTabbedPane;
-import javax.swing.Icon;
-import javax.swing.border.BevelBorder;
-import javax.swing.Timer;
-import javax.swing.JTextField;
 
 
 
 public class uba {
 	
-	private static PinpadMode pinpadMode = PinpadMode.None;
-	
-	private static boolean userLogged = false;
-	
-	private static String retiroUser = "";
-	private static String retiroPassword = "";
-	private static String retiroClave = "";
+	private static PinpadMode pinpadMode = PinpadMode.None;	
+
 	private static String depositoUser = "";
 	private static String depositoPassword = "";
 	
 	private static int referenciaNumerica = 0;
 	private static int montoRetiro = 0;
-
-	private static Gson gson = new Gson();
-
+	private static String autorizacionDispensar = "";
+	
 	private static final Logger logger = LogManager.getLogger(uba.class);
 
-	private static String autorizacionDispensar = "";
+	
 	private static String asteriscos = "";
 
 	private JFrame mainFrame;
-	
 
 
 	uart[] jcms = new uart[2];
 	int contador = 0;
-	private JTextField textFieldDepositoUser;
-	private JTextField textFieldDepositoPassword;
 
+	
+	final Tio miTio = new Tio();
 		
 	/**
 	 * Launch the application.
@@ -107,8 +99,19 @@ public class uba {
 
 		t2.start();
 		
-		initialize();	
-
+		initialize();
+		
+		
+		Thread tioThread = new Thread(miTio, "Tio Thread");
+		tioThread.start();	
+			
+		
+		
+		//TODO: QUITAR
+		/*
+		jcms[0] = new uart(1);
+		jcms[1] = new uart(2);
+		//*/
 	}
 
 	/**
@@ -126,14 +129,16 @@ public class uba {
 				
 		//String[] BaudArray = { "9600", "19200", "38400" };
 		
-		String[] CurrencyArray = { "20", "50", "100", "200", "500" };
+		//String[] CurrencyArray = { "20", "50", "100", "200", "500" };
 
+		
+		
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 1904, 1050);
+		
+		
 		mainFrame.getContentPane().add(tabbedPane);
-
-		
-		
 		
 		JPanel panelPrincipal = new JPanel();
 		tabbedPane.addTab("Principal", (Icon) null, panelPrincipal, null);
@@ -285,31 +290,6 @@ public class uba {
 		panelRetiro.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRetiro.setLayout(null);
 
-		final JLabel lblMonto = new JLabel("$000,000");
-		lblMonto.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblMonto.setBounds(553, 11, 287, 95);
-		panelRetiro.add(lblMonto);
-
-		JButton btnAutorizacion = new JButton("Autorizaci\u00F3n");
-		btnAutorizacion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pinpadMode = PinpadMode.retiroClave;
-			}
-		});
-		btnAutorizacion.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnAutorizacion.setBounds(10, 125, 275, 100);
-		panelRetiro.add(btnAutorizacion);
-
-		final JLabel lblAutorizacion = new JLabel(".\r\n");
-		lblAutorizacion.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblAutorizacion.setBounds(304, 128, 275, 95);
-		panelRetiro.add(lblAutorizacion);
-		
-		JLabel lblReferencia = new JLabel(".\r\n");
-		lblReferencia.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblReferencia.setBounds(10, 11, 275, 95);
-		panelRetiro.add(lblReferencia);
-
 		JPanel panelPinPad = new JPanel();
 		panelPinPad.setBackground(Color.GRAY);
 		panelPinPad.setBounds(870, 11, 1019, 923);
@@ -439,63 +419,67 @@ public class uba {
 
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("1", lblMonto, lblAutorizacion);
+				textoMontoValidacion("1");
 			}
 		});
 
 		btn2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("2", lblMonto, lblAutorizacion);
+				textoMontoValidacion("2");
 			}
 		});
 
 		btn3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("3", lblMonto, lblAutorizacion);
+				textoMontoValidacion("3");
 			}
 		});
 
 		btn4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("4", lblMonto, lblAutorizacion);
+				textoMontoValidacion("4");
 			}
 		});
 
 		btn5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("5", lblMonto, lblAutorizacion);
+				textoMontoValidacion("5");
 			}
 		});
 
 		btn6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("6", lblMonto, lblAutorizacion);
+				textoMontoValidacion("6");
 			}
 		});
 
 		btn7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("7", lblMonto, lblAutorizacion);
+				textoMontoValidacion("7");
 			}
 		});
 
 		btn8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("8", lblMonto, lblAutorizacion);
+				textoMontoValidacion("8");
 			}
 		});
 
 		btn9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("9", lblMonto, lblAutorizacion);
+				textoMontoValidacion("9");
 			}
 		});
 
 		btn0.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("0", lblMonto, lblAutorizacion);
+				textoMontoValidacion("0");
 			}
 		});
+		
+		
+		/*  - - - - - -   P I N P A D   A C T I O N S   - - - - - -  */
+		
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -507,7 +491,7 @@ public class uba {
 						return;
 					depositoUser = depositoUser.substring(0, depositoUser.length() - 1);
 										
-					textFieldDepositoUser.setText(depositoUser);
+					LoginForm.textFieldDepositoUser.setText(depositoUser);
 					
 					break;
 				case depositoPassword:
@@ -515,25 +499,21 @@ public class uba {
 					if (depositoPassword.length()  ==  0)
 						return;
 					depositoPassword = depositoPassword.substring(0, depositoPassword.length() - 1);
-					
-					textFieldDepositoPassword.setText(depositoPassword);
+					asteriscos = asteriscos.substring(0, asteriscos.length() - 1);;
+					LoginForm.textFieldDepositoPassword.setText(asteriscos);
 					break;
-				case retiroUser:
-					break;
-				case retiroPassword:
-					break;
-				case retiroClave:
+				
+				case retiroAutorizacion:
 					if (autorizacionDispensar.length() ==  0)
 						return;
 					autorizacionDispensar = autorizacionDispensar.substring(0, autorizacionDispensar.length() - 1);
 					
-					lblAutorizacion.setText(autorizacionDispensar);
+					ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);
 					break;
 					default:
 						break;
 						
-				}
-				
+				}		
 				
 
 			}
@@ -544,29 +524,21 @@ public class uba {
 				switch(pinpadMode) {
 				case None:
 					break;
-				case depositoUser:
-														
-					textFieldDepositoUser.setText("");
-					
+				case depositoUser:			
+					depositoUser = "";
+					LoginForm.textFieldDepositoUser.setText(depositoUser);					
 					break;
-				case depositoPassword:
-					
-					
-					
-					textFieldDepositoPassword.setText("");
+				case depositoPassword:	
+					depositoPassword = "";
+					asteriscos = "";
+					LoginForm.textFieldDepositoPassword.setText(asteriscos);
+					break;				
+				case retiroAutorizacion:
+					autorizacionDispensar = "";				
+					ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);
 					break;
-				case retiroUser:
-					break;
-				case retiroPassword:
-					break;
-				case retiroClave:
-			
-					
-					lblAutorizacion.setText("");
-					break;
-					default:
-						break;
-						
+				default:
+					break;						
 				}	
 			}
 		});
@@ -1084,17 +1056,44 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {				
 				btnRetiroAlertBlinker.stop();
 				btnRetiro.setBackground(null);			
-				ValidaRetiroForm.validationForm(mainFrame,Integer.toString(referenciaNumerica),customFormat("$###,###.###", montoRetiro)).setVisible(true);
-								
+				pinpadMode = PinpadMode.retiroAutorizacion;
+				ValidaRetiroForm.validationForm(mainFrame,Integer.toString(referenciaNumerica),customFormat("$###,###.###", montoRetiro)).setVisible(true);				
 			}
 		});
 		
 		
-		ValidaRetiroForm.btnConfirmacion.addActionListener(new ActionListener() {
+		ValidaRetiroForm.btnAceptar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				
+				System.out.println("Validamos que los daros ingresados sean correctos");
+				
+				if(ValidaRetiroForm.textFieldConfirmacion.getText().length() == 0) {
+					System.out.println("NO SON IGUALES");
+					ValidaRetiroForm.textFieldConfirmacion.setText("");
+					pinpadMode = PinpadMode.retiroAutorizacion;
+					return;
+				}
+				
+				
+				if(Integer.parseInt(ValidaRetiroForm.textFieldConfirmacion.getText()) != referenciaNumerica) {
+					System.out.println("NO SON IGUALES");
+					ValidaRetiroForm.textFieldConfirmacion.setText("");
+					pinpadMode = PinpadMode.retiroAutorizacion;
+					return;
+				}
+				
+				System.out.println("SIN IGUALES VALEDOR");
+				
+				//Cerramos la ventana, comenzamos a dispensar.
+				ValidaRetiroForm.validationDialog.setVisible(false);
+				ValidaRetiroForm.validationDialog.dispose();
+				pinpadMode = PinpadMode.None;
+				
+				Dispensar();
+				
 				
 			}
 			
@@ -1103,7 +1102,7 @@ public class uba {
 		
 		btnDeposito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnAutorizacion.setEnabled(false);
+				
 				btnDeposito.setEnabled(false);
 				LoginForm.btnUser.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1130,7 +1129,7 @@ public class uba {
 					  System.out.println("jdialog window closed event received desde main");			  
 					  
 					  btnDeposito.setEnabled(true);
-					  btnAutorizacion.setEnabled(true);
+					  
 					  LoginForm.loginDialog.setVisible(false);
 					  LoginForm.loginDialog.dispose();
 				  }
@@ -1139,7 +1138,7 @@ public class uba {
 					  System.out.println("jdialog window closing event received desde main");
 					 
 					  btnDeposito.setEnabled(true);
-					  btnAutorizacion.setEnabled(true);				
+					  			
 					  LoginForm.loginDialog.setVisible(false);
 					  LoginForm.loginDialog.dispose();
 				  }
@@ -1221,14 +1220,14 @@ public class uba {
 		
 		btnCierraBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//miTio.cierraBoveda();
+				miTio.cierraBoveda();
 			}
 		});
 		
 		
 		btnAbreBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//miTio.abreBoveda();
+				miTio.abreBoveda();
 			}
 		});
 		
@@ -1240,8 +1239,22 @@ public class uba {
 				
 				referenciaNumerica = getRandomDoubleBetweenRange(111111,999999);
 				montoRetiro = getRandomDoubleBetweenRange(20,5000);
-				lblReferencia.setText(Integer.toString(referenciaNumerica));
-				lblMonto.setText(customFormat("$###,###.###", montoRetiro));
+				
+				
+				//TODO: QUITAR DEBUG
+				/*
+				jcms[0].contadores.Cass1Denom = 200;
+				jcms[0].contadores.Cass1Available = 2;
+				
+				jcms[0].contadores.Cass2Denom = 100;
+				jcms[0].contadores.Cass2Available = 3;
+				
+				jcms[1].contadores.Cass1Denom = 50;
+				jcms[1].contadores.Cass1Available = 4;
+				
+				jcms[1].contadores.Cass2Denom = 20;
+				jcms[1].contadores.Cass2Available = 7;			
+				//*/
 				
 				btnRetiro.setEnabled(true);
 				btnRetiroAlertBlinker.start();
@@ -1358,7 +1371,7 @@ public class uba {
 	}
 	
 	
-	private void textoMontoValidacion(String digito, JLabel lblMonto, JLabel lblAutorizacion) {
+	private void textoMontoValidacion(String digito) {
 		
 		switch(pinpadMode) {
 		case None:
@@ -1368,27 +1381,21 @@ public class uba {
 				return;
 			depositoUser += digito;
 			LoginForm.textFieldDepositoUser.setText(depositoUser);
-			
-			
 			break;
 		case depositoPassword:
 			
 			if (depositoPassword.length() > 7)
 				return;
 			depositoPassword += digito;
-			LoginForm.textFieldDepositoPassword.setText(depositoPassword);			
-			break;
-		case retiroUser:
-			break;
-		case retiroPassword:
-			break;
-		case retiroClave:
-			if (autorizacionDispensar.length() > 5)
+			asteriscos += "*";
+			LoginForm.textFieldDepositoPassword.setText(asteriscos);			
+			break;		
+		case retiroAutorizacion:
+			if (autorizacionDispensar.length() > 7)
 				return;
 
 			autorizacionDispensar += digito;
-			
-			lblAutorizacion.setText(autorizacionDispensar);
+			ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);			
 			break;
 			default:
 				break;
@@ -1399,10 +1406,191 @@ public class uba {
 	
 	
 	public static int getRandomDoubleBetweenRange(double min, double max){
-
+		
 	    int x = (int) ((Math.random()*((max-min)+1))+min);
-
 	    return x;
 
+	}
+	
+	
+	void Dispensar() {
+		
+		//Checamos que tenga algo de dinero.
+        if(jcms[0].contadores.Cass1Available == 0 && jcms[0].contadores.Cass2Available == 0 && jcms[1].contadores.Cass1Available == 0 && jcms[1].contadores.Cass2Available == 0){
+        	System.out.println("No hay dinero en los caseteros para dispensar");
+        }
+		
+      //Revisamos que tanto billetes podemos dispensar
+		int solicitado =  montoRetiro;
+		int jcm1Total = 0;
+		int jcm2Total = 0;
+		
+		//revisamos del JCM 1
+		
+		//cuantos de  jcm1 cass 1 
+		
+		System.out.println("JCM1 Cass1Denom [" + jcms[0].contadores.Cass1Denom + "][" + jcms[0].contadores.Cass1Available + "]");
+		System.out.println("JCM1 Cass2Denom [" + jcms[0].contadores.Cass2Denom + "][" + jcms[0].contadores.Cass2Available + "]");
+		
+		System.out.println("JCM2 Cass1Denom [" + jcms[1].contadores.Cass1Denom + "][" + jcms[1].contadores.Cass1Available + "]");
+		System.out.println("JCM2 Cass2Denom [" + jcms[1].contadores.Cass2Denom + "][" + jcms[1].contadores.Cass2Available + "]");
+		
+		jcm1Total += jcms[0].contadores.Cass1Denom * jcms[0].contadores.Cass1Available;
+		jcm1Total += jcms[0].contadores.Cass2Denom * jcms[0].contadores.Cass2Available;				
+		
+		jcm2Total += jcms[1].contadores.Cass1Denom * jcms[1].contadores.Cass1Available;
+		jcm2Total += jcms[1].contadores.Cass2Denom * jcms[1].contadores.Cass2Available;
+		
+		
+		System.out.println("jcm1Total [" + jcm1Total + "] jcm2Total [" + jcm2Total + "]");
+		
+		
+		jcms[0].jcmCass1 = solicitado / jcms[0].contadores.Cass1Denom;
+																		
+		//Reviamos si necestia mas de los que tiene
+		if(jcms[0].jcmCass1 > jcms[0].contadores.Cass1Available) {
+			jcms[0].jcmCass1 = jcms[0].contadores.Cass1Available;
+		}
+		System.out.println("Billetes a dipensar de JCM1 CASS1" + jcms[0].jcmCass1);
+		
+		solicitado = solicitado - (jcms[0].jcmCass1 * jcms[0].contadores.Cass1Denom);
+		
+		System.out.println("Faltante [" + solicitado + "]");
+		
+		
+		jcms[0].jcmCass2 = solicitado / jcms[0].contadores.Cass2Denom;
+		System.out.println("Billetes a dipensar de JCM1 CASS2" + jcms[0].jcmCass2);
+														
+		//Reviamos si necestia mas de los que tiene
+		if(jcms[0].jcmCass2 > jcms[0].contadores.Cass2Available) {
+			jcms[0].jcmCass2 = jcms[0].contadores.Cass2Available;
+		}
+		
+		solicitado = solicitado - (jcms[0].jcmCass2 * jcms[0].contadores.Cass2Denom);
+		
+		System.out.println("Faltante [" + solicitado + "]");
+		
+		//revisamos del JCM 2
+		
+		//cuantos de  jcm2 cass 1 
+		
+		jcm2Total += jcms[1].contadores.Cass1Denom * jcms[1].contadores.Cass1Available;
+						
+		jcms[1].jcmCass1 = solicitado / jcms[1].contadores.Cass1Denom;
+		System.out.println("Billetes a dipensar de JCM2 CASS1" + jcms[1].jcmCass1);
+														
+		//Reviamos si necestia mas de los que tiene
+		if(jcms[1].jcmCass1 > jcms[1].contadores.Cass1Available) {
+			jcms[1].jcmCass1 = jcms[1].contadores.Cass1Available;
+		}
+		
+		solicitado = solicitado - (jcms[1].jcmCass1 * jcms[1].contadores.Cass1Denom);
+		
+		System.out.println("Faltante [" + solicitado + "]");
+		
+		jcms[1].jcmCass2 = solicitado / jcms[1].contadores.Cass2Denom;
+		System.out.println("Billetes a dipensar de JCM2 CASS2" + jcms[1].jcmCass2);
+														
+		//Reviamos si necestia mas de los que tiene
+		if(jcms[1].jcmCass2 > jcms[1].contadores.Cass2Available) {
+			jcms[1].jcmCass2 = jcms[1].contadores.Cass2Available;
+		}
+		
+		solicitado = solicitado - (jcms[1].jcmCass2 * jcms[1].contadores.Cass2Denom);
+		
+		
+		System.out.println("jcm1cass1 [" + jcms[0].jcmCass1 + "] jcm1cass2 [" + jcms[0].jcmCass2 + "] jcm2cass1 [" + jcms[1].jcmCass1 + "]jcm2cass2 [" + jcms[1].jcmCass2 + "]" );
+		
+		System.out.println("Faltante [" + solicitado + "]");
+		
+		// Primero deshabilitamos el que acepte billetes	
+		
+
+		System.out.println("Retirar");
+				
+		ArrayList<JcmCassetero> orden = new ArrayList<JcmCassetero>();
+		
+		JcmCassetero cass = null;
+		
+		//500, 50, 100,200
+		
+		if(jcms[0].contadores.Cass1Available > 0) {
+			cass = new JcmCassetero();
+			cass.Jcm = 0;
+			cass.Cassete = 1;
+			cass.Denomincacion = jcms[0].contadores.Cass1Denom;
+			orden.add(cass);
+		}
+		
+		if(jcms[0].contadores.Cass2Available > 0) {
+			cass = new JcmCassetero();
+			cass.Jcm = 0;
+			cass.Cassete = 2;
+			cass.Denomincacion = jcms[0].contadores.Cass2Denom;
+			orden.add(cass);
+		}
+		
+		if(jcms[1].contadores.Cass1Available > 0) {
+			cass = new JcmCassetero();
+			cass.Jcm = 1;
+			cass.Cassete = 1;
+			cass.Denomincacion = jcms[1].contadores.Cass1Denom;
+			orden.add(cass);
+		}
+		
+		if(jcms[1].contadores.Cass2Available > 0) {
+			cass = new JcmCassetero();
+			cass.Jcm = 1;
+			cass.Cassete = 2;
+			cass.Denomincacion = jcms[1].contadores.Cass2Denom;
+			orden.add(cass);
+		}
+		
+		System.out.println("PRE ORDEN");
+		for(JcmCassetero dat : orden) {
+			System.out.println("" + dat.getDenomincacion());
+		}
+		
+		
+		orden.sort(new DenominacionSorter());
+		
+		System.out.println("POST ORDEN");
+		for(JcmCassetero dat : orden) {
+			System.out.println("" + dat.getDenomincacion());
+		}
+		
+		
+		// Iniciamos el dispensado
+		
+		//Checamos para JCM1
+		if(jcms[0].jcmCass1 > 0 || jcms[0].jcmCass2 > 0) {	
+			
+			System.out.println("Deshabilitamos JCM1 para dispense");
+			jcms[0].currentOpertion = jcmOperation.Dispense;
+
+			// primero el inhibit
+			jcms[0].jcmMessage[3] = 0x01;
+			jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+		}
+		
+		//Checamos para JCM2
+		if(jcms[1].jcmCass1 > 0 || jcms[1].jcmCass2 > 0) {
+			
+			System.out.println("Deshabilitamos JCM2 para dispense");
+			jcms[1].currentOpertion = jcmOperation.Dispense;
+
+			// primero el inhibit
+			jcms[1].jcmMessage[3] = 0x01;
+			jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
+		}	
+	}
+	
+	
+	class DenominacionSorter implements Comparator<JcmCassetero> 
+	{
+	    @Override
+	    public int compare(JcmCassetero o1, JcmCassetero o2) {
+	        return o2.getDenomincacion().compareTo(o1.getDenomincacion());
+	    }
 	}
 }

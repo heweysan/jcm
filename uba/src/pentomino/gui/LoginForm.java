@@ -1,11 +1,8 @@
 package pentomino.gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Dialog.ModalityType;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,12 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import pentomino.common.PinpadMode;
 
 public final class LoginForm {
 
@@ -50,8 +43,9 @@ public final class LoginForm {
 		
 		
 		JLabel lblNewLabel = new JLabel("Ingresa tu n\u00FAmero de usuario y contrase\u00F1a");
+		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel.setBounds(27, 27, 711, 66);
+		lblNewLabel.setBounds(26, 11, 711, 66);
 		panelUserLogin.add(lblNewLabel);		
 		
 		btnUser.addActionListener(new ActionListener() {
@@ -59,14 +53,13 @@ public final class LoginForm {
 			}
 		});
 		btnUser.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnUser.setBounds(10, 116, 400, 200);
+		btnUser.setBounds(10, 88, 400, 200);
 		panelUserLogin.add(btnUser);
 		
 		textFieldDepositoUser = new JTextField();
 		textFieldDepositoUser.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldDepositoUser.setText("007007");
 		textFieldDepositoUser.setFont(new Font("Tahoma", Font.BOLD, 32));
-		textFieldDepositoUser.setBounds(433, 115, 400, 200);
+		textFieldDepositoUser.setBounds(433, 88, 400, 200);
 		panelUserLogin.add(textFieldDepositoUser);
 		textFieldDepositoUser.setColumns(10);
 		
@@ -77,15 +70,14 @@ public final class LoginForm {
 			}
 		});
 		btnPassword.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnPassword.setBounds(10, 344, 400, 200);
+		btnPassword.setBounds(10, 322, 400, 200);
 		panelUserLogin.add(btnPassword);
 		
 		textFieldDepositoPassword = new JTextField();
-		textFieldDepositoPassword.setText("007007");
 		textFieldDepositoPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		textFieldDepositoPassword.setFont(new Font("Tahoma", Font.BOLD, 32));
 		textFieldDepositoPassword.setColumns(10);
-		textFieldDepositoPassword.setBounds(433, 343, 400, 200);
+		textFieldDepositoPassword.setBounds(433, 319, 400, 200);
 		panelUserLogin.add(textFieldDepositoPassword);
 		
 				
@@ -95,14 +87,14 @@ public final class LoginForm {
 		});
 		
 		btnLoginSubmit.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnLoginSubmit.setBounds(441, 589, 400, 200);
+		btnLoginSubmit.setBounds(433, 549, 400, 200);
 		panelUserLogin.add(btnLoginSubmit);
 		
 		loginDialog = new JDialog(mainFrame,"LOGIN", true);
 		
 		loginDialog.setAlwaysOnTop(true);
 		loginDialog.setModalityType(ModalityType.MODELESS);
-		loginDialog.setBounds(10, 10, 870, 1000);
+		loginDialog.setBounds(10, 10, 870, 804);
 		
 		loginDialog.getContentPane().setLayout(null);
 		loginDialog.getContentPane().add(panelUserLogin);	
