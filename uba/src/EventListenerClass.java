@@ -1,8 +1,3 @@
-/*
- * http://www.java2s.com
- * 
- * */
-
 import java.util.EventListener;
 import java.util.EventObject;
 import javax.swing.event.EventListenerList;
@@ -18,7 +13,7 @@ interface MyEventListener extends EventListener {
   public void myEventOccurred(MyEvent evt);
 }
 
-class MyClass {
+class EventListenerClass {
   protected static EventListenerList listenerList = new EventListenerList();
 
   public void addMyEventListener(MyEventListener listener) {

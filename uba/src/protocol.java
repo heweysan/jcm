@@ -312,7 +312,7 @@ public class protocol extends kermit{
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing ESCROW", jcmResponse));
             	bill = bill_value(jcmResponse[3]); //bill = b[3];
             	
-            	MyClass.fireMyEvent(new MyEvent("bill"+jcmId));
+            	EventListenerClass.fireMyEvent(new MyEvent("bill"+jcmId));
             	accept = false;
             	rturn = false;
             	id003_format((byte)5, (byte) 0x44, jcmMessage,true); //HOLD
@@ -341,7 +341,7 @@ public class protocol extends kermit{
             	id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcmMessage);
             	
             	//id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
-            	MyClass.fireMyEvent(new MyEvent("clearbill"+jcmId));
+            	EventListenerClass.fireMyEvent(new MyEvent("clearbill"+jcmId));
             	break;
             case SR_REJECTING: // 0x17 REJECTING
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing REJECTING", jcmResponse));
@@ -366,7 +366,7 @@ public class protocol extends kermit{
             case SR_RETURNING: //0x18 RETURNING
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing RETURNING", jcmResponse));
             	id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
-            	MyClass.fireMyEvent(new MyEvent("clearbill"+jcmId));
+            	EventListenerClass.fireMyEvent(new MyEvent("clearbill"+jcmId));
             	break;
             	
             case SR_HOLDING: // 0x19 HOLDING            	
@@ -630,7 +630,7 @@ public class protocol extends kermit{
             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing FIRMWARE", jcmResponse));
             	id003_format((byte)5, (byte) 0x89, jcmMessage,true); // SSR_BOOT_VERSION_REQUEST
             	System.arraycopy(jcmResponse, 3, version, 0,jcmResponse[1]-5);
-            	MyClass.fireMyEvent(new MyEvent("version"+jcmId));
+            	EventListenerClass.fireMyEvent(new MyEvent("version"+jcmId));
             	break;   
             case SSRR_BOOT_VERSION_INFO: // 0x89 SSRR_BOOT_VERSION_INFO
             	//TODO: Checar el DATA   
@@ -702,7 +702,7 @@ public class protocol extends kermit{
 		            		id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
 		            	}	
 	            		
-	            		MyClass.fireMyEvent(new MyEvent("recyclerContadores"+jcmId));
+	            		EventListenerClass.fireMyEvent(new MyEvent("recyclerContadores"+jcmId));
 	            		
 
 	            	break;
@@ -710,7 +710,7 @@ public class protocol extends kermit{
 	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing Recycler Software Version Request", jcmResponse));
             			System.arraycopy(jcmResponse, 5, recyclerVersion, 0,jcmResponse[1]-7);
             			
-            			MyClass.fireMyEvent(new MyEvent("recyclerVersion"+jcmId));
+            			EventListenerClass.fireMyEvent(new MyEvent("recyclerVersion"+jcmId));
             			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //
 	            		break;
 	            	case (byte)0x90:
@@ -749,7 +749,7 @@ public class protocol extends kermit{
 	            		recyclerOneB = "$" + recyclerOneB;
 	            		
 	            		
-	            		MyClass.fireMyEvent(new MyEvent("recyclerBillsA"+jcmId));
+	            		EventListenerClass.fireMyEvent(new MyEvent("recyclerBillsA"+jcmId));
 	            		break;
 	            		
 	            	case (byte)0x92:
