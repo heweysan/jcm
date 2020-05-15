@@ -647,3 +647,8 @@
 2020-05-13 23:31:56,101|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
 2020-05-13 23:31:56,304|DEBUG|uart|[AWT-EventQueue-0]|uart constructor [1]
 2020-05-13 23:31:56,304|DEBUG|uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-05-14 11:23:20,332|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-14 11:23:20,334|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-14 11:23:20,334|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-14 11:23:20,334|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-14 11:23:20,334|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message

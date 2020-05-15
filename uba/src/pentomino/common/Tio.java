@@ -20,11 +20,11 @@ public class Tio implements Runnable{
 	
 	
 	// create gpio controller
-    final static GpioController gpio = GpioFactory.getInstance();
+    static GpioController gpio;
     
  // provision gpio pin #02 as an input pin with its internal pull down resistor enabled
-    final static GpioPinDigitalInput boveda = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_26,PinPullResistance.PULL_UP);
-    final static GpioPinDigitalInput fascia = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_19, PinPullResistance.PULL_UP);
+    static GpioPinDigitalInput boveda;
+    static GpioPinDigitalInput fascia;
     static GpioPinDigitalOutput electroIman;
     static GpioPinDigitalOutput pin21;
     
@@ -86,19 +86,45 @@ public class Tio implements Runnable{
        
 		logger.debug("Tio starting....");
 		
-		
-		
-		if(gpio.isShutdown()) {
-			System.out.println("TIO GPIO IS SHUTDOWN");
+		gpio = GpioFactory.getInstance();
+		try {
+			Thread.sleep(250);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		gpio.shutdown();
 		
-		if(gpio.isShutdown()) {
-			System.out.println("TIO GPIO IS SHUTDOWN 2");
+		if(gpio != null && gpio.isShutdown()) {
+			System.out.println("TIO GPIO IS SHUTDOWN!");
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			gpio = GpioFactory.getInstance();
+		}
+		else {
+			System.out.println("TIO GPIO UP");
 		}
 		
 		GpioFactory.setDefaultProvider(new RaspiGpioProvider(RaspiPinNumberingScheme.BROADCOM_PIN_NUMBERING));
-	     
+		
+		boveda = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_26,PinPullResistance.PULL_UP);
+		try {
+			Thread.sleep(250);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    fascia = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_19, PinPullResistance.PULL_UP);
+	    
+	    try {
+			Thread.sleep(500);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		
 		 electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.HIGH);
 		 try {

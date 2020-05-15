@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.*;
 import gnu.io.*;
 import gnu.io.SerialPortEventListener;
+import pentomino.common.DeviceEvent;
+import pentomino.jcmagent.RaspiAgent;
 
 public class uart extends protocol implements Runnable, SerialPortEventListener{
 	/**
@@ -23,6 +25,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	public String port;
 	public int id = -1;
 	
+	private int pingTimer = 0;
 
 	Thread readThread;
     
@@ -72,24 +75,26 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	public int tempCont = 0;
 	
 	public void serialTx(byte[] msg) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("serialTx(byte[]) - start"); //$NON-NLS-1$
-		}
 		
         try {
         
             if(msg[2] != lastTx) {
             	lastTx = msg[2];
-            	System.out.println(baitsToString("\n[" + id + "] uart->serialTx", msg, msg[1]));
+            	System.out.println(baitsToString("\nJCM[" + id + "] uart->serialTx", msg, msg[1]));
             }
             else {
             	tempCont++;
-            	if(tempCont == 50) { //Cada n * 200 ms;   50 = 10 secs
+            	if(tempCont == 100) { //Cada n * 200 ms;   100 = 20 secs
             		System.out.print(".");
+            		pingTimer++;            			
             		tempCont = 0;
             	}
             }
-            	
+            
+            if(pingTimer >= 9) { //3 es un minuto
+            	pingTimer = 0;
+            	RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_PingAgents,"jcm[" + jcmId + "]");
+            }
             
             outputStream.write(msg,0,msg[1]);
         
@@ -97,11 +102,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 			logger.error("serialTx(byte[])", e); //$NON-NLS-1$
 
         	e.printStackTrace();
-        }
-       
-		if (logger.isDebugEnabled()) {
-			logger.debug("serialTx(byte[]) - end"); //$NON-NLS-1$
-		}
+        }       
+		
 	}
 	
 	public void openPort (String prt){

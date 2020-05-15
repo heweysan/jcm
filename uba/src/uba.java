@@ -59,9 +59,10 @@ public class uba {
 	uart[] jcms = new uart[2];
 	int contador = 0;
 
-	
+	//*
 	final Tio miTio = new Tio();
-		
+	//*/
+	
 	/**
 	 * Launch the application.
 	 */
@@ -101,10 +102,10 @@ public class uba {
 		
 		initialize();
 		
-		
+		//*
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();	
-			
+		//*/
 		
 		
 		//TODO: QUITAR
@@ -255,7 +256,7 @@ public class uba {
 
 
 		JPanel panel_firmware1 = new JPanel();
-		panel_firmware1.setBounds(10, 85, 380, 59);
+		panel_firmware1.setBounds(10, 81, 380, 59);
 		panelJCM1.add(panel_firmware1);
 		panel_firmware1
 		.setBorder(new TitledBorder(null, "Firmware:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -584,8 +585,12 @@ public class uba {
 		btnReset.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnReset.setBackground(Color.GREEN);
 		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
+			public void actionPerformed(ActionEvent e) {
+				jcms[0].currentOpertion = jcmOperation.Reset; 
+				//Primero se piden los estatus
+				jcms[0].id003_format((byte)5, protocol.SSR_VERSION, jcms[0].jcmMessage,true); //SSR_VERSION 0x88
+				
+				//jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
 			}
 		});
 		btnReset.setBounds(318, 11, 167, 50);
@@ -1150,14 +1155,31 @@ public class uba {
 		btnReiniciarJcm1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				jcms[0].currentOpertion = jcmOperation.Reset;
+				 //Primero hacemos los get versions...
+				
+				//Primero se piden los estatus
+				jcms[0].id003_format((byte)5, protocol.SSR_VERSION, jcms[0].jcmMessage,true); //SSR_VERSION 0x88
+				
+				//jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
+				
+				/* ORIGINAL
 				jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
+				//*/
 			}
 		});
 		
 		btnReiniciarJcm2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				jcms[1].currentOpertion = jcmOperation.Reset;
+				//Primero hacemos los get versions...
+				
+				//Primero se piden los estatus
+				jcms[1].id003_format((byte)5, protocol.SSR_VERSION, jcms[1].jcmMessage,true); //SSR_VERSION 0x88
+				
+				//jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
+				/* ORIGINAL
 				jcms[1].id003_format((byte) 5, (byte) 0x40, jcms[1].jcmMessage, true);
+				//*/
 			}
 		});
 		
@@ -1220,14 +1242,18 @@ public class uba {
 		
 		btnCierraBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//*
 				miTio.cierraBoveda();
+				//*/
 			}
 		});
 		
 		
 		btnAbreBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//*
 				miTio.abreBoveda();
+				//*/
 			}
 		});
 		
@@ -1305,10 +1331,10 @@ public class uba {
 					lblRecyclerVersion2.setText(new String(jcms[1].recyclerVersion));
 					break;					
 				case "recyclerBillsA1":
-					lblRecycler1.setText(jcms[0].recyclerOneA + " " + jcms[0].recyclerOneB);
+					lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
 					break;
 				case "recyclerBillsA2":
-					lblRecycler2.setText(jcms[1].recyclerOneA + " " + jcms[1].recyclerOneB);
+					lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 					break;
 				case "recyclerContadores1":
 					lblContadores1.setText(jcms[0].recyclerContadores);

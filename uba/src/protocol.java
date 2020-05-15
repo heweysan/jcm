@@ -13,12 +13,10 @@ public class protocol extends kermit{
 	
 	byte[] version 	= new byte[50];	
 	byte[] recyclerVersion 	= new byte[50];	
-	boolean accept	= false;
-	boolean rturn 	= false;
 	
 	//Las denominaciones que recicla cada JCM
-	public String recyclerOneA = "";
-	public String recyclerOneB = "";
+	public String recyclerDenom1 = "";
+	public String recyclerDenom2 = "";
 		
 	public String recyclerContadores = "";
 	
@@ -26,6 +24,9 @@ public class protocol extends kermit{
 	
 	public JcmContadores contadores = new JcmContadores();
 	
+	
+	private boolean processingOperation = false;
+	private boolean waitingForInitialize = false;
 	
 	/* VARIABLES PARA DISPENSADO */
 	int jcmCass1 = 0;
@@ -234,7 +235,7 @@ public class protocol extends kermit{
 	
 	void id003_format_ext(byte LNG, byte EXT_CMD, byte UNIT, byte CMD, byte DATA1, byte DATA2,  byte[] DATA){
 		
-		//System.out.println("[" + jcmId + "] protocol id003_format_ext LNG [" + Integer.toHexString(LNG) + "] CMD [" + Integer.toHexString(CMD) + "] " + baitsToString("",DATA,LNG));
+		//System.out.println("JCM[" + jcmId + "] protocol id003_format_ext LNG [" + Integer.toHexString(LNG) + "] CMD [" + Integer.toHexString(CMD) + "] " + baitsToString("",DATA,LNG));
 		
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
@@ -296,32 +297,31 @@ public class protocol extends kermit{
         switch(jcmResponse[2]){
         
 	        case INVALID_COMMAND: // 0x4b Invalid Command
-	        	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing INVALID COMMAND", jcmResponse,jcmResponse[1]));
+	        	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing INVALID COMMAND", jcmResponse,jcmResponse[1]));
 	        	break;
             case ACK: // 0x50 ACK
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing ACK", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing ACK", jcmResponse,jcmResponse[1]));
             	id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //STATUS_REQUEST
             	break;
             case SR_IDLING: //0x11 IDLING
-            	//System.out.println(baitsToString("[" + jcmId + "] protocol processing IDLING", jcmResponse,jcmResponse[1]));            	
+            	//System.out.println(baitsToString("JCM[" + jcmId + "] processing IDLING", jcmResponse,jcmResponse[1]));            	
             	//id003_format((byte)5, (byte) STATUS_REQUEST, jcmMessage); //STATUS_REQUEST
             	break;
             case SR_ACCEPTING: //0x12 ACCEPTING
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing ACCEPTING", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing ACCEPTING", jcmResponse,jcmResponse[1]));
             	id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
             	break;
             case SR_ESCROW: // 0x13 ESCROW
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing ESCROW", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing ESCROW", jcmResponse,jcmResponse[1]));
             	bill = bill_value(jcmResponse[3]); //bill = b[3];
             	
             	EventListenerClass.fireMyEvent(new MyEvent("bill"+jcmId));
-            	accept = false;
-            	rturn = false;
+            	
             	id003_format((byte)5, (byte) 0x44, jcmMessage,true); //HOLD
             	//id003_format((byte)5, (byte) 0x41, jcmMessage); //STACK1
             	break;
             case SR_STACKING: //0x14 STACKING +DATA
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing STACKING", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing STACKING", jcmResponse,jcmResponse[1]));
             	
             	//Revisamos el status del stacking
             	if(jcmMessage[3] == 0x00)
@@ -334,11 +334,11 @@ public class protocol extends kermit{
             	id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
             	break;
             case SR_VEND_VALID: //0x15 VEND_VALID
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing VEND_VALID", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing VEND_VALID", jcmResponse,jcmResponse[1]));
             	id003_format((byte)5, ACK, jcmMessage,true); //ACK
             	break;
             case SR_STACKED: // 0x16 STACKED  +DATA
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing STACKED", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing STACKED", jcmResponse,jcmResponse[1]));
             	//Actualizacion de contadores de reciclaje
             	id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcmMessage);
             	
@@ -346,7 +346,7 @@ public class protocol extends kermit{
             	EventListenerClass.fireMyEvent(new MyEvent("clearbill"+jcmId));
             	break;
             case SR_REJECTING: // 0x17 REJECTING
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing REJECTING", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing REJECTING", jcmResponse,jcmResponse[1]));
             	
 	            	switch(jcmResponse[3]) {
 	            	case 0x71:
@@ -366,13 +366,13 @@ public class protocol extends kermit{
             	break;
             	
             case SR_RETURNING: //0x18 RETURNING
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing RETURNING", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing RETURNING", jcmResponse,jcmResponse[1]));
             	id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
             	EventListenerClass.fireMyEvent(new MyEvent("clearbill"+jcmId));
             	break;
             	
             case SR_HOLDING: // 0x19 HOLDING            	
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing HOLDING", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing HOLDING", jcmResponse,jcmResponse[1]));
             	//guardamos el billete
             	id003_format((byte)5, (byte) 0x41, jcmMessage,true); //STACK1
             	
@@ -385,12 +385,11 @@ public class protocol extends kermit{
             		id003_format((byte)5, (byte) 0x41, jcmMessage,true); //STACK1
             	}
             	*/
-            	accept = false;
-            	rturn = false;
+            	
             	break;
             	
             case SR_INHIBIT: //0x1A DISABLE (INHIBIT)
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing DISABLE (INHIBIT)", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing DISABLE (INHIBIT)", jcmResponse,jcmResponse[1]));
             	
             	if(currentOpertion == jcmOperation.Reset) {
             		
@@ -420,27 +419,34 @@ public class protocol extends kermit{
             	break;
             	
             case SR_INITIALIZE: // 0x1B INITIALIZE
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing INITIALIZE", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing INITIALIZE", jcmResponse,jcmResponse[1]));
             	
-            	if(currentOpertion == jcmOperation.Reset) {            	
-            		id003_format((byte)5, (byte) 0x88, jcmMessage,true); //SSR_VERSION_REQUEST
+            	//Para que ya no procese la operaicon anterior
+            	processingOperation = false;
+            	
+            	
+            	if(!waitingForInitialize) {
+            		waitingForInitialize = true;
+	            	if(currentOpertion == jcmOperation.Reset) {            	
+	            		id003_format((byte)5, SSR_BOOT_VERSION, jcmMessage,true); // 0x89 
+	            	}
+	            	else {
+	            		id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //STATUS_REQUEST
+	            		waitingForInitialize = false;
+	            	}
             	}
-            	else {
-            		id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); //STATUS_REQUEST
-            	}
-            		
             	break;
             	
             case SR_PAYING: // 0x20 PAYING
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing PAYING", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing PAYING", jcmResponse,jcmResponse[1]));            	
             	break;
             	
             case SR_COLLECTING: // 0x21 COLLECTING
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing COLLETING", jcmResponse,jcmResponse[1]));                        	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing COLLETING", jcmResponse,jcmResponse[1]));                        	
             	break;
             	
             case SR_COLLECTED: // 0x22 COLLECTED + DATA
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing COLLECTED", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing COLLECTED", jcmResponse,jcmResponse[1]));
             	
             	//Revisamos el status del Collected
             	if(jcmMessage[3] == 0x01)
@@ -451,128 +457,125 @@ public class protocol extends kermit{
             	break;
             	
             case SR_PAY_VALID: //0x23 PAY VALID
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing PAY VALID", jcmResponse,jcmResponse[1])); 
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing PAY VALID", jcmResponse,jcmResponse[1])); 
             	id003_format((byte)5, ACK, jcmMessage,true); // ACK
             	break;
             	
             case SR_PAY_STAY: //0x24 PAY STAY
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing PAY STAY", jcmResponse,jcmResponse[1])); 
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing PAY STAY", jcmResponse,jcmResponse[1])); 
             	id003_format((byte)5, STATUS_REQUEST, jcmMessage,true); // STATUS_REQUEST
             	break;
             	
             case SR_RETURN_TO_BOX: //0x25 RETURN TO BOX
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing RETURN TO BOX", jcmResponse,jcmResponse[1])); 
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing RETURN TO BOX", jcmResponse,jcmResponse[1])); 
             	id003_format((byte)5, ACK, jcmMessage,true); // ACK
             	break;
             	
             case SR_RETURN_PAY_OUT_NOTE: //0x26 RETURN PAY OUT NOTE +DATA
-             	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing RETURN PAY OUT NOTE", jcmResponse,jcmResponse[1])); 
+             	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing RETURN PAY OUT NOTE", jcmResponse,jcmResponse[1])); 
             	id003_format((byte)5, ACK, jcmMessage,true); // ACK
             	break;
             	
             case SR_RETURN_ERROR: //0x2F RETURN ERROR
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing RETURN TO BOX", jcmResponse,jcmResponse[1])); 
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing RETURN TO BOX", jcmResponse,jcmResponse[1])); 
             	id003_format((byte)5, ACK, jcmMessage,true); // ACK
             	break;
             
             case SR_POWER_UP_WITH_BILL_IN_STACKER: //0x42 POWER_UP_WITH_BILL_IN_STACKER / MOTOR_ERROR            	
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_POWER_UP_WITH_BILL_IN_STACKER", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_POWER_UP_WITH_BILL_IN_STACKER", jcmResponse,jcmResponse[1]));
             	
             	//TODO: REVISAR SI ES NORMAL O EXTENDED
             	
             	break;
             	
             case SR_ERR_RECYCLER_ERROR: //0x4C  RECYCLER ERROR
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_RECYCLER_ERROR", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_RECYCLER_ERROR", jcmResponse,jcmResponse[1]));            	
             	
-            	//TODO: REVISAR EL DATA
-            	
-            	//MAndamos el clear
-            	id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
-						jcmMessage);
-            	break;
-           
+            	//Pedimos Informacion del error            	
+            	id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x1A, (byte) 0x0, jcmMessage);            	
+            	//Mandamos el clear
+            	//id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,jcmMessage);
+            	break;           
             	
             case SR_E_UNCONNECTED: //0x00  UNCONNECTED
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_E_UNCONNECTED", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_E_UNCONNECTED", jcmResponse,jcmResponse[1]));            	
             	break;	
             	
             case SR_E_NORMAL: //0x10  SR_E_NORMAL + DATA
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_E_NORMAL", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_E_NORMAL", jcmResponse,jcmResponse[1]));            	
             	break;	
             /*  TODO: VALIDAR SI ES EXTENSION	
             case SR_E_EMPTY: //0x11  SR_E_EMPTY
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_E_EMPTY", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_E_EMPTY", jcmResponse,jcmResponse[1]));            	
             	break;	
             */	
             case SR_ERR_STACKER_FULL: //0x43 STACKER_FULL
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing STACKER FULL", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing STACKER FULL", jcmResponse,jcmResponse[1]));            	
             	break;
             case SR_ERR_STACKER_OPEN: //0x44 SR_ERR_STACKER_OPEN
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_STACKER_OPEN", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_STACKER_OPEN", jcmResponse,jcmResponse[1]));            	
             	break;
             case SR_ERR_JAM_IN_ACCEPTOR: //0x45 JAM_IN_ACCEPTOR
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_JAM_IN_ACCEPTOR", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_JAM_IN_ACCEPTOR", jcmResponse,jcmResponse[1]));            	
             	break;
             case SR_ERR_JAM_IN_STACKER: //0x46 SR_ERR_JAM_IN_STACKER
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_JAM_IN_STACKER", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_JAM_IN_STACKER", jcmResponse,jcmResponse[1]));            	
             	break;
             	
             case SR_ERR_PAUSE: //0x47 SR_ERR_PAUSE
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_PAUSE", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_PAUSE", jcmResponse,jcmResponse[1]));            	
             	break;
             	
             case SR_ERR_CHEATED: //0x48 SR_ERR_CHEATED
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_CHEATED", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_CHEATED", jcmResponse,jcmResponse[1]));            	
             	break;	
             	
             case SR_ERR_FAILURE: //0x49 SR_ERR_FAILURE + DATA
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_FAILURE", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_FAILURE", jcmResponse,jcmResponse[1]));            	
             	//TODO: Checar el DATA
             	break;	
             	
             case SR_ERR_COMMUNICATION_ERROR: //0x4A SR_ERR_COMMUNICATION_ERROR
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SR_ERR_COMMUNICATION_ERROR", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_COMMUNICATION_ERROR", jcmResponse,jcmResponse[1]));            	
             	//TODO: Checar el DATA
             	break;	           	
             	
             case SCR_ENABLE_DENOM: // 0xC0 SCR_ENABLE_DENOM
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SCR_ENABLE_DENOM", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SCR_ENABLE_DENOM", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA            		
             	id003_format((byte)7, (byte) 0xC1, jcmMessage,true); // CMD_SECURITY_DENOMI
             	break;
+            	
             case SCR_SECURITY_DENOM: //0xC1 SCR_SECURITY_DENOM
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SCR_SECURITY_DENOM", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SCR_SECURITY_DENOM", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA            		
             	id003_format((byte)6, (byte) 0xC4, jcmMessage,true); // CMD_DIRECTION
             	break;
             case SCR_COMMUNICATION_MODE: //0xC2 CMD_INHIBIT_ACCEPTOR
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing CMD INHIBIT ACCEPTOR", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing CMD INHIBIT ACCEPTOR", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA            		
             	id003_format((byte)5, (byte) 0x83, jcmMessage,true); // SSR_INHIBIT_ACCEPTOR
             	break;
             case SCR_INHIBIT: //0xC3 SCR_INHIBIT
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing CMD SCR_INHIBIT ACCEPTOR", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing CMD SCR_INHIBIT ACCEPTOR", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA            		
             	id003_format((byte)5, (byte) 0x83, jcmMessage,true); // SSR_INHIBIT_ACCEPTOR
             	break;
             case SCR_DIRECTION: //0xC4 CMD_DIRECTION
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing CMD_DIRECTION", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing CMD_DIRECTION", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA            		
-            	id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, SSR_E_SOFTWARE_VERSION, (byte) 0x00, (byte) 0x0,
-						jcmMessage);
-            	//id003_format((byte)5, (byte) 0x50, jcmMessage,true); // ACK
+            	id003_format((byte)5, (byte) 0x11, jcmMessage,true); // STATUS_REQUEST            	
             	break;
             case SCR_OPTIONAL_FUNCTION: //0xC5 CMD_DIRECTION
             	//TODO: Checar el DATA       
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SCR_OPTIONAL_FUNCTION", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SCR_OPTIONAL_FUNCTION", jcmResponse,jcmResponse[1]));            	
             	break;            	
             case SSRR_ENABLE_DENOM: //0x80 SSR_EN_DIS_DENOMI
             	//TODO: Checar el DATA
             	id003_format((byte)5, (byte) SSRR_SECURITY, jcmMessage,true); // SSRR_ENABLE_DENOM
             	break;
             case SSRR_SECURITY: // 0x81 SSRR_SECURITY
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SSRR_SECURITY", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SSRR_SECURITY", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA
             	id003_format((byte)5, (byte) 0x85, jcmMessage,true); // SSR_OPTIONAL_FUNCTION
             	break;         
@@ -581,7 +584,7 @@ public class protocol extends kermit{
             	break;         
             case (byte)SSRR_INHIBIT: //0x83 SSR_INHIBIT_ACCEPTOR
             	//TODO: Checar el DATA
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SSR INHIBIT ACCEPTOR", jcmResponse,jcmResponse[1]));            	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SSR INHIBIT ACCEPTOR", jcmResponse,jcmResponse[1]));            	
             	
             	//Checamos que tipo de operacion estamos haciendo.
             	switch(currentOpertion) {
@@ -618,7 +621,7 @@ public class protocol extends kermit{
             	
             	break;
             case SSRR_DIRECTION: // 0x84 SSRR_DIRECTION
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing SSRR_DIRECTION", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing SSRR_DIRECTION", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA
             	id003_format((byte)6, (byte) 0xC3, jcmMessage,true); // SSRR_DIRECTION
             	break;
@@ -627,38 +630,75 @@ public class protocol extends kermit{
             	id003_format((byte)5, (byte) 0x84, jcmMessage,true); // SSR_DIRECTION
             	break;
             case SSRR_VERSION_INFORMATION: //0x88 SSRR_VERSION_INFORMATION  (FIRMWARE)
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing FIRMWARE", jcmResponse,jcmResponse[1]));
-            	id003_format((byte)5, (byte) 0x89, jcmMessage,true); // SSR_BOOT_VERSION_REQUEST
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing FIRMWARE", jcmResponse,jcmResponse[1]));
             	System.arraycopy(jcmResponse, 3, version, 0,jcmResponse[1]-5);
-            	EventListenerClass.fireMyEvent(new MyEvent("version"+jcmId));
             	
-            	//TODO: AQUI            	
+            	id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, SSR_E_SOFTWARE_VERSION, (byte) 0x00, (byte) 0x0,jcmMessage); //0x93
+            	            	
+            	EventListenerClass.fireMyEvent(new MyEvent("version"+jcmId));
+            	            	
             	RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_VersionInfo,"jcm[" + jcmId + "] " + new String(version).trim());	
             	break;   
             case SSRR_BOOT_VERSION_INFO: // 0x89 SSRR_BOOT_VERSION_INFO
             	//TODO: Checar el DATA   
+            	
+            	
             	id003_format((byte)5, (byte) 0x8A, jcmMessage,true); // SSR_BILL_TABLE
             	break;
             case SSRR_DENOMINATION_DATA: // 0x8A SSRR_DENOMINATION_DATA
             	//TODO: Checar el DATA   
-            	id003_format((byte)7, (byte) 0xC0, jcmMessage,true); // CMD_EN_DIS_DENOMI
+            	id003_format((byte)7, (byte) 0xC0, jcmMessage,true); // 0xC0 CMD_EN_DIS_DENOMI
             	break;
             	
-            case 0x40: // POWER_UP            	
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing POWER UP", jcmResponse,jcmResponse[1]));
+            case 0x40: // POWER_UP   0x40          	
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing POWER UP", jcmResponse,jcmResponse[1]));
             	//TODO: AQUI REVISAR AQUI 
             	//id003_format((byte)5, (byte) 0x40, jcmMessage,true); // RESET_      // SAN TODO AQUI: 
             	break;
             case 0x41:  // POWER_UP_WITH_BILL_IN_ACCEPTOR * POWER_UP_WITH_BILL_IN_STACKER            	
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing POWER_UP_WITH_BILL_IN_ACCEPTOR", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing POWER_UP_WITH_BILL_IN_ACCEPTOR", jcmResponse,jcmResponse[1]));
             	break;
             
             case (byte)0xF0: // ALGUN EXTENDED
             	
             	
             	switch(jcmResponse[4]) {
+            		case (byte) 0x00:  // UNCONNECTED Recycler Unit is not connected. 
+            			//Mandamos el clear
+                    	id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,jcmMessage);
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_HardwareError, "UNCONNECTED Recycler Unit is not connected.");            		
+            		break;
+            		
+            		case (byte) 0x10:  //NORMAL             			
+            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+            			break;
+            			
+            		case (byte) 0x11:  //EMPTY           			
+            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "Online");
+            			if(jcmId == 1)
+            				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-EMPTY-0;2-EMPTY-0;3-NA-0;4-NA-0");
+            			else
+            				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-NA-0;2-NA-0;3-EMPTY-0;4-EMPTY-0");
+            			break;
+            		
+            		case (byte) 0x12:  //FULL           			
+            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+            			RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "Online");
+            			if(jcmId == 1)
+            				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-FULL-0;2-FULL-0;3-NA-0;4-NA-0");
+            			else
+            				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-NA-0;2-NA-0;3-FULL-0;4-FULL-0");
+            			break;
+            			
 	            	case (byte)0xA0:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing TOTAL COUNT REQUEST", jcmResponse,jcmResponse[1]));
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing TOTAL COUNT REQUEST", jcmResponse,jcmResponse[1]));
 	            	
 	            		System.out.println("Total number of the stacked notes in Recycle      [" + jcmResponse[5] + "]");
 	            		System.out.println("Total number of the dispensed notes from Recycler [" + jcmResponse[8] + "]");
@@ -667,7 +707,7 @@ public class protocol extends kermit{
 	            	
 	            		break;
 	            	case (byte)0xA1:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing TOTAL COUNT CLEAR ", jcmResponse,jcmResponse[1]));
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing TOTAL COUNT CLEAR ", jcmResponse,jcmResponse[1]));
 	            		switch(jcmResponse[5]) {
 	            		case 0x0:
 	            			System.out.println("Normal End");
@@ -684,20 +724,21 @@ public class protocol extends kermit{
 	            		id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
 	            		break;
 	            	case (byte)0xA2:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing CURRENT COUNT REQUEST", jcmResponse,jcmResponse[1]));
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing CURRENT COUNT REQUEST", jcmResponse,jcmResponse[1]));
 	            		
-		            	System.out.println("Rec Count 1 [" + jcmResponse[5] + "]");
-	            		System.out.println("Rec Count 2 [" + jcmResponse[7] + "]");
-	            		
+		            	       		
 	            		recyclerContadores = "Rec1 [" + jcmResponse[5] + "] / Rec2 [" + jcmResponse[7] + "]";
+	            		System.out.println(recyclerContadores);
+	            		
 	            		contadores.Cass1Available = Byte.toUnsignedInt(jcmResponse[5]);
 	            		contadores.Cass2Available = Byte.toUnsignedInt(jcmResponse[7]);
-	            	
+	            		
+	            		waitingForInitialize = false;
 		            	if(currentOpertion == jcmOperation.Reset) {
 		            			            		
 		            		currentOpertion = jcmOperation.None;
 		            		            		
-		            		System.out.println("RE INHIBIT");
+		            		System.out.println("RE INHIBIT (HABILITAMOS QUE ACEPTE BILLETES)");
 		    				jcmMessage[3] = 0x00;
 		    				id003_format((byte) 0x6, (byte) 0xC3, jcmMessage, false);
 		    				
@@ -710,21 +751,32 @@ public class protocol extends kermit{
 	            		
 
 	            	break;
-	            	case (byte)0x93:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing Recycler Software Version Request", jcmResponse,jcmResponse[1]));
+	            	case SSRR_E_RECYCLE_SOFTWARE_VERSION:  //0x93
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing RECYCLER SOFTWARE VERSION REQUEST", jcmResponse,jcmResponse[1]));
             			
-	            		System.out.println("LEN [" + jcmResponse[1] + "]");
-	            		            			
-	            		System.arraycopy(jcmResponse, 5, recyclerVersion, 0,jcmResponse[1]-7);
-            			
-            			EventListenerClass.fireMyEvent(new MyEvent("recyclerVersion"+jcmId));
-            			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //Si lo pedimos aqui va a decir que esta Initializing y lo va a hacer de nuevo y de nuevo y de neuvo hasta que termine el initialice
-            			            			
-            			RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version,"jcm[" + jcmId + "] " + new String(recyclerVersion).trim());
+	            		if(!processingOperation) {
+	            			processingOperation = true;
+	            			
+		            		System.arraycopy(jcmResponse, 5, recyclerVersion, 0,jcmResponse[1]-7);
+	            				            			
+	            			//Mandamos ahora si el reset
+	            			if(currentOpertion == jcmOperation.Reset) {
+	            				id003_format((byte) 5, (byte) 0x40, jcmMessage, true);  //RESET
+	            			}            			
+	            			else {
+	            				processingOperation = false;
+	            				id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS
+	            			}   
+	            			
+	            			EventListenerClass.fireMyEvent(new MyEvent("recyclerVersion"+jcmId));
+	            			
+	            			RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version,"jcm[" + jcmId + "] " + new String(recyclerVersion).trim());
+	            				            			
+	            		}	            		
             			
             			break;
 	            	case (byte)0x90:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing RECYCLE CURRENCY REQUEST", jcmResponse,jcmResponse[1]));
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing RECYCLE CURRENCY REQUEST", jcmResponse,jcmResponse[1]));
 	            		
 		            	if(currentOpertion == jcmOperation.Reset) {
 		            		
@@ -741,21 +793,23 @@ public class protocol extends kermit{
 	            	
 		            	String broadcastData = "";
 		            	
-	            		recyclerOneA = hexToDenom(jcmResponse[5]);
-	            		contadores.Cass1Denom = Integer.parseInt(recyclerOneA);
+	            		recyclerDenom1 = hexToDenom(jcmResponse[5]);
+	            		contadores.Cass1Denom = Integer.parseInt(recyclerDenom1);
 	            		
-	            		recyclerOneB = hexToDenom(jcmResponse[7]);
-	            		contadores.Cass2Denom = Integer.parseInt(recyclerOneB);
+	            		recyclerDenom2 = hexToDenom(jcmResponse[7]);
+	            		contadores.Cass2Denom = Integer.parseInt(recyclerDenom2);
 	            		
 	            		
 	            		if(jcmId == 1)
-	            			broadcastData = "Cassette1-" + recyclerOneA + ";Cassette2-" + recyclerOneB +";Cassette3-0;Cassette4-0";
+	            			broadcastData = "Cassette1-" + recyclerDenom1 + ";Cassette2-" + recyclerDenom2 +";Cassette3-0;Cassette4-0";
 	            		else
-	            			broadcastData = "Cassette1-0;Cassette2-0;Cassette3-" + recyclerOneA + ";Cassette4-" + recyclerOneB;
+	            			broadcastData = "Cassette1-0;Cassette2-0;Cassette3-" + recyclerDenom1 + ";Cassette4-" + recyclerDenom2;
 	            			
-	            		recyclerOneA = "$" + recyclerOneA;
-	            		recyclerOneB = "$" + recyclerOneB;	            		
+	            		recyclerDenom1 = "$" + recyclerDenom1;
+	            		recyclerDenom2 = "$" + recyclerDenom2;	            		
 	            		
+	            		System.out.println("Rec1[" + recyclerDenom1 + "] Rec2[" + recyclerDenom2 + "]");
+	            			            		
 	            		EventListenerClass.fireMyEvent(new MyEvent("recyclerBillsA"+jcmId));	            		            		
 	            		
 	            		RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts ,broadcastData);
@@ -763,20 +817,20 @@ public class protocol extends kermit{
 	            		break;
 	            		
 	            	case (byte)0x92:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processin Recycle Count Req (+92h)", jcmResponse,jcmResponse[1]));
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] protocol processin Recycle Count Req (+92h)", jcmResponse,jcmResponse[1]));
 	            		System.out.println("Recycle Box No. 1 [" + jcmResponse[5] + "]");
             			System.out.println("Recycle Box No. 2 [" + jcmResponse[6] + "]");
             			id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
 	            		break;
 	            	default:
-	            		if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing Algun Extended", jcmResponse,jcmResponse[1]));
+	            		if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing Algun Extended", jcmResponse,jcmResponse[1]));
 	            		id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
 	            		break;
             	}
             	
             	break;	
             case (byte)0x92: // UNIT INFORMATION RESPONSE
-            	if(mostrar) System.out.println(baitsToString("[" + jcmId + "] protocol processing UNIT INFORMATION RESPONSE", jcmResponse,jcmResponse[1]));
+            	if(mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] processing UNIT INFORMATION RESPONSE", jcmResponse,jcmResponse[1]));
             	//TODO: Checar el DATA   
             	
             	break;	
@@ -793,22 +847,22 @@ public class protocol extends kermit{
     	
     	switch(Data) {
 		case (byte)0x02:
-			System.out.println("\t Reciclador [20]");
+			//System.out.println("\t Reciclador [20]");
 			return "20";			
 		case (byte)0x04:
-			System.out.println("\t Reciclador [50]");
+			//System.out.println("\t Reciclador [50]");
 			return "50";
 			
 		case (byte)0x08:
-			System.out.println("\t Reciclador [100]");
+			//System.out.println("\t Reciclador [100]");
 			return "100";
 			
 		case (byte)0x10:
-			System.out.println("\t Reciclador [200]");
+			//System.out.println("\t Reciclador [200]");
 			return "200";
 			
 		case (byte)0x20:
-			System.out.println("\t Reciclador [500]");
+			//System.out.println("\t Reciclador [500]");
 			return "500";
 		
 		default:
@@ -820,7 +874,7 @@ public class protocol extends kermit{
     
         
     public String baitsToString(String texto, byte[] baits, int total) {
-    	String result = texto;
+    	String result = "\n" +  texto;
     	
     	int count = 0;
     	    	
