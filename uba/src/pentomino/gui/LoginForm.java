@@ -17,13 +17,14 @@ import javax.swing.SwingConstants;
 public final class LoginForm {
 
 	
-	public static JTextField textFieldDepositoUser;
-	public static JTextField textFieldDepositoPassword;
+	public static JTextField tfUser;
+	public static JTextField tfPassword;
 	public static JButton btnUser = new JButton("USUARIO");
 	public static JButton btnPassword = new JButton("CONTRASE\u00D1A");
-	public static JButton btnLoginSubmit = new JButton("INGRESAR");
+	public static JButton btnSubmit = new JButton("INGRESAR");
 	public static JDialog loginDialog;
-	
+	public static JLabel lblMensaje;
+	public static JButton btnCancel = new JButton("");;
 	
 	/**
 	 * @wbp.parser.entryPoint
@@ -42,11 +43,11 @@ public final class LoginForm {
 		
 		
 		
-		JLabel lblNewLabel = new JLabel("Ingresa tu n\u00FAmero de usuario y contrase\u00F1a");
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel.setBounds(26, 11, 711, 66);
-		panelUserLogin.add(lblNewLabel);		
+		lblMensaje = new JLabel("Ingresa tu n\u00FAmero de usuario y contrase\u00F1a");
+		lblMensaje.setForeground(Color.WHITE);
+		lblMensaje.setFont(new Font("Tahoma", Font.BOLD, 26));
+		lblMensaje.setBounds(26, 11, 711, 66);
+		panelUserLogin.add(lblMensaje);		
 		
 		btnUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -56,12 +57,12 @@ public final class LoginForm {
 		btnUser.setBounds(10, 88, 400, 200);
 		panelUserLogin.add(btnUser);
 		
-		textFieldDepositoUser = new JTextField();
-		textFieldDepositoUser.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldDepositoUser.setFont(new Font("Tahoma", Font.BOLD, 32));
-		textFieldDepositoUser.setBounds(433, 88, 400, 200);
-		panelUserLogin.add(textFieldDepositoUser);
-		textFieldDepositoUser.setColumns(10);
+		tfUser = new JTextField();
+		tfUser.setHorizontalAlignment(SwingConstants.CENTER);
+		tfUser.setFont(new Font("Tahoma", Font.BOLD, 32));
+		tfUser.setBounds(433, 88, 400, 200);
+		panelUserLogin.add(tfUser);
+		tfUser.setColumns(10);
 		
 		
 		
@@ -73,22 +74,23 @@ public final class LoginForm {
 		btnPassword.setBounds(10, 322, 400, 200);
 		panelUserLogin.add(btnPassword);
 		
-		textFieldDepositoPassword = new JTextField();
-		textFieldDepositoPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldDepositoPassword.setFont(new Font("Tahoma", Font.BOLD, 32));
-		textFieldDepositoPassword.setColumns(10);
-		textFieldDepositoPassword.setBounds(433, 319, 400, 200);
-		panelUserLogin.add(textFieldDepositoPassword);
+		tfPassword = new JTextField();
+		tfPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		tfPassword.setFont(new Font("Tahoma", Font.BOLD, 32));
+		tfPassword.setColumns(10);
+		tfPassword.setBounds(433, 319, 400, 200);
+		panelUserLogin.add(tfPassword);
+		btnSubmit.setBackground(Color.GREEN);
 		
 				
-		btnLoginSubmit.addActionListener(new ActionListener() {
+		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
-		btnLoginSubmit.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnLoginSubmit.setBounds(433, 549, 400, 200);
-		panelUserLogin.add(btnLoginSubmit);
+		btnSubmit.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnSubmit.setBounds(433, 549, 400, 200);
+		panelUserLogin.add(btnSubmit);
 		
 		loginDialog = new JDialog(mainFrame,"LOGIN", true);
 		
@@ -98,6 +100,12 @@ public final class LoginForm {
 		
 		loginDialog.getContentPane().setLayout(null);
 		loginDialog.getContentPane().add(panelUserLogin);	
+		
+		btnCancel = new JButton("CANCELAR");
+		btnCancel.setBackground(Color.RED);
+		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnCancel.setBounds(10, 549, 400, 200);
+		panelUserLogin.add(btnCancel);
 		
 		
 		return loginDialog;
