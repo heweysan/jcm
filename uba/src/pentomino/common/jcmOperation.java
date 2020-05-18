@@ -5,5 +5,6 @@ public enum jcmOperation {
 	Reset,
     Connect,
     Deposit,
-    Dispense
+    Dispense,
+    PreDispense
 }

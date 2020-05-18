@@ -4,6 +4,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +17,8 @@ import org.cups4j.CupsPrinter;
 import org.cups4j.PrintJob;
 import org.cups4j.PrintRequestResult;
 
+import pentomino.jcmagent.AgentsQueue;
+
 public class Ptr {
 
 	private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
@@ -19,16 +26,30 @@ public class Ptr {
 	public static void main(String[] args) {
 		
 		
+		//Queue<String> myqueue = new LinkedList<String>();
+		//Queue<String> mq2 =  (Queue<String>) Collections.synchronizedList(new LinkedList<String>());
+		
+		BlockingQueue<String> myqueue = new LinkedBlockingQueue<String>();
+		
 		String currentDirectory = System.getProperty("user.dir");
 	    System.out.println("The current working directory is " + currentDirectory);
 		
 	    logger.debug("PTR MAIN");      
 	     
-	    Tio miTio = new Tio();
-	    miTio.abreBoveda();
-	    
+	    final AgentsQueue miQueue = new AgentsQueue();
+		Thread miQueueThread = new Thread(miQueue, "miQueueThread");
+		miQueueThread.start();
+    
 		
-		
+		//miQueue.bq.add("AAA");
+		/*
+		myqueue.add("1");
+		myqueue.add("2");
+		myqueue.add("3");
+		myqueue.add("4");
+		myqueue.add("5");
+		myqueue.add("6");
+		*/	
 		
 	}
 	

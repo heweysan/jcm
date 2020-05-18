@@ -7,8 +7,6 @@
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/amqp-client-5.7.1.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/apache-log4j-2.13.1-bin/apache-log4j-2.13.1-bin/log4j-api-2.13.1.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/apache-log4j-2.13.1-bin/apache-log4j-2.13.1-bin/log4j-core-2.13.1.jar"/>
-	<classpathentry kind="lib" path="D:/Repos/JavaJars/slf4j-api-1.7.26.jar"/>
-	<classpathentry kind="lib" path="D:/Repos/JavaJars/slf4j-simple-1.7.26.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/cUPS/commons-codec-1.9.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/cUPS/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/cUPS/cups4j-0.7.1.jar"/>
@@ -22,5 +20,7 @@
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/pi4j-1.2/lib/pi4j-core.jar"/>
 	<classpathentry kind="lib" path="jgoodies-common-1.8.0.jar" sourcepath="jgoodies-common-1.8.0-sources.jar"/>
 	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Repos/JavaJars/slf4j-api-1.7.26.jar"/>
+	<classpathentry kind="lib" path="D:/Repos/JavaJars/slf4j-simple-1.7.26.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -21,7 +21,7 @@ public class ValidaRetiroForm {
 	public static JTextField textFieldConfirmacion;
 	public static JButton btnConfirmacion = new JButton("CONFIRMACI\u00D3N");
 	public static JButton btnAceptar = new JButton("ACEPTAR");	
-	private static final JButton btnCancelar = new JButton("CANCELAR");
+	public static JButton btnCancelar = new JButton("CANCELAR");
 	
 	
 	/**
@@ -93,6 +93,7 @@ public class ValidaRetiroForm {
 		
 		validationDialog.getContentPane().setLayout(null);
 		validationDialog.getContentPane().add(panelUserLogin);	
+		
 		btnCancelar.setBackground(Color.RED);
 		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 22));
 		btnCancelar.setBounds(10, 340, 400, 200);

@@ -3,8 +3,10 @@ package pentomino.cashmanagement;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -41,9 +43,10 @@ public class Transactions {
 
 	public static void main(String args[]) throws IOException, InterruptedException{
 
+	     
 		//ValidaUsuario("007007"); //007007		
 
-		//BorraCashInOPs("CI01GL0001");		
+		BorraCashInOPs("CI01GL0001");		
 
 		CashInOpVO myObj = new CashInOpVO();
 		myObj.atmId = "CI01GL0001";
@@ -52,7 +55,7 @@ public class Transactions {
 		myObj.operatorId = 7007;
 		myObj.notesDetails = "1x20";
 
-		//InsertaCashInOp(myObj);		
+		InsertaCashInOp(myObj);		
 
 		//InsertaPreDeposito(new Deposito());
 		

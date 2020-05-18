@@ -91,7 +91,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
             	}
             }
             
-            if(pingTimer >= 9) { //3 es un minuto
+            if(pingTimer >= 15) { //3 es un minuto
             	pingTimer = 0;
             	RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_PingAgents,"jcm[" + jcmId + "]");
             }

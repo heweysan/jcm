@@ -41,7 +41,7 @@ public class Config {
 	public static String GetPulsarParam(String param, String defValue) {
 				
 		if(PulsarParamHashmap.containsKey(param)) {			
-			System.out.println("Pulsar param retrieved from Map");
+			//System.out.println("Pulsar param retrieved from Map");
 			return PulsarParamHashmap.get(param);
 		}
 		
@@ -80,7 +80,7 @@ public class Config {
 			lock.unlock();
 		}
 		
-		System.out.println("param [" + param + "] value[" + retVal  + "]");
+		//System.out.println("param [" + param + "] value[" + retVal  + "]");
 		
 		return retVal;
 	}
@@ -89,7 +89,7 @@ public class Config {
 		
 		
 		if(DirectiveParamHashmap.containsKey(param)) {
-			System.out.println("Directive param retrieved from Map");
+			//System.out.println("Directive param retrieved from Map");
 			return DirectiveParamHashmap.get(param);
 		}
 		
@@ -116,7 +116,7 @@ public class Config {
 	            
 	            if (conn != null) {
 	                conn.close();
-	                System.out.println("Connection closed");
+	                //System.out.println("Connection closed");
 	            }
 	            	            
 	        } catch (SQLException e) {
@@ -129,7 +129,7 @@ public class Config {
 			lock.unlock();
 		}
 		
-		System.out.println("param [" + param + "] value[" + retVal  + "]");
+		//System.out.println("param [" + param + "] value[" + retVal  + "]");
 		
 		return retVal;
 	}
@@ -137,7 +137,7 @@ public class Config {
 	public static String GetPersistence(String param, String defValue) {
 		
 		if(PersistenceParamHashmap.containsKey(param)) {
-			System.out.println("Persistence param retrieved from Map");
+			//System.out.println("Persistence param retrieved from Map");
 			return PersistenceParamHashmap.get(param);
 		}
 		
@@ -179,7 +179,7 @@ public class Config {
 			lock.unlock();
 		}
 		
-		System.out.println("param [" + param + "] value[" + retVal  + "]");
+		//System.out.println("param [" + param + "] value[" + retVal  + "]");
 		
 		
 		

@@ -34,7 +34,7 @@ public class RaspiAgent {
 			JcmWriteToJournal("Withdrawal", 0, 0,"","CardNumber", "", "0", "MXN", "",  "",
 					"FullAtmId", "Withdrawal PresentFailed Timeout", AccountType.Checkings, pentomino.common.TransactionType.ControlMessage
 					, "", "Timeout", 1006, "");
-		*/
+		*/	
 		
 		String atmId = Config.GetDirective("AtmId", "");
 		
@@ -120,7 +120,9 @@ public class RaspiAgent {
 		
 		System.out.println(gson.toJson(agentMsg));
 		
-		RaspiAgent.SendCommandToRabbit(agentMsg);
+		AgentsQueue.bq.add(agentMsg);
+				
+		//SendCommandToRabbit(agentMsg);
 			
 		
 	}
@@ -145,11 +147,13 @@ public class RaspiAgent {
 		
 		System.out.println(gson.toJson(agentMsg));
 		
-		RaspiAgent.SendCommandToRabbit(agentMsg);
+		AgentsQueue.bq.add(agentMsg);
+		
+		//RaspiAgent.SendCommandToRabbit(agentMsg);
 	}
 		
 	
-	private static void SendCommandToRabbit(AgentMessage payload) {
+	private static void SendCommandToRabbitLocal(AgentMessage payload) {
 		
 		//String atmId = Configuration.GetDirective("AtmId", "");
 		
