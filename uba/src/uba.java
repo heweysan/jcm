@@ -1,27 +1,27 @@
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.Timer;
+import javax.swing.SwingConstants;
+//import javax.swing.Timer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
@@ -38,12 +38,9 @@ import pentomino.common.Tio;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.gui.ImagePanel;
-import pentomino.gui.LoginForm;
 import pentomino.gui.ValidaRetiroForm;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.RaspiAgent;
-import javax.swing.SwingConstants;
-import java.awt.Component;
 
 
 
@@ -77,7 +74,7 @@ public class uba {
 	uart[] jcms = new uart[2];
 	int contador = 0;
 
-	/*  //TODO: TIO
+	//*  //TODO: TIO
 	final Tio miTio = new Tio();
 	//*/
 
@@ -126,7 +123,7 @@ public class uba {
 
 		initialize();
 
-		/* TODO: TIO		
+		//* TODO: TIO		
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();	
 
@@ -146,7 +143,7 @@ public class uba {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setLocationRelativeTo(null);
-		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
+		mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 
 		//String[] BaudArray = { "9600", "19200", "38400" };		
@@ -165,11 +162,13 @@ public class uba {
 
 		ImagePanel panelToken = new ImagePanel(new ImageIcon("./images/panelToken.png").getImage(),"panelToken");
 
+		ImagePanel panelTerminamos = new ImagePanel(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
+		
 		CardLayout cl = new CardLayout();
 		panelCont.setLayout(cl);
 
 
-		panelCont.add(panelIdle,"Idle");
+		panelCont.add(panelIdle,"panelIdle");
 		panelIdle.setLayout(null);
 
 		JButton btnDeposito2 = new JButton("");
@@ -186,6 +185,12 @@ public class uba {
 		lblDepositUser.setForeground(Color.WHITE);
 		lblDepositUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDepositUser.setBounds(257, 545, 496, 87);
+		
+		JButton btnNewButton = new JButton("COMANDOS");		
+		btnNewButton.setBackground(Color.ORANGE);
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnNewButton.setBounds(1580, 37, 282, 138);
+		panelIdle.add(btnNewButton);
 
 
 		panelIdle.add(btnDeposito2);
@@ -206,6 +211,7 @@ public class uba {
 		panelCont.add(panelComandos, "panelComandos");
 		panelCont.add(panelLogin, "panelLogin");
 		panelCont.add(panelToken,"panelToken");
+		panelCont.add(panelTerminamos,"panelTerminamos");
 
 		JPanel panelPinPad = new JPanel();
 		panelPinPad.setOpaque(false);
@@ -278,12 +284,6 @@ public class uba {
 		btn1.setBounds(50, 47, 260, 220);
 		panelPinPad.add(btn1);
 
-
-
-
-
-
-
 		JLabel lblLoginMensaje = new JLabel("Para depositar, identif\u00EDcate");
 		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 60));
 		lblLoginMensaje.setForeground(Color.WHITE);
@@ -307,7 +307,7 @@ public class uba {
 		panelLogin.add(btnComandos);
 		btnComandos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cl.show(panelCont, "comandos");
+				cl.show(panelCont, "panelComandos");
 			}
 		});
 		btnComandos.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -347,26 +347,31 @@ public class uba {
 		panelJCM2.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
 		JLabel lblRecycler2 = new JLabel(".");
+		lblRecycler2.setForeground(Color.WHITE);
 		lblRecycler2.setBounds(10, 102, 210, 53);
 		panelJCM2.add(lblRecycler2);
 		lblRecycler2.setFont(new Font("Tahoma", Font.BOLD, 26));
 
 		JLabel lblTitleReciclador2 = new JLabel("Reciclador 2");
+		lblTitleReciclador2.setForeground(Color.WHITE);
 		lblTitleReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTitleReciclador2.setBounds(10, 11, 144, 28);
 		panelJCM2.add(lblTitleReciclador2);
 
 		JLabel lblBilleteIngresado2 = new JLabel("$0");
+		lblBilleteIngresado2.setForeground(Color.WHITE);
 		lblBilleteIngresado2.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblBilleteIngresado2.setBounds(164, 166, 226, 46);
 		panelJCM2.add(lblBilleteIngresado2);
 
 		JLabel lblTxtBill2 = new JLabel("Billete:");
+		lblTxtBill2.setForeground(Color.WHITE);
 		lblTxtBill2.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblTxtBill2.setBounds(10, 166, 144, 46);
 		panelJCM2.add(lblTxtBill2);
 
 		JLabel lblContadores2 = new JLabel("rec1/0  rec2/0");
+		lblContadores2.setForeground(Color.WHITE);
 		lblContadores2.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblContadores2.setBounds(200, 114, 190, 37);
 		panelJCM2.add(lblContadores2);
@@ -384,26 +389,31 @@ public class uba {
 		panelJCM1.setOpaque(false);
 
 		JLabel lblRecycler1 = new JLabel(".");
+		lblRecycler1.setForeground(Color.WHITE);
 		lblRecycler1.setBounds(10, 102, 210, 53);
 		panelJCM1.add(lblRecycler1);
 		lblRecycler1.setFont(new Font("Tahoma", Font.BOLD, 26));
 
 		JLabel lblTitleReciclador1 = new JLabel("Reciclador 1");
+		lblTitleReciclador1.setForeground(Color.WHITE);
 		lblTitleReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTitleReciclador1.setBounds(10, 11, 161, 28);
 		panelJCM1.add(lblTitleReciclador1);
 
 		JLabel lblTxtBill1 = new JLabel("Billete:");
+		lblTxtBill1.setForeground(Color.WHITE);
 		lblTxtBill1.setBounds(10, 166, 144, 46);
 		panelJCM1.add(lblTxtBill1);
 		lblTxtBill1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		final JLabel lblBilleteIngresado1 = new JLabel("$0");
+		lblBilleteIngresado1.setForeground(Color.WHITE);
 		lblBilleteIngresado1.setBounds(164, 166, 226, 46);
 		panelJCM1.add(lblBilleteIngresado1);
 		lblBilleteIngresado1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JLabel lblContadores1 = new JLabel("rec1/0  rec2/0");
+		lblContadores1.setForeground(Color.WHITE);
 		lblContadores1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblContadores1.setBounds(200, 114, 190, 37);
 		panelJCM1.add(lblContadores1);
@@ -434,19 +444,22 @@ public class uba {
 		panelMensajes.add(lblMensajes);
 
 		JPanel panelInfoOperacion = new JPanel();
+		panelInfoOperacion.setForeground(Color.WHITE);
 		panelInfoOperacion.setBounds(10, 85, 830, 613);
 		panelRetiro.add(panelInfoOperacion);
 		panelInfoOperacion.setLayout(null);
 		panelInfoOperacion.setOpaque(false);
 
 		final JLabel lblOperacion1 = new JLabel(".");
+		lblOperacion1.setForeground(Color.WHITE);
 		lblOperacion1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblOperacion1.setBounds(10, 11, 326, 74);
+		lblOperacion1.setBounds(10, 103, 326, 74);
 		panelInfoOperacion.add(lblOperacion1);
 
 		final JLabel lblOperacion2 = new JLabel(".");
+		lblOperacion2.setForeground(Color.WHITE);
 		lblOperacion2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblOperacion2.setBounds(370, 11, 450, 74);
+		lblOperacion2.setBounds(370, 103, 450, 74);
 		panelInfoOperacion.add(lblOperacion2);
 
 		JButton btnOperacion1 = new JButton("Terminar");
@@ -480,6 +493,25 @@ public class uba {
 
 					try {
 						Transactions.ConfirmaDeposito(depositOpVO);
+						System.out.println("ADIOS!!!");
+						
+						
+						//Terminamos el deposito, mandamos al pantalla y regresamos a idle.
+						cl.show(panelCont, "panelTerminamos");
+						
+						Timer screenTimer = new Timer();
+						
+						screenTimer.schedule(new TimerTask() {
+				            @Override
+				            public void run() {				                
+				            	System.out.println("ADIOS DESDE EL TIMER");
+				            	EventListenerClass.fireMyEvent(new MyEvent("timerScreen"));				                
+				                screenTimer.cancel();
+				            }
+				        }, 5000);
+
+						
+						
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -502,15 +534,22 @@ public class uba {
 		btnOperacion1.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnOperacion1.setBounds(420, 382, 400, 220);
 		panelInfoOperacion.add(btnOperacion1);
+		
+		JLabel lblNewLabel_3 = new JLabel("Ingresa los billetes uno por uno en los aceptadores");
+		lblNewLabel_3.setForeground(Color.WHITE);
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblNewLabel_3.setBounds(10, 11, 810, 65);
+		panelInfoOperacion.add(lblNewLabel_3);
 
 		JButton btnComandos_1 = new JButton("COMANDOS");
 		btnComandos_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				cl.show(panelCont, "panelComandos");
 			}
 		});
 		btnComandos_1.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnComandos_1.setBackground(Color.ORANGE);
-		btnComandos_1.setBounds(1072, 11, 321, 136);
+		btnComandos_1.setBounds(1569, 11, 321, 136);
 		panelPrincipal.add(btnComandos_1);
 		/*
 		Timer btnRetiroAlertBlinker = new Timer(500, new ActionListener() {
@@ -523,12 +562,17 @@ public class uba {
 		});        
 		*/
 		
+		
+		
+		
+    
+		
 		//TODO: HEWEY AQUI JPanel panelComandos = new JPanel();
 		//tabbedPane.addTab("Comandos", (Icon) null, panelComandos, null);
 		panelComandos.setLayout(null);
 
 		JPanel panel_comandos = new JPanel();
-		panel_comandos.setBounds(10, 113, 1860, 706);
+		panel_comandos.setBounds(10, 113, 1886, 706);
 		panelComandos.add(panel_comandos);
 		panel_comandos.setLayout(null);
 
@@ -1034,12 +1078,12 @@ public class uba {
 		JButton btnRegresar = new JButton("Regresar");
 		btnRegresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cl.show(panelCont, "principal");
+				cl.show(panelCont, "panelPrincipal");
 			}
 		});
 		btnRegresar.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnRegresar.setBackground(Color.ORANGE);
-		btnRegresar.setBounds(599, 24, 157, 50);
+		btnRegresar.setBounds(1222, 16, 207, 73);
 		panelComandos.add(btnRegresar);
 
 		JButton btnSalir = new JButton("SALIR");
@@ -1051,13 +1095,18 @@ public class uba {
 
 		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnSalir.setBackground(Color.RED);
-		btnSalir.setBounds(867, 24, 157, 50);
+		btnSalir.setBounds(1696, 16, 200, 73);
 		panelComandos.add(btnSalir);
 
 
 		//TODO: LISTENERS
 		/* - - - - - - - - -   L I S T E N E R S   - - - - - - - - - */
 
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cl.show(panelCont, "panelComandos");
+			}
+		});
 		
 		btnConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1167,7 +1216,7 @@ public class uba {
 					break;						
 				}
 
-				cl.show(panelCont, "Idle");
+				cl.show(panelCont, "panelIdle");
 			}
 		});
 
@@ -1359,7 +1408,7 @@ public class uba {
 		btnDeposito2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pinpadMode = PinpadMode.loginUser;
-				lblLoginMensaje.setText("Para depostiar, identifícate");
+				lblLoginMensaje.setText("Para depositar, identifícate");
 				currentOperation = jcmOperation.Deposit;
 				cl.show(panelCont, "panelLogin");
 
@@ -1508,7 +1557,7 @@ public class uba {
 
 		btnCierraBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/* TODO: TIO
+				//* TODO: TIO
 				miTio.cierraBoveda();
 				//*/
 			}
@@ -1517,7 +1566,7 @@ public class uba {
 
 		btnAbreBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/* TODO: TIO
+				//* TODO: TIO
 				miTio.abreBoveda();
 				//*/
 			}
@@ -1633,6 +1682,10 @@ public class uba {
 
 					lblContadores2.setText(jcms[1].recyclerContadores);
 					break;
+				case "timerScreen":
+					//cl.show(panelCont, "panelIdle");
+					cl.show(panelCont, "panelIdle");
+					break;
 				}
 
 
@@ -1674,7 +1727,7 @@ public class uba {
 
 
 
-		cl.show(panelCont, "Idle");
+		cl.show(panelCont, "panelIdle");
 
 	}
 

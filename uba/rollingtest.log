@@ -1053,3 +1053,90 @@
 2020-05-18 23:54:33,729|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
 2020-05-18 23:54:33,729|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
 2020-05-18 23:54:45,395|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-18 23:59:58,575|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-18 23:59:58,578|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-18 23:59:58,578|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-18 23:59:58,578|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-18 23:59:58,578|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 00:00:09,099|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:13:10,261|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:13:10,263|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:13:10,263|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:13:10,263|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:13:10,263|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:13:10,766|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:13:21,309|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:26:08,145|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:26:08,148|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:26:08,148|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:26:08,148|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:26:08,148|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:26:08,654|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:26:17,077|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:28:14,497|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:28:14,499|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:28:14,499|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:28:14,499|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:28:14,499|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:28:14,991|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:28:25,283|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:30:12,373|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:30:12,375|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:30:12,376|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:30:12,376|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:30:12,376|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:30:12,881|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:30:22,464|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:33:21,060|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:33:21,063|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:33:21,063|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:33:21,063|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:33:21,063|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:33:21,576|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:33:28,795|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:42:44,869|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:42:44,871|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:42:44,871|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:42:44,871|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:42:44,872|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:42:45,364|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:43:06,228|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:43:06,230|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:43:06,230|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:43:06,231|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:43:06,231|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:43:06,731|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:43:14,763|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:44:24,781|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:44:24,784|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:44:24,784|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:44:24,784|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:44:24,784|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:44:25,286|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:44:34,162|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:46:03,935|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:46:03,938|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:46:03,938|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:46:03,938|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:46:03,938|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:46:04,427|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:46:19,798|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:46:19,801|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:46:19,801|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:46:19,801|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:46:19,801|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:46:20,298|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:46:29,062|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:47:35,837|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:47:35,840|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:47:35,840|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:47:35,840|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:47:35,840|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:47:36,337|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-05-19 01:47:44,894|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-19 01:48:59,910|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-19 01:48:59,913|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-19 01:48:59,913|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-19 01:48:59,913|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-19 01:48:59,913|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-19 01:49:00,412|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
