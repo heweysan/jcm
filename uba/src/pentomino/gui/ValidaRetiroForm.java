@@ -30,7 +30,7 @@ public class ValidaRetiroForm {
 	public static JDialog validationForm(JFrame mainFrame, String referenciaNumerica, String monto) {
 		
 		
-		ImagePanel panelUserLogin = new ImagePanel(new ImageIcon("ScrPlaceholder.png").getImage());
+		ImagePanel panelUserLogin = new ImagePanel(new ImageIcon("ScrPlaceholder.png").getImage(),"panelUserLogin");
 		
 		JTextField textFieldReferenciaNumerica;
 		JLabel lblMonto = new JLabel("$2,500.00");

@@ -288,11 +288,26 @@ public class protocol extends kermit {
 	public void processing(byte[] jcmResponse) {
 
 		boolean mostrar = false;
-		// Si es disitnto al ultimo si despliego la info
-		if (lastMsg != jcmResponse[2]) {
-			lastMsg = jcmResponse[2];
+		
+		// Si es disitinto al ultimo si despliego la info
+		
+		byte operacion;
+		
+				
+		if(jcmResponse[2] == (byte) 0xF0) {  //Es extended command
+			operacion = jcmResponse[4];
+		}
+		else {
+			operacion = jcmResponse[2];
+		}
+		
+		if (lastMsg != operacion) {
+			lastMsg = operacion;
 			mostrar = true;
 		}
+		else  //PARA NO PROCESAR EL MISMO MENSAJE MAS DE UNA VEZ
+ 			return;
+		
 		switch (jcmResponse[2]) {
 
 		case INVALID_COMMAND: // 0x4b Invalid Command

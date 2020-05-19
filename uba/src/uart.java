@@ -14,7 +14,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	 */
 	private static final Logger logger = LogManager.getLogger(uart.class.getName());
 	
-	
+
 	@SuppressWarnings("rawtypes")
 	static Enumeration portList;
 	public CommPortIdentifier portId;
@@ -78,8 +78,19 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 		
         try {
         
+        	
+        	byte operacion;
+    		
+			
+    		if(msg[2] == (byte) 0xF0) {  //Es extended command
+    			operacion = msg[4];
+    		}
+    		else {
+    			operacion = msg[2];
+    		}
+    		
             if(msg[2] != lastTx) {
-            	lastTx = msg[2];
+            	lastTx = operacion;
             	System.out.println(baitsToString("\nJCM[" + id + "] uart->serialTx", msg, msg[1]));
             }
             else {

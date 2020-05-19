@@ -1,3 +1,4 @@
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -21,7 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
@@ -31,10 +31,8 @@ import org.apache.logging.log4j.Logger;
 import gnu.io.CommPortIdentifier;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CMUserVO;
-import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.AccountType;
-import pentomino.common.DeviceEvent;
 import pentomino.common.PinpadMode;
 import pentomino.common.Tio;
 import pentomino.common.TransactionType;
@@ -44,32 +42,34 @@ import pentomino.gui.LoginForm;
 import pentomino.gui.ValidaRetiroForm;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.RaspiAgent;
+import javax.swing.SwingConstants;
+import java.awt.Component;
 
 
 
 public class uba {
-	
+
 	private static PinpadMode pinpadMode = PinpadMode.None;	
-	
+
 	private static jcmOperation currentOperation = jcmOperation.None;
 
 	private static JcmContadores contadoresDeposito = new JcmContadores();
-	
-	private static String depositoUser = "";
-	private static String depositoPassword = "";
-	
+
+	private static String loginUser = "";
+	private static String loginPassword = "";
+
 	private static int referenciaNumerica = 0;
 	private static int montoRetiro = 0;
 	private static String autorizacionDispensar = "";
-	
+
 	private static final Logger logger = LogManager.getLogger(uba.class);
 
 	public static int montoDepositado = 0;
-	
+
 	private static String asteriscos = "";
 
 	private JFrame mainFrame;
-	
+
 	public static boolean recyclerContadores1 = false;
 	public static boolean recyclerContadores2 = false;
 
@@ -77,12 +77,12 @@ public class uba {
 	uart[] jcms = new uart[2];
 	int contador = 0;
 
-	//*
+	/*  //TODO: TIO
 	final Tio miTio = new Tio();
 	//*/
-	
+
 	final AgentsQueue agentsQueue = new AgentsQueue();
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -108,29 +108,28 @@ public class uba {
 	public uba() throws IOException, TimeoutException {
 
 		//https://logging.apache.org/log4j/2.x/manual/layouts.html
-		
-				
+
+
 		logger.debug("this is an DEBUG message");
 		logger.info("this is an INFO message");
 		logger.warn("this is an WARN message");
 		logger.error("this is an ERROR message");
 		logger.fatal("this is an FATAL message");
-		
+
 		JcmMonitor t2 = new JcmMonitor();
 
 		t2.start();
-		
+
 		Thread agentsQueueThread = new Thread(agentsQueue, "agentsQueueThread");
 		agentsQueueThread.start();
-		
-		
+
+
 		initialize();
-		
-		//*
-		
+
+		/* TODO: TIO		
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();	
-		
+
 		//*/	
 
 	}
@@ -140,33 +139,197 @@ public class uba {
 	 */
 	private void initialize() {
 
-		mainFrame = new JFrame();
+		mainFrame = new JFrame("Frame Principal");
 		mainFrame.getContentPane().setBackground(Color.DARK_GRAY);
-		mainFrame.setTitle("RedBlu JCM Driver (ID003)");
+		//mainFrame.setTitle("RedBlu JCM Driver (ID003)");
 		mainFrame.setBounds(100, 100, 1920, 1084);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setLocationRelativeTo(null);
-				
-		//String[] BaudArray = { "9600", "19200", "38400" };
-		
+		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
+
+
+		//String[] BaudArray = { "9600", "19200", "38400" };		
 		//String[] CurrencyArray = { "20", "50", "100", "200", "500" };
 
+		JPanel panelCont = new JPanel();
+		panelCont.setAlignmentY(Component.TOP_ALIGNMENT);
+		panelCont.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelCont.setBackground(Color.LIGHT_GRAY);
+		panelCont.setBounds(0, 0, 1920, 1080);
+		ImagePanel panelIdle = new ImagePanel(new ImageIcon("./images/ScrPlaceholder.png").getImage(),"panelIdle");
+		ImagePanel panelPrincipal = new ImagePanel(new ImageIcon("./images/ScrPlaceholder.png").getImage(),"panelPrincipal");
+		panelPrincipal.setOpaque(false);
+		ImagePanel panelComandos = new ImagePanel(new ImageIcon("./images/ScrPlaceholder.png").getImage(),"panelComandos");
+		ImagePanel panelLogin = new ImagePanel(new ImageIcon("./images/loginFormClean.png").getImage(),"panelLogin");
+
+		ImagePanel panelToken = new ImagePanel(new ImageIcon("./images/panelToken.png").getImage(),"panelToken");
+
+		CardLayout cl = new CardLayout();
+		panelCont.setLayout(cl);
+
+
+		panelCont.add(panelIdle,"Idle");
+		panelIdle.setLayout(null);
+
+		JButton btnDeposito2 = new JButton("");
+		btnDeposito2.setOpaque(false);
+
+		btnDeposito2.setBounds(361, 415, 576, 585);
+		btnDeposito2.setOpaque(false);
+		btnDeposito2.setContentAreaFilled(false);
+		btnDeposito2.setBorderPainted(false);
+
+
+		final JLabel lblDepositUser = new JLabel("");
+		lblDepositUser.setFont(new Font("Tahoma", Font.BOLD, 90));
+		lblDepositUser.setForeground(Color.WHITE);
+		lblDepositUser.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDepositUser.setBounds(257, 545, 496, 87);
+
+
+		panelIdle.add(btnDeposito2);
+
+		JButton btnRetiro2 = new JButton("");		
+		btnRetiro2.setOpaque(false);
+		btnRetiro2.setContentAreaFilled(false);
+		btnRetiro2.setBorderPainted(false);
+		btnRetiro2.setBounds(989, 415, 576, 585);
+		panelIdle.add(btnRetiro2);
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setOpaque(true);
+		lblNewLabel.setIcon(new ImageIcon("./images/scrPrincipal.png"));
+		lblNewLabel.setBounds(0, 0, 1920, 1080);
+		panelIdle.add(lblNewLabel);
+		panelCont.add(panelPrincipal,"panelPrincipal");
+		panelCont.add(panelComandos, "panelComandos");
+		panelCont.add(panelLogin, "panelLogin");
+		panelCont.add(panelToken,"panelToken");
+
+		JPanel panelPinPad = new JPanel();
+		panelPinPad.setOpaque(false);
+		panelPinPad.setBackground(Color.GRAY);
+		panelPinPad.setBounds(936, 0, 946, 1080);
+		//panelPrincipal.add(panelPinPad);
+		panelPinPad.setBorder(null);
+		panelPinPad.setLayout(null);
+
+		JButton btn2 = new JButton("2");
+		btn2.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn2.setBounds(359, 47, 262, 220);
+		panelPinPad.add(btn2);
+
+		JButton btn3 = new JButton("3");
+		btn3.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn3.setBounds(674, 47, 262, 220);
+		panelPinPad.add(btn3);
+
+		JButton btn4 = new JButton("4");
+		btn4.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn4.setBounds(50, 302, 259, 220);
+		panelPinPad.add(btn4);
+
+		JButton btn5 = new JButton("5");
+		btn5.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn5.setBounds(359, 302, 262, 220);
+		panelPinPad.add(btn5);
+
+		JButton btn6 = new JButton("6");
+		btn6.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn6.setBounds(674, 302, 262, 220);
+		panelPinPad.add(btn6);
+
+		JButton btn7 = new JButton("7");
+		btn7.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn7.setBounds(50, 557, 259, 220);
+		panelPinPad.add(btn7);
+
+		JButton btn8 = new JButton("8");
+		btn8.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn8.setBounds(359, 557, 267, 220);
+		panelPinPad.add(btn8);
+
+		JButton btn9 = new JButton("9");
+		btn9.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn9.setBounds(664, 557, 272, 220);
+		panelPinPad.add(btn9);
+
+		JButton btn0 = new JButton("0");
+		btn0.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn0.setBounds(359, 812, 267, 220);
+		panelPinPad.add(btn0);
+
+		JButton btnCancel = new JButton("CANCELAR");
+		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 30));
+		btnCancel.setBackground(Color.RED);
+		btnCancel.setBounds(50, 812, 259, 220);
+		panelPinPad.add(btnCancel);
+
+		JButton btnConfirmar = new JButton("CONFIRMAR");
 		
+		btnConfirmar.setFont(new Font("Tahoma", Font.BOLD, 30));
+		btnConfirmar.setBackground(Color.GREEN);
+		btnConfirmar.setBounds(664, 812, 272, 220);
+		panelPinPad.add(btnConfirmar);
+
+		JButton btn1 = new JButton("1");
+		btn1.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btn1.setBounds(50, 47, 260, 220);
+		panelPinPad.add(btn1);
+
+
+
+
+
+
+
+		JLabel lblLoginMensaje = new JLabel("Para depositar, identif\u00EDcate");
+		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 60));
+		lblLoginMensaje.setForeground(Color.WHITE);
+		lblLoginMensaje.setBounds(89, 139, 837, 70);
+		panelLogin.add(lblLoginMensaje);
+
+		panelLogin.add(panelPinPad);
+
+
+		panelLogin.add(lblDepositUser);
+
+		final JLabel lblDepositPassword = new JLabel("");
+		lblDepositPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDepositPassword.setForeground(Color.WHITE);
+		lblDepositPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
+		lblDepositPassword.setBounds(257, 793, 496, 87);
+		panelLogin.add(lblDepositPassword);
+
+		JButton btnComandos = new JButton("COMANDOS");
+		btnComandos.setBounds(10, 11, 263, 113);
+		panelLogin.add(btnComandos);
+		btnComandos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cl.show(panelCont, "comandos");
+			}
+		});
+		btnComandos.setFont(new Font("Tahoma", Font.BOLD, 30));
+		btnComandos.setBackground(Color.ORANGE);
 		
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 1904, 1050);
-		
-		
-		mainFrame.getContentPane().add(tabbedPane);
-		
-		//JPanel panelPrincipal = new JPanel();
-		
-		ImagePanel panelPrincipal = new ImagePanel(new ImageIcon("ScrPlaceholderGDE.png").getImage());
-		
-		tabbedPane.addTab("Principal", (Icon) null, panelPrincipal, null);
-		tabbedPane.setEnabledAt(0, true);
+		final JLabel lblLoginRow1 = new JLabel("");
+		lblLoginRow1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLoginRow1.setForeground(Color.WHITE);
+		lblLoginRow1.setFont(new Font("Tahoma", Font.BOLD, 60));
+		lblLoginRow1.setBounds(89, 58, 837, 70);
+		panelLogin.add(lblLoginRow1);
+
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\loginFormClean.png"));
+		lblNewLabel_1.setBounds(0, 0, 1920, 1080);
+		panelLogin.add(lblNewLabel_1);
+
+		mainFrame.getContentPane().add(panelCont);
+
+
+		//tabbedPane.addTab("Principal", (Icon) null, panelPrincipal, null);
+		//tabbedPane.setEnabledAt(0, true);
 		panelPrincipal.setLayout(null);
 
 		JPanel panel_estatus = new JPanel();
@@ -174,8 +337,10 @@ public class uba {
 		panelPrincipal.add(panel_estatus);
 		panel_estatus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_estatus.setLayout(null);
+		panel_estatus.setOpaque(false);
 
 		JPanel panelJCM2 = new JPanel();
+		panelJCM2.setOpaque(false);
 		panelJCM2.setBounds(440, 11, 400, 225);
 		panel_estatus.add(panelJCM2);
 		panelJCM2.setLayout(null);
@@ -216,6 +381,7 @@ public class uba {
 		panel_estatus.add(panelJCM1);
 		panelJCM1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelJCM1.setLayout(null);
+		panelJCM1.setOpaque(false);
 
 		JLabel lblRecycler1 = new JLabel(".");
 		lblRecycler1.setBounds(10, 102, 210, 53);
@@ -245,51 +411,53 @@ public class uba {
 		JButton btnReiniciarJcm1 = new JButton("REINICIAR");
 		btnReiniciarJcm1.setBounds(181, 11, 209, 80);
 		panelJCM1.add(btnReiniciarJcm1);
-		
+
 		btnReiniciarJcm1.setFont(new Font("Tahoma", Font.BOLD, 30));
 
 		JPanel panelRetiro = new JPanel();
-		panelRetiro.setBounds(10, 527, 850, 451);
+		panelRetiro.setOpaque(false);
+		panelRetiro.setBounds(10, 269, 850, 709);
 		panelPrincipal.add(panelRetiro);
 		panelRetiro.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRetiro.setLayout(null);
-		
-				
+
+
 		JPanel panelMensajes = new JPanel();
-		panelMensajes.setBounds(10, 11, 850, 63);
+		panelMensajes.setBounds(10, 11, 830, 63);
 		panelRetiro.add(panelMensajes);
 		panelMensajes.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelMensajes.setLayout(null);
-		
+
 		final JLabel lblMensajes = new JLabel(".");
 		lblMensajes.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		lblMensajes.setBounds(10, 11, 830, 41);
+		lblMensajes.setBounds(10, 11, 810, 41);
 		panelMensajes.add(lblMensajes);
-		
+
 		JPanel panelInfoOperacion = new JPanel();
-		panelInfoOperacion.setBounds(10, 85, 830, 355);
+		panelInfoOperacion.setBounds(10, 85, 830, 613);
 		panelRetiro.add(panelInfoOperacion);
 		panelInfoOperacion.setLayout(null);
-		
+		panelInfoOperacion.setOpaque(false);
+
 		final JLabel lblOperacion1 = new JLabel(".");
 		lblOperacion1.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblOperacion1.setBounds(10, 11, 326, 74);
 		panelInfoOperacion.add(lblOperacion1);
-		
+
 		final JLabel lblOperacion2 = new JLabel(".");
 		lblOperacion2.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblOperacion2.setBounds(370, 11, 450, 74);
 		panelInfoOperacion.add(lblOperacion2);
-		
+
 		JButton btnOperacion1 = new JButton("Terminar");
-		
+
 		btnOperacion1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+
+
 				if(currentOperation == jcmOperation.Deposit) {
 					//Terminamos el deposito
-					
+
 					DepositOpVO depositOpVO = new DepositOpVO();
 
 					depositOpVO.atmId = "CI01GL0001"; //"CIXXGS0020";
@@ -303,13 +471,13 @@ public class uba {
 					depositOpVO.operatorId = 7007;
 					depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
 					depositOpVO.userName = "007007";
-					
+
 					String billetes = "[" + contadoresDeposito.x20 + "x20|" + contadoresDeposito.x50 + "x50|" + contadoresDeposito.x100 + "x100|" + contadoresDeposito.x200 + "x200|" + contadoresDeposito.x500 + "x500|0x1000]";
-					
-					
+
+
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
-										
-					
+
+
 					try {
 						Transactions.ConfirmaDeposito(depositOpVO);
 					} catch (IOException e1) {
@@ -319,278 +487,44 @@ public class uba {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
-					
+
+
 				}
-				
+
 				if(currentOperation == jcmOperation.Dispense) {
-					
+
 				}
-				
-				
+
+
 			}
 		});
-		btnOperacion1.setEnabled(false);
 		btnOperacion1.setBackground(Color.LIGHT_GRAY);
 		btnOperacion1.setFont(new Font("Tahoma", Font.BOLD, 40));
-		btnOperacion1.setBounds(420, 124, 400, 220);
+		btnOperacion1.setBounds(420, 382, 400, 220);
 		panelInfoOperacion.add(btnOperacion1);
 
-		JPanel panelPinPad = new JPanel();
-		panelPinPad.setBackground(Color.GRAY);
-		panelPinPad.setBounds(870, 11, 1019, 923);
-		panelPrincipal.add(panelPinPad);
-		panelPinPad.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		panelPinPad.setLayout(null);
-
-		JButton btn2 = new JButton("2");
-		btn2.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn2.setBounds(240, 11, 200, 200);
-		panelPinPad.add(btn2);
-
-		JButton btn3 = new JButton("3");
-		btn3.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn3.setBounds(471, 11, 200, 200);
-		panelPinPad.add(btn3);
-
-		JButton btn4 = new JButton("4");
-		btn4.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn4.setBounds(10, 242, 200, 200);
-		panelPinPad.add(btn4);
-
-		JButton btn5 = new JButton("5");
-		btn5.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn5.setBounds(240, 242, 200, 200);
-		panelPinPad.add(btn5);
-
-		JButton btn6 = new JButton("6");
-		btn6.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn6.setBounds(471, 242, 200, 200);
-		panelPinPad.add(btn6);
-
-		JButton btn7 = new JButton("7");
-		btn7.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn7.setBounds(10, 473, 200, 200);
-		panelPinPad.add(btn7);
-
-		JButton btn8 = new JButton("8");
-		btn8.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn8.setBounds(240, 473, 200, 200);
-		panelPinPad.add(btn8);
-
-		JButton btn9 = new JButton("9");
-		btn9.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn9.setBounds(471, 473, 200, 200);
-		panelPinPad.add(btn9);
-
-		JButton btn0 = new JButton("0");
-		btn0.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn0.setBounds(240, 706, 200, 200);
-		panelPinPad.add(btn0);
-
-		JButton btnNullIzq = new JButton("");
-		btnNullIzq.setEnabled(false);
-		btnNullIzq.setBounds(10, 706, 200, 200);
-		panelPinPad.add(btnNullIzq);
-
-		JButton btnNullDer = new JButton("");
-		btnNullDer.setEnabled(false);
-		btnNullDer.setBounds(471, 706, 200, 200);
-		panelPinPad.add(btnNullDer);
-
-		JButton btnCancel = new JButton("CANCELAR");
-		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnCancel.setBackground(Color.RED);
-		btnCancel.setBounds(709, 11, 300, 200);
-		panelPinPad.add(btnCancel);
-
-		JButton btnBorrar = new JButton("BORRAR");
-		btnBorrar.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnBorrar.setBackground(Color.ORANGE);
-		btnBorrar.setBounds(709, 242, 300, 200);
-		panelPinPad.add(btnBorrar);
-
-		JButton btnConfirmar = new JButton("CONFIRMAR");
-		btnConfirmar.addActionListener(new ActionListener() {
+		JButton btnComandos_1 = new JButton("COMANDOS");
+		btnComandos_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pinpadMode = PinpadMode.None;
 			}
 		});
-		btnConfirmar.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnConfirmar.setBackground(Color.GREEN);
-		btnConfirmar.setBounds(709, 473, 300, 200);
-		panelPinPad.add(btnConfirmar);
-
-		JButton btnConfirmar_1 = new JButton("");
-		btnConfirmar_1.setEnabled(false);
-		btnConfirmar_1.setBackground(UIManager.getColor("Button.background"));
-		btnConfirmar_1.setBounds(709, 706, 300, 200);
-		panelPinPad.add(btnConfirmar_1);
-
-		JButton btn1 = new JButton("1");
-		btn1.setFont(new Font("Tahoma", Font.BOLD, 44));
-		btn1.setBounds(10, 11, 200, 200);
-		panelPinPad.add(btn1);
-
-		JPanel panelDeposito = new JPanel();
-		panelDeposito.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelDeposito.setBounds(10, 269, 850, 247);
-		panelPrincipal.add(panelDeposito);
-		panelDeposito.setLayout(null);
+		btnComandos_1.setFont(new Font("Tahoma", Font.BOLD, 30));
+		btnComandos_1.setBackground(Color.ORANGE);
+		btnComandos_1.setBounds(1072, 11, 321, 136);
+		panelPrincipal.add(btnComandos_1);
+		/*
+		Timer btnRetiroAlertBlinker = new Timer(500, new ActionListener() {
+			boolean on=false;
+			public void actionPerformed(ActionEvent e) {
+				// blink the button background on and off
+				btnRetiro.setBackground( on ? Color.ORANGE : null);
+				on = !on;
+			}
+		});        
+		*/
 		
-		JButton btnDeposito = new JButton("Deposito");
-		btnDeposito.setFont(new Font("Tahoma", Font.BOLD, 40));
-		btnDeposito.setBounds(10, 15, 400, 220);
-		panelDeposito.add(btnDeposito);
-		
-		JButton btnRetiro = new JButton("Retiro");
-		
-		btnRetiro.setEnabled(false);
-		btnRetiro.setFont(new Font("Tahoma", Font.BOLD, 40));
-		btnRetiro.setBounds(440, 14, 400, 221);
-		panelDeposito.add(btnRetiro);
-		
-		
-		btnRetiro.setOpaque(true);
-        Timer btnRetiroAlertBlinker = new Timer(500, new ActionListener() {
-            boolean on=false;
-            public void actionPerformed(ActionEvent e) {
-                // blink the button background on and off
-            	btnRetiro.setBackground( on ? Color.ORANGE : null);
-                on = !on;
-            }
-        });        
-        
-		
-
-		btn1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("1");
-			}
-		});
-
-		btn2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("2");
-			}
-		});
-
-		btn3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("3");
-			}
-		});
-
-		btn4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("4");
-			}
-		});
-
-		btn5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("5");
-			}
-		});
-
-		btn6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("6");
-			}
-		});
-
-		btn7.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("7");
-			}
-		});
-
-		btn8.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("8");
-			}
-		});
-
-		btn9.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("9");
-			}
-		});
-
-		btn0.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textoMontoValidacion("0");
-			}
-		});
-		
-		
-		/*  - - - - - -   P I N P A D   A C T I O N S   - - - - - -  */
-		
-		btnBorrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				switch(pinpadMode) {
-				case None:
-					break;
-				case depositoUser:
-					if (depositoUser.length() ==  0)
-						return;
-					depositoUser = depositoUser.substring(0, depositoUser.length() - 1);
-										
-					LoginForm.tfUser.setText(depositoUser);
-					
-					break;
-				case depositoPassword:
-					
-					if (depositoPassword.length()  ==  0)
-						return;
-					depositoPassword = depositoPassword.substring(0, depositoPassword.length() - 1);
-					asteriscos = asteriscos.substring(0, asteriscos.length() - 1);;
-					LoginForm.tfPassword.setText(asteriscos);
-					break;
-				
-				case retiroAutorizacion:
-					if (autorizacionDispensar.length() ==  0)
-						return;
-					autorizacionDispensar = autorizacionDispensar.substring(0, autorizacionDispensar.length() - 1);
-					
-					ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);
-					break;
-					default:
-						break;
-						
-				}		
-				
-
-			}
-		});
-
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
-				case None:
-					break;
-				case depositoUser:			
-					depositoUser = "";
-					LoginForm.tfUser.setText(depositoUser);					
-					break;
-				case depositoPassword:	
-					depositoPassword = "";
-					asteriscos = "";
-					LoginForm.tfPassword.setText(asteriscos);
-					break;				
-				case retiroAutorizacion:
-					autorizacionDispensar = "";				
-					ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);
-					break;
-				default:
-					break;						
-				}	
-			}
-		});
-
-		JPanel panelComandos = new JPanel();
-		tabbedPane.addTab("Comandos", (Icon) null, panelComandos, null);
+		//TODO: HEWEY AQUI JPanel panelComandos = new JPanel();
+		//tabbedPane.addTab("Comandos", (Icon) null, panelComandos, null);
 		panelComandos.setLayout(null);
 
 		JPanel panel_comandos = new JPanel();
@@ -634,7 +568,7 @@ public class uba {
 				jcms[0].currentOpertion = jcmOperation.Reset; 
 				//Primero se piden los estatus
 				jcms[0].id003_format((byte)5, protocol.SSR_VERSION, jcms[0].jcmMessage,true); //SSR_VERSION 0x88
-				
+
 				//jcms[0].id003_format((byte) 5, (byte) 0x40, jcms[0].jcmMessage, true);
 			}
 		});
@@ -981,7 +915,7 @@ public class uba {
 		JButton btnRecycleCurrencySetting = new JButton("Recycle Currency Setting (+D0h+Data)");
 		btnRecycleCurrencySetting.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnRecycleCurrencySetting.setBackground(Color.ORANGE);
-		
+
 		btnRecycleCurrencySetting.setBounds(558, 399, 299, 50);
 		panel_comandos.add(btnRecycleCurrencySetting);
 
@@ -1009,7 +943,7 @@ public class uba {
 		JButton btnRecycleSoftwareVersionReq = new JButton("Recycle Software Version Req (+93h)");
 		btnRecycleSoftwareVersionReq.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnRecycleSoftwareVersionReq.setBackground(Color.ORANGE);
-		
+
 		btnRecycleSoftwareVersionReq.setBounds(1516, 569, 334, 50);
 		panel_comandos.add(btnRecycleSoftwareVersionReq);
 
@@ -1041,35 +975,35 @@ public class uba {
 
 		JButton btnRecycleRefillModeReq = new JButton("Recycle Refill Mode Req (+94h)");
 		btnRecycleRefillModeReq.setFont(new Font("Dialog", Font.BOLD, 12));
-		
+
 		btnRecycleRefillModeReq.setBounds(10, 569, 270, 50);
 		panel_comandos.add(btnRecycleRefillModeReq);
 
 		JButton btnTotalCountReq = new JButton("Total Count Req (+A0h)");
 		btnTotalCountReq.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnTotalCountReq.setBackground(Color.ORANGE);
-		
+
 		btnTotalCountReq.setBounds(301, 569, 205, 50);
 		panel_comandos.add(btnTotalCountReq);
 
 		JButton btnTotalCountClear = new JButton("Total Count Clear (+A1h)");
 		btnTotalCountClear.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnTotalCountClear.setBackground(Color.ORANGE);
-		
+
 		btnTotalCountClear.setBounds(516, 569, 210, 50);
 		panel_comandos.add(btnTotalCountClear);
 
 		JButton btnCurrentCountReq = new JButton("Current Count Req (+A2h)");
 		btnCurrentCountReq.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnCurrentCountReq.setBackground(Color.ORANGE);
-		
+
 		btnCurrentCountReq.setBounds(10, 630, 236, 50);
 		panel_comandos.add(btnCurrentCountReq);
 
 		JButton btnReinhibitch = new JButton("REInhibit (C3h)");
 		btnReinhibitch.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnReinhibitch.setBackground(Color.ORANGE);
-		
+
 		btnReinhibitch.setBounds(608, 119, 144, 50);
 		panel_comandos.add(btnReinhibitch);
 
@@ -1078,259 +1012,435 @@ public class uba {
 		btnCurrencyAssingRequest.setBounds(1496, 223, 224, 50);
 		panel_comandos.add(btnCurrencyAssingRequest);
 		btnCurrencyAssingRequest.setBackground(Color.ORANGE);
-		
+
 		JButton btnCierraBoveda = new JButton("CIERRA BOVEDA");
-		
+
 		btnCierraBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnCierraBoveda.setBounds(301, 632, 203, 48);
 		panel_comandos.add(btnCierraBoveda);
-		
+
 		JButton btnAbreBoveda = new JButton("ABRE BOVEDA");
-		
+
 		btnAbreBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAbreBoveda.setBounds(526, 630, 203, 48);
 		panel_comandos.add(btnAbreBoveda);
-		
+
 		JButton btnSolicitaRetiro = new JButton("SOLICITA RETIRO");
-		
+
 		btnSolicitaRetiro.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnSolicitaRetiro.setBounds(779, 630, 203, 48);
 		panel_comandos.add(btnSolicitaRetiro);
-		
+
+		JButton btnRegresar = new JButton("Regresar");
+		btnRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cl.show(panelCont, "principal");
+			}
+		});
+		btnRegresar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnRegresar.setBackground(Color.ORANGE);
+		btnRegresar.setBounds(599, 24, 157, 50);
+		panelComandos.add(btnRegresar);
+
+		JButton btnSalir = new JButton("SALIR");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+
+		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnSalir.setBackground(Color.RED);
+		btnSalir.setBounds(867, 24, 157, 50);
+		panelComandos.add(btnSalir);
+
 
 		//TODO: LISTENERS
 		/* - - - - - - - - -   L I S T E N E R S   - - - - - - - - - */
+
 		
-		
-		btnRetiro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				btnRetiroAlertBlinker.stop();
-				btnRetiro.setBackground(null);			
-				pinpadMode = PinpadMode.retiroAutorizacion;
-				ValidaRetiroForm.validationForm(mainFrame,Integer.toString(referenciaNumerica),customFormat("$###,###.###", montoRetiro)).setVisible(true);				
+		btnConfirmar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				switch(pinpadMode) {
+				case loginUser:
+					pinpadMode = PinpadMode.loginPassword;
+					break;
+				case loginPassword:
+
+					if(loginUser.length() <= 0) {
+						//No ha ingresado su user
+						pinpadMode = PinpadMode.loginUser;						
+						return;
+
+					}
+
+					if(loginPassword.length() <= 0) {
+						//No ha ingresado su pwd
+						pinpadMode = PinpadMode.loginPassword;						
+						return;
+					}
+
+
+					System.out.println("Validando usuario....");
+					//Validamos el usuario
+					CMUserVO user = Transactions.ValidaUsuario(loginUser);
+
+					if(user.isValid) {
+						if(user.allowWithdrawals) {
+							//Lo dejamos depositar
+							System.out.println("Usuario Valido...");
+
+							//CASHIN...
+							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",
+									AccountType.Administrative, TransactionType.ControlMessage);
+
+
+							Transactions.BorraCashInOPs("CI01GL0001");		
+
+							montoDepositado = 0;
+							
+							cl.show(panelCont, "panelPrincipal");
+
+						}
+						else {
+							lblLoginRow1.setText("¡Oh no!");
+							lblLoginMensaje.setText("       Están mal los datos.");
+							pinpadMode = PinpadMode.loginUser;
+				
+							return;
+						}
+					}
+					else {
+						lblLoginRow1.setText("¡Oh no!");
+						lblLoginMensaje.setText("       Están mal los datos.");
+						pinpadMode = PinpadMode.loginUser;				
+						RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+
+
+						return;
+					}
+
+
+					pinpadMode = PinpadMode.None;
+
+
+
+
+
+
+					break;
+				default:
+					break;
+
+				}			
+
+				//pinpadMode = PinpadMode.None;
 			}
 		});
 		
-		
-		
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loginUser = "";
+				loginPassword = "";
+				autorizacionDispensar = "";
+				lblDepositUser.setText("");
+				lblDepositPassword.setText("");
+
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginUser:			
+					loginUser = "";
+					//LoginForm.tfUser.setText(loginUser);					
+					break;
+				case loginPassword:	
+					loginPassword = "";
+					asteriscos = "";
+					//LoginForm.tfPassword.setText(asteriscos);
+					break;				
+				case retiroToken:
+					autorizacionDispensar = "";				
+					ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);
+					break;
+				default:
+					break;						
+				}
+
+				cl.show(panelCont, "Idle");
+			}
+		});
+
+		btn1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("1",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("1",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}			
+			}
+		});
+
+		btn2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("2",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("2",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}	
+			}
+		});
+
+		btn3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("3",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("3",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}	
+			}
+		});
+
+		btn4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("4",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("4",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}	
+			}
+		});
+
+		btn5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("5",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("5",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}	
+			}
+		});
+
+		btn6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("6",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("6",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}				}
+		});
+
+		btn7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("7",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("7",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}				}
+		});
+
+		btn8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("8",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("8",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}				}
+		});
+
+		btn9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("9",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("9",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}				}
+		});
+
+		btn0.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(pinpadMode) {
+				case None:
+					break;
+				case loginPassword:
+					textoMontoValidacion("0",lblDepositPassword);
+					break;
+				case loginUser:
+					textoMontoValidacion("0",lblDepositUser);
+					break;
+				case retiroToken:
+					break;
+				default:
+					break;				
+				}				}
+		});
+
+		btnDeposito2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pinpadMode = PinpadMode.loginUser;
+				lblLoginMensaje.setText("Para depostiar, identifícate");
+				currentOperation = jcmOperation.Deposit;
+				cl.show(panelCont, "panelLogin");
+
+			}
+		});
+
+
+		btnRetiro2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pinpadMode = PinpadMode.loginUser;
+				currentOperation = jcmOperation.Dispense;
+				lblLoginMensaje.setText("Para retirar, identifícate");
+				cl.show(panelCont, "panelLogin");
+			}
+		});
+
+
+
 		ValidaRetiroForm.btnAceptar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-								
+
 				System.out.println("Validamos que los datos ingresados sean correctos");
-				
+
 				if(ValidaRetiroForm.textFieldConfirmacion.getText().length() == 0) {
 					System.out.println("NO SON IGUALES");
 					ValidaRetiroForm.textFieldConfirmacion.setText("");
-					pinpadMode = PinpadMode.retiroAutorizacion;
+					pinpadMode = PinpadMode.retiroToken;
 					return;
 				}
-				
-				
+
+
 				if(Integer.parseInt(ValidaRetiroForm.textFieldConfirmacion.getText()) != referenciaNumerica) {
 					System.out.println("NO SON IGUALES");
 					ValidaRetiroForm.textFieldConfirmacion.setText("");
-					pinpadMode = PinpadMode.retiroAutorizacion;
+					pinpadMode = PinpadMode.retiroToken;
 					return;
 				}
-				
+
 				//Cerramos la ventana, comenzamos a dispensar.
 				ValidaRetiroForm.validationDialog.setVisible(false);
 				ValidaRetiroForm.validationDialog.dispose();
 				pinpadMode = PinpadMode.None;
-				
+
 				lblOperacion1.setText("Monto: ");
-								
+
 				Dispensar();								
 			}
-			
+
 		});
-		
+
 		ValidaRetiroForm.btnCancelar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-								
+
 				System.out.println("ValidaRetirForm Cancelar");				
-			
+
 				ValidaRetiroForm.textFieldConfirmacion.setText("");
-					
+
 				ValidaRetiroForm.textFieldConfirmacion.setText("");
-					
+
 				//Cerramos la ventana, comenzamos a dispensar.
 				ValidaRetiroForm.validationDialog.setVisible(false);
 				ValidaRetiroForm.validationDialog.dispose();
 				pinpadMode = PinpadMode.None;
-				
-										
-			}
-			
-		});
-		
-		
-		btnDeposito.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				btnDeposito.setEnabled(false);
-				
-				pinpadMode = PinpadMode.depositoUser;
-				LoginForm.btnUser.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						pinpadMode = PinpadMode.depositoUser;
-					}
-				});
-				LoginForm.btnPassword.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						pinpadMode = PinpadMode.depositoPassword;
-					}
-				});
-				LoginForm.btnSubmit.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						
-						if(depositoUser.length() <= 0) {
-							//No ha ingresado su user
-							pinpadMode = PinpadMode.depositoUser;
-							LoginForm.lblMensaje.setText("");
-							LoginForm.lblMensaje.setText("Ingresa tu usuario");
-							LoginForm.lblMensaje.setForeground(Color.RED);
-							return;
-							
-						}
-						
-						if(depositoPassword.length() <= 0) {
-							//No ha ingresado su pwd
-							pinpadMode = PinpadMode.depositoPassword;
-							LoginForm.lblMensaje.setText("");
-							LoginForm.lblMensaje.setText("Ingresa tu Password");
-							LoginForm.lblMensaje.setForeground(Color.RED);
-							return;
-						}
-												
-						
-						System.out.println("Validando usuario....");
-						//Validamos el usuario
-						CMUserVO user = Transactions.ValidaUsuario(depositoUser);
-						
-						if(user.isValid) {
-							if(user.allowWithdrawals) {
-								//Lo dejamos depositar
-								System.out.println("Usuario Valido...");
-								
-								
-								//CASHIN...
-								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",
-										AccountType.Administrative, TransactionType.ControlMessage);
-								
-																
-								Transactions.BorraCashInOPs("CI01GL0001");		
-								
-								montoDepositado = 0;
-								
-								btnDeposito.setEnabled(false);
-								lblOperacion1.setText("Monto: ");
-								lblOperacion2.setText("$0.00");
-								btnOperacion1.setText("Terminar");
-								
-								btnOperacion1.removeAll();
-								btnOperacion1.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										
-										//Terminamos el depostio
-										
-										btnDeposito.setEnabled(true);
-										
-									}
-								});
-								
-								LoginForm.loginDialog.dispose();
-								
-							}
-							else {
-								System.out.println("Usuario sin permisos de deposito");
-								pinpadMode = PinpadMode.depositoUser;
-								LoginForm.lblMensaje.setText("");
-								LoginForm.lblMensaje.setText("No tienes permisos para depositar.");
-								LoginForm.lblMensaje.setForeground(Color.RED);
-								return;
-							}
-						}
-						else {
-							System.out.println("Usuario InValido");
-							pinpadMode = PinpadMode.depositoUser;
-							LoginForm.lblMensaje.setText("");
-							LoginForm.lblMensaje.setText("Usuario Inválido");
-							LoginForm.lblMensaje.setForeground(Color.RED);
-							
-							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
-							
-							
-							return;
-						}
-						
-						
-						pinpadMode = PinpadMode.None;
-					}
-				});
-				
-				LoginForm.btnCancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						pinpadMode = PinpadMode.None;
-						
-						depositoUser = "";
-						depositoPassword = "";
-						asteriscos = "";
-						btnDeposito.setEnabled(true);
-						LoginForm.tfUser.setText("");
-						LoginForm.tfPassword.setText("");
-						LoginForm.loginDialog.setVisible(false);
-						LoginForm.loginDialog.dispose();
-					}
-				});
-					
-				
-				LoginForm.loginForm(mainFrame).setVisible(true);
-				
-				LoginForm.loginDialog.addWindowListener(new WindowAdapter() 
-				{
-				  public void windowClosed(WindowEvent e){
-					  System.out.println("jdialog window closed event received desde main");			  
-					  
-					  btnDeposito.setEnabled(true);
-					  depositoUser = "";
-					  depositoPassword = "";
-					  asteriscos = "";
-					  LoginForm.tfUser.setText("");
-					  LoginForm.tfPassword.setText("");
-					  LoginForm.loginDialog.setVisible(false);
-					  LoginForm.loginDialog.dispose();
-				  }
 
-				  public void windowClosing(WindowEvent e){			  
-					  System.out.println("jdialog window closing event received desde main");
-					 
-					  btnDeposito.setEnabled(true);
-					  depositoUser = "";
-					  depositoPassword = "";
-					  asteriscos = "";
-					  LoginForm.tfUser.setText("");
-					  LoginForm.tfPassword.setText("");	
-					  LoginForm.loginDialog.setVisible(false);
-					  LoginForm.loginDialog.dispose();
-				  }
-				});			
-				
+
 			}
+
 		});
-		
+
 		btnReiniciarJcm1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				jcms[0].currentOpertion = jcmOperation.Reset;
-				 //Primero hacemos los get versions...				
+				//Primero hacemos los get versions...				
 				jcms[0].id003_format((byte)5, protocol.SSR_VERSION, jcms[0].jcmMessage,true); //SSR_VERSION 0x88
 			}
 		});
-		
+
 		btnReiniciarJcm2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				jcms[1].currentOpertion = jcmOperation.Reset;
@@ -1338,7 +1448,7 @@ public class uba {
 				jcms[1].id003_format((byte)5, protocol.SSR_VERSION, jcms[1].jcmMessage,true); //SSR_VERSION 0x88
 			}
 		});
-		
+
 		btnRecycleCurrencySetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].jcmMessage[7] = 0x01;
@@ -1349,34 +1459,34 @@ public class uba {
 						jcms[0].jcmMessage);
 			}
 		});
-		
+
 		btnTotalCountReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA0, (byte) 0x00, (byte) 0x0,
 						jcms[0].jcmMessage);
 			}
 		});		
-		
+
 		btnRecycleSoftwareVersionReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x93, (byte) 0x00, (byte) 0x0,
 						jcms[0].jcmMessage);
 			}
 		});
-		
+
 		btnRecycleRefillModeReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		
-		
+
+
 		btnTotalCountClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA1, (byte) 0x00, (byte) 0x0,
 						jcms[0].jcmMessage);
 			}
 		});
-		
+
 		btnCurrentCountReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxReciclador1.isSelected())
@@ -1395,40 +1505,40 @@ public class uba {
 				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
 			}
 		});
-		
+
 		btnCierraBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//*
+				/* TODO: TIO
 				miTio.cierraBoveda();
 				//*/
 			}
 		});
-		
-		
+
+
 		btnAbreBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//*
+				/* TODO: TIO
 				miTio.abreBoveda();
 				//*/
 			}
 		});
-		
+
 		btnSolicitaRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				tabbedPane.setSelectedIndex(0);
-				
+
+
+				//tabbedPane.setSelectedIndex(0);
+
 				referenciaNumerica = getRandomDoubleBetweenRange(111111,999999);
 				montoRetiro = getRandomDoubleBetweenRange(20,1500);						
-				
-				
+
+				/*
 				btnRetiro.setEnabled(true);
 				btnRetiroAlertBlinker.start();
-				
+				*/
 			}
 		});
-		
+
 
 		btnCurrencyAssingRequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
@@ -1438,8 +1548,8 @@ public class uba {
 					jcms[1].id003_format((byte) 5, (byte) 0x8A, jcms[1].jcmMessage, true);
 			}
 		});
-		
-		
+
+
 
 		EventListenerClass c = new EventListenerClass();
 		c.addMyEventListener(new MyEventListener() {
@@ -1447,9 +1557,9 @@ public class uba {
 				System.out.println("myEventOccurred [" + evt.getSource() + "]");
 
 				switch(evt.getSource().toString()) {
-				
+
 				case "bill1":							
-					
+
 					switch(jcms[0].bill)
 					{
 					case 20:
@@ -1468,12 +1578,12 @@ public class uba {
 						contadoresDeposito.x500++;
 						break;
 					}
-					
+
 					NumberFormat format1 = NumberFormat.getCurrencyInstance();
 					montoDepositado += jcms[0].bill;					
 					String currency1 = format1.format(montoDepositado);
 					String billete1 = format1.format(jcms[0].bill);
-					
+
 					System.out.println(currency1 + " - " + billete1);
 					System.out.println(format1.format(currency1));
 					lblOperacion1.setText(format1.format(currency1));
@@ -1516,11 +1626,11 @@ public class uba {
 					lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 					break;
 				case "recyclerContadores1":
-					
+
 					lblContadores1.setText(jcms[0].recyclerContadores);
 					break;
 				case "recyclerContadores2":
-					
+
 					lblContadores2.setText(jcms[1].recyclerContadores);
 					break;
 				}
@@ -1562,6 +1672,10 @@ public class uba {
 			jcms[i].openPort(jcms[i].portId.getName().toString());
 		}
 
+
+
+		cl.show(panelCont, "Idle");
+
 	}
 
 	public static String baitsToString(String texto, byte[] baits) {
@@ -1576,75 +1690,75 @@ public class uba {
 		DecimalFormat myFormatter = new DecimalFormat(pattern);
 		return myFormatter.format(value);
 	}
-	
-	
-	private void textoMontoValidacion(String digito) {
-		
+
+
+	private void textoMontoValidacion(String digito, JLabel detLabel) {
+
 		switch(pinpadMode) {
 		case None:
 			break;
-		case depositoUser:
-			if (depositoUser.length() > 7)
+		case loginUser:
+			if (loginUser.length() > 7)				
 				return;
-			depositoUser += digito;
-			LoginForm.tfUser.setText(depositoUser);
+			loginUser += digito;
+			//LoginForm.tfUser.setText(loginUser);
+			detLabel.setText(loginUser);			
 			break;
-		case depositoPassword:
-			
-			if (depositoPassword.length() > 7)
+		case loginPassword:
+			if (loginPassword.length() > 7)
 				return;
-			depositoPassword += digito;
+			loginPassword += digito;
 			asteriscos += "*";
-			LoginForm.tfPassword.setText(asteriscos);			
+			//LoginForm.tfPassword.setText(asteriscos);
+			detLabel.setText(asteriscos);
 			break;		
-		case retiroAutorizacion:
+		case retiroToken:
 			if (autorizacionDispensar.length() > 7)
 				return;
-
 			autorizacionDispensar += digito;
-			ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);			
+			ValidaRetiroForm.textFieldConfirmacion.setText(autorizacionDispensar);
+			detLabel.setText(autorizacionDispensar);
 			break;
-			default:
-				break;
-				
+		default:
+			break;				
 		}		
-		
-	}
-	
-	
-	public static int getRandomDoubleBetweenRange(double min, double max){
-		
-	    int x = (int) ((Math.random()*((max-min)+1))+min);
-	    return x;
 
 	}
-	
-	
+
+
+	public static int getRandomDoubleBetweenRange(double min, double max){
+
+		int x = (int) ((Math.random()*((max-min)+1))+min);
+		return x;
+
+	}
+
+
 	void Dispensar() {
-		
-		
+
+
 		/*
 		jcms[0].currentOpertion = jcmOperation.PreDispense;
 		jcms[1].currentOpertion = jcmOperation.PreDispense;
-		*/
-		
+		 */
+
 		//Checamos los contadores actuales
 		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcms[0].jcmMessage);
-		
+
 		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcms[1].jcmMessage);
-		
-		
+
+
 		try {
 			Thread.sleep(250);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		boolean enEspera = true;
-		
+
 		while(enEspera) {
-		
+
 			if(jcms[0].recyclerContadores1 && jcms[1].recyclerContadores1){
 				enEspera = false;
 			}
@@ -1657,108 +1771,108 @@ public class uba {
 				}
 			}
 		}
-		
+
 		//Checamos que tenga algo de dinero.
-        if(jcms[0].contadores.Cass1Available == 0 && jcms[0].contadores.Cass2Available == 0 && jcms[1].contadores.Cass1Available == 0 && jcms[1].contadores.Cass2Available == 0){
-        	System.out.println("No hay dinero en los caseteros para dispensar");
-        }
-		
-      //Revisamos que tanto billetes podemos dispensar
+		if(jcms[0].contadores.Cass1Available == 0 && jcms[0].contadores.Cass2Available == 0 && jcms[1].contadores.Cass1Available == 0 && jcms[1].contadores.Cass2Available == 0){
+			System.out.println("No hay dinero en los caseteros para dispensar");
+		}
+
+		//Revisamos que tanto billetes podemos dispensar
 		int solicitado =  montoRetiro;
 		int jcm1Total = 0;
 		int jcm2Total = 0;
-		
-		
-		
+
+
+
 		//revisamos del JCM 1
-		
+
 		//cuantos de  jcm1 cass 1 
-		
+
 		System.out.println("JCM1 Cass1Denom [" + jcms[0].contadores.Cass1Denom + "][" + jcms[0].contadores.Cass1Available + "]");
 		System.out.println("JCM1 Cass2Denom [" + jcms[0].contadores.Cass2Denom + "][" + jcms[0].contadores.Cass2Available + "]");
-		
+
 		System.out.println("JCM2 Cass1Denom [" + jcms[1].contadores.Cass1Denom + "][" + jcms[1].contadores.Cass1Available + "]");
 		System.out.println("JCM2 Cass2Denom [" + jcms[1].contadores.Cass2Denom + "][" + jcms[1].contadores.Cass2Available + "]");
-		
+
 		jcm1Total += jcms[0].contadores.Cass1Denom * jcms[0].contadores.Cass1Available;
 		jcm1Total += jcms[0].contadores.Cass2Denom * jcms[0].contadores.Cass2Available;				
-		
+
 		jcm2Total += jcms[1].contadores.Cass1Denom * jcms[1].contadores.Cass1Available;
 		jcm2Total += jcms[1].contadores.Cass2Denom * jcms[1].contadores.Cass2Available;
-		
-		
+
+
 		System.out.println("jcm1Total [" + jcm1Total + "] jcm2Total [" + jcm2Total + "]");
-		
-		
+
+
 		jcms[0].jcmCass1 = solicitado / jcms[0].contadores.Cass1Denom;
-																		
+
 		//Reviamos si necestia mas de los que tiene
 		if(jcms[0].jcmCass1 > jcms[0].contadores.Cass1Available) {
 			jcms[0].jcmCass1 = jcms[0].contadores.Cass1Available;
 		}
 		System.out.println("Billetes a dipensar de JCM1 CASS1" + jcms[0].jcmCass1);
-		
+
 		solicitado = solicitado - (jcms[0].jcmCass1 * jcms[0].contadores.Cass1Denom);
-		
+
 		System.out.println("Faltante [" + solicitado + "]");
-		
-		
+
+
 		jcms[0].jcmCass2 = solicitado / jcms[0].contadores.Cass2Denom;
 		System.out.println("Billetes a dipensar de JCM1 CASS2" + jcms[0].jcmCass2);
-														
+
 		//Reviamos si necestia mas de los que tiene
 		if(jcms[0].jcmCass2 > jcms[0].contadores.Cass2Available) {
 			jcms[0].jcmCass2 = jcms[0].contadores.Cass2Available;
 		}
-		
+
 		solicitado = solicitado - (jcms[0].jcmCass2 * jcms[0].contadores.Cass2Denom);
-		
+
 		System.out.println("Faltante [" + solicitado + "]");
-		
+
 		//revisamos del JCM 2
-		
+
 		//cuantos de  jcm2 cass 1 
-		
+
 		jcm2Total += jcms[1].contadores.Cass1Denom * jcms[1].contadores.Cass1Available;
-						
+
 		jcms[1].jcmCass1 = solicitado / jcms[1].contadores.Cass1Denom;
 		System.out.println("Billetes a dipensar de JCM2 CASS1" + jcms[1].jcmCass1);
-														
+
 		//Reviamos si necestia mas de los que tiene
 		if(jcms[1].jcmCass1 > jcms[1].contadores.Cass1Available) {
 			jcms[1].jcmCass1 = jcms[1].contadores.Cass1Available;
 		}
-		
+
 		solicitado = solicitado - (jcms[1].jcmCass1 * jcms[1].contadores.Cass1Denom);
-		
+
 		System.out.println("Faltante [" + solicitado + "]");
-		
+
 		jcms[1].jcmCass2 = solicitado / jcms[1].contadores.Cass2Denom;
 		System.out.println("Billetes a dipensar de JCM2 CASS2" + jcms[1].jcmCass2);
-														
+
 		//Reviamos si necestia mas de los que tiene
 		if(jcms[1].jcmCass2 > jcms[1].contadores.Cass2Available) {
 			jcms[1].jcmCass2 = jcms[1].contadores.Cass2Available;
 		}
-		
+
 		solicitado = solicitado - (jcms[1].jcmCass2 * jcms[1].contadores.Cass2Denom);
-		
-		
+
+
 		System.out.println("jcm1cass1 [" + jcms[0].jcmCass1 + "] jcm1cass2 [" + jcms[0].jcmCass2 + "] jcm2cass1 [" + jcms[1].jcmCass1 + "]jcm2cass2 [" + jcms[1].jcmCass2 + "]" );
-		
+
 		System.out.println("Faltante [" + solicitado + "]");
-		
+
 		// Primero deshabilitamos el que acepte billetes	
-		
+
 
 		System.out.println("Retirar");
-				
+
 		ArrayList<JcmCassetero> orden = new ArrayList<JcmCassetero>();
-		
+
 		JcmCassetero cass = null;
-		
+
 		//500, 50, 100,200
-		
+
 		if(jcms[0].contadores.Cass1Available > 0) {
 			cass = new JcmCassetero();
 			cass.Jcm = 0;
@@ -1766,7 +1880,7 @@ public class uba {
 			cass.Denomincacion = jcms[0].contadores.Cass1Denom;
 			orden.add(cass);
 		}
-		
+
 		if(jcms[0].contadores.Cass2Available > 0) {
 			cass = new JcmCassetero();
 			cass.Jcm = 0;
@@ -1774,7 +1888,7 @@ public class uba {
 			cass.Denomincacion = jcms[0].contadores.Cass2Denom;
 			orden.add(cass);
 		}
-		
+
 		if(jcms[1].contadores.Cass1Available > 0) {
 			cass = new JcmCassetero();
 			cass.Jcm = 1;
@@ -1782,7 +1896,7 @@ public class uba {
 			cass.Denomincacion = jcms[1].contadores.Cass1Denom;
 			orden.add(cass);
 		}
-		
+
 		if(jcms[1].contadores.Cass2Available > 0) {
 			cass = new JcmCassetero();
 			cass.Jcm = 1;
@@ -1790,26 +1904,26 @@ public class uba {
 			cass.Denomincacion = jcms[1].contadores.Cass2Denom;
 			orden.add(cass);
 		}
-		
+
 		System.out.println("PRE ORDEN");
 		for(JcmCassetero dat : orden) {
 			System.out.println("" + dat.getDenomincacion());
 		}
-		
-		
+
+
 		orden.sort(new DenominacionSorter());
-		
+
 		System.out.println("POST ORDEN");
 		for(JcmCassetero dat : orden) {
 			System.out.println("" + dat.getDenomincacion());
 		}
-		
-		
+
+
 		// Iniciamos el dispensado
-		
+
 		//Checamos para JCM1
 		if(jcms[0].jcmCass1 > 0 || jcms[0].jcmCass2 > 0) {	
-			
+
 			System.out.println("Deshabilitamos JCM1 para dispense");
 			jcms[0].currentOpertion = jcmOperation.Dispense;
 
@@ -1817,10 +1931,10 @@ public class uba {
 			jcms[0].jcmMessage[3] = 0x01;
 			jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
 		}
-		
+
 		//Checamos para JCM2
 		if(jcms[1].jcmCass1 > 0 || jcms[1].jcmCass2 > 0) {
-			
+
 			System.out.println("Deshabilitamos JCM2 para dispense");
 			jcms[1].currentOpertion = jcmOperation.Dispense;
 
@@ -1829,13 +1943,13 @@ public class uba {
 			jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
 		}	
 	}
-	
-	
+
+
 	class DenominacionSorter implements Comparator<JcmCassetero> 
 	{
-	    @Override
-	    public int compare(JcmCassetero o1, JcmCassetero o2) {
-	        return o2.getDenomincacion().compareTo(o1.getDenomincacion());
-	    }
+		@Override
+		public int compare(JcmCassetero o1, JcmCassetero o2) {
+			return o2.getDenomincacion().compareTo(o1.getDenomincacion());
+		}
 	}
 }
