@@ -53,7 +53,7 @@ public class AgentsQueue  implements Runnable{
 			String response = dtaServer.ManageAgent(otherEnvVars.data.Command, otherEnvVars.data.Convert());
 			System.out.println(response);
 
-			Transactions cmTrans = new Transactions();
+			//Transactions cmTrans = new Transactions();
 
 			RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita 2",
 					AccountType.Administrative, TransactionType.CashManagement);

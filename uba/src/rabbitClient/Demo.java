@@ -2,7 +2,6 @@ package rabbitClient;
 
 import com.google.gson.Gson;
 
-import pentomino.cashmanagement.Transactions;
 import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.TransactionType;
@@ -24,8 +23,6 @@ public class Demo {
 
 			String response = dtaServer.ManageAgent(otherEnvVars.data.Command, otherEnvVars.data.Convert());
 			System.out.println(response);
-
-			Transactions cmTrans = new Transactions();
 
 			RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita 2",
 					AccountType.Administrative, TransactionType.CashManagement);

@@ -1,12 +1,5 @@
 package pentomino.jcmagent;
 
-import pentomino.common.AccountType;
-import pentomino.common.DeviceEvent;
-import pentomino.common.TransactionType;
-import pentomino.config.Config;
-import rabbitClient.Producer;
-import rabbitClient.RabbitMQConnection;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,9 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.AMQP.BasicProperties;
+
+import pentomino.common.AccountType;
+import pentomino.common.DeviceEvent;
+import pentomino.common.TransactionType;
+import pentomino.config.Config;
+import rabbitClient.RabbitMQConnection;
 
 public class RaspiAgent {
 

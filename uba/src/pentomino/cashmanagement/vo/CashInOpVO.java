@@ -1,7 +1,5 @@
 package pentomino.cashmanagement.vo;
 
-import java.math.BigDecimal;
-
 public class CashInOpVO {
     
     public Integer operatorId;

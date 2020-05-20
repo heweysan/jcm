@@ -2,7 +2,6 @@ import java.util.Arrays;
 
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CashInOpVO;
-import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.TransactionType;
@@ -25,12 +24,14 @@ public class protocol extends kermit {
 
 	public String recyclerContadores = "";
 
-	public boolean recyclerContadores1 = false;
+	public boolean recyclerContadoresSet = false;
 
 	public jcmOperation currentOpertion = jcmOperation.None;
 
 	public JcmContadores contadores = new JcmContadores();
 
+	public static String loginUser;
+	
 	private boolean processingOperation = false;
 	private boolean waitingForInitialize = false;
 
@@ -39,7 +40,7 @@ public class protocol extends kermit {
 	int jcmCass2 = 0;
 
 	public byte lastMsg = 0x0;
-	// private byte lastProtocol = 0x0;
+
 	public static final byte SYNC = (byte) 0xFC;
 
 	/* ---------------------------------- */
@@ -205,8 +206,7 @@ public class protocol extends kermit {
 
 		byte[] byteArray = Arrays.copyOf(bty, bty[1]);
 
-		if (this.compareCRC(byteArray)) {
-			// System.out.println("Yes");
+		if (this.compareCRC(byteArray)) {			
 			processing(bty);
 		} else {
 			System.out.println("CRC No");
@@ -236,10 +236,6 @@ public class protocol extends kermit {
 	}
 
 	void id003_format_ext(byte LNG, byte EXT_CMD, byte UNIT, byte CMD, byte DATA1, byte DATA2, byte[] DATA) {
-
-		// System.out.println("JCM[" + jcmId + "] protocol id003_format_ext LNG [" +
-		// Integer.toHexString(LNG) + "] CMD [" + Integer.toHexString(CMD) + "] " +
-		// baitsToString("",DATA,LNG));
 
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
@@ -377,14 +373,14 @@ public class protocol extends kermit {
 			if (mostrar)
 				System.out.println(baitsToString("JCM[" + jcmId + "] processing STACKED", jcmResponse, jcmResponse[1]));
 			// Actualizacion de contadores de reciclaje
-			recyclerContadores1 = false;
+			recyclerContadoresSet = false;
 			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0, jcmMessage);
 
 			CashInOpVO myObj = new CashInOpVO();
 			myObj.atmId = "CI01GL0001";
 			myObj.amount = (long) bill;
 			myObj.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-			myObj.operatorId = 7007;
+			myObj.operatorId = Integer.parseInt(loginUser);
 			myObj.notesDetails = "1x" + bill;
 
 			Transactions.InsertaCashInOp(myObj);
@@ -872,7 +868,7 @@ public class protocol extends kermit {
 					id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				}
 
-				recyclerContadores1 = true;
+				recyclerContadoresSet = true;
 
 				EventListenerClass.fireMyEvent(new MyEvent("recyclerContadores" + jcmId));
 
@@ -909,7 +905,7 @@ public class protocol extends kermit {
 							jcmResponse, jcmResponse[1]));
 
 				if (currentOpertion == jcmOperation.Reset) {
-					recyclerContadores1 = false;
+					recyclerContadoresSet = false;
 					id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
 							jcmMessage);
 
@@ -921,7 +917,7 @@ public class protocol extends kermit {
 				// 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
 				// sacamos que billetes esta reciclando:
 
-				String broadcastData = "";
+				
 
 				recyclerDenom1 = hexToDenom(jcmResponse[5]);
 				contadores.Cass1Denom = Integer.parseInt(recyclerDenom1);
@@ -929,6 +925,8 @@ public class protocol extends kermit {
 				recyclerDenom2 = hexToDenom(jcmResponse[7]);
 				contadores.Cass2Denom = Integer.parseInt(recyclerDenom2);
 
+				String broadcastData = "";
+				
 				if (jcmId == 1)
 					broadcastData = "Cassette1-" + recyclerDenom1 + ";Cassette2-" + recyclerDenom2
 							+ ";Cassette3-0;Cassette4-0";
@@ -936,14 +934,11 @@ public class protocol extends kermit {
 					broadcastData = "Cassette1-0;Cassette2-0;Cassette3-" + recyclerDenom1 + ";Cassette4-"
 							+ recyclerDenom2;
 
-				recyclerDenom1 = "$" + recyclerDenom1;
-				recyclerDenom2 = "$" + recyclerDenom2;
-
 				System.out.println("Rec1[" + recyclerDenom1 + "] Rec2[" + recyclerDenom2 + "]");
 
-				EventListenerClass.fireMyEvent(new MyEvent("recyclerBillsA" + jcmId));
+				EventListenerClass.fireMyEvent(new MyEvent("recyclerBills" + jcmId));
 
-				RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, broadcastData);
+				//RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, broadcastData);
 
 				break;
 

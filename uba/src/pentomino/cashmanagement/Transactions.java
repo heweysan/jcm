@@ -3,10 +3,8 @@ package pentomino.cashmanagement;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -28,54 +26,15 @@ import pentomino.cashmanagement.vo.ResponseObjectVO;
 import rabbitClient.RabbitMQConnection;
 
 
-
 public class Transactions {
 
-
-	/**
-	 * Logger for this class
-	 */
 	private static final Logger logger = LogManager.getLogger(Transactions.class.getName());
 
 	private static Gson gson = new Gson();
 
 	private Connection connection;
 
-	public static void main(String args[]) throws IOException, InterruptedException{
-
-	     
-		//ValidaUsuario("007007"); //007007		
-
-		BorraCashInOPs("CI01GL0001");		
-
-		CashInOpVO myObj = new CashInOpVO();
-		myObj.atmId = "CI01GL0001";
-		myObj.amount = 20L;
-		myObj.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-		myObj.operatorId = 7007;
-		myObj.notesDetails = "1x20";
-
-		InsertaCashInOp(myObj);		
-
-		//InsertaPreDeposito(new Deposito());
-		
-		
-		DepositOpVO depositOpVO = new DepositOpVO();
-
-		depositOpVO.atmId = "CI01GL0001"; //"CIXXGS0020";
-		depositOpVO.amount = 20L;
-		depositOpVO.b20 = 1;
-		depositOpVO.b50 = 0;
-		depositOpVO.b100 = 0;
-		depositOpVO.b200 = 0;
-		depositOpVO.b500 = 0;
-		depositOpVO.b1000 = 0;
-		depositOpVO.operatorId = 7007;
-		depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-		depositOpVO.userName = "007007";
-		
-		ConfirmaDeposito(depositOpVO);
-
+	public static void main(String args[]) throws IOException, InterruptedException{		
 	}
 
 
@@ -83,7 +42,7 @@ public class Transactions {
 
 		System.out.println("\n--- InsertaCashInOp ---".toUpperCase());		
 
-		final String corrId = UUID.randomUUID().toString();
+		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
 
@@ -166,13 +125,12 @@ public class Transactions {
 		System.out.println("\n--- BorraCashInOPs ---".toUpperCase()); 
 
 		
-		final String corrId = UUID.randomUUID().toString();
+		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
 
 		String mensaje = "{\"data\":{\"atmId\":\"" + atmId + "\"}}";
-
-		//GenericMessageVO requestMessage = new GenericMessageVO();
+	
 		ResponseObjectVO returnVO = new ResponseObjectVO();
 
 		try{
@@ -250,9 +208,8 @@ public class Transactions {
 			logger.debug("InsertaPreDeposito(Deposito) - start"); //$NON-NLS-1$
 		}	
 
-		/* FRANKY */
-
-		final String corrId = UUID.randomUUID().toString();
+		
+		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
 
@@ -383,7 +340,6 @@ public class Transactions {
 
 		String mensaje = "{\"data\":{\"numTarjeta\":\"" + idEmp + "\"}}";
 
-		GenericMessageVO requestMessage = new GenericMessageVO();
 		CMUserVO returnVO = new CMUserVO();    		        		
 
 		try{
@@ -506,14 +462,12 @@ public class Transactions {
 		System.out.println("\n--- ConfirmaDeposito ---".toUpperCase());
 		/* FRANKY */
 
-		final String corrId = UUID.randomUUID().toString();
+		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;		
 
 		GenericMessageVO requestMessage = new GenericMessageVO();
 		requestMessage.data = depositOpVO;
-
-		ResponseObjectVO returnVO = new ResponseObjectVO();
 
 		try{
 			Connection conn = RabbitMQConnection.getConnection();
