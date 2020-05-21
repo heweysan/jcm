@@ -77,7 +77,7 @@ public class AgentsQueue  implements Runnable{
 		
 		 try {
 		      while (!terminateRequested) {
-		    	  System.out.println("AgentsQueue Esperando...");
+		    	  //System.out.println("AgentsQueue Esperando...");
 		    	  SendCommandToRabbit(bq.take());		       
 		      }
 		    } catch (InterruptedException ex) {

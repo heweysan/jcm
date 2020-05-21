@@ -2,9 +2,11 @@ package pentomino.common;
 
 public enum jcmOperation {
 	None,
+	Startup,
 	Reset,
-    Connect,
     Deposit,
     Dispense,
-    PreDispense
+    PreDispense,
+    CollectCass1,
+    CollectCass2
 }

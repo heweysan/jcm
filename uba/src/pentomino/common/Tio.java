@@ -26,7 +26,7 @@ public class Tio implements Runnable{
     static GpioPinDigitalInput boveda;
     static GpioPinDigitalInput fascia;
     static GpioPinDigitalOutput electroIman;
-    static GpioPinDigitalOutput pin21;
+    static GpioPinDigitalOutput alarma;
     
     
     private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
@@ -66,14 +66,14 @@ public class Tio implements Runnable{
 	
 	public boolean cierraBoveda21() {
 		
-		 pin21.low();
+		 alarma.low();
 	     System.out.println("--> Electroinam ON");
 		return true;
 	}
 	
 	public boolean abreBoveda21() {
 		
-		pin21.high();
+		alarma.high();
 	    System.out.println("--> Electroinam OFF");
 		return true;
 	}
@@ -126,14 +126,17 @@ public class Tio implements Runnable{
 			e2.printStackTrace();
 		}
 		
-		 electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.HIGH);
+	    //El electroiman arranca encendido
+		 electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.LOW);
 		 try {
 			Thread.sleep(500);
-		} catch (InterruptedException e2) {
+		 } catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
-		}
-		 pin21 = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_21, "MyLED", PinState.HIGH);
+		 }
+		
+		 //La alarma inicia apagada
+		 alarma = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_21, "MyLED", PinState.HIGH);
 		    
      
        // set shutdown state for this input pin
@@ -141,8 +144,8 @@ public class Tio implements Runnable{
        fascia.setShutdownOptions(true);
        
        // set shutdown state for this pin
-       electroIman.setShutdownOptions(true, PinState.LOW);
-       pin21.setShutdownOptions(true,PinState.LOW);
+       electroIman.setShutdownOptions(true, PinState.LOW,PinPullResistance.PULL_DOWN);
+       alarma.setShutdownOptions(true,PinState.LOW);
        
        
        System.out.println("--> GPIO state should be: ON");
@@ -155,18 +158,14 @@ public class Tio implements Runnable{
 		}
        
        
-       pin21.low();
+      
+       System.out.println("alarma Name[" + alarma.getState().getName() + "] value[" + alarma.getState().getValue() + "]");
        
        
-       System.out.println("pin21 Name[" + pin21.getState().getName() + "] value[" + pin21.getState().getValue() + "]");
+       //electroIman.low();       
+       System.out.println("electroIman Name[" + electroIman.getState().getName() + "] value[" + electroIman.getState().getValue() + "]");
        
-       
-       electroIman.low();
-       
-       
-       System.out.println("electroIman Name[" + pin21.getState().getName() + "] value[" + electroIman.getState().getValue() + "]");
-       
-       System.out.println("\n--> Electroiman ON");
+      
        
        
        
@@ -194,7 +193,8 @@ public class Tio implements Runnable{
            @Override
            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
                // display pin state on console
-           	if(event.getState().isHigh()) { 
+        	   System.out.println(" --> GPIO FASCIA PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
+        	   if(event.getState().isHigh()) { 
            		logger.info("FASCIA ABIERTA");
            		System.out.println("FASCIA ABIERTA");
            		RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetOpen,"");
@@ -204,7 +204,7 @@ public class Tio implements Runnable{
            		System.out.println("FASCIA CERRADA");
            		RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetClosed,"");
            	}           	
-            //System.out.println(" --> GPIO FASCIA PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
+            
            }
        });       
       

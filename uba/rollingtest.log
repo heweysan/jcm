@@ -1481,3 +1481,20 @@
 2020-05-19 17:20:30,678|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
 2020-05-19 17:20:30,678|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
 2020-05-19 17:20:42,559|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-20 15:11:43,818|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-20 15:11:43,820|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-20 15:11:43,820|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-20 15:11:43,821|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-20 15:11:43,821|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-20 18:54:00,890|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-20 18:54:00,892|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-20 18:54:00,893|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-20 18:54:00,893|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-20 18:54:00,893|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-20 18:54:18,018|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-20 18:56:04,473|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-20 18:56:04,475|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-20 18:56:04,475|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-20 18:56:04,475|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-20 18:56:04,475|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-20 18:56:15,770|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}

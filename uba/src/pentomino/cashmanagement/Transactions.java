@@ -114,6 +114,7 @@ public class Transactions {
 				conn.close();
 			}
 		}catch(Exception e){
+			System.out.println("InsertaCashInOp");
 			e.printStackTrace();
 		}		
 
@@ -193,6 +194,7 @@ public class Transactions {
 				conn.close();
 			}
 		}catch(Exception e){
+			System.out.println("BorraCashInOPs");
 			e.printStackTrace();
 		}
 
@@ -300,6 +302,7 @@ public class Transactions {
 				conn.close();
 			}
 		}catch(Exception e){
+			System.out.println("InsertaPreDeposito");
 			e.printStackTrace();
 		}
 
@@ -445,6 +448,7 @@ public class Transactions {
 			}
 
 		}catch(Exception e){
+			System.out.println("ValidaUsuario");
 			e.printStackTrace();
 		}
 
@@ -457,11 +461,10 @@ public class Transactions {
 
 
 	//Equivalente a /Deposito  PUT
-	public static String ConfirmaDeposito(DepositOpVO depositOpVO) throws IOException, InterruptedException {
+	public static String ConfirmaDeposito(DepositOpVO depositOpVO)  {
 
 		System.out.println("\n--- ConfirmaDeposito ---".toUpperCase());
-		/* FRANKY */
-
+	
 		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;		
@@ -515,6 +518,7 @@ public class Transactions {
 				conn.close();
 			}
 		}catch(Exception e){
+			System.out.println("ConfirmaDeposito");
 			e.printStackTrace();
 		}
 

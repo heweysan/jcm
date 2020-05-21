@@ -37,7 +37,7 @@ public class RaspiAgent {
 		
 		String atmId = Config.GetDirective("AtmId", "");
 		
-		WriteToJournal(evt, 0, 0, authId, "", accountId, "0", "MXN", "",  "",
+		WriteToJournal(evt, amount, 0, authId, "", accountId, "0", "MXN", "",  "",
 				atmId, extraData, acctType, type,"", "", 0, "");
 			
 	}
@@ -117,7 +117,7 @@ public class RaspiAgent {
 		agentMsg.Command = "add";
 		agentMsg.AtmId = switchAtmId;
 		
-		System.out.println(gson.toJson(agentMsg));
+		//System.out.println(gson.toJson(agentMsg));
 		
 		AgentsQueue.bq.add(agentMsg);
 				
