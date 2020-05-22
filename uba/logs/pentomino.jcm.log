@@ -1,0 +1,456 @@
+2020-05-21 15:43:51,548|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:43:51,637|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:43:51,637|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:43:51,637|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:43:51,637|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:43:51,637|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:45:21,619|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:45:21,708|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:45:21,708|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:45:21,709|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:45:21,709|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:45:21,709|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:45:41,604|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:45:41,693|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:45:41,694|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:45:41,694|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:45:41,694|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:45:41,694|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:45:53,701|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:45:53,789|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:45:53,789|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:45:53,789|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:45:53,789|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:45:53,789|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:46:22,062|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:46:22,155|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:46:22,155|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:46:22,155|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:46:22,155|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:46:22,155|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:46:35,105|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:46:35,198|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:46:35,198|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:46:35,198|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:46:35,198|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:46:35,198|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:48:24,265|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:48:24,353|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:48:24,353|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:48:24,353|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:48:24,353|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:48:24,353|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:56:10,423|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:56:10,514|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:56:10,514|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:56:10,514|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:56:10,514|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:56:10,514|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 15:58:22,413|INFO |uba|[main]|UBA MAIN
+2020-05-21 15:58:22,508|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 15:58:22,508|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 15:58:22,508|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 15:58:22,508|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 15:58:22,508|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:05:29,164|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:05:29,251|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:05:29,252|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:05:29,252|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:05:29,252|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:05:29,252|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:06:38,465|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:06:38,555|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:06:38,555|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:06:38,555|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:06:38,555|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:06:38,555|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:07:45,297|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:07:45,387|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:07:45,387|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:07:45,387|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:07:45,388|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:07:45,388|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:11:05,277|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:11:05,366|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:11:05,366|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:11:05,366|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:11:05,366|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:11:05,366|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:12:06,743|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:12:06,832|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:12:06,832|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:12:06,832|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:12:06,832|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:12:06,833|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:15:59,188|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:15:59,284|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:15:59,284|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:15:59,284|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:15:59,284|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:15:59,284|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:16:44,376|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:16:44,467|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:16:44,467|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:16:44,467|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:16:44,467|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:16:44,467|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:18:57,382|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:18:57,474|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:18:57,474|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:18:57,474|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:18:57,474|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:18:57,474|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:20:11,537|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:20:11,632|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:20:11,632|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:20:11,632|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:20:11,632|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:20:11,632|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:22:43,364|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:22:43,456|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:22:43,456|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:22:43,456|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:22:43,456|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:22:43,457|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:24:41,745|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:24:41,835|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:24:41,835|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:24:41,835|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:24:41,835|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:24:41,835|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:27:31,759|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:27:31,849|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:27:31,849|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:27:31,849|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:27:31,849|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:27:31,849|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:28:55,841|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:28:55,929|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:28:55,929|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:28:55,929|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:28:55,930|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:28:55,930|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:29:46,558|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:29:46,646|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:29:46,646|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:29:46,647|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:29:46,647|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:29:46,647|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:30:32,181|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:30:32,275|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:30:32,275|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:30:32,275|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:30:32,275|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:30:32,275|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:34:38,567|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:34:38,657|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:34:38,657|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:34:38,657|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:34:38,657|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:34:38,658|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:36:45,849|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:36:45,937|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:36:45,938|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:36:45,938|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:36:45,938|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:36:45,938|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:39:48,671|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:39:48,758|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:39:48,758|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:39:48,758|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:39:48,758|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:39:48,758|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:39:58,189|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 16:48:00,121|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:48:00,210|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:48:00,210|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:48:00,210|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:48:00,210|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:48:00,211|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:50:24,857|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:50:24,947|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:50:24,947|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:50:24,947|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:50:24,947|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:50:24,947|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:51:39,809|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:51:39,896|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:51:39,896|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:51:39,897|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:51:39,897|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:51:39,897|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:53:03,856|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:53:03,944|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:53:03,944|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:53:03,944|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:53:03,944|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:53:03,945|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:54:06,347|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:54:06,449|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:54:06,449|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:54:06,449|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:54:06,449|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:54:06,450|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:54:58,766|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:54:58,854|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:54:58,854|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:54:58,854|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:54:58,854|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:54:58,855|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:56:01,439|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:56:01,529|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:56:01,529|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:56:01,529|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:56:01,529|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:56:01,529|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:57:44,450|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:57:44,541|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:57:44,541|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:57:44,541|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:57:44,541|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:57:44,541|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:57:51,728|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 16:58:13,005|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:58:13,093|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:58:13,093|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:58:13,093|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:58:13,093|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:58:13,094|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 16:58:48,526|INFO |uba|[main]|UBA MAIN
+2020-05-21 16:58:48,613|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 16:58:48,613|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 16:58:48,613|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 16:58:48,613|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 16:58:48,613|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:06:55,668|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:06:55,768|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:06:55,768|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:06:55,768|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:06:55,769|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:06:55,769|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:08:10,913|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:08:11,003|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:08:11,003|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:08:11,003|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:08:11,003|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:08:11,004|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:10:00,270|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:10:00,360|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:10:00,361|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:10:00,361|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:10:00,361|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:10:00,361|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:34:47,556|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:34:47,654|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:34:47,655|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:34:47,655|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:34:47,655|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:34:47,655|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:52:41,687|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:52:41,778|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:52:41,778|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:52:41,778|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:52:41,778|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:52:41,778|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:54:07,284|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:54:07,374|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:54:07,374|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:54:07,374|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:54:07,374|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:54:07,374|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 17:57:18,000|INFO |uba|[main]|UBA MAIN
+2020-05-21 17:57:18,090|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 17:57:18,090|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 17:57:18,090|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 17:57:18,090|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 17:57:18,090|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 19:27:37,324|INFO |uba|[main]|UBA MAIN
+2020-05-21 19:27:37,415|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 19:27:37,415|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 19:27:37,415|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 19:27:37,415|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 19:27:37,415|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 19:57:34,727|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 19:57:38,709|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 19:58:17,581|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 19:59:47,057|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:02:13,314|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:11:29,096|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:18:30,502|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:40:38,244|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:40:50,942|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:41:05,437|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:45:45,447|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:58:31,117|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 20:59:27,116|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:00:05,820|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:00:18,058|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:01:24,097|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:03:31,125|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:04:16,616|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:05:56,948|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:06:32,912|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:08:39,725|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:10:00,109|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:18:17,597|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:19:19,621|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:20:17,634|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:20:57,337|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:22:29,703|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:23:22,450|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:23:35,189|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:24:01,041|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:24:33,437|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:25:00,298|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:25:28,391|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:25:45,771|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:26:30,676|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:26:34,099|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:26:56,872|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:27:13,792|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:27:43,703|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:28:08,287|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:28:52,215|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 21:43:24,384|INFO |uba|[main]|UBA MAIN
+2020-05-21 21:43:24,500|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 21:43:24,500|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 21:43:24,500|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 21:43:24,500|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 21:43:24,500|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 21:43:33,888|INFO |uba|[main]|UBA MAIN
+2020-05-21 21:43:33,981|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 21:43:33,981|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 21:43:33,981|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 21:43:33,982|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 21:43:33,982|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:21:07,255|DEBUG|p.c.Ptr|[main]|PTR MAIN
+2020-05-21 22:26:46,425|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:26:46,517|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:26:46,517|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:26:46,517|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:26:46,517|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:26:46,517|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:27:52,703|DEBUG|p.c.Ptr|[AWT-EventQueue-0]|Prt.printDeposit
+2020-05-21 22:31:32,985|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:31:33,077|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:31:33,077|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:31:33,077|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:31:33,078|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:31:33,078|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:32:33,317|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:32:33,408|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:32:33,408|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:32:33,408|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:32:33,409|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:32:33,409|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:34:07,690|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:34:07,792|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:34:07,792|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:34:07,792|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:34:07,792|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:34:07,792|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:35:13,421|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:35:13,510|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:35:13,511|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:35:13,511|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:35:13,511|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:35:13,511|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:35:54,488|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:35:54,580|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:35:54,580|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:35:54,580|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:35:54,580|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:35:54,580|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:38:54,469|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:38:54,559|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:38:54,559|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:38:54,559|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:38:54,559|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:38:54,559|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:42:37,871|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:42:37,960|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:42:37,960|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:42:37,961|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:42:37,961|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:42:37,961|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:46:26,129|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:46:26,221|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:46:26,222|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:46:26,222|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:46:26,222|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:46:26,222|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:49:23,716|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:49:23,808|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:49:23,809|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:49:23,809|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:49:23,809|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:49:23,809|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:52:26,211|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:52:26,305|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:52:26,305|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:52:26,305|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:52:26,305|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:52:26,305|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:53:40,312|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:53:40,404|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:53:40,404|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:53:40,404|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:53:40,404|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:53:40,404|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:55:23,566|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:55:23,656|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:55:23,656|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:55:23,656|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:55:23,656|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:55:23,657|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 22:58:18,842|INFO |uba|[main]|UBA MAIN
+2020-05-21 22:58:18,934|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 22:58:18,934|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 22:58:18,934|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 22:58:18,934|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 22:58:18,934|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:03:16,474|INFO |uba|[main]|UBA MAIN
+2020-05-21 23:03:16,574|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 23:03:16,575|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 23:03:16,575|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 23:03:16,575|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 23:03:16,575|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:08:23,906|INFO |uba|[main]|UBA MAIN
+2020-05-21 23:08:23,996|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 23:08:23,996|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 23:08:23,996|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 23:08:23,997|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 23:08:23,997|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:08:57,486|INFO |uba|[main]|UBA MAIN
+2020-05-21 23:08:57,574|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 23:08:57,575|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 23:08:57,575|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 23:08:57,575|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 23:08:57,575|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:09:06,051|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:10:36,998|DEBUG|p.c.Ptr|[AWT-EventQueue-0]|Prt.printDeposit
+2020-05-21 23:12:18,871|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:17:00,687|INFO |uba|[main]|UBA MAIN
+2020-05-21 23:17:00,778|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 23:17:00,778|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 23:17:00,778|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 23:17:00,778|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 23:17:00,778|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:17:10,475|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:17:27,702|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:21:57,482|INFO |uba|[main]|UBA MAIN
+2020-05-21 23:21:57,573|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 23:21:57,573|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 23:21:57,574|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 23:21:57,574|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 23:21:57,574|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:22:05,623|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:22:13,923|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:25:12,727|INFO |uba|[main]|UBA MAIN
+2020-05-21 23:25:12,818|DEBUG|uba|[AWT-EventQueue-0]|this is an DEBUG message
+2020-05-21 23:25:12,819|INFO |uba|[AWT-EventQueue-0]|this is an INFO message
+2020-05-21 23:25:12,819|WARN |uba|[AWT-EventQueue-0]|this is an WARN message
+2020-05-21 23:25:12,819|ERROR|uba|[AWT-EventQueue-0]|this is an ERROR message
+2020-05-21 23:25:12,819|FATAL|uba|[AWT-EventQueue-0]|this is an FATAL message
+2020-05-21 23:25:20,257|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-05-21 23:25:26,405|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}

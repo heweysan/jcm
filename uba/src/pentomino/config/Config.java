@@ -17,22 +17,28 @@ public class Config {
 	static ReentrantLock lock = new ReentrantLock();
 	
 	
-	private static Connection conn = null;
+	private static Connection sqlLiteConn = null;
 	
 	private static void connect() { 
-				
+			
+		System.out.println("Config.connect");
         try { 
         	
-        	if(conn != null && !conn.isClosed())
+        	if(sqlLiteConn != null && !sqlLiteConn.isClosed())
     			return;
            
             String url = "jdbc:sqlite:./Pentomino.Config.db3";
            
-            conn = DriverManager.getConnection(url);           
+            sqlLiteConn = DriverManager.getConnection(url);           
             
             
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        	if(e.getMessage() != null)
+        		System.out.println("Config.connect SQLException [" +  e.getMessage() + "]");
+        	else{
+        		e.printStackTrace();
+        	}
+                    	
         } finally {
            
         }
@@ -40,8 +46,7 @@ public class Config {
 	
 	public static String GetPulsarParam(String param, String defValue) {
 				
-		if(PulsarParamHashmap.containsKey(param)) {			
-			//System.out.println("Pulsar param retrieved from Map");
+		if(PulsarParamHashmap.containsKey(param)) {
 			return PulsarParamHashmap.get(param);
 		}
 		
@@ -53,7 +58,7 @@ public class Config {
 		
 			Config.connect();
 			
-			try (PreparedStatement pstmt  = conn.prepareStatement(sql)){		
+			try (PreparedStatement pstmt  = sqlLiteConn.prepareStatement(sql)){		
 		            
 				// set the value
 	            pstmt.setString(1,param);
@@ -67,29 +72,33 @@ public class Config {
 	            	            
 	            PulsarParamHashmap.put(param,retVal);
 	            
-	            if (conn != null) {
-	                conn.close();                
+	            if (sqlLiteConn != null) {
+	                sqlLiteConn.close();                
 	            }
 	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
+	        	if(e.getMessage() != null)
+	        		System.out.println("Config.GetPulsarParam SQLException [" +  e.getMessage() + "]");
+	        	else{
+	        		e.printStackTrace();
+	        	}
 	        }
 		}catch(Exception ge) {
-			ge.printStackTrace();
+			if(ge.getMessage() != null)
+				System.out.println("Config.GetPulsarParam GENERAL EXCEPTION [" +  ge.getMessage() + "]");
+			else{
+				ge.printStackTrace();
+			}
 		}
 		finally{
 			lock.unlock();
 		}
 		
-		//System.out.println("param [" + param + "] value[" + retVal  + "]");
-		
 		return retVal;
 	}
 	
 	public static String GetDirective(String param, String defValue) {
-		
-		
+				
 		if(DirectiveParamHashmap.containsKey(param)) {
-			//System.out.println("Directive param retrieved from Map");
 			return DirectiveParamHashmap.get(param);
 		}
 		
@@ -99,14 +108,14 @@ public class Config {
 		lock.lock();
 		try {
 			Config.connect();
-		
-			try (PreparedStatement pstmt  = conn.prepareStatement(sql)){
+			
+			try (PreparedStatement pstmt  = sqlLiteConn.prepareStatement(sql)){
 	            
 				// set the value
 	            pstmt.setString(1,param);
-	           
+	    
 	            ResultSet rs  = pstmt.executeQuery();
-	            
+	    
 	            if(rs.isClosed())
 	            	System.out.println("param [" + param + "] not found in DB setting defValue");
 	            else
@@ -114,22 +123,28 @@ public class Config {
 	            
 	            DirectiveParamHashmap.put(param,retVal);
 	            
-	            if (conn != null) {
-	                conn.close();
-	                //System.out.println("Connection closed");
+	            if (sqlLiteConn != null) {
+	                sqlLiteConn.close();	                
 	            }
 	            	            
 	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
+	        	if(e.getMessage() != null)
+	        		System.out.println("Config.GetDirective SQLException [" +  e.getMessage() + "]");
+	        	else{
+	        		e.printStackTrace();
+	        	}
+	        	
 	        }		
 		}catch(Exception ge) {
-			ge.printStackTrace();
+			if(ge.getMessage() != null)
+				System.out.println("Config.GetDirective GENERAL EXCEPTION [" +  ge.getMessage() + "]");
+			else{
+				ge.printStackTrace();
+			}
 		}
 		finally{
 			lock.unlock();
 		}
-		
-		//System.out.println("param [" + param + "] value[" + retVal  + "]");
 		
 		return retVal;
 	}
@@ -149,7 +164,7 @@ public class Config {
 		try {
 			Config.connect();
 		
-			try (PreparedStatement pstmt  = conn.prepareStatement(sql)){
+			try (PreparedStatement pstmt  = sqlLiteConn.prepareStatement(sql)){
 	            
 				// set the value
 	            pstmt.setString(1,param);
@@ -163,26 +178,31 @@ public class Config {
 	            
 	            PersistenceParamHashmap.put(param,retVal);
 	            
-	            if (conn != null) {
-	                conn.close();
+	            if (sqlLiteConn != null) {
+	                sqlLiteConn.close();
 	                //System.out.println("Connection closed");
 	            }
 	            
 	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
+	        	if(e.getMessage() != null)
+	        		System.out.println("Config.GetPersistence SQLException [" +  e.getMessage() + "]");
+	        	else{
+	        		e.printStackTrace();
+	        	}
 	        }
 		
 		}catch(Exception ge) {
-			ge.printStackTrace();
+			if(ge.getMessage() != null)
+				System.out.println("Config.GetPersistence GENERAL EXCEPTION [" +  ge.getMessage() + "]");
+			else{
+				ge.printStackTrace();
+			}
 		}
 		finally{
 			lock.unlock();
 		}
 		
-		//System.out.println("param [" + param + "] value[" + retVal  + "]");
-		
-		
-		
+	
 		return retVal;
 	}
 	

@@ -3,13 +3,13 @@ package pentomino.jcmagent;
 import java.io.File;
 
 import pentomino.config.Config;
-import rabbitClient.Producer;
 
 public class DTAServer {
 
 	
 	 public String ManageAgent(String function, EnvironmentVariables envVars) {
          //Logger.DebugFormat("Received DTA function: {0}", function);
+		 System.out.println("DTAServer.ManageAgent");
 
          switch (function.toUpperCase()) {
              case "RESTARTATM":
@@ -90,6 +90,7 @@ public class DTAServer {
 
              case "GOOFFLINE":
                  //TODO: REVISAR Config.SetPersistence("ForceOoS", true);
+            	 
                  return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
                  
          }
@@ -123,6 +124,7 @@ public class DTAServer {
 
 
 	private String ListFiles() {
+		System.out.println("DTAServer.ListFiles");
 		// TODO Auto-generated method stub
 		/* ESTO SE HACE EN OTRO LADO */
         String response =  "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"CI99XE0001\", \"Files\":[\"javaDummyFile1.zip\",\"javaDummyFile2.txt\"]}}";

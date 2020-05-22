@@ -52,11 +52,11 @@ public class Transactions {
 		ResponseObjectVO returnVO = new ResponseObjectVO();
 
 		try{
-			Connection conn = RabbitMQConnection.getConnection();
-			if(conn != null){
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			if(rabbitConn != null){
 
 
-				Channel channel = conn.createChannel();  
+				Channel channel = rabbitConn.createChannel();  
 
 				map = new HashMap<String,Object>(); 
 				map.put("operation-type","insert-cashin");         
@@ -111,7 +111,7 @@ public class Transactions {
 				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
 
 				channel.close();
-				conn.close();
+				//rabbitConn.close();
 			}
 		}catch(Exception e){
 			System.out.println("InsertaCashInOp");
@@ -135,9 +135,9 @@ public class Transactions {
 		ResponseObjectVO returnVO = new ResponseObjectVO();
 
 		try{
-			Connection conn = RabbitMQConnection.getConnection();
-			if(conn != null){
-				Channel channel = conn.createChannel();  
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			if(rabbitConn != null){
+				Channel channel = rabbitConn.createChannel();  
 
 				map = new HashMap<String,Object>(); 
 				map.put("operation-type","delete-cashin");         
@@ -191,7 +191,7 @@ public class Transactions {
 				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
 				
 				channel.close();
-				conn.close();
+				//rabbitConn.close();
 			}
 		}catch(Exception e){
 			System.out.println("BorraCashInOPs");
@@ -238,9 +238,9 @@ public class Transactions {
 
 
 		try{
-			Connection conn = RabbitMQConnection.getConnection();
-			if(conn != null){
-				Channel channel = conn.createChannel();  
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			if(rabbitConn != null){
+				Channel channel = rabbitConn.createChannel();  
 
 				map = new HashMap<String,Object>(); 
 				map.put("operation-type","insert-predeposit");         
@@ -299,7 +299,7 @@ public class Transactions {
 				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
 
 				channel.close();
-				conn.close();
+				//rabbitConn.close();
 			}
 		}catch(Exception e){
 			System.out.println("InsertaPreDeposito");
@@ -347,10 +347,22 @@ public class Transactions {
 
 		try{
 
-			Connection conn = RabbitMQConnection.getConnection();
-
-			if(conn != null){
-				Channel channel = conn.createChannel();  
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			
+			if(rabbitConn == null) {
+				//NO SE PUDO CONECTAR O CREDENCIALES INCORRECTA, ALGO MALO PASO
+				returnVO.isValid = false;
+				returnVO.allowWithdrawals = false;
+				returnVO.depositInfo = new ArrayList();
+				returnVO.success = false;
+				returnVO.profileName = null;
+				returnVO.profileId = (int) 0L;
+				returnVO.message = "Error de conexion";
+				returnVO.exception = null;
+				returnVO.totalDeposit = 0;
+			}
+			else{
+				Channel channel = rabbitConn.createChannel();  
 
 				map = new HashMap<String,Object>(); 
 				map.put("operation-type","validate-username");         
@@ -423,7 +435,6 @@ public class Transactions {
 						returnVO.totalDeposit = 0;
 					}
 
-
 				}else {
 					returnVO.isValid = false;
 					returnVO.allowWithdrawals = false;
@@ -439,24 +450,20 @@ public class Transactions {
 
 
 				System.out.println("result   [" + result + "]");  
-				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");                    
-
+				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
 
 				channel.basicCancel(ctag);
 				channel.close();
-				conn.close();
+				
+				
+				//HEWEY AQUI rabbitConn.close();
 			}
-
 		}catch(Exception e){
 			System.out.println("ValidaUsuario");
 			e.printStackTrace();
 		}
 
-		return returnVO;		
-
-
-
-
+		return returnVO;
 	}
 
 
@@ -473,9 +480,9 @@ public class Transactions {
 		requestMessage.data = depositOpVO;
 
 		try{
-			Connection conn = RabbitMQConnection.getConnection();
-			if(conn != null){
-				Channel channel = conn.createChannel();  
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			if(rabbitConn != null){
+				Channel channel = rabbitConn.createChannel();  
 
 				map = new HashMap<String,Object>(); 
 				map.put("operation-type","insert-deposit");         
@@ -491,13 +498,11 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.deposits.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("Sent     [" + gson.toJson(requestMessage) + "]");
+				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
 
 				//Esperamos la respuesta
 
 				final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
-
-
 
 				String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
 					if (delivery.getProperties().getCorrelationId().equals(corrId)) {
@@ -505,8 +510,7 @@ public class Transactions {
 					}
 				}, consumerTag -> {
 				});
-
-				//System.out.println("ctag ["+ ctag + "]");              
+			     
 
 				String result = response.take();
 
@@ -515,7 +519,7 @@ public class Transactions {
 				System.out.println("result [" + result + "]");
 
 				channel.close();
-				conn.close();
+				//rabbitConn.close();
 			}
 		}catch(Exception e){
 			System.out.println("ConfirmaDeposito");

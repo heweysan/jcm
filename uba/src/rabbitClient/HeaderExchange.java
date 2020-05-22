@@ -22,10 +22,12 @@ public class HeaderExchange {
   
  public void createExchangeAndQueue(){
    Map<String,Object> map = null; 
+   
+   System.out.println("HeaderExchange.createExchangeAndQueue");	
    try{
-      Connection conn = RabbitMQConnection.getConnection();
-      if(conn != null){
-        Channel channel = conn.createChannel(); 
+      Connection rabbitConn = RabbitMQConnection.getConnection();
+      if(rabbitConn != null){
+        Channel channel = rabbitConn.createChannel(); 
   
         channel.exchangeDeclare(exchange, ExchangeType.HEADER.getExchangeName(), true);
                
@@ -37,7 +39,7 @@ public class HeaderExchange {
         channel.queueBind(QUEUE_NAME_1, EXCHANGE_NAME, ROUTING_KEY ,map);   
 
         channel.close();
-        conn.close();
+        //rabbitConn.close();
       }
    }catch(Exception e){
         e.printStackTrace();

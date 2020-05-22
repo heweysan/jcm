@@ -12,7 +12,8 @@ import pentomino.jcmagent.SimpleRabbitEnvironmentVariablesContainer;
 public class Demo {
 
 	public static void main(String args[]) {
-
+		System.out.println("Demo.main");
+		
 		try {
 			DTAServer dtaServer = new DTAServer();
 
@@ -22,12 +23,7 @@ public class Demo {
 					SimpleRabbitEnvironmentVariablesContainer.class);
 
 			String response = dtaServer.ManageAgent(otherEnvVars.data.Command, otherEnvVars.data.Convert());
-			System.out.println(response);
-
-			RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita 2",
-					AccountType.Administrative, TransactionType.CashManagement);
-
-			RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "Monto Incorrecto Java Jcm");
+			System.out.println("response [" + response + "]");
 
 			Receiver myRec = new Receiver();
 

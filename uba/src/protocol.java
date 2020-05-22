@@ -40,6 +40,9 @@ public class protocol extends kermit {
 	/* VARIABLES PARA DISPENSADO */
 	int jcmCass1 = 0;
 	int jcmCass2 = 0;
+	
+	int cuantos = 0;
+	int cuantos2 = 0;
 
 	public byte lastMsg = 0x0;
 
@@ -472,7 +475,7 @@ public class protocol extends kermit {
 				// Validamos si hay que dispensar mas o no
 				EventListenerClass.fireMyEvent(new MyEvent("dispensedCass1" + jcmId));
 				if (jcmCass2 > 0) {
-					int cuantos2 = jcmCass2;
+					cuantos2 = jcmCass2;
 					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos2, (byte) 0x2,
 							jcmMessage);
 					jcmCass2 = 0;
@@ -536,6 +539,7 @@ public class protocol extends kermit {
 			if (mostrar)
 				System.out
 						.println(baitsToString("JCM[" + jcmId + "] processing PAY VALID", jcmResponse, jcmResponse[1]));
+			EventListenerClass.fireMyEvent(new MyEvent("mediaTaken" + jcmId)); //Ya tomaron el dinero
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			break;
 
@@ -543,7 +547,9 @@ public class protocol extends kermit {
 			if (mostrar)
 				System.out
 						.println(baitsToString("JCM[" + jcmId + "] processing PAY STAY", jcmResponse, jcmResponse[1]));
+			EventListenerClass.fireMyEvent(new MyEvent("presentOk" + jcmId)); //El dinero esta presentado 
 			id003_format((byte) 5, STATUS_REQUEST, jcmMessage, true); // STATUS_REQUEST
+			
 			break;
 
 		case SR_RETURN_TO_BOX: // 0x25 RETURN TO BOX

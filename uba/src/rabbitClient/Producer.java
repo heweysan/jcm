@@ -17,12 +17,13 @@ private static String routingKey = "agent.event.eja";
  public void publish(String jsonMessage){
    Map<String,Object> map = null;
    BasicProperties props = null;
-         
+       
+   System.out.println("Producer.publish");	
    
    try{
-       Connection conn = RabbitMQConnection.getConnection();
-       if(conn != null){
-         Channel channel = conn.createChannel();  
+       Connection rabbitConn = RabbitMQConnection.getConnection();
+       if(rabbitConn != null){
+         Channel channel = rabbitConn.createChannel();  
           
          props = new BasicProperties();
          map = new HashMap<String,Object>(); 
@@ -34,7 +35,7 @@ private static String routingKey = "agent.event.eja";
          System.out.println(" Message Sent '" + jsonMessage + "'"); 
          
          channel.close();
-         conn.close();
+         //rabbitConn.close();
        }
    }catch(Exception e){
        e.printStackTrace();
@@ -45,6 +46,8 @@ private static String routingKey = "agent.event.eja";
  public void SendResponse(String message, String exchange, String routingKey,
 		  HashMap<String,Object> headers, String correlationId, String replyToQueue) {
         
+	 System.out.println("Producer.SendResponse");	
+	 
 	   Map<String,Object> map = null;
 	   BasicProperties props = null;	         
 	   
@@ -55,9 +58,9 @@ private static String routingKey = "agent.event.eja";
 	   System.out.println(" replyToQueue '" + replyToQueue + "'");
 	   
 	   try{
-	       Connection conn = RabbitMQConnection.getConnection();
-	       if(conn != null){
-	         Channel channel = conn.createChannel();  
+	       Connection rabbitConn = RabbitMQConnection.getConnection();
+	       if(rabbitConn != null){
+	         Channel channel = rabbitConn.createChannel();  
 	          
 	         props = new BasicProperties();
 	         props = props.builder().build();
@@ -65,13 +68,12 @@ private static String routingKey = "agent.event.eja";
 	         props = props.builder().correlationId(correlationId).build();
 	         props = props.builder().replyTo(replyToQueue).build();
 	         
-	         channel.basicPublish(exchange, routingKey,true, props, message.getBytes());
-	         
+	         channel.basicPublish(exchange, routingKey,true, props, message.getBytes());	         
 	         
 	         System.out.println(" Message Sent '" + message + "'"); 
 	         
 	         channel.close();
-	         conn.close();
+	         //rabbitConn.close();
 	       }
 	   }catch(Exception e){
 	       e.printStackTrace();

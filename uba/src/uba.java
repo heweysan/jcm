@@ -8,8 +8,13 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
@@ -23,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-import javax.xml.bind.JAXBElement.GlobalScope;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,13 +48,16 @@ import pentomino.config.Config;
 import pentomino.gui.ImagePanel;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.RaspiAgent;
+import javax.swing.JTextField;
 
 public class uba {
-	
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = LogManager.getLogger(uba.class.getName());
+
 	private static boolean isDebug = false;
-	private static final Logger logger = LogManager.getLogger(uba.class);
-	
-	
+
 	private static PinpadMode pinpadMode = PinpadMode.None;
 	private static jcmOperation currentOperation = jcmOperation.None;
 
@@ -69,15 +76,15 @@ public class uba {
 
 	private static boolean recyclerBills1Set = false;
 	private static boolean recyclerBills2Set = false;
-	
-	
+
+
 	/* Variables de control apra saber queya dispensaron todos los caseteros*/
 	private boolean jcm1cass1Dispensed = false;
 	private boolean jcm1cass2Dispensed = false;
 	private boolean jcm2cass1Dispensed = false;
 	private boolean jcm2cass2Dispensed = false;
-	
-	
+
+
 	uart[] jcms = new uart[2];
 	int contador = 0;
 
@@ -91,6 +98,10 @@ public class uba {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
+		logger.info("UBA MAIN");
+		//System.setProperty("log4j.configurationFile", "/resources/log4j2.properties");
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -112,18 +123,19 @@ public class uba {
 	public uba() throws IOException, TimeoutException {
 
 		//https://logging.apache.org/log4j/2.x/manual/layouts.html
-		
+
 		isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 		System.out.println(System.getProperty("os.name") + " isDebug[" + isDebug + "]");
 
+		System.out.println("[LOG4J ----------------------------]");
 		logger.debug("this is an DEBUG message");
 		logger.info("this is an INFO message");
 		logger.warn("this is an WARN message");
 		logger.error("this is an ERROR message");
 		logger.fatal("this is an FATAL message");
+		System.out.println("[LOG4J ----------------------------]");
 
 		JcmMonitor t2 = new JcmMonitor();
-
 		t2.start();
 
 		Thread agentsQueueThread = new Thread(agentsQueue, "agentsQueueThread");
@@ -147,16 +159,16 @@ public class uba {
 	 */
 	private void initialize() {
 
-		
+
 		JcmGlobalData.maxRecyclableChash = Integer.parseInt(Config.GetDirective("maxRecyclableChash","1500"));
-		
-		
+
+
 		JPanel panelCont = new JPanel();
 		panelCont.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelCont.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelCont.setBackground(Color.LIGHT_GRAY);
 		panelCont.setBounds(0, 0, 1920, 1080);
-		
+
 		mainFrame = new JFrame("Frame Principal");
 		mainFrame.getContentPane().setBackground(Color.DARK_GRAY);
 		mainFrame.setBounds(100, 100, 1920, 1084);
@@ -165,35 +177,56 @@ public class uba {
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.getContentPane().add(panelCont);
 		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
-		
-		ImagePanel panelIdle = new ImagePanel(new ImageIcon("./images/ScrPrincipal.png").getImage(),"panelIdle");
+
+
+		ImagePanel panelIdle = new ImagePanel(new ImageIcon("./images/ScrIdle.png").getImage(),"panelIdle");
+		ImagePanel panelInicio = new ImagePanel(new ImageIcon("./images/ScrPrincipal.png").getImage(),"panelInicio");
 		ImagePanel panelDeposito = new ImagePanel(new ImageIcon("./images/ScrPlaceholder.png").getImage(),"panelDeposito");
 		ImagePanel panelComandos = new ImagePanel(new ImageIcon("./images/ScrPlaceholder.png").getImage(),"panelComandos");
 		ImagePanel panelLogin = new ImagePanel(new ImageIcon("./images/loginFormClean.png").getImage(),"panelLogin");
 		ImagePanel panelToken = new ImagePanel(new ImageIcon("./images/panelToken.png").getImage(),"panelToken");
 		ImagePanel panelTerminamos = new ImagePanel(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
 		ImagePanel panelRetiraBilletes = new ImagePanel(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiraBilletes");
-		
+
 		panelIdle.setLayout(null);
+		panelInicio.setLayout(null);
 		panelDeposito.setLayout(null);
 		panelComandos.setLayout(null);
 		panelLogin.setLayout(null);
 		panelToken.setLayout(null);
 		panelTerminamos.setLayout(null);
 		panelRetiraBilletes.setLayout(null);
-		
-		
+
+
 		CardLayout cl = new CardLayout();
 		panelCont.setLayout(cl);
 
 		panelCont.add(panelIdle,"panelIdle");
+		panelCont.add(panelInicio,"panelInicio");
 		panelCont.add(panelDeposito,"panelDeposito");
 		panelCont.add(panelComandos, "panelComandos");
 		panelCont.add(panelLogin, "panelLogin");
 		panelCont.add(panelToken,"panelToken");
 		panelCont.add(panelTerminamos,"panelTerminamos");
 		panelCont.add(panelRetiraBilletes,"panelRetiraBilletes");
-		
+
+
+		/*** PANEL IDLE  ***/
+		JButton btnIdle = new JButton("");
+		btnIdle.setBounds(0, 0, 1920, 1080);		
+		btnIdle.setFont(new Font("Tahoma", Font.BOLD, 44));
+		btnIdle.setOpaque(false);
+		btnIdle.setContentAreaFilled(false);
+		btnIdle.setBorderPainted(false);
+		btnIdle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cl.show(panelCont,"panelInicio");
+			}
+		});
+		panelIdle.add(btnIdle);
+
+
+
 		JButton btnRetiraBilletesComandos = new JButton("COMANDOS");
 		btnRetiraBilletesComandos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -204,7 +237,7 @@ public class uba {
 		btnRetiraBilletesComandos.setBackground(Color.ORANGE);
 		btnRetiraBilletesComandos.setBounds(9, 8, 200, 73);
 		panelRetiraBilletes.add(btnRetiraBilletesComandos);
-		
+
 		JButton btnRetiraBilletesSalir = new JButton("SALIR");
 		btnRetiraBilletesSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -215,29 +248,29 @@ public class uba {
 		btnRetiraBilletesSalir.setBackground(Color.RED);
 		btnRetiraBilletesSalir.setBounds(219, 8, 200, 73);
 		panelRetiraBilletes.add(btnRetiraBilletesSalir);
-		
+
 		final JLabel lblRetiraBilletesMonto = new JLabel("New label");
 		lblRetiraBilletesMonto.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblRetiraBilletesMonto.setForeground(Color.WHITE);
 		lblRetiraBilletesMonto.setBounds(29, 131, 379, 100);
 		panelRetiraBilletes.add(lblRetiraBilletesMonto);
-		
+
 		JLabel lblRetiraBilletesDispensado = new JLabel("New label");
 		lblRetiraBilletesDispensado.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblRetiraBilletesDispensado.setForeground(Color.WHITE);
 		lblRetiraBilletesDispensado.setBounds(29, 264, 379, 100);
 		panelRetiraBilletes.add(lblRetiraBilletesDispensado);
-		
+
 		JLabel lblRetiraBilletesFaltante = new JLabel("New label");
 		lblRetiraBilletesFaltante.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblRetiraBilletesFaltante.setForeground(Color.WHITE);
 		lblRetiraBilletesFaltante.setBounds(29, 391, 379, 100);
 		panelRetiraBilletes.add(lblRetiraBilletesFaltante);
-						
+
 		/***
 		 * - - - - - - - - - -   P A N E L   P I N P A D   - - - - - - - - - - 
 		 */
-		
+
 		JPanel panelPinPad = new JPanel();
 		panelPinPad.setOpaque(false);
 		panelPinPad.setBackground(Color.GRAY);
@@ -252,7 +285,7 @@ public class uba {
 		btnPinPad1.setContentAreaFilled(false);
 		btnPinPad1.setBorderPainted(false);
 		panelPinPad.add(btnPinPad1);
-		
+
 		JButton btnPinPad2 = new JButton();
 		btnPinPad2.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad2.setBounds(359, 47, 262, 220);
@@ -342,8 +375,8 @@ public class uba {
 		btnPinPadConfirmar.setContentAreaFilled(false);
 		btnPinPadConfirmar.setBorderPainted(false);
 		panelPinPad.add(btnPinPadConfirmar);
-		
-		
+
+
 		/** - - - - - - - - - -   P A N E L   I D L E   - - - - - - - - - -  */
 
 		JButton btnIdleDeposito = new JButton("");
@@ -352,15 +385,15 @@ public class uba {
 		btnIdleDeposito.setOpaque(false);
 		btnIdleDeposito.setContentAreaFilled(false);
 		btnIdleDeposito.setBorderPainted(false);
-		panelIdle.add(btnIdleDeposito);
-		
+		panelInicio.add(btnIdleDeposito);
+
 		final JLabel lblLoginUser = new JLabel("");
 		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 90));
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginUser.setBounds(257, 545, 496, 87);
 		panelLogin.add(lblLoginUser);
-		
+
 		JButton btnIdleComandos = new JButton("COMANDOS");
 		btnIdleComandos.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnIdleComandos.setBackground(Color.ORANGE);
@@ -370,8 +403,8 @@ public class uba {
 				cl.show(panelCont,"panelComandos");
 			}
 		});
-		panelIdle.add(btnIdleComandos);
-		
+		panelInicio.add(btnIdleComandos);
+
 		JButton btnIdleSalir = new JButton("SALIR");
 		btnIdleSalir.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnIdleSalir.setBackground(Color.RED);
@@ -381,15 +414,15 @@ public class uba {
 				System.exit(0);
 			}
 		});
-		panelIdle.add(btnIdleSalir);
+		panelInicio.add(btnIdleSalir);
 
 		JButton btnIdleRetiro = new JButton("");		
 		btnIdleRetiro.setOpaque(false);
 		btnIdleRetiro.setContentAreaFilled(false);
 		btnIdleRetiro.setBorderPainted(false);
 		btnIdleRetiro.setBounds(989, 415, 576, 585);
-		panelIdle.add(btnIdleRetiro);
-		
+		panelInicio.add(btnIdleRetiro);
+
 		JButton btnTokenComandos = new JButton("COMANDOS");
 		btnTokenComandos.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnTokenComandos.setBackground(Color.ORANGE);
@@ -400,28 +433,28 @@ public class uba {
 			}
 		});
 		panelToken.add(btnTokenComandos);
-		
+
 		JLabel lblTokenConfirmacion = new JLabel(".");
 		lblTokenConfirmacion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenConfirmacion.setForeground(Color.WHITE);
 		lblTokenConfirmacion.setFont(new Font("Tahoma", Font.BOLD, 50));
 		lblTokenConfirmacion.setBounds(190, 861, 583, 66);
 		panelToken.add(lblTokenConfirmacion);
-		
+
 		JLabel lblToken = new JLabel(".");
 		lblToken.setForeground(Color.WHITE);
 		lblToken.setHorizontalAlignment(SwingConstants.CENTER);
 		lblToken.setFont(new Font("Tahoma", Font.BOLD, 50));
 		lblToken.setBounds(190, 594, 583, 66);
 		panelToken.add(lblToken);
-		
+
 		JLabel lblTokenMontoRetiro = new JLabel(".");
 		lblTokenMontoRetiro.setForeground(Color.WHITE);
 		lblTokenMontoRetiro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenMontoRetiro.setFont(new Font("Tahoma", Font.BOLD, 99));
 		lblTokenMontoRetiro.setBounds(190, 321, 583, 136);
 		panelToken.add(lblTokenMontoRetiro);
-		
+
 		JButton btnTokenSalir = new JButton("SALIR");		
 		btnTokenSalir.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnTokenSalir.setBackground(Color.RED);
@@ -432,19 +465,19 @@ public class uba {
 			}
 		});
 		panelToken.add(btnTokenSalir);
-		
+
 		JLabel lblTokenMensaje = new JLabel(".");
 		lblTokenMensaje.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenMensaje.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblTokenMensaje.setForeground(Color.WHITE);
 		lblTokenMensaje.setBounds(190, 93, 583, 75);
 		panelToken.add(lblTokenMensaje);
-		
-		
+
+
 		/** - - - - - - - - - -   P A N E L   L O G I N   - - - - - - - - - -  */
 
-	
-		
+
+
 		JButton btnLoginSalir = new JButton("SALIR");
 		btnLoginSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -462,7 +495,7 @@ public class uba {
 		lblLoginMensaje.setForeground(Color.WHITE);
 		lblLoginMensaje.setBounds(89, 139, 837, 70);
 		panelLogin.add(lblLoginMensaje);
-		
+
 
 		final JLabel lblLoginPassword = new JLabel("");
 		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
@@ -481,7 +514,7 @@ public class uba {
 		btnLoginComandos.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnLoginComandos.setBackground(Color.ORANGE);
 		panelLogin.add(btnLoginComandos);
-		
+
 		final JLabel lblLoginRow1 = new JLabel("");
 		lblLoginRow1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginRow1.setForeground(Color.WHITE);
@@ -491,7 +524,7 @@ public class uba {
 
 		panelLogin.add(panelPinPad);
 
-		
+
 
 		JPanel panel_estatus = new JPanel();
 		panel_estatus.setBounds(10, 11, 1060, 247);
@@ -629,51 +662,28 @@ public class uba {
 
 		btnOperacion1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				if(isDebug) {
+				
+				switch(currentOperation) {
+				case Deposit:
 					
-					String billetes = "[1x20|2x50|3x100|4x200|5x500|6x1000]";
-					montoDepositado = 9630;
-					
+					//Terminamos el deposito
 					DepositOpVO depositOpVO = new DepositOpVO();
-					
-					
 
-					depositOpVO.atmId = "CI01GL0001"; //"CIXXGS0020";
-					depositOpVO.amount = (long) montoDepositado;
-					depositOpVO.b20 = 1;
-					depositOpVO.b50 = 2;
-					depositOpVO.b100 = 3;
-					depositOpVO.b200 = 4;
-					depositOpVO.b500 = 5;
-					depositOpVO.b1000 = 6;
-					depositOpVO.operatorId = Integer.parseInt(CurrentUser.loginUser);
-					depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-					depositOpVO.userName = CurrentUser.loginUser;
-					
-					RaspiAgent.WriteToJournal("CASH MANAGEMENT", montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
-					
-					Transactions.ConfirmaDeposito(depositOpVO);
-					
-					//Terminamos el deposito, mandamos al pantalla y regresamos a idle.
-					cl.show(panelCont, "panelTerminamos");
-					
-					Timer screenTimer = new Timer();					
-					screenTimer.schedule(new TimerTask() {
-			            @Override
-			            public void run() {				                
-			            	cl.show(panelCont, "panelIdle");
-			                screenTimer.cancel();
-			            }
-			        }, 3000);
-				}
-				else {
-
-					if(currentOperation == jcmOperation.Deposit) {
-						//Terminamos el deposito
-	
-						DepositOpVO depositOpVO = new DepositOpVO();
-	
+					if(isDebug) {						
+						montoDepositado = 3720;	
+						depositOpVO.atmId = "CI01GL0001"; //"CIXXGS0020";
+						depositOpVO.amount = (long) montoDepositado;
+						depositOpVO.b20 = 1;
+						depositOpVO.b50 = 2;
+						depositOpVO.b100 = 3;
+						depositOpVO.b200 = 4;
+						depositOpVO.b500 = 5;
+						depositOpVO.b1000 = 6;
+						depositOpVO.operatorId = Integer.parseInt(CurrentUser.loginUser);
+						depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+						depositOpVO.userName = CurrentUser.loginUser;							
+					}
+					else {
 						depositOpVO.atmId = "CI01GL0001"; //"CIXXGS0020";
 						depositOpVO.amount = (long) montoDepositado;
 						depositOpVO.b20 = contadoresDeposito.x20;
@@ -684,41 +694,32 @@ public class uba {
 						depositOpVO.b1000 = 0;
 						depositOpVO.operatorId = Integer.parseInt(CurrentUser.loginUser);
 						depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-						depositOpVO.userName = CurrentUser.loginUser;
-	
-						String billetes = "[" + contadoresDeposito.x20 + "x20|" + contadoresDeposito.x50 + "x50|" + contadoresDeposito.x100 + "x100|" + contadoresDeposito.x200 + "x200|" + contadoresDeposito.x500 + "x500|0x1000]";
-	
-	
-						RaspiAgent.WriteToJournal("CASH MANAGEMENT", montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
-	
-	
-						
-						Transactions.ConfirmaDeposito(depositOpVO);
-												
-						//Terminamos el deposito, mandamos a la pantalla y regresamos a idle.
-						cl.show(panelCont, "panelTerminamos");
-						
-						Timer screenTimer = new Timer();
-						
-						screenTimer.schedule(new TimerTask() {
-				            @Override
-				            public void run() {				                
-				            	cl.show(panelCont, "panelIdle");
-				                screenTimer.cancel();
-				            }
-				        }, 3000);
-	
-						Ptr.print("SI");
-							
-						
-	
-	
+						depositOpVO.userName = CurrentUser.loginUser;										
 					}
-	
-					if(currentOperation == jcmOperation.Dispense) {
-	
-					}
-				}
+					
+					String billetes = "[1x20|2x50|3x100|4x200|5x500|6x1000]";
+					RaspiAgent.WriteToJournal("CASH MANAGEMENT", montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
+					Transactions.ConfirmaDeposito(depositOpVO);
+					
+					Ptr.printDeposit(depositOpVO);
+					
+					//Terminamos el deposito, mandamos a la pantalla y regresamos a idle.
+					cl.show(panelCont, "panelTerminamos");
+					Timer screenTimer = new Timer();
+					screenTimer.schedule(new TimerTask() {
+						@Override
+						public void run() {				                
+							cl.show(panelCont, "panelInicio");
+							screenTimer.cancel();
+						}
+					}, 3000);
+					
+					break;
+				case Dispense:
+					break;
+				default:
+					break;
+				}				
 
 			}
 		});
@@ -726,7 +727,7 @@ public class uba {
 		btnOperacion1.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnOperacion1.setBounds(420, 382, 400, 220);
 		panelInfoOperacion.add(btnOperacion1);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Ingresa los billetes uno por uno en los aceptadores.");
 		lblNewLabel_3.setForeground(Color.WHITE);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -743,11 +744,11 @@ public class uba {
 		btnDepositoComandos.setBackground(Color.ORANGE);
 		btnDepositoComandos.setBounds(1569, 11, 321, 136);
 		panelDeposito.add(btnDepositoComandos);
-		
+
 		JButton btnDepositoIdle = new JButton("IDLE");
 		btnDepositoIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cl.show(panelCont, "panelIdle");
+				cl.show(panelCont, "panelInicio");
 			}
 		});
 		btnDepositoIdle.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -763,11 +764,9 @@ public class uba {
 				on = !on;
 			}
 		});        
-		*/
-		
-		
-		//TODO: HEWEY AQUI JPanel panelComandos = new JPanel();
-		
+		 */
+
+
 
 		JPanel panel_comandos = new JPanel();
 		panel_comandos.setBounds(10, 113, 1886, 706);
@@ -1085,25 +1084,25 @@ public class uba {
 		btnCollect.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnCollect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if(chckbxReciclador1.isSelected()) {
 					jcms[0].currentOpertion = jcmOperation.CollectCass1; 
-					
+
 					// primero el inhibit
 					jcms[0].jcmMessage[3] = 0x01;
 					jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
 					jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
 							jcms[0].jcmMessage);
 				}
-				
+
 				if(chckbxReciclador2.isSelected()) {
-								
+
 					jcms[1].currentOpertion = jcmOperation.CollectCass1;
 					// primero el inhibit
 					jcms[1].jcmMessage[3] = 0x01;
 					jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
 				}
-				
+
 			}
 		});
 		btnCollect.setBounds(10, 399, 179, 50);
@@ -1313,7 +1312,7 @@ public class uba {
 		btnComandosSalir.setBackground(Color.RED);
 		btnComandosSalir.setBounds(227, 11, 200, 73);
 		panelComandos.add(btnComandosSalir);
-		
+
 		btnPinPadConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -1333,9 +1332,10 @@ public class uba {
 					//Validamos el usuario
 					CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
 
-					if(user.isValid) {
+
+					if(user.success && user.isValid) {
 						switch(currentOperation) {
-						
+
 						case Deposit:
 							//Si es deposito ya lo dejamos pasar
 							pinpadMode = PinpadMode.None;
@@ -1367,14 +1367,43 @@ public class uba {
 							break;
 						}
 					}
-					else {
-						lblLoginRow1.setText("¡Oh no!");
-						lblLoginMensaje.setText("       Están mal los datos.");
-						CurrentUser.loginUser = "";
-						CurrentUser.loginPassword = "";
-						pinpadMode = PinpadMode.loginUser;		
-						RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
-						return;
+					else {						
+						if(!user.success) {
+							switch(currentOperation) {
+
+							case Deposit:
+								//Si es deposito ya lo dejamos pasar
+								pinpadMode = PinpadMode.None;
+								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
+								montoDepositado = 0;
+								cl.show(panelCont, "panelDeposito");
+								Transactions.BorraCashInOPs("CI01GL0001");
+								break;
+							case Dispense:								
+								CurrentUser.loginUser = "";
+								CurrentUser.loginPassword = "";
+								pinpadMode = PinpadMode.loginUser;	
+								lblLoginRow1.setText("¡Oh no!");
+								lblLoginMensaje.setText("Algo salió mal, no podemos darte el servicio en este momento.");
+								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
+
+								break;
+							default:
+								pinpadMode = PinpadMode.loginUser;
+								lblLoginRow1.setText("¡Oh no!");
+								lblLoginMensaje.setText("Algo salió mal, intenta nuevamente.");
+								break;
+							}							
+						}
+						else {
+							lblLoginRow1.setText("¡Oh no!");
+							lblLoginMensaje.setText("       Están mal los datos.");
+							CurrentUser.loginUser = "";
+							CurrentUser.loginPassword = "";
+							pinpadMode = PinpadMode.loginUser;		
+							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+							return;
+						}
 					}
 
 
@@ -1383,85 +1412,85 @@ public class uba {
 					break;
 				case retiroToken:
 					System.out.println("VALIDAMOS QUE SEAN IGUALES");
-					
+
 					System.out.println(token + " - " + CurrentUser.tokenConfirmacion);
 					if(token.equalsIgnoreCase(CurrentUser.tokenConfirmacion)) {
 						//Preparamos el retiro
 						token = "";
 						pinpadMode = PinpadMode.None;
 						cl.show(panelCont, "panelRetiraBilletes");
-						
+
 						lblRetiraBilletesMonto.setText("$" + montoRetiro);
-						
+
 						Dispensar();
-						
-						
+
+
 						if(isDebug) {													
 							Timer screenTimer = new Timer();
 							screenTimer.schedule(new TimerTask() {
-					            @Override
-					            public void run() {				                
-					            	cl.show(panelCont, "panelTerminamos");
-					            	Ptr.print("SI");
-					            	Timer screenTimer2 = new Timer();
+								@Override
+								public void run() {				                
+									cl.show(panelCont, "panelTerminamos");
+									Ptr.print("SI",new HashMap<String,String>());
+									Timer screenTimer2 = new Timer();
 									screenTimer2.schedule(new TimerTask() {
-							            @Override
-							            public void run() {				                
-							            	cl.show(panelCont, "panelIdle");
-							            	screenTimer.cancel();
-							                screenTimer2.cancel();
-							            }
-							        }, 3000);
-					                
-					            }
-					        }, 3000);
+										@Override
+										public void run() {				                
+											cl.show(panelCont, "panelInicio");
+											screenTimer.cancel();
+											screenTimer2.cancel();
+										}
+									}, 3000);
+
+								}
+							}, 3000);
 						}
 						else
 						{
-							
-						
+
+
 							Timer screenTimerDispense = new Timer();
 							screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
-					            @Override
-					            public void run() {
-					            	if(jcm1cass1Dispensed && jcm1cass2Dispensed && jcm2cass1Dispensed && jcm2cass2Dispensed) {
-					            		cl.show(panelCont, "panelTerminamos");
-						            	Timer screenTimer2 = new Timer();
+								@Override
+								public void run() {
+									if(jcm1cass1Dispensed && jcm1cass2Dispensed && jcm2cass1Dispensed && jcm2cass2Dispensed) {
+										cl.show(panelCont, "panelTerminamos");
+										Timer screenTimer2 = new Timer();
 										screenTimer2.schedule(new TimerTask() {
-								            @Override
-								            public void run() {				                
-								            	cl.show(panelCont, "panelIdle");
-								            	screenTimerDispense.cancel();
-								                screenTimer2.cancel();
-								            }
-								        }, 1000);
-					            	}
-					            }
-					        }, 1000,2000);
-					        
+											@Override
+											public void run() {				                
+												cl.show(panelCont, "panelInicio");
+												screenTimerDispense.cancel();
+												screenTimer2.cancel();
+											}
+										}, 1000);
+									}
+								}
+							}, 1000,2000);
+
 						}
-									
-						
+
+
 						/*
 						cl.show(panelCont, "panelTerminamos");
 						Timer screenTimer = new Timer();						
 						screenTimer.schedule(new TimerTask() {
 				            @Override
 				            public void run() {				                
-				            	cl.show(panelCont, "panelIdle");
+				            	cl.show(panelCont, "panelInicio");
 				                screenTimer.cancel();
 				            }
 				        }, 3000);
-						*/
+						 */
 					}
 					else {
 						CurrentUser.tokenConfirmacion = "";
 						lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
-						
+
 						lblTokenMensaje.setText("Los valores no son iguales, verifica.");
 					}
-					
-					
+
+
 					break;
 				default:
 					break;
@@ -1471,9 +1500,9 @@ public class uba {
 				//pinpadMode = PinpadMode.None;
 			}
 		});
-		
-			
-		
+
+
+
 		btnPinPadCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CurrentUser.loginUser = "";
@@ -1500,7 +1529,7 @@ public class uba {
 					break;						
 				}
 
-				cl.show(panelCont, "panelIdle");
+				cl.show(panelCont, "panelInicio");
 			}
 		});
 
@@ -1717,17 +1746,17 @@ public class uba {
 			}
 		});
 
-		
+
 		btnIdleRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-				
+
 				token = "" + getRandomDoubleBetweenRange(1111,9999);
 				montoRetiro = getRandomDoubleBetweenRange(120,1100);	
-				
+
 				panelToken.remove(panelPinPad);
 				panelLogin.remove(panelPinPad);
 				panelToken.add(panelPinPad);
-				
+
 				pinpadMode = PinpadMode.retiroToken;
 				currentOperation = jcmOperation.Dispense;
 				lblLoginMensaje.setText("Para retirar, identifícate");
@@ -1735,11 +1764,11 @@ public class uba {
 				lblToken.setText(token);
 				CurrentUser.tokenConfirmacion = "";
 				lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
-				
+
 				cl.show(panelCont, "panelToken");
 			}
 		});
-		
+
 		btnReiniciarJcm1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				jcms[0].currentOpertion = jcmOperation.Reset;
@@ -1883,15 +1912,15 @@ public class uba {
 					myObj.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
 					myObj.operatorId = Integer.parseInt(CurrentUser.loginUser);
 					myObj.notesDetails = "1x" + billType;
-		
+
 					Transactions.InsertaCashInOp(myObj);
-					
+
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType,0, "","", "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType);
-					
+
 					montoDepositado += billType;
-					
+
 					System.out.println("$" + montoDepositado);
 					lblOperacion2.setText("$" + montoDepositado);
 					lblBilleteIngresado1.setText("$" + billType);
@@ -1916,21 +1945,21 @@ public class uba {
 						contadoresDeposito.x500++;
 						break;
 					}
-					
+
 					CashInOpVO myObj2 = new CashInOpVO();
 					myObj2.atmId = "CI01GL0001";
 					myObj2.amount = (long) billType2;
 					myObj2.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
 					myObj2.operatorId = Integer.parseInt(CurrentUser.loginUser);
 					myObj2.notesDetails = "1x" + billType2;
-		
+
 					Transactions.InsertaCashInOp(myObj2);
-					
+
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType2,0, "","", "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType2);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType2);
-					
-					
+
+
 					montoDepositado += billType2;					
 					System.out.println("$" + montoDepositado);
 					lblOperacion2.setText("$" + montoDepositado);
@@ -1943,36 +1972,36 @@ public class uba {
 					lblBilleteIngresado2.setText("");
 					break;		
 				case "recyclerBills1":
-					
+
 					lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
-					
+
 					recyclerBills1Set = true;					
 					if(recyclerBills2Set) {
-						
+
 						String broadcastData = "Cassette1-" + jcms[0].recyclerDenom1 + ";Cassette2-" + jcms[0].recyclerDenom2
 								+ ";Cassette3-" + jcms[1].recyclerDenom1 + ";Cassette4-" + jcms[1].recyclerDenom2;
-						
+
 						RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, broadcastData);
-						
+
 						recyclerBills1Set = false;
 					}
 					break;
 				case "recyclerBills2":
-					
+
 					lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
-					
+
 					recyclerBills2Set = true;
 					if(recyclerBills1Set) {						
-												
+
 						String broadcastData = "Cassette1-" + jcms[0].recyclerDenom1 + ";Cassette2-" + jcms[0].recyclerDenom2
 								+ ";Cassette3-" + jcms[1].recyclerDenom1 + ";Cassette4-" + jcms[1].recyclerDenom2;
-						
-						
+
+
 						RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, broadcastData);
-						
+
 						recyclerBills2Set = false;
 					}
-					
+
 					break;
 				case "recyclerContadores1":
 
@@ -1982,10 +2011,14 @@ public class uba {
 
 					lblContadores2.setText(jcms[1].recyclerContadores);
 					break;		
-				case "dispensedCass11":
+				case "dispensedCass11":					
+					RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[0].cuantos2 * jcms[0].contadores.Cass2Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[0].cuantos2  + "x" +  jcms[0].contadores.Cass2Denom);
 					jcm1cass1Dispensed = true;
 					break;
 				case "dispensedCass21":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[1].cuantos2 * jcms[1].contadores.Cass2Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[1].cuantos2  + "x" +  jcms[1].contadores.Cass2Denom);
 					jcm1cass2Dispensed = true;					
 					break;
 				case "dispensedCass12":
@@ -1993,8 +2026,20 @@ public class uba {
 					break;
 				case "dispensedCass22":
 					jcm2cass2Dispensed = true;
+					break;					
+				case "presentOk1":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_PresentOk, "JCM[1]");
 					break;
-					
+				case "presentOk2":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_PresentOk, "JCM[2]");
+					break;
+				case "mediaTaken1":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[1]");
+					break;
+				case "mediaTaken2":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[2]");
+					break;
+
 				}
 			}
 		});
@@ -2035,13 +2080,13 @@ public class uba {
 
 
 
-		cl.show(panelCont, "panelIdle");
-
+		//cl.show(panelCont, "panelInicio");
+		cl.show(panelCont, "panelIdle");	
 	}
-	
-	
-	
-	
+
+
+
+
 	public static String baitsToString(String texto, byte[] baits) {
 		String result = texto;
 		for (byte theByte : baits) {
@@ -2097,11 +2142,11 @@ public class uba {
 
 	boolean Dispensar() {
 
-		
+
 		if(isDebug) {
 			return true;
 		}
-		
+
 		/*
 		jcms[0].currentOpertion = jcmOperation.PreDispense;
 		jcms[1].currentOpertion = jcmOperation.PreDispense;
@@ -2130,11 +2175,11 @@ public class uba {
 			else {
 				Timer screenTimer = new Timer();					
 				screenTimer.schedule(new TimerTask() {
-		            @Override
-		            public void run() {				                
-		            	screenTimer.cancel();
-		            }
-		        }, 500);
+					@Override
+					public void run() {				                
+						screenTimer.cancel();
+					}
+				}, 500);
 			}
 		}
 
@@ -2148,7 +2193,7 @@ public class uba {
 		int jcm1Total = 0;
 		int jcm2Total = 0;
 
-		
+
 		//revisamos del JCM 1
 
 		//cuantos de  jcm1 cass 1 
@@ -2291,10 +2336,13 @@ public class uba {
 		jcm1cass2Dispensed = false;
 		jcm2cass1Dispensed = false;
 		jcm2cass2Dispensed = false;
-		
+
 		//Checamos para JCM1
 		if(jcms[0].jcmCass1 > 0 || jcms[0].jcmCass2 > 0) {	
-
+			
+			//El primer denominate se genera aqui:
+			RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[0].jcmCass1 * jcms[0].contadores.Cass1Denom));
+			RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[0].jcmCass1  + "x" +  jcms[0].contadores.Cass1Denom);
 			System.out.println("Deshabilitamos JCM1 para dispense");
 			jcms[0].currentOpertion = jcmOperation.Dispense;
 
@@ -2307,33 +2355,38 @@ public class uba {
 			jcm1cass2Dispensed = true;
 		}
 
-		
-		Timer screenTimerDispense = new Timer();
-				
-		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-            	//System.out.println("Esperando que termine dispense 1 ");
-            	if(jcm1cass1Dispensed && jcm1cass2Dispensed) {
-            		System.out.println("Dispense 1 terminado");
-            		if(jcms[1].jcmCass1 > 0 || jcms[1].jcmCass2 > 0) {
-            			System.out.println("Deshabilitamos JCM2 para dispense");
-            			jcms[1].currentOpertion = jcmOperation.Dispense;
 
-            			// primero el inhibit
-            			jcms[1].jcmMessage[3] = 0x01;
-            			jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
-            		}
-            		else{
-            			System.out.println("Nada que dispensar del JCM[2]");
-            			jcm2cass1Dispensed = true;
-            			jcm2cass2Dispensed = true;
-            		}
-            		screenTimerDispense.cancel();
-            	}            	
-            }
-        }, 1000,1000);
-		
+		Timer screenTimerDispense = new Timer();
+
+		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				//System.out.println("Esperando que termine dispense 1 ");
+				if(jcm1cass1Dispensed && jcm1cass2Dispensed) {
+					System.out.println("Dispense 1 terminado");
+					if(jcms[1].jcmCass1 > 0 || jcms[1].jcmCass2 > 0) {
+						
+						//El primer denominate se genera aqui:
+						RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[1].jcmCass1 * jcms[1].contadores.Cass1Denom));
+						RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[1].jcmCass1  + "x" +  jcms[1].contadores.Cass1Denom);
+						
+						System.out.println("Deshabilitamos JCM2 para dispense");
+						jcms[1].currentOpertion = jcmOperation.Dispense;
+
+						// primero el inhibit
+						jcms[1].jcmMessage[3] = 0x01;
+						jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
+					}
+					else{
+						System.out.println("Nada que dispensar del JCM[2]");
+						jcm2cass1Dispensed = true;
+						jcm2cass2Dispensed = true;
+					}
+					screenTimerDispense.cancel();
+				}            	
+			}
+		}, 1000,1000);
+
 		return true;
 	}
 

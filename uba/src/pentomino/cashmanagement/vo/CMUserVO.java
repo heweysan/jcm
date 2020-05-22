@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class CMUserVO implements Serializable {
-	
-	
+		
 	 /**
 	 * 
 	 */
@@ -13,20 +12,20 @@ public class CMUserVO implements Serializable {
 
 	public Boolean success;
 	
-	 public String message;
+	public String message;
 	
-	 public Boolean isValid;
+	public Boolean isValid;
 	
-	 public List depositInfo;
+	public List depositInfo;
 	
-	 public String profileName;
+	public String profileName;
 	
-	 public int profileId;
+	public int profileId;
 	
-	 public ExceptionVO exception;
+	public ExceptionVO exception;
 	
-	 public Integer totalDeposit;
+	public Integer totalDeposit;
 	
-	 public Boolean allowWithdrawals;
+	public Boolean allowWithdrawals;
 
 }

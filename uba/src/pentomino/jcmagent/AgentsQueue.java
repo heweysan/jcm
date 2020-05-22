@@ -29,12 +29,12 @@ public class AgentsQueue  implements Runnable{
 	
 
 	public AgentsQueue(BlockingQueue<AgentMessage> myQueue) {
-		System.out.println("AgentsQueue constructor con queue.");
+		System.out.println("AgentsQueue constructor.");
 		bq = myQueue;
 	}
 	
 	public AgentsQueue() {
-		System.out.println("AgentsQueue constructor con queue NATIVO.");
+		System.out.println("AgentsQueue constructor.");
 		
 	}
 	
@@ -89,7 +89,9 @@ public class AgentsQueue  implements Runnable{
 	
 private static void SendCommandToRabbit(AgentMessage payload) {
 		
-		//String atmId = Configuration.GetDirective("AtmId", "");
+	System.out.println("AgentsQueue.SendCommandToRabbit");	
+	
+	//String atmId = Configuration.GetDirective("AtmId", "");
 		
 		
 		//TODO: Todo el mecanismo por si no esta disponoble rabbit y el queue, etc.
@@ -116,9 +118,9 @@ private static void SendCommandToRabbit(AgentMessage payload) {
               
         
         try{
-            Connection conn = RabbitMQConnection.getConnection();
-            if(conn != null){
-              Channel channel = conn.createChannel();  
+            Connection rabbitConn = RabbitMQConnection.getConnection();
+            if(rabbitConn != null){
+              Channel channel = rabbitConn.createChannel();  
                
               props = new BasicProperties();
               map = new HashMap<String,Object>(); 
@@ -127,12 +129,14 @@ private static void SendCommandToRabbit(AgentMessage payload) {
               map.put("acq-channelId","red-blu");
               props = props.builder().headers(map).build();
               channel.basicPublish(exchange, routingKey,true, props, gson.toJson(payload).getBytes());
-              //System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
+              
+              System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
               
               channel.close();
-              conn.close();
+              //rabbitConn.close();
             }
         }catch(Exception e){
+        	System.out.println("AQUI MAMAO");
             e.printStackTrace();
         }       
         

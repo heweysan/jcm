@@ -18,9 +18,12 @@ public class Receiver {
   
  public void receive(){
    try{
-       Connection conn = RabbitMQConnection.getConnection();
-       if(conn != null){
-         Channel channel = conn.createChannel();
+	   
+	   System.out.println("Receiver.receive");	
+	   
+       Connection rabbitConn = RabbitMQConnection.getConnection();
+       if(rabbitConn != null){
+         Channel channel = rabbitConn.createChannel();
         
          Consumer consumer1 = new DefaultConsumer(channel) {
             @Override
@@ -32,17 +35,17 @@ public class Receiver {
          channel.basicConsume(HeaderExchange.QUEUE_NAME_1, true, consumer1);
         
          channel.close();
-         conn.close();
+         //rabbitConn.close();
        }
    }catch(Exception e){
       e.printStackTrace();
    }
-   
-   
  }
  
  
  public void SetupRabbitListener() {
+	 
+	 System.out.println("Receiver.SetupRabbitListener");
 	 
 	 //TODO: Poner validacion de connection status
 	 
@@ -50,36 +53,11 @@ public class Receiver {
 	 
 	 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
 	 String atmId = Config.GetDirective("AtmId", "");
-	 
-	 
-	 /*
+
 	 Map<String,Object> map = null;
 	 BasicProperties props = null;
-	 
-	 try{
-	       Connection conn = RabbitMQConnection.getConnection();
-	       if(conn != null){
-	         Channel channel = conn.createChannel();  
-	          
-	         props = new BasicProperties();
-	         map = new HashMap<String,Object>(); 
-	         map.put("acq-source-channel","atm_blu");
-	         map.put("acq-source-type","event");
-	         map.put("acq-channelId","red-blu");
-	         props = props.builder().headers(map).build();
-	        	         
-	         channel.close();
-	         conn.close();
-	       }
-	   }catch(Exception e){
-	       e.printStackTrace();
-	   }
-	 */
-	 
-	 Map<String,Object> map = null;
-	 BasicProperties props = null;
-	Channel channel;
-	try {
+	 Channel channel;
+	 try {
 		
 		
 		/*
@@ -105,15 +83,13 @@ public class Receiver {
 	         
 	         System.out.println(" [x] consumerTag '" + consumerTag + "'");	         
 	         System.out.println(" [x] Received '" + body + "'");
-	         System.out.println(" [x] replyToQueue '" + replyToQueue + "'");
-	         
+	         System.out.println(" [x] replyToQueue '" + replyToQueue + "'");	         
 	         	         
 	         /* ESTO SE HACE EN OTRO LADO */
 	         String response =  "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"CI99XE0001\", \"Files\":[\"javaDummyFile1.zip\",\"javaDummyFile2.txt\"]}}";
 	         
 	         Producer myProd = new Producer(); 
-	         myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);
-	         
+	         myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);         
 	         
 	     };
 	     channel.basicConsume("dta.command.CI99XE0001", true, deliverCallback, consumerTag -> { });
@@ -129,6 +105,8 @@ public class Receiver {
  
  public void ListenForCommands() {
 	 
+	 System.out.println("Receiver.ListenForCommands");
+	 
 	 String atmId = Config.GetDirective("AtmId", "");
 	 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
 	 String topicQueue = Config.GetDirective("BusinessCommandTopicQueue", "dta.command." + atmId);
@@ -136,9 +114,9 @@ public class Receiver {
 	 
 	 
 	 try{
-	       Connection conn = RabbitMQConnection.getConnection();
-	       if(conn != null){
-	         Channel channel = conn.createChannel();
+	       Connection rabbitConn = RabbitMQConnection.getConnection();
+	       if(rabbitConn != null){
+	         Channel channel = rabbitConn.createChannel();
 	        
 	         Consumer consumer1 = new DefaultConsumer(channel) {
 	            @Override
@@ -150,12 +128,11 @@ public class Receiver {
 	         channel.basicConsume(HeaderExchange.QUEUE_NAME_1, true, consumer1);
 	        
 	         channel.close();
-	         conn.close();
+	         //rabbitConn.close();
 	       }
 	   }catch(Exception e){
 	      e.printStackTrace();
-	   }
-	 
+	   } 
 	 
  }
  

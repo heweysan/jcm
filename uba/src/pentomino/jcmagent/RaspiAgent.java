@@ -148,62 +148,7 @@ public class RaspiAgent {
 		
 		AgentsQueue.bq.add(agentMsg);
 		
-		//RaspiAgent.SendCommandToRabbit(agentMsg);
-	}
-		
-	
-	private static void SendCommandToRabbitLocal(AgentMessage payload) {
-		
-		//String atmId = Configuration.GetDirective("AtmId", "");
-		
-		
-		//TODO: Todo el mecanismo por si no esta disponoble rabbit y el queue, etc.
-		
-		String exchange = Config.GetDirective("BusinessAmqpExchange", null);
-		
-		String routingKey = Config.GetDirective(String.format("%sEventRoutingKey", payload.Agent),
-				String.format("agent.event.%s",payload.Agent.toLowerCase()));
-			
-		
-		String routingKeyStaled = "";  
-		if (payload.Agent.equalsIgnoreCase("hma"))
-            routingKeyStaled = Config.GetDirective(String.format("Staled%sEventRoutingKey", payload.Agent),
-            		String.format("agent.event.%s.staled", payload.Agent.toLowerCase()));
-        else
-            routingKeyStaled = Config.GetDirective(String.format("Staled%sEventRoutingKey", payload.Agent),"");
-        
-        String staledTime = Config.GetDirective("HmaMsgStaledSeconds", "300");
-		
-     // Publish
-        
-        Map<String,Object> map = null;
-        BasicProperties props = null;
-              
-        
-        try{
-            Connection conn = RabbitMQConnection.getConnection();
-            if(conn != null){
-              Channel channel = conn.createChannel();  
-               
-              props = new BasicProperties();
-              map = new HashMap<String,Object>(); 
-              map.put("acq-source-channel","atm_blu");
-              map.put("acq-source-type","event");
-              map.put("acq-channelId","red-blu");
-              props = props.builder().headers(map).build();
-              channel.basicPublish(exchange, routingKey,true, props, gson.toJson(payload).getBytes());
-              //System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
-              
-              channel.close();
-              conn.close();
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }       
-        
-       
 	}
 	
-		
 	
 }
