@@ -355,6 +355,9 @@ public class protocol extends kermit {
 			JcmGlobalData.totalCashInRecyclers += bill;
 									
 			System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecyclers + "]");
+			
+			EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
+			
 			//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
 			if(JcmGlobalData.totalCashInRecyclers > JcmGlobalData.maxRecyclableChash) {
 				id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
@@ -364,11 +367,11 @@ public class protocol extends kermit {
 			}
 			
 			
+			
 			break;
 		case SR_STACKING: // 0x14 STACKING +DATA
 			if (mostrar)
-				System.out
-						.println(baitsToString("JCM[" + jcmId + "] processing STACKING", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] processing STACKING", jcmResponse, jcmResponse[1]));
 
 			// Revisamos el status del stacking
 			if (jcmResponse[3] == 0x00)
@@ -588,7 +591,7 @@ public class protocol extends kermit {
 						jcmResponse[1]));
 
 			// Pedimos Informacion del error
-			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x1A, (byte) 0x0, jcmMessage);
+			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x1A, (byte)0x0, (byte)0x0, jcmMessage);
 			// Mandamos el clear
 			// id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte)
 			// 0x1, (byte) 0x2,jcmMessage);
@@ -812,18 +815,24 @@ public class protocol extends kermit {
 
 			switch (jcmResponse[4]) {
 			case (byte) 0x00: // UNCONNECTED Recycler Unit is not connected.
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing UNCONNECTED",jcmResponse, jcmResponse[1]));
 				// Mandamos el clear
 				id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2, jcmMessage);
 				RaspiAgent.Broadcast(DeviceEvent.DEP_HardwareError, "UNCONNECTED Recycler Unit is not connected.");
 				break;
 
 			case (byte) 0x10: // NORMAL
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing NORMAL",jcmResponse, jcmResponse[1]));
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
 				RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
 				break;
 
 			case (byte) 0x11: // EMPTY
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing EMPTY",jcmResponse, jcmResponse[1]));
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
 				RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
@@ -835,6 +844,8 @@ public class protocol extends kermit {
 				break;
 
 			case (byte) 0x12: // FULL
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing FULL",jcmResponse, jcmResponse[1]));
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
 				RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
@@ -844,7 +855,77 @@ public class protocol extends kermit {
 				else
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-NA-0;2-NA-0;3-FULL-0;4-FULL-0");
 				break;
-
+			case (byte) 0x1F: // BUSY
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing BUSY",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
+				RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "Online");
+				if (jcmId == 1)
+					RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-FULL-0;2-FULL-0;3-NA-0;4-NA-0");
+				else
+					RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-NA-0;2-NA-0;3-FULL-0;4-FULL-0");
+				break;
+			case (byte) 0x40: // RECYCLER JAM
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing RECYCLER JAM",jcmResponse, jcmResponse[1]));
+				
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "Recycler Jam");
+				
+				currentOpertion = jcmOperation.Reset; 
+				//Primero se piden los estatus
+				id003_format((byte)5, protocol.OC_RESET, jcmMessage,true); //SSR_VERSION 0x88
+				
+				break;
+			case (byte) 0x41: // DOOR OPEN
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing DOOR OPEN",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "Door Open");				
+				break;
+			case (byte) 0x42: // MOTOR ERROR
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing MOTOR ERROR",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "Reycler motor malfunction");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "Motor Error");				
+				break;
+			case (byte) 0x43: // EEPROM ERROR
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing EEPROM ERROR",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "EEROM read/write error occurred.");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "EEPROM Error");				
+				break;
+			case (byte) 0x44: //  PAY OUT NOTE ERROR 
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing  PAY OUT NOTE ERROR ",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "Error is detected during note dispensing, such as double notes. ");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, " PAY OUT NOTE Error");				
+				break;
+			case (byte) 0x45: //  RECYCLE BOX OPEN  
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing  RECYCLE BOX OPEN",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "The Recycler Box is not seated.");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "RECYCLE BOX OPEN");				
+				break;
+			case (byte) 0x4A: //HARDWARE ERROR 
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing HARDWARE ERROR",jcmResponse, jcmResponse[1]));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "Anormal recycler condition.");
+				RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "HARDWARE ERROR");				
+				break;
 			case (byte) 0xA0:
 				if (mostrar)
 					System.out.println(baitsToString("JCM[" + jcmId + "] processing TOTAL COUNT REQUEST", jcmResponse,

@@ -1,0 +1,20 @@
+.                            .
+	      DEPOSITO
+		  
+FECHA:    22/05/2020     
+HORA:     17:40:04       
+
+MONTO:	  $1,000
+
+PIEZAS    BILLETES      MONTO
+ 5           $20         $100
+ 7           $50         $350
+ 3          $100         $300
+ 1          $200         $200
+ 4          $500       $2,000
+
+REFERENCIA: 13579
+OPERACION:  23
+USUARIO:    007007
+
+.                            .

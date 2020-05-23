@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -93,10 +94,43 @@ public class Ptr {
 		
 	}
 	
+	public static boolean printDispense(int montoRetiro, String currentUser) {
+		
+		logger.debug("Prt.printDispense"); 
+		
+		Date date = new Date(); 
+		
+		currencyFormat.setMaximumFractionDigits(0);
+
+		Map<String,String> printMap = new HashMap<String,String>();
+		printMap.put("<fecha>",String.format("%1$-15s",dateFormat.format(date)));
+		printMap.put("<hora>",String.format("%1$-15s",timeFormat.format(date)));
+		printMap.put("<monto>",currencyFormat.format(montoRetiro));		
+		printMap.put("<referencia>","13579");
+		printMap.put("<operacion>","23");
+		printMap.put("<usuario>",currentUser);		
+		
+		print("retiro",printMap);
+		
+		return true;
+		
+	}
+	
 	public static boolean print(String form, Map<String,String> formData) {
 		
 		
 		BufferedReader reader;
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(form + "out.txt");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 
+		
+		
+		
 		try {
 			reader = new BufferedReader(new FileReader(form + ".txt"));
 			String line = reader.readLine();
@@ -104,23 +138,30 @@ public class Ptr {
 				for (Entry<String, String> entry : formData.entrySet()) {
 			        line = line.replace(entry.getKey() ,entry.getValue() );
 			    }
+				
+				fw.write(line + System.getProperty("line.separator"));
 				System.out.println(line);
 				line = reader.readLine();
+				
 			}
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-	
+		try {
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		if(true)
-			return true;
 		
+				
 		// Input the file
 				InputStream textStream = null; 
 				try { 
-					textStream = new FileInputStream("file.TXT"); 
+					textStream = new FileInputStream(form + "out.txt"); 
 				} catch (FileNotFoundException ffne) { 
 					
 					System.out.println(ffne.getMessage());
@@ -147,6 +188,7 @@ public class Ptr {
 			        else
 			        	System.out.println("Impresion FAIL");
 
+			        cupsClient.
 			    }catch (Exception ignored){
 			        System.out.println("YA MAMOTO ---------------");
 			    	ignored.printStackTrace();

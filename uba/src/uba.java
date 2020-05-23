@@ -141,7 +141,7 @@ public class uba {
 		Thread agentsQueueThread = new Thread(agentsQueue, "agentsQueueThread");
 		agentsQueueThread.start();
 
-		currentOperation = jcmOperation.Startup;
+		//HEWEY QUITAR currentOperation = jcmOperation.Startup;
 
 		initialize();
 
@@ -697,9 +697,16 @@ public class uba {
 						depositOpVO.userName = CurrentUser.loginUser;										
 					}
 					
-					String billetes = "[1x20|2x50|3x100|4x200|5x500|6x1000]";
-					RaspiAgent.WriteToJournal("CASH MANAGEMENT", montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
+					String billetes = "[" + depositOpVO.b20 + "x20|" + depositOpVO.b50 + "x50|" + depositOpVO.b100 + "x100|" + depositOpVO.b200 + "x200|" + depositOpVO.b500 + "x500|" + depositOpVO.b1000 + "x1000]";
+					String billetesNotesValidated = "" + depositOpVO.b20 + "x20;" + depositOpVO.b50 + "x50;" + depositOpVO.b100 + "x100;" + depositOpVO.b200 + "x200;" + depositOpVO.b500 + "x500;" + depositOpVO.b1000 + "x1000";
+					
 					Transactions.ConfirmaDeposito(depositOpVO);
+					
+					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted,"" + montoDepositado);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, billetesNotesValidated);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + montoDepositado);
+					RaspiAgent.WriteToJournal("CASH MANAGEMENT", montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
+					
 					
 					Ptr.printDeposit(depositOpVO);
 					
@@ -791,11 +798,14 @@ public class uba {
 
 		JButton btnStatusReq = new JButton("Stat Req (11h)");
 		btnStatusReq.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnStatusReq.setBackground(Color.ORANGE);
+		btnStatusReq.setBackground(Color.GREEN);
 		btnStatusReq.setBounds(10, 11, 157, 50);
 		btnStatusReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x11, jcms[0].jcmMessage, true);
+				if(chckbxReciclador1.isSelected()) 
+					jcms[0].id003_format((byte) 5, (byte) 0x11, jcms[0].jcmMessage, true);
+				if(chckbxReciclador2.isSelected()) 
+					jcms[1].id003_format((byte) 5, (byte) 0x11, jcms[1].jcmMessage, true);
 			}
 		});
 
@@ -804,11 +814,19 @@ public class uba {
 		JButton btnReset = new JButton("Reset (40h)");
 		btnReset.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnReset.setBackground(Color.GREEN);
-		btnReset.addActionListener(new ActionListener() {
+		btnReset.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].currentOpertion = jcmOperation.Reset; 
-				//Primero se piden los estatus
-				jcms[0].id003_format((byte)5, protocol.SSR_VERSION, jcms[0].jcmMessage,true); //SSR_VERSION 0x88				
+				
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].currentOpertion = jcmOperation.Reset; 
+					//Primero se piden los estatus
+					jcms[0].id003_format((byte)5, protocol.SSR_VERSION, jcms[0].jcmMessage,true); //SSR_VERSION 0x88
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].currentOpertion = jcmOperation.Reset; 
+					//Primero se piden los estatus
+					jcms[1].id003_format((byte)5, protocol.SSR_VERSION, jcms[1].jcmMessage,true); //SSR_VERSION 0x88
+				}
 			}
 		});
 		btnReset.setBounds(318, 11, 167, 50);
@@ -816,10 +834,13 @@ public class uba {
 
 		JButton btnAck = new JButton("Ack (50h)");
 		btnAck.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnAck.setBackground(Color.ORANGE);
+		btnAck.setBackground(Color.GREEN);
 		btnAck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x50, jcms[0].jcmMessage, true);
+				if(chckbxReciclador1.isSelected()) 
+					jcms[0].id003_format((byte) 5, (byte) 0x50, jcms[0].jcmMessage, true);
+				if(chckbxReciclador2.isSelected()) 
+					jcms[1].id003_format((byte) 5, (byte) 0x50, jcms[1].jcmMessage, true);
 			}
 		});
 		btnAck.setLocation(177, 11);
@@ -916,12 +937,19 @@ public class uba {
 
 		JButton btnInhibit = new JButton("Inhibit (C3h)");
 		btnInhibit.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnInhibit.setBackground(Color.ORANGE);
+		btnInhibit.setBackground(Color.GREEN);
 		btnInhibit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("INHIBIT");
-				jcms[0].jcmMessage[3] = 0x01;
-				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+				if(chckbxReciclador1.isSelected()) {
+					System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+					jcms[0].jcmMessage[3] = 0x01;
+					jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+					jcms[1].jcmMessage[3] = 0x01;
+					jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
+				}
 			}
 		});
 		btnInhibit.setBounds(445, 119, 146, 50);
@@ -1030,10 +1058,15 @@ public class uba {
 
 		JButton btnBootVersionrequest = new JButton("Boot Version Request (89h)");
 		btnBootVersionrequest.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnBootVersionrequest.setBackground(Color.ORANGE);
+		btnBootVersionrequest.setBackground(Color.GREEN);
 		btnBootVersionrequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format((byte) 5, (byte) 0x89, jcms[0].jcmMessage, true);
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].id003_format((byte) 5, (byte) 0x89, jcms[0].jcmMessage, true);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].id003_format((byte) 5, (byte) 0x89, jcms[1].jcmMessage, true);
+				}
 			}
 		});
 		btnBootVersionrequest.setBounds(10, 285, 256, 50);
@@ -1046,11 +1079,17 @@ public class uba {
 
 		JButton btnStatusRequestExt = new JButton("Stat Req Ext (+1Ah)");
 		btnStatusRequestExt.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnStatusRequestExt.setBackground(Color.ORANGE);
+		btnStatusRequestExt.setBackground(Color.GREEN);
 		btnStatusRequestExt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x7, (byte) 0xf0, (byte) 0x20, (byte) 0x1a, (byte) 0x1, (byte) 0x2,
-						jcms[0].jcmMessage);
+			public void actionPerformed(ActionEvent e) {			
+				
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].id003_format_ext((byte) 0x7, (byte) 0xf0, (byte) 0x20, (byte) 0x1a, (byte) 0x1, (byte) 0x2,jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].id003_format_ext((byte) 0x7, (byte) 0xf0, (byte) 0x20, (byte) 0x1a, (byte) 0x1, (byte) 0x2,jcms[1].jcmMessage);
+				}		
+				
 			}
 		});
 		btnStatusRequestExt.setBounds(559, 459, 194, 50);
@@ -1096,11 +1135,12 @@ public class uba {
 				}
 
 				if(chckbxReciclador2.isSelected()) {
-
 					jcms[1].currentOpertion = jcmOperation.CollectCass1;
 					// primero el inhibit
 					jcms[1].jcmMessage[3] = 0x01;
-					jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+					jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
+					jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
+							jcms[1].jcmMessage);
 				}
 
 			}
@@ -1110,11 +1150,17 @@ public class uba {
 
 		JButton btnClear = new JButton("Clear (+4Ch)");
 		btnClear.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnClear.setBackground(Color.ORANGE);
+		btnClear.setBackground(Color.GREEN);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
 						jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
+						jcms[1].jcmMessage);
+				}
 			}
 		});
 		btnClear.setBounds(195, 399, 144, 50);
@@ -1122,11 +1168,21 @@ public class uba {
 
 		JButton btnEmergencyStop = new JButton("Emergency Stop (+4Dh)");
 		btnEmergencyStop.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnEmergencyStop.setBackground(Color.ORANGE);
+		btnEmergencyStop.setBackground(Color.GREEN);
 		btnEmergencyStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
-						jcms[0].jcmMessage);
+				
+				
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
+							jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
+							jcms[1].jcmMessage);
+				}
+				
+				
 			}
 		});
 		btnEmergencyStop.setBounds(351, 399, 197, 50);
@@ -1173,15 +1229,31 @@ public class uba {
 
 		JButton btnRecycleCurrencySetting = new JButton("Recycle Currency Setting (+D0h+Data)");
 		btnRecycleCurrencySetting.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnRecycleCurrencySetting.setBackground(Color.ORANGE);
+		btnRecycleCurrencySetting.setBackground(Color.GREEN);
 
 		btnRecycleCurrencySetting.setBounds(558, 399, 299, 50);
 		panel_comandos.add(btnRecycleCurrencySetting);
 
 		JButton btnCurrentCountSetting = new JButton("Current Count\u00A0Setting (E2h+Data)");
+		btnCurrentCountSetting.setBackground(Color.GREEN);
 		btnCurrentCountSetting.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnCurrentCountSetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(chckbxReciclador1.isSelected()) {
+					
+					jcms[0].jcmMessage[7] = 0x01;  //REC1
+					jcms[0].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
+					jcms[0].jcmMessage[9] = 0x00; //RESERVADO
+					jcms[0].jcmMessage[10] = 0x02; //REC2
+					jcms[0].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].jcmMessage[7] = 0x01;  //REC1
+					jcms[1].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
+					jcms[1].jcmMessage[9] = 0x00; //RESERVADO
+					jcms[1].jcmMessage[10] = 0x02; //REC2
+					jcms[1].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, jcms[1].jcmMessage);
+				}
 			}
 		});
 		btnCurrentCountSetting.setBounds(10, 458, 289, 50);
@@ -1189,11 +1261,15 @@ public class uba {
 
 		JButton btnRecycleCurrencyReqSetting = new JButton("Recycle Currency Req (+90h)");
 		btnRecycleCurrencyReqSetting.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnRecycleCurrencyReqSetting.setBackground(Color.ORANGE);
+		btnRecycleCurrencyReqSetting.setBackground(Color.GREEN);
 		btnRecycleCurrencyReqSetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0,
-						jcms[0].jcmMessage);
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, jcms[1].jcmMessage);
+				}
 			}
 		});
 		btnRecycleCurrencyReqSetting.setBounds(736, 569, 236, 50);
@@ -1240,28 +1316,28 @@ public class uba {
 
 		JButton btnTotalCountReq = new JButton("Total Count Req (+A0h)");
 		btnTotalCountReq.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnTotalCountReq.setBackground(Color.ORANGE);
+		btnTotalCountReq.setBackground(Color.GREEN);
 
 		btnTotalCountReq.setBounds(301, 569, 205, 50);
 		panel_comandos.add(btnTotalCountReq);
 
 		JButton btnTotalCountClear = new JButton("Total Count Clear (+A1h)");
 		btnTotalCountClear.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnTotalCountClear.setBackground(Color.ORANGE);
+		btnTotalCountClear.setBackground(Color.GREEN);
 
 		btnTotalCountClear.setBounds(516, 569, 210, 50);
 		panel_comandos.add(btnTotalCountClear);
 
 		JButton btnCurrentCountReq = new JButton("Current Count Req (+A2h)");
 		btnCurrentCountReq.setFont(new Font("Dialog", Font.BOLD, 12));
-		btnCurrentCountReq.setBackground(Color.ORANGE);
+		btnCurrentCountReq.setBackground(Color.GREEN);
 
 		btnCurrentCountReq.setBounds(10, 630, 236, 50);
 		panel_comandos.add(btnCurrentCountReq);
 
 		JButton btnReinhibitch = new JButton("REInhibit (C3h)");
 		btnReinhibitch.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnReinhibitch.setBackground(Color.ORANGE);
+		btnReinhibitch.setBackground(Color.GREEN);
 
 		btnReinhibitch.setBounds(608, 119, 144, 50);
 		panel_comandos.add(btnReinhibitch);
@@ -1289,6 +1365,11 @@ public class uba {
 		btnSolicitaRetiro.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnSolicitaRetiro.setBounds(779, 630, 203, 48);
 		panel_comandos.add(btnSolicitaRetiro);
+		
+		JLabel lblNewLabel = new JLabel("Set denomination (debe estar DISABLE (INHIBIT))");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel.setBounds(559, 347, 425, 41);
+		panel_comandos.add(lblNewLabel);
 
 		JButton btnComandosRegresar = new JButton("Regresar");
 		btnComandosRegresar.addActionListener(new ActionListener() {
@@ -1447,18 +1528,19 @@ public class uba {
 						}
 						else
 						{
-
-
 							Timer screenTimerDispense = new Timer();
 							screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
 								@Override
 								public void run() {
 									if(jcm1cass1Dispensed && jcm1cass2Dispensed && jcm2cass1Dispensed && jcm2cass2Dispensed) {
 										cl.show(panelCont, "panelTerminamos");
+										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + montoRetiro);
+										RaspiAgent.WriteToJournal("Withdrawal", montoRetiro,0, "","", "Withdrawal DispenseOk", AccountType.Other, TransactionType.Withdrawal);
+										Ptr.printDispense(montoRetiro,CurrentUser.loginUser);
 										Timer screenTimer2 = new Timer();
 										screenTimer2.schedule(new TimerTask() {
 											@Override
-											public void run() {				                
+											public void run() {
 												cl.show(panelCont, "panelInicio");
 												screenTimerDispense.cancel();
 												screenTimer2.cancel();
@@ -1787,18 +1869,36 @@ public class uba {
 
 		btnRecycleCurrencySetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].jcmMessage[7] = 0x01;
-				jcms[0].jcmMessage[8] = 0x10; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
-				jcms[0].jcmMessage[9] = 0x00;
-				jcms[0].jcmMessage[10] = 0x02;
-				jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x08, (byte) 0x0,jcms[0].jcmMessage);
+				
+				//0xD0; DENOM; RESEVADO (0x0h); REC_BOX
+				
+				if(chckbxReciclador1.isSelected()) {				
+					jcms[0].jcmMessage[7] = 0x01;  //REC1
+					jcms[0].jcmMessage[8] = 0x08; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
+					jcms[0].jcmMessage[9] = 0x00;
+					jcms[0].jcmMessage[10] = 0x02;
+					jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x10, (byte) 0x0,jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].jcmMessage[7] = 0x01;  
+					jcms[1].jcmMessage[8] = 0x02; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
+					jcms[1].jcmMessage[9] = 0x00;
+					jcms[1].jcmMessage[10] = 0x02; //REC2
+					jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x04, (byte) 0x0,jcms[1].jcmMessage);
+				}
 			}
 		});
 
 		btnTotalCountReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA0, (byte) 0x00, (byte) 0x0,
+				if(chckbxReciclador1.isSelected()) {	
+					jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA0, (byte) 0x00, (byte) 0x0,
 						jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {	
+					jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA0, (byte) 0x00, (byte) 0x0,
+							jcms[1].jcmMessage);
+				}
 			}
 		});		
 
@@ -1817,8 +1917,12 @@ public class uba {
 
 		btnTotalCountClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA1, (byte) 0x00, (byte) 0x0,
+				if(chckbxReciclador1.isSelected())
+					jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA1, (byte) 0x00, (byte) 0x0,
 						jcms[0].jcmMessage);
+				if(chckbxReciclador2.isSelected())
+					jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA1, (byte) 0x00, (byte) 0x0,
+							jcms[1].jcmMessage);
 			}
 		});
 
@@ -1836,8 +1940,14 @@ public class uba {
 		btnReinhibitch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("RE INHIBIT");
-				jcms[0].jcmMessage[3] = 0x00;
-				jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+				if(chckbxReciclador1.isSelected()) {
+					jcms[0].jcmMessage[3] = 0x00;
+					jcms[0].id003_format((byte) 0x6, (byte) 0xC3, jcms[0].jcmMessage, false);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					jcms[1].jcmMessage[3] = 0x00;
+					jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
+				}
 			}
 		});
 
@@ -1881,10 +1991,17 @@ public class uba {
 		EventListenerClass c = new EventListenerClass();
 		c.addMyEventListener(new MyEventListener() {
 			public void myEventOccurred(MyEvent evt) {
+				//FIRE
 				System.out.println("myEventOccurred [" + evt.getSource() + "]");
 
 				switch(evt.getSource().toString()) {
 
+				case "escrow1":
+					RaspiAgent.Broadcast(DeviceEvent.DEP_ItemsInserted, "JCM 1");
+					break;
+				case "escrow2":
+					RaspiAgent.Broadcast(DeviceEvent.DEP_ItemsInserted, "JCM 2");
+					break;
 				case "bill1":							
 					int billType = jcms[0].bill;
 					switch(billType)
@@ -1913,13 +2030,15 @@ public class uba {
 					myObj.operatorId = Integer.parseInt(CurrentUser.loginUser);
 					myObj.notesDetails = "1x" + billType;
 
+					montoDepositado += billType;					
+					
 					Transactions.InsertaCashInOp(myObj);
 
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType,0, "","", "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType);
-
-					montoDepositado += billType;
+					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted, "" + montoDepositado);
+					
 
 					System.out.println("$" + montoDepositado);
 					lblOperacion2.setText("$" + montoDepositado);
@@ -2377,7 +2496,7 @@ public class uba {
 						jcms[1].jcmMessage[3] = 0x01;
 						jcms[1].id003_format((byte) 0x6, (byte) 0xC3, jcms[1].jcmMessage, false);
 					}
-					else{
+					else{						
 						System.out.println("Nada que dispensar del JCM[2]");
 						jcm2cass1Dispensed = true;
 						jcm2cass2Dispensed = true;
