@@ -10,13 +10,14 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
-import pentomino.cashmanagement.Transactions;
 import pentomino.common.AccountType;
+import pentomino.common.CryptUtils;
 import pentomino.common.DeviceEvent;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
+import rabbitClient.CmListener;
 import rabbitClient.RabbitMQConnection;
-import rabbitClient.Receiver;
+import rabbitClient.DtaListener;
 
 
 public class AgentsQueue  implements Runnable{
@@ -43,8 +44,9 @@ public class AgentsQueue  implements Runnable{
 
 		try {
 
-			DTAServer dtaServer = new DTAServer();
+			//DTAServer dtaServer = new DTAServer();
 
+			/*
 			String jsonString = "{\"data\":{\"Command\":\"LISTFILES\",\"Date\":\"Wed Apr 29 21:36:22 CDT 2020\",\"Parameter\":null,\"Extra\":\"\"}}";
 
 			SimpleRabbitEnvironmentVariablesContainer otherEnvVars = new Gson().fromJson(jsonString,
@@ -52,17 +54,18 @@ public class AgentsQueue  implements Runnable{
 
 			String response = dtaServer.ManageAgent(otherEnvVars.data.Command, otherEnvVars.data.Convert());
 			System.out.println(response);
+			*/
 
-			//Transactions cmTrans = new Transactions();
-
-			RaspiAgent.WriteToJournal("JCM_EVENT", 0, 0, "", "", "Prueba desde la frambuesita 2",
-					AccountType.Administrative, TransactionType.CashManagement);
-
-			RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "Monto Incorrecto Java Jcm");
-
-			Receiver myRec = new Receiver();
-
+			
+			DtaListener myRec = new DtaListener();
 			myRec.SetupRabbitListener();
+			
+			 /*
+			CmListener myCmListener = new CmListener();
+			myCmListener.SetupRabbitListener();
+			*/
+			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,7 +92,7 @@ public class AgentsQueue  implements Runnable{
 	
 private static void SendCommandToRabbit(AgentMessage payload) {
 		
-	System.out.println("AgentsQueue.SendCommandToRabbit");	
+	//System.out.println("AgentsQueue.SendCommandToRabbit");	
 	
 	//String atmId = Configuration.GetDirective("AtmId", "");
 		
@@ -134,6 +137,11 @@ private static void SendCommandToRabbit(AgentMessage payload) {
               
               channel.close();
               //rabbitConn.close();
+            }
+            else {
+            	//NO HAY RABBIT CREAMOS EL ARCHIVO DE QUEUE
+            	CryptUtils.SaveEntry(payload);
+            	
             }
         }catch(Exception e){
         	System.out.println("AQUI MAMAO");

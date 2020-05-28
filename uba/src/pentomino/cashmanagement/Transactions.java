@@ -19,6 +19,7 @@ import com.rabbitmq.client.Connection;
 
 import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.cashmanagement.vo.CashInOpVO;
+import pentomino.cashmanagement.vo.CmWithdrawal;
 import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.cashmanagement.vo.ExceptionVO;
 import pentomino.cashmanagement.vo.GenericMessageVO;
@@ -58,7 +59,7 @@ public class Transactions {
 
 				Channel channel = rabbitConn.createChannel();  
 
-				map = new HashMap<String,Object>(); 
+				map = new HashMap<String,Object>();
 				map.put("operation-type","insert-cashin");         
 
 				String replyQueueName = channel.queueDeclare().getQueue();
@@ -530,6 +531,95 @@ public class Transactions {
 
 	}
 
+	
+	//Equivalente a /Deposito  PUT
+		public static boolean ConfirmaRetiro(CmWithdrawal cmWithdrawalVo)  {
+
+			System.out.println("\n--- ConfirmaRetiro ---".toUpperCase());
+		
+			boolean retData = false;
+			
+			String corrId = UUID.randomUUID().toString();
+
+			Map<String,Object> map = null;		
+
+			GenericMessageVO requestMessage = new GenericMessageVO();
+			requestMessage.data = cmWithdrawalVo;			
+			
+			try{
+				Connection rabbitConn = RabbitMQConnection.getConnection();
+				if(rabbitConn != null){
+					Channel channel = rabbitConn.createChannel();  
+
+					map = new HashMap<String,Object>(); 
+					map.put("operation-type","process-withdrawal");         
+
+					String replyQueueName = channel.queueDeclare().getQueue();
+					//System.out.println("replyQueueName [" + replyQueueName + "]");
+
+					AMQP.BasicProperties props = new AMQP.BasicProperties
+							.Builder()
+							.correlationId(corrId)
+							.replyTo(replyQueueName)
+							.headers(map)
+							.build();
+
+					channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
+					System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
+
+					//Esperamos la respuesta
+
+					final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+
+					String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+						if (delivery.getProperties().getCorrelationId().equals(corrId)) {
+							response.offer(new String(delivery.getBody(), "UTF-8"));
+						}
+					}, consumerTag -> {
+					});
+				     
+
+					String result = response.take();
+
+					channel.basicCancel(ctag);
+
+					System.out.println("result [" + result + "]");
+					
+					if(!result.isEmpty()) {
+						if(result != ""){
+							Map responseMap = gson.fromJson(result, Map.class);
+							if(responseMap.containsKey("exception")){
+								return false;
+							}else{
+								if(responseMap.containsKey("success")) {
+									retData =  (Boolean) responseMap.get("success");
+								}
+							}
+
+						}else{
+							retData = false;
+						}
+
+					}else {
+						retData = false;
+					}					
+
+					channel.close();
+					
+					
+				}
+			}catch(Exception e){
+				System.out.println("ConfirmaDeposito Exception");				
+				e.printStackTrace();
+				retData = false;
+			}
+
+			return retData;            
+
+		}
+
+	
+	
 	public void close() throws IOException {
 		connection.close();
 	}

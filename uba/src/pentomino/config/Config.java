@@ -21,7 +21,7 @@ public class Config {
 	
 	private static void connect() { 
 			
-		System.out.println("Config.connect");
+		//System.out.println("Config.connect");
         try { 
         	
         	if(sqlLiteConn != null && !sqlLiteConn.isClosed())

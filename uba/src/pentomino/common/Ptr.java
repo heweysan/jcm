@@ -23,6 +23,7 @@ import org.cups4j.PrintJob;
 import org.cups4j.PrintRequestResult;
 
 import pentomino.cashmanagement.vo.DepositOpVO;
+import pentomino.jcmagent.RaspiAgent;
 
 public class Ptr {
 
@@ -33,38 +34,13 @@ public class Ptr {
 	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 	
 	
-	public static void main(String[] args) {
-		 logger.debug("PTR MAIN"); 
-		 String currentDirectory = System.getProperty("user.dir");
-		 System.out.println("The current working directory is " + currentDirectory);
-		 currencyFormat.setMaximumFractionDigits(0);
-		 Date date = new Date(); 
-    
-		    
-		 Map<String,String> mapa = new HashMap<String,String>();
-		 mapa.put("<fecha>",String.format("%1$-15s",dateFormat.format(date)));
-		 mapa.put("<hora>",String.format("%1$-15s",timeFormat.format(date)));
-		 mapa.put("<monto>",currencyFormat.format(1000));
-		 mapa.put("<b020>",String.format("%1$-5s"," 5"));
-		 mapa.put("<b050>",String.format("%1$-5s"," 7"));
-		 mapa.put("<b100>",String.format("%1$-5s"," 3"));
-		 mapa.put("<b200>",String.format("%1$-5s"," 1"));
-		 mapa.put("<b500>",String.format("%1$-5s"," 4"));
-		 mapa.put("<monto20>",String.format("%1$9s",currencyFormat.format(100)));
-		 mapa.put("<monto50>",String.format("%1$9s",currencyFormat.format(350)));
-		 mapa.put("<monto100>",String.format("%1$9s",currencyFormat.format(300)));
-		 mapa.put("<monto200>",String.format("%1$9s",currencyFormat.format(200)));
-		 mapa.put("<monto500>",String.format("%1$9s",currencyFormat.format(2000)));
-		 mapa.put("<referencia>","13579");
-		 mapa.put("<operacion>","23");
-		 mapa.put("<usuario>","007007");
-		print("deposito",mapa);		
+	public static void main(String[] args) {		
 	}
 	
 	
 	public static boolean printDeposit(DepositOpVO depositOpVO) {
 		
-		logger.debug("Prt.printDeposit"); 
+		System.out.println("Prt.printDeposit"); 
 		
 		Date date = new Date(); 
 		
@@ -94,9 +70,9 @@ public class Ptr {
 		
 	}
 	
-	public static boolean printDispense(int montoRetiro, String currentUser) {
+	public static boolean printDispense(double montoRetiro, String currentUser) {
 		
-		logger.debug("Prt.printDispense"); 
+		System.out.println("Prt.printDispense"); 
 		
 		Date date = new Date(); 
 		
@@ -145,15 +121,24 @@ public class Ptr {
 				
 			}
 			reader.close();
+		}
+		catch( FileNotFoundException fe) {
+			System.out.println("No se encontro el archivo [" + form + ".txt]");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+			return false;
+		
 		} catch (IOException e) {
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
 			e.printStackTrace();
+			return false;
 		}
 		
 		try {
 			fw.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
 			e.printStackTrace();
+			return false;
 		}
 		
 		
@@ -181,18 +166,30 @@ public class Ptr {
 			        
 			        URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
 			        CupsPrinter cupsPrinter = cupsClient.getPrinter(printerURL);
+			        for(String media : cupsPrinter.getMediaSupported())
+			        {
+			        	System.out.println("MEDIA [" + media + "]");
+			        }
+			        
 			        PrintJob printJob = new PrintJob.Builder(textStream).build();
 			        PrintRequestResult printRequestResult = cupsPrinter.print(printJob);
-			        if(printRequestResult.isSuccessfulResult())
+			        if(printRequestResult.isSuccessfulResult()) {
 			        	System.out.println("Impresion OK");
-			        else
+			        	RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, "");
+			        }
+			        else {
 			        	System.out.println("Impresion FAIL");
+			        	RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+			        }
 
-			        cupsClient.
+			        
 			    }catch (Exception ignored){
-			        System.out.println("YA MAMOTO ---------------");
-			    	ignored.printStackTrace();
-			    	System.out.println("-------------------------");
+			    	RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+			        if(ignored.getMessage() != null)
+			        	System.out.println(ignored.getMessage());
+			        else
+			        	ignored.printStackTrace();
+			    	
 			    }	
 				
 				

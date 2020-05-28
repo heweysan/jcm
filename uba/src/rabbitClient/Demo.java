@@ -25,7 +25,7 @@ public class Demo {
 			String response = dtaServer.ManageAgent(otherEnvVars.data.Command, otherEnvVars.data.Convert());
 			System.out.println("response [" + response + "]");
 
-			Receiver myRec = new Receiver();
+			DtaListener myRec = new DtaListener();
 
 			myRec.SetupRabbitListener();
 

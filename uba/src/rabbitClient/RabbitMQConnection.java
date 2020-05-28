@@ -13,10 +13,10 @@ public class RabbitMQConnection {
 
 	public static Connection getConnection(){
 
-		System.out.println("RabbitMQConnection.Connection");	
+		//System.out.println("RabbitMQConnection.Connection");	
 
 		if(conn != null && conn.isOpen()) {
-			System.out.println("RabbitMQConnection.Connection reusing connection");
+			//System.out.println("RabbitMQConnection.Connection reusing connection");
 			return conn;
 		}
 
@@ -30,6 +30,7 @@ public class RabbitMQConnection {
 		factory.setHost("11.50.0.7");
 		factory.setConnectionTimeout(5000);
 		factory.setPort(5672);
+		factory.setAutomaticRecoveryEnabled(true); //TODO: HEWEY AQUI QUE ES
 
 		try {
 			conn = factory.newConnection();
