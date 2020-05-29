@@ -133,7 +133,7 @@ private static void SendCommandToRabbit(AgentMessage payload) {
               props = props.builder().headers(map).build();
               channel.basicPublish(exchange, routingKey,true, props, gson.toJson(payload).getBytes());
               
-              System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
+              //System.out.println(" Message Sent '" + gson.toJson(payload) + "'"); 
               
               channel.close();
               //rabbitConn.close();

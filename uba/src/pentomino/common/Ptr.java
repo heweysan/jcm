@@ -34,7 +34,73 @@ public class Ptr {
 	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 	
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
+		
+		
+		try { 
+			
+			CupsClient cupsClient = new CupsClient("127.0.0.1", 631);
+
+			
+			
+	        
+	        URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
+	        CupsPrinter cupsPrinter = cupsClient.getPrinter(printerURL);
+	        
+	        System.out.println("Descriptipn[" + cupsPrinter.getDescription() + "]");
+	        	        
+	        System.out.println("MEDIA DEFAULT[" + cupsPrinter.getMediaDefault() + "]");
+			
+	        for(String media : cupsPrinter.getMediaSupported())
+	        {
+	        	System.out.println("MEDIA [" + media + "]");
+	        }       
+	        
+	        
+	        
+	        for(String media : cupsPrinter.getMimeTypesSupported())
+	        {
+	        	System.out.println("MIME [" + media + "]");
+	        }
+	       
+	        System.out.println("Resolution Default[" + cupsPrinter.getResolutionDefault() + "]");
+	        for(String media : cupsPrinter.getResolutionSupported())
+	        {
+	        	System.out.println("resolution [" + media + "]");
+	        }
+	       
+	        	        
+	        InputStream textStream = null; 
+			try { 
+				textStream = new FileInputStream("retiroout.txt"); 
+			} catch (FileNotFoundException ffne) { 
+				
+				System.out.println(ffne.getMessage());
+			} 
+			
+			PrintJob printJob = new PrintJob.Builder(textStream).build();
+			
+			System.out.println("page format [" + printJob.getPageFormat() + "]");
+			
+			System.out.println("page resolution [" +printJob.getResolution() + "]");
+			
+			Map<String,String> data = printJob.getAttributes();
+				
+			for (Map.Entry<String, String> entry : data.entrySet()) {
+		        System.out.println(entry.getKey() + ":" + entry.getValue());
+		    }
+			
+
+	        
+	    }catch (Exception ignored){
+	    	RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+	        if(ignored.getMessage() != null)
+	        	System.out.println(ignored.getMessage());
+	        else
+	        	ignored.printStackTrace();
+	    	
+	    }
+		
 	}
 	
 	
@@ -172,6 +238,10 @@ public class Ptr {
 			        }
 			        
 			        PrintJob printJob = new PrintJob.Builder(textStream).build();
+			        
+			        
+			        
+			        
 			        PrintRequestResult printRequestResult = cupsPrinter.print(printJob);
 			        if(printRequestResult.isSuccessfulResult()) {
 			        	System.out.println("Impresion OK");

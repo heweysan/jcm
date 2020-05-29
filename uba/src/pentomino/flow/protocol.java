@@ -819,11 +819,11 @@ public class protocol extends kermit {
 
 		case 0x40: // POWER_UP 0x40
 			if (mostrar)
-				System.out
-						.println(baitsToString("JCM[" + jcmId + "] processing POWER UP", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] processing POWER UP", jcmResponse, jcmResponse[1]));
 				// TODO: AQUI REVISAR AQUI
 			if(currentOpertion == jcmOperation.Startup) {
 				//DO NOTHING
+				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, SSR_E_SOFTWARE_VERSION, (byte) 0x00, (byte) 0x0,jcmMessage); // 0x93
 			}
 			else
 				id003_format((byte)5, protocol.SSR_VERSION, jcmMessage,true); // 0x88

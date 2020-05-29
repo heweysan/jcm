@@ -6,8 +6,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Comparator;
@@ -16,7 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -51,11 +48,11 @@ import pentomino.gui.ImagePanel;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.RaspiAgent;
 
-public class uba {
+public class Flow {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = LogManager.getLogger(uba.class.getName());
+	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
 
 	private static boolean isDebug = false;
 
@@ -105,12 +102,12 @@ public class uba {
 	 */
 	public static void main(String[] args) {
 
-		logger.info("UBA MAIN");
+		logger.info("FLOW MAIN");
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					uba window = new uba();
+					Flow window = new Flow();
 					window.mainFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -125,7 +122,7 @@ public class uba {
 	 * @throws TimeoutException
 	 * @throws IOException
 	 */
-	public uba() throws IOException, TimeoutException {
+	public Flow() throws IOException, TimeoutException {
 
 		//https://logging.apache.org/log4j/2.x/manual/layouts.html
 
@@ -141,17 +138,16 @@ public class uba {
 
 		Thread cmQueueThread = new Thread(cmQueue, "cmQueueThread");
 		cmQueueThread.start();
-		//HEWEY QUITAR 
-		//currentOperation = jcmOperation.Startup;
-
+		
+		
 		initialize();
 
-		//* TODO: TIO	
+		//TIO	
 		if(!isDebug) {
 			Thread tioThread = new Thread(miTio, "Tio Thread");
 			tioThread.start();	
 		}
-		//*/	
+		
 
 	}
 
@@ -181,20 +177,19 @@ public class uba {
 
 
 		ImagePanel panelIdle = new ImagePanel(new ImageIcon("./images/Scr7Inicio.png").getImage(),"panelIdle");
-		ImagePanel panelInicio = new ImagePanel(new ImageIcon("./images/Scr7SinRetiroAutorizado.png").getImage(),"panelInicio");
-		ImagePanel panelInicioConRetiro = new ImagePanel(new ImageIcon("./images/Scr7RetiroAutorizado.png").getImage(),"panelInicioConRetiro");
+		ImagePanel panelMenu = new ImagePanel(new ImageIcon("./images/Scr7SinRetiroAutorizado.png").getImage(),"panelMenu");
 		ImagePanel panelDeposito = new ImagePanel(new ImageIcon("./images/Scr7MontoIngresado.png").getImage(),"panelDeposito");
 		ImagePanel panelComandos = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelComandos");
-		ImagePanel panelLogin = new ImagePanel(new ImageIcon("./images/loginFormClean.png").getImage(),"panelLogin");
-		ImagePanel panelToken = new ImagePanel(new ImageIcon("./images/panelToken.png").getImage(),"panelToken");
+		ImagePanel panelLogin = new ImagePanel(new ImageIcon("./images/Scr7IdentificateDeposito.png").getImage(),"panelLogin");
+		ImagePanel panelToken = new ImagePanel(new ImageIcon("./images/Scr7ConfirmaToken.png").getImage(),"panelToken");
 		ImagePanel panelTerminamos = new ImagePanel(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
 		ImagePanel panelRetiraBilletes = new ImagePanel(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiraBilletes");
 		ImagePanel panelRetiroParcial = new ImagePanel(new ImageIcon("./images/Scr7RetiroParcial.png").getImage(),"panelRetiroParcial");
 		ImagePanel panelError = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelError");
+		ImagePanel panelOperacionCancelada = new ImagePanel(new ImageIcon("./images/Scr7OperacionCancelada.png").getImage(),"panelOperacionCancelada");
 
 		panelIdle.setLayout(null);
-		panelInicio.setLayout(null);
-		panelInicioConRetiro.setLayout(null);
+		panelMenu.setLayout(null);
 		panelDeposito.setLayout(null);
 		panelComandos.setLayout(null);
 		panelLogin.setLayout(null);
@@ -203,14 +198,14 @@ public class uba {
 		panelRetiraBilletes.setLayout(null);
 		panelRetiroParcial.setLayout(null);
 		panelError.setLayout(null);
-
-
+		panelOperacionCancelada.setLayout(null);
+				
+		
 
 		panelContainer.setLayout(cl);
 
 		panelContainer.add(panelIdle,"panelIdle");
-		panelContainer.add(panelInicio,"panelInicio");
-		panelContainer.add(panelInicioConRetiro,"panelInicioConRetiro");
+		panelContainer.add(panelMenu,"panelMenu");
 		panelContainer.add(panelDeposito,"panelDeposito");
 		panelContainer.add(panelComandos, "panelComandos");
 		panelContainer.add(panelLogin, "panelLogin");
@@ -219,6 +214,7 @@ public class uba {
 		panelContainer.add(panelRetiraBilletes,"panelRetiraBilletes");
 		panelContainer.add(panelRetiroParcial,"panelRetiroParcial");
 		panelContainer.add(panelError,"panelError");
+		panelContainer.add(panelError,"panelOperacionCancelada");
 
 		JLabel lblPanelError = new JLabel("New label");
 		lblPanelError.setHorizontalAlignment(SwingConstants.CENTER);
@@ -265,19 +261,20 @@ public class uba {
 		btnIdle.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnIdle.setOpaque(false);
 		btnIdle.setContentAreaFilled(false);
-		btnIdle.setBorderPainted(false);
-		btnIdle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				if(CmQueue.queueList.isEmpty())				
-					cl.show(panelContainer,"panelInicio");				
-				else
-					cl.show(panelContainer,"panelInicioConRetiro");
-
-				screenTimeout(10000);
-
-			}
-		});
+		btnIdle.setBorderPainted(false);		
 		panelIdle.add(btnIdle);
+		
+		/*		
+		Timer screenTimer = new Timer();
+		screenTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {				                
+				//Revisamos si hay retiros listos									
+				panelIdle.setBackground("./images/BTN7_NO.png");						
+				screenTimer.cancel();
+			}
+		}, 3000);
+		*/
 
 
 		JButton btnRetiraBilletesComandos = new JButton("COMANDOS");
@@ -319,8 +316,9 @@ public class uba {
 		panelPinPad.setBounds(936, 0, 946, 1080);
 		panelPinPad.setBorder(null);
 		panelPinPad.setLayout(null);
+	
 
-		JButton btnPinPad1 = new JButton();
+		JButton btnPinPad1 = new JButton(new ImageIcon("./images/BTN7_1.png"));
 		btnPinPad1.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad1.setBounds(50, 47, 260, 220);
 		btnPinPad1.setOpaque(false);
@@ -328,7 +326,7 @@ public class uba {
 		btnPinPad1.setBorderPainted(false);
 		panelPinPad.add(btnPinPad1);
 
-		JButton btnPinPad2 = new JButton();
+		JButton btnPinPad2 = new JButton(new ImageIcon("./images/BTN7_2.png"));
 		btnPinPad2.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad2.setBounds(359, 47, 262, 220);
 		btnPinPad2.setOpaque(false);
@@ -336,7 +334,7 @@ public class uba {
 		btnPinPad2.setBorderPainted(false);
 		panelPinPad.add(btnPinPad2);
 
-		JButton btnPinPad3 = new JButton();
+		JButton btnPinPad3 = new JButton(new ImageIcon("./images/BTN7_3.png"));
 		btnPinPad3.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad3.setBounds(674, 47, 262, 220);
 		btnPinPad3.setOpaque(false);
@@ -344,7 +342,7 @@ public class uba {
 		btnPinPad3.setBorderPainted(false);
 		panelPinPad.add(btnPinPad3);
 
-		JButton btnPinPad4 = new JButton();
+		JButton btnPinPad4 = new JButton(new ImageIcon("./images/BTN7_4.png"));
 		btnPinPad4.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad4.setBounds(50, 302, 259, 220);
 		btnPinPad4.setOpaque(false);
@@ -352,7 +350,7 @@ public class uba {
 		btnPinPad4.setBorderPainted(false);
 		panelPinPad.add(btnPinPad4);
 
-		JButton btnPinPad5 = new JButton();
+		JButton btnPinPad5 = new JButton(new ImageIcon("./images/BTN7_5.png"));
 		btnPinPad5.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad5.setBounds(359, 302, 262, 220);
 		btnPinPad5.setOpaque(false);
@@ -360,7 +358,7 @@ public class uba {
 		btnPinPad5.setBorderPainted(false);
 		panelPinPad.add(btnPinPad5);
 
-		JButton btnPinPad6 = new JButton();
+		JButton btnPinPad6 = new JButton(new ImageIcon("./images/BTN7_6.png"));
 		btnPinPad6.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad6.setBounds(674, 302, 262, 220);
 		btnPinPad6.setOpaque(false);
@@ -368,7 +366,7 @@ public class uba {
 		btnPinPad6.setBorderPainted(false);
 		panelPinPad.add(btnPinPad6);
 
-		JButton btnPinPad7 = new JButton();
+		JButton btnPinPad7 = new JButton(new ImageIcon("./images/BTN7_7.png"));
 		btnPinPad7.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad7.setBounds(50, 557, 259, 220);
 		btnPinPad7.setOpaque(false);
@@ -376,7 +374,7 @@ public class uba {
 		btnPinPad7.setBorderPainted(false);
 		panelPinPad.add(btnPinPad7);
 
-		JButton btnPinPad8 = new JButton();
+		JButton btnPinPad8 = new JButton(new ImageIcon("./images/BTN7_8.png"));
 		btnPinPad8.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad8.setBounds(359, 557, 267, 220);
 		btnPinPad2.setOpaque(false);
@@ -384,7 +382,7 @@ public class uba {
 		btnPinPad8.setBorderPainted(false);
 		panelPinPad.add(btnPinPad8);
 
-		JButton btnPinPad9 = new JButton();
+		JButton btnPinPad9 = new JButton(new ImageIcon("./images/BTN7_9.png"));
 		btnPinPad9.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad9.setBounds(664, 557, 272, 220);
 		btnPinPad9.setOpaque(false);
@@ -392,7 +390,7 @@ public class uba {
 		btnPinPad9.setBorderPainted(false);
 		panelPinPad.add(btnPinPad9);
 
-		JButton btnPinPad0 = new JButton();
+		JButton btnPinPad0 = new JButton(new ImageIcon("./images/BTN7_0.png"));
 		btnPinPad0.setFont(new Font("Tahoma", Font.BOLD, 44));
 		btnPinPad0.setBounds(359, 812, 267, 220);
 		btnPinPad0.setOpaque(false);
@@ -400,7 +398,7 @@ public class uba {
 		btnPinPad0.setBorderPainted(false);
 		panelPinPad.add(btnPinPad0);
 
-		JButton btnPinPadCancel = new JButton();
+		JButton btnPinPadCancel = new JButton(new ImageIcon("./images/BTN7_NO.png"));
 		btnPinPadCancel.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnPinPadCancel.setBackground(Color.RED);
 		btnPinPadCancel.setBounds(50, 812, 259, 220);
@@ -409,55 +407,30 @@ public class uba {
 		btnPinPadCancel.setBorderPainted(false);
 		panelPinPad.add(btnPinPadCancel);
 
-		JButton btnPinPadConfirmar = new JButton();		
+		JButton btnPinPadConfirmar = new JButton(new ImageIcon("./images/BTN7_OK.png"));		
 		btnPinPadConfirmar.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnPinPadConfirmar.setBackground(Color.GREEN);
 		btnPinPadConfirmar.setBounds(664, 812, 272, 220);
 		btnPinPadConfirmar.setOpaque(false);
 		btnPinPadConfirmar.setContentAreaFilled(false);
 		btnPinPadConfirmar.setBorderPainted(false);
-		panelPinPad.add(btnPinPadConfirmar);
-
-		BufferedImage btnAceptar = null;
-		try {
-			btnAceptar = ImageIO.read(new File("./images/BTN7Aceptar.png"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		BufferedImage btnDeposito = null;
-		try {
-			btnDeposito = ImageIO.read(new File("./images/BTN7Deposito.png"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-
-		BufferedImage btnRetiro = null;
-		try {
-			btnRetiro = ImageIO.read(new File("./images/BTN7Retiro.png"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		panelPinPad.add(btnPinPadConfirmar);	
 
 		/** - - - - - - - - - -   P A N E L   I N I C I O  S I N  R E T I R O - - - - - - - - - -  */
 
-		JButton btnMenuDeposito = new JButton(new ImageIcon(btnDeposito));
+		JButton btnMenuDeposito = new JButton(new ImageIcon("./images/BTN7Deposito.png"));
 		btnMenuDeposito.setOpaque(false);
 		btnMenuDeposito.setBounds(360, 502, 492, 498);
 		btnMenuDeposito.setOpaque(false);
 		btnMenuDeposito.setContentAreaFilled(false);
 		btnMenuDeposito.setBorderPainted(false);
-		panelInicio.add(btnMenuDeposito);
+		panelMenu.add(btnMenuDeposito);
 
 		final JLabel lblLoginUser = new JLabel("");
-		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 90));
+		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginUser.setBounds(257, 545, 496, 87);
+		lblLoginUser.setBounds(257, 625, 496, 87);
 		panelLogin.add(lblLoginUser);
 
 		JButton btnMenuComandos = new JButton("COMANDOS");
@@ -469,7 +442,7 @@ public class uba {
 				cl.show(panelContainer,"panelComandos");
 			}
 		});
-		panelInicio.add(btnMenuComandos);
+		panelMenu.add(btnMenuComandos);
 
 		JButton btnMenuSalir = new JButton("SALIR");
 		btnMenuSalir.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -480,57 +453,15 @@ public class uba {
 				System.exit(0);
 			}
 		});
-		panelInicio.add(btnMenuSalir);
-
-
-
-		/** - - - - - - - - - -   P A N E L   I N I C I O  C O N   R E T I R O - - - - - - - - - -  */
-
-		JButton btnInicioDepositoConRetiro = new JButton(new ImageIcon(btnDeposito));		
-		btnInicioDepositoConRetiro.setBounds(360, 502, 492, 498);
-		btnInicioDepositoConRetiro.setOpaque(false);
-		btnInicioDepositoConRetiro.setContentAreaFilled(false);
-		btnInicioDepositoConRetiro.setBorderPainted(false);
-		panelInicioConRetiro.add(btnInicioDepositoConRetiro);
-
-		final JLabel lblLoginUserConRetiro = new JLabel("");
-		lblLoginUserConRetiro.setFont(new Font("Tahoma", Font.BOLD, 90));
-		lblLoginUserConRetiro.setForeground(Color.WHITE);
-		lblLoginUserConRetiro.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginUserConRetiro.setBounds(257, 545, 496, 87);
-		panelInicioConRetiro.add(lblLoginUserConRetiro);
-
-		JButton btnIdleComandosConRetiro = new JButton("COMANDOS");
-		btnIdleComandosConRetiro.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnIdleComandosConRetiro.setBackground(Color.ORANGE);
-		btnIdleComandosConRetiro.setBounds(10, 11, 200, 73);
-		btnIdleComandosConRetiro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cl.show(panelContainer,"panelComandos");
-			}
-		});
-		panelInicioConRetiro.add(btnIdleComandosConRetiro);
-
-		JButton btnIdleSalirConRetiro = new JButton("SALIR");
-		btnIdleSalirConRetiro.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnIdleSalirConRetiro.setBackground(Color.RED);
-		btnIdleSalirConRetiro.setBounds(220, 11, 200, 73);
-		btnIdleSalirConRetiro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		panelInicioConRetiro.add(btnIdleSalirConRetiro);
-
-		JButton btnIdleRetiro = new JButton(new ImageIcon(btnRetiro));		
+		panelMenu.add(btnMenuSalir);
+		
+		JButton btnIdleRetiro = new JButton(new ImageIcon("./images/BTN7Retiro.png"));		
 		btnIdleRetiro.setOpaque(false);
 		btnIdleRetiro.setContentAreaFilled(false);
 		btnIdleRetiro.setBorderPainted(false);
 		btnIdleRetiro.setBounds(989, 502, 492, 498);
-
-		panelInicioConRetiro.add(btnIdleRetiro);
-
-
+		panelMenu.add(btnIdleRetiro);
+		
 		JButton btnTokenComandos = new JButton("COMANDOS");
 		btnTokenComandos.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnTokenComandos.setBackground(Color.ORANGE);
@@ -546,7 +477,7 @@ public class uba {
 		lblTokenConfirmacion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenConfirmacion.setForeground(Color.WHITE);
 		lblTokenConfirmacion.setFont(new Font("Tahoma", Font.BOLD, 50));
-		lblTokenConfirmacion.setBounds(190, 861, 583, 66);
+		lblTokenConfirmacion.setBounds(190, 773, 583, 66);
 		panelToken.add(lblTokenConfirmacion);
 
 		JLabel lblToken = new JLabel(".");
@@ -597,13 +528,6 @@ public class uba {
 		btnLoginSalir.setBounds(220, 11, 200, 73);
 		panelLogin.add(btnLoginSalir);
 
-		JLabel lblLoginMensaje = new JLabel("Para depositar, identif\u00EDcate");
-		lblLoginMensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblLoginMensaje.setForeground(Color.WHITE);
-		lblLoginMensaje.setBounds(89, 139, 837, 70);
-		panelLogin.add(lblLoginMensaje);
-
 
 		final JLabel lblLoginPassword = new JLabel("");
 		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
@@ -645,12 +569,8 @@ public class uba {
 
 		JButton btnDepositoIdle = new JButton("IDLE");
 		btnDepositoIdle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Revisamos si hay retiros listos
-				if(CmQueue.queueList.isEmpty())				
-					cl.show(panelContainer,"panelIdle");
-				else
-					cl.show(panelContainer,"panelInicioConRetiro");
+			public void actionPerformed(ActionEvent e) {				
+				cl.show(panelContainer,"panelIdle");
 			}
 		});
 		btnDepositoIdle.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -658,8 +578,8 @@ public class uba {
 		btnDepositoIdle.setBounds(1220, 11, 321, 136);
 		panelDeposito.add(btnDepositoIdle);
 
-		JButton btnOperacion1 = new JButton(new ImageIcon(btnAceptar));
-		btnOperacion1.setBounds(651, 757, 782, 159);
+		JButton btnOperacion1 = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
+		btnOperacion1.setBounds(547, 757, 782, 159);
 		panelDeposito.add(btnOperacion1);
 
 
@@ -717,19 +637,18 @@ public class uba {
 
 					//Terminamos el deposito, mandamos a la pantalla y regresamos a idle.
 					cl.show(panelContainer, "panelTerminamos");
+					screenTimeout(5000,"panelIdle");
+					/*
 					Timer screenTimer = new Timer();
 					screenTimer.schedule(new TimerTask() {
 						@Override
 						public void run() {				                
-							//Revisamos si hay retiros listos
-							if(CmQueue.queueList.isEmpty())				
-								cl.show(panelContainer,"panelInicio");
-							else
-								cl.show(panelContainer,"panelInicioConRetiro");
+							//Revisamos si hay retiros listos									
+							cl.show(panelContainer,"panelIdle");							
 							screenTimer.cancel();
 						}
 					}, 3000);
-
+					*/
 					break;
 				case Dispense:
 					break;
@@ -1494,8 +1413,52 @@ public class uba {
 			public void actionPerformed(ActionEvent e) {
 
 				switch(pinpadMode) {
-				case loginUser:
-					pinpadMode = PinpadMode.loginPassword;
+				case loginUser:					
+					if(currentOperation == jcmOperation.Deposit) {						
+						//No ha ingresado su user
+						if(CurrentUser.loginUser.length() <= 0) {						
+							pinpadMode = PinpadMode.loginUser;						
+							return;
+						}
+						
+						System.out.println("Validando usuario....");
+						//Validamos el usuario
+						CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
+						
+						if(user.success && user.isValid) {
+						
+								//Si es deposito ya lo dejamos pasar
+								pinpadMode = PinpadMode.None;
+								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
+								montoDepositado = 0;
+								cl.show(panelContainer, "panelDeposito");
+								Transactions.BorraCashInOPs("CI01GL0001");								
+						}
+						else {						
+							if(!user.success) {								
+									//Si es deposito ya lo dejamos pasar
+									pinpadMode = PinpadMode.None;
+									RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
+									montoDepositado = 0;
+									cl.show(panelContainer, "panelDeposito");
+									Transactions.BorraCashInOPs("CI01GL0001");
+							}
+							else {													
+								CurrentUser.loginUser = "";
+								CurrentUser.loginPassword = "";
+								lblLoginUser.setText("");
+								lblLoginPassword.setText("");
+								asteriscos = "";
+								pinpadMode = PinpadMode.loginUser;		
+								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+								panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
+								return;
+							}
+						}
+					}
+					else {
+						pinpadMode = PinpadMode.loginPassword;
+					}
 					break;
 				case loginPassword:
 
@@ -1535,16 +1498,23 @@ public class uba {
 							else {
 								CurrentUser.loginUser = "";
 								CurrentUser.loginPassword = "";
+								lblLoginUser.setText("");
+								lblLoginPassword.setText("");
+								asteriscos = "";
 								pinpadMode = PinpadMode.loginUser;	
-								lblLoginRow1.setText("¡Oh no!");
-								lblLoginMensaje.setText("No tiene permisos para hacer retiros.");
+								lblLoginRow1.setText("¡Oh no! No tiene permisos para hacer retiros.");
+								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
 							}
 							break;
 						default:
-							pinpadMode = PinpadMode.loginUser;
-							lblLoginRow1.setText("¡Oh no!");
-							lblLoginMensaje.setText("Algo salió mal, intenta nuevamente.");
+							lblLoginUser.setText("");
+							lblLoginPassword.setText("");
+							CurrentUser.loginUser = "";
+							CurrentUser.loginPassword = "";
+							asteriscos = "";
+							pinpadMode = PinpadMode.loginUser;							
+							panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 							break;
 						}
 					}
@@ -1561,28 +1531,35 @@ public class uba {
 								Transactions.BorraCashInOPs("CI01GL0001");
 								break;
 							case Dispense:								
+								lblLoginUser.setText("");
+								lblLoginPassword.setText("");
 								CurrentUser.loginUser = "";
 								CurrentUser.loginPassword = "";
-								pinpadMode = PinpadMode.loginUser;	
-								lblLoginRow1.setText("¡Oh no!");
-								lblLoginMensaje.setText("Algo salió mal, no podemos darte el servicio en este momento.");
+								asteriscos = "";
+								pinpadMode = PinpadMode.loginUser;								
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
-
+								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 								break;
 							default:
-								pinpadMode = PinpadMode.loginUser;
-								lblLoginRow1.setText("¡Oh no!");
-								lblLoginMensaje.setText("Algo salió mal, intenta nuevamente.");
+								lblLoginUser.setText("");
+								lblLoginPassword.setText("");
+								CurrentUser.loginUser = "";
+								CurrentUser.loginPassword = "";
+								asteriscos = "";
+								pinpadMode = PinpadMode.loginUser;								
+								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 								break;
 							}							
 						}
-						else {
-							lblLoginRow1.setText("¡Oh no!");
-							lblLoginMensaje.setText("       Están mal los datos.");
+						else {													
+							lblLoginUser.setText("");
+							lblLoginPassword.setText("");
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
+							asteriscos = "";
 							pinpadMode = PinpadMode.loginUser;		
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+							panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 							return;
 						}
 					}
@@ -1601,7 +1578,6 @@ public class uba {
 								public void run() {				                
 									cl.show(panelContainer, "panelTerminamos");
 
-
 									Ptr.print("SI",new HashMap<String,String>());
 									Timer screenTimer2 = new Timer();
 									screenTimer2.schedule(new TimerTask() {
@@ -1619,15 +1595,13 @@ public class uba {
 						}
 						else {
 
-
 							if(!validateDisepnse()) {
 								System.out.println("No se puede dispensar en este momento.");							
 								lblPanelError.setText("No se puede dispensar en este momento.");
 								cl.show(panelContainer, "panelError");
-								screenTimeout(5000);
+								screenTimeout(5000,"panelIdle");
 							}
 							else {
-
 
 								CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
 								cmWithdrawalVo.atmId = "CI01GL0001";
@@ -1643,9 +1617,13 @@ public class uba {
 									System.out.println("Usuario sin permiso para dispansar!");
 									lblPanelError.setText("Lo sentimos, no se pude procesar su petición");
 									cl.show(panelContainer, "panelError");
-									screenTimeout(5000);
+									screenTimeout(5000,"panelIdle");
 								}
 								else {
+									
+									//Quitamos el retiro del queue
+									CmQueue.queueList.removeFirst();
+									
 									//Preparamos el retiro
 									token = "";
 									pinpadMode = PinpadMode.None;
@@ -1709,10 +1687,9 @@ public class uba {
 
 					}
 					else {
+						panelToken.setBackground("./images/Scr7TokenIncorrecto.png");
 						CurrentUser.tokenConfirmacion = "";
-						lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
-
-						lblTokenMensaje.setText("Los valores no son iguales, verifica.");
+						lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);					
 					}
 
 
@@ -1960,6 +1937,7 @@ public class uba {
 
 		btnMenuDeposito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				screenTimerTimeout.cancel();
 				panelToken.remove(panelPinPad);
 				panelLogin.remove(panelPinPad);
 				panelLogin.add(panelPinPad);
@@ -1967,34 +1945,35 @@ public class uba {
 				CurrentUser.loginUser = "";
 				CurrentUser.loginPassword = "";
 				asteriscos = "";
-				lblLoginMensaje.setText("Para depositar, identifícate");
+				lblLoginUser.setLocation(257, 625);
 				lblLoginPassword.setText(CurrentUser.loginPassword);
 				lblLoginUser.setText(CurrentUser.loginUser);
 				currentOperation = jcmOperation.Deposit;
 				cl.show(panelContainer, "panelLogin");
+				screenTimeout(7000, "panelOperacionCancelada");
 			}
 		});
 
-		btnInicioDepositoConRetiro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panelToken.remove(panelPinPad);
-				panelLogin.remove(panelPinPad);
-				panelLogin.add(panelPinPad);
-				pinpadMode = PinpadMode.loginUser;
-				CurrentUser.loginUser = "";
-				CurrentUser.loginPassword = "";
-				asteriscos = "";
-				lblLoginMensaje.setText("Para depositar, identifícate");
-				lblLoginPassword.setText(CurrentUser.loginPassword);
-				lblLoginUser.setText(CurrentUser.loginUser);
-				currentOperation = jcmOperation.Deposit;
-				cl.show(panelContainer, "panelLogin");
+
+		btnIdle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				if(CmQueue.queueList.isEmpty()) {				
+					btnIdleRetiro.setEnabled(false);
+					cl.show(panelContainer,"panelMenu");
+				
+				}else {
+					btnIdleRetiro.setEnabled(true);
+					cl.show(panelContainer,"panelMenu");
+				}
+				screenTimeout(5000,"panelIdle");
+
 			}
 		});
-
+		
 		btnIdleRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-
+				
+				screenTimerTimeout.cancel();
 
 				panelToken.remove(panelPinPad);
 				panelLogin.remove(panelPinPad);
@@ -2003,12 +1982,17 @@ public class uba {
 				CurrentUser.loginUser = "";
 				CurrentUser.loginPassword = "";
 				asteriscos = "";
-				lblLoginMensaje.setText("Para retirar, identifícate");
+				
+				
+				lblLoginUser.setLocation(257, 525);
 				lblLoginPassword.setText(CurrentUser.loginPassword);
 				lblLoginUser.setText(CurrentUser.loginUser);
 				currentOperation = jcmOperation.Dispense;
+				
+				panelLogin.setBackground("./images/Scr7IngresaDatos.png");
 				cl.show(panelContainer, "panelLogin");
-
+				screenTimeout(7000, "panelOperacionCancelada");
+				
 				CmMessageRequest request =  CmQueue.queueList.getFirst();
 
 				token = "" + request.token;
@@ -2017,29 +2001,7 @@ public class uba {
 				lblToken.setText(token);
 				CurrentUser.tokenConfirmacion = "";	
 				CurrentUser.referencia = request.reference;
-				lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
-				/*
-				//Tomamos los datos del retiro que exite
-				CmMessageRequest request =  CmQueue.queueList.getFirst();
-
-				token = "" + request.token;
-				montoRetiro = request.amount;	
-
-				panelToken.remove(panelPinPad);
-				panelLogin.remove(panelPinPad);
-				panelToken.add(panelPinPad);
-
-				pinpadMode = PinpadMode.loginUser;
-				currentOperation = jcmOperation.Dispense;
-				lblLoginMensaje.setText("Para retirar, identifícate");
-				lblTokenMontoRetiro.setText("$" + montoRetiro);
-				lblToken.setText(token);
-				CurrentUser.tokenConfirmacion = "";	
-				CurrentUser.referencia = request.reference;
-				lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
-
-				cl.show(panelCont, "panelLogin");
-				 */
+				lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);				
 			}
 		});
 
@@ -2364,8 +2326,6 @@ public class uba {
 				jcms[contador].portId = commPort;
 				jcms[contador].baud = 9600;
 				jcms[contador].id = contador + 1;
-				//jcms[contador].openPort(commPort.getName().toString());
-
 				contador++;
 			}			
 		}
@@ -2375,6 +2335,8 @@ public class uba {
 			jcms[i].currentOpertion = jcmOperation.Startup;
 			jcms[i].openPort(jcms[i].portId.getName().toString());
 		}
+		
+		
 
 		cl.show(panelContainer, "panelIdle");	
 	}
@@ -2658,12 +2620,12 @@ public class uba {
 	}
 
 
-	public void screenTimeout(int milliseconds) {
+	public void screenTimeout(int milliseconds, String targetPanel) {
 		screenTimerTimeout = new Timer();
 		screenTimerTimeout.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				cl.show(panelContainer,"panelIdle");
+				cl.show(panelContainer,targetPanel);
 				screenTimerTimeout.cancel();
 			}
 		}, milliseconds);

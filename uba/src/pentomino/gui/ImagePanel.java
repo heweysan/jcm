@@ -31,6 +31,15 @@ public class ImagePanel extends JPanel{
 	  public void paintComponent(Graphics g) {
 	    g.drawImage(img, 0, 0, null);
 	  }
+	  
+		// Metodo donde le pasaremos la dirección de la imagen a cargar.
+		public void setBackground(String imagePath) {
+			
+			// Construimos la imagen y se la asignamos al atributo background.
+			this.setOpaque(false);
+			this.img = new ImageIcon(imagePath).getImage();
+			repaint();
+		}
 
 }
 
