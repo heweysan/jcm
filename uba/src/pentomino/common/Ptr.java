@@ -40,9 +40,6 @@ public class Ptr {
 		try { 
 			
 			CupsClient cupsClient = new CupsClient("127.0.0.1", 631);
-
-			
-			
 	        
 	        URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
 	        CupsPrinter cupsPrinter = cupsClient.getPrinter(printerURL);
@@ -51,21 +48,18 @@ public class Ptr {
 	        	        
 	        System.out.println("MEDIA DEFAULT[" + cupsPrinter.getMediaDefault() + "]");
 			
-	        for(String media : cupsPrinter.getMediaSupported())
-	        {
+	        for(String media : cupsPrinter.getMediaSupported()){
 	        	System.out.println("MEDIA [" + media + "]");
 	        }       
 	        
 	        
 	        
-	        for(String media : cupsPrinter.getMimeTypesSupported())
-	        {
+	        for(String media : cupsPrinter.getMimeTypesSupported()){
 	        	System.out.println("MIME [" + media + "]");
 	        }
 	       
 	        System.out.println("Resolution Default[" + cupsPrinter.getResolutionDefault() + "]");
-	        for(String media : cupsPrinter.getResolutionSupported())
-	        {
+	        for(String media : cupsPrinter.getResolutionSupported()){
 	        	System.out.println("resolution [" + media + "]");
 	        }
 	       

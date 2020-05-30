@@ -56,7 +56,6 @@ public class Flow {
 
 	private static boolean isDebug = false;
 
-	private static PinpadMode pinpadMode = PinpadMode.None;
 	private static jcmOperation currentOperation = jcmOperation.None;
 	private static DispenseStatus dispenseStatus = DispenseStatus.None; 
 
@@ -102,7 +101,7 @@ public class Flow {
 	 */
 	public static void main(String[] args) {
 
-		logger.info("FLOW MAIN");
+		logger.info("----- FLOW MAIN -----");
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -117,7 +116,7 @@ public class Flow {
 	}
 
 	/**
-	 * Create the application.
+	 * FLOW
 	 * 
 	 * @throws TimeoutException
 	 * @throws IOException
@@ -138,9 +137,6 @@ public class Flow {
 
 		Thread cmQueueThread = new Thread(cmQueue, "cmQueueThread");
 		cmQueueThread.start();
-		
-		
-		initialize();
 
 		//TIO	
 		if(!isDebug) {
@@ -148,6 +144,7 @@ public class Flow {
 			tioThread.start();	
 		}
 		
+		initialize();
 
 	}
 
@@ -158,9 +155,7 @@ public class Flow {
 
 
 		JcmGlobalData.maxRecyclableChash = Integer.parseInt(Config.GetDirective("maxRecyclableChash","1500"));
-
-
-		//JPanel panelCont = new JPanel();
+		
 		panelContainer.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelContainer.setBackground(Color.LIGHT_GRAY);
@@ -186,7 +181,7 @@ public class Flow {
 		ImagePanel panelRetiraBilletes = new ImagePanel(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiraBilletes");
 		ImagePanel panelRetiroParcial = new ImagePanel(new ImageIcon("./images/Scr7RetiroParcial.png").getImage(),"panelRetiroParcial");
 		ImagePanel panelError = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelError");
-		ImagePanel panelOperacionCancelada = new ImagePanel(new ImageIcon("./images/Scr7OperacionCancelada.png").getImage(),"panelOperacionCancelada");
+		ImagePanel panelOperacionCancelada = new ImagePanel(new ImageIcon("./images/Scr7OperacionCancelada.png").getImage(),"C");
 
 		panelIdle.setLayout(null);
 		panelMenu.setLayout(null);
@@ -199,8 +194,8 @@ public class Flow {
 		panelRetiroParcial.setLayout(null);
 		panelError.setLayout(null);
 		panelOperacionCancelada.setLayout(null);
-				
-		
+
+
 
 		panelContainer.setLayout(cl);
 
@@ -214,7 +209,7 @@ public class Flow {
 		panelContainer.add(panelRetiraBilletes,"panelRetiraBilletes");
 		panelContainer.add(panelRetiroParcial,"panelRetiroParcial");
 		panelContainer.add(panelError,"panelError");
-		panelContainer.add(panelError,"panelOperacionCancelada");
+		panelContainer.add(panelOperacionCancelada,"panelOperacionCancelada");
 
 		JLabel lblPanelError = new JLabel("New label");
 		lblPanelError.setHorizontalAlignment(SwingConstants.CENTER);
@@ -263,7 +258,7 @@ public class Flow {
 		btnIdle.setContentAreaFilled(false);
 		btnIdle.setBorderPainted(false);		
 		panelIdle.add(btnIdle);
-		
+
 		/*		
 		Timer screenTimer = new Timer();
 		screenTimer.schedule(new TimerTask() {
@@ -274,7 +269,7 @@ public class Flow {
 				screenTimer.cancel();
 			}
 		}, 3000);
-		*/
+		 */
 
 
 		JButton btnRetiraBilletesComandos = new JButton("COMANDOS");
@@ -316,7 +311,7 @@ public class Flow {
 		panelPinPad.setBounds(936, 0, 946, 1080);
 		panelPinPad.setBorder(null);
 		panelPinPad.setLayout(null);
-	
+
 
 		JButton btnPinPad1 = new JButton(new ImageIcon("./images/BTN7_1.png"));
 		btnPinPad1.setFont(new Font("Tahoma", Font.BOLD, 44));
@@ -454,14 +449,14 @@ public class Flow {
 			}
 		});
 		panelMenu.add(btnMenuSalir);
-		
-		JButton btnIdleRetiro = new JButton(new ImageIcon("./images/BTN7Retiro.png"));		
-		btnIdleRetiro.setOpaque(false);
-		btnIdleRetiro.setContentAreaFilled(false);
-		btnIdleRetiro.setBorderPainted(false);
-		btnIdleRetiro.setBounds(989, 502, 492, 498);
-		panelMenu.add(btnIdleRetiro);
-		
+
+		JButton btnMenuRetiro = new JButton(new ImageIcon("./images/BTN7Retiro.png"));		
+		btnMenuRetiro.setOpaque(false);
+		btnMenuRetiro.setContentAreaFilled(false);
+		btnMenuRetiro.setBorderPainted(false);
+		btnMenuRetiro.setBounds(989, 502, 492, 498);
+		panelMenu.add(btnMenuRetiro);
+
 		JButton btnTokenComandos = new JButton("COMANDOS");
 		btnTokenComandos.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnTokenComandos.setBackground(Color.ORANGE);
@@ -648,7 +643,7 @@ public class Flow {
 							screenTimer.cancel();
 						}
 					}, 3000);
-					*/
+					 */
 					break;
 				case Dispense:
 					break;
@@ -963,7 +958,7 @@ public class Flow {
 				if(chckbxReciclador2.isSelected()) {
 					jcms[1].id003_format((byte) 5, (byte) 0x88, jcms[0].jcmMessage, true);
 				}
-				
+
 			}
 		});
 		btnVersionRequest.setBounds(1269, 225, 218, 50);
@@ -1412,59 +1407,76 @@ public class Flow {
 		btnPinPadConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case loginUser:					
-					if(currentOperation == jcmOperation.Deposit) {						
+					System.out.println("loginUser");
+					if(currentOperation == jcmOperation.Deposit) {
+						System.out.println("loginUser deposit");
 						//No ha ingresado su user
 						if(CurrentUser.loginUser.length() <= 0) {						
-							pinpadMode = PinpadMode.loginUser;						
+							CurrentUser.pinpadMode = PinpadMode.loginUser;						
 							return;
 						}
-						
+
 						System.out.println("Validando usuario....");
 						//Validamos el usuario
 						CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
-						
+						System.out.println("loginUser success[" +  user.success +"] success [" + user.isValid + "]");
+
+
 						if(user.success && user.isValid) {
-						
-								//Si es deposito ya lo dejamos pasar
-								pinpadMode = PinpadMode.None;
-								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
-								montoDepositado = 0;
-								cl.show(panelContainer, "panelDeposito");
-								Transactions.BorraCashInOPs("CI01GL0001");								
+							System.out.println("loginUser deposit success y isvalid");
+							//Si es deposito ya lo dejamos pasar
+							CurrentUser.pinpadMode = PinpadMode.None;
+							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
+							montoDepositado = 0;
+							cl.show(panelContainer, "panelDeposito");
+							Transactions.BorraCashInOPs("CI01GL0001");								
 						}
 						else {						
-							if(!user.success) {								
-									//Si es deposito ya lo dejamos pasar
-									pinpadMode = PinpadMode.None;
-									RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
-									montoDepositado = 0;
-									cl.show(panelContainer, "panelDeposito");
-									Transactions.BorraCashInOPs("CI01GL0001");
+							if(!user.success) {
+								System.out.println("loginUser deposit success NO");
+								//Si es deposito ya lo dejamos pasar
+								CurrentUser.pinpadMode = PinpadMode.None;
+								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
+								montoDepositado = 0;
+								cl.show(panelContainer, "panelDeposito");
+								Transactions.BorraCashInOPs("CI01GL0001");
 							}
-							else {													
-								CurrentUser.loginUser = "";
-								CurrentUser.loginPassword = "";
-								lblLoginUser.setText("");
-								lblLoginPassword.setText("");
-								asteriscos = "";
-								pinpadMode = PinpadMode.loginUser;		
-								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
-								panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
+							else {	
+								if(++CurrentUser.loginAttempts >= 2) {
+									//Intentos superados
+									CurrentUser.loginUser = "";
+									CurrentUser.loginPassword = "";
+									CurrentUser.loginAttempts = 0;
+									CurrentUser.tokenAttempts = 0;
+									cl.show(panelContainer, "panelOperacionCancelada");
+									screenTimeout(5000, "panelIdle");
+								}
+								else {
+									CurrentUser.loginUser = "";
+									CurrentUser.loginPassword = "";
+									lblLoginUser.setText("");
+									lblLoginPassword.setText("");
+									asteriscos = "";
+									CurrentUser.pinpadMode = PinpadMode.loginUser;		
+									RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+									panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
+								}
 								return;
 							}
 						}
 					}
 					else {
-						pinpadMode = PinpadMode.loginPassword;
+						CurrentUser.pinpadMode = PinpadMode.loginPassword;
 					}
 					break;
 				case loginPassword:
 
+					System.out.println("loginPassword");
 					//No ha ingresado su user o pwd
 					if(CurrentUser.loginUser.length() <= 0 || CurrentUser.loginPassword.length() <= 0) {						
-						pinpadMode = PinpadMode.loginUser;						
+						CurrentUser.pinpadMode = PinpadMode.loginUser;						
 						return;
 					}
 
@@ -1472,71 +1484,80 @@ public class Flow {
 					//Validamos el usuario
 					CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
 
+					System.out.println("loginPassword success[" +  user.success +"] success [" + user.isValid + "]");
 
 					if(user.success && user.isValid) {
-						switch(currentOperation) {
-
-						case Deposit:
-							//Si es deposito ya lo dejamos pasar
-							pinpadMode = PinpadMode.None;
-							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
-							montoDepositado = 0;
-							cl.show(panelContainer, "panelDeposito");
-							Transactions.BorraCashInOPs("CI01GL0001");
-							break;
+						System.out.println("loginPassword success y isvalid");
+						switch(currentOperation) {						
 						case Dispense:
 							//Si puede retirar lo dejamos pasar
-							if(user.allowWithdrawals) {																
+							if(user.allowWithdrawals) {
+								//El unico que dejamos pasar para dispensado
+								System.out.println("loginPassword success y isvalid y dispense y allowsWithdrawals");
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
 								panelToken.remove(panelPinPad);
 								panelLogin.remove(panelPinPad);
 								panelToken.add(panelPinPad);
-								pinpadMode = PinpadMode.retiroToken;
-								cl.show(panelContainer, "panelToken");								
-								break;
+								CurrentUser.pinpadMode = PinpadMode.retiroToken;
+								panelToken.setBackground("./images/Scr7ConfirmaToken.png");
+								cl.show(panelContainer, "panelToken");
 							}
 							else {
+								System.out.println("loginPassword success y isvalid y dispense y NO allowsWithdrawals");
 								CurrentUser.loginUser = "";
 								CurrentUser.loginPassword = "";
 								lblLoginUser.setText("");
 								lblLoginPassword.setText("");
 								asteriscos = "";
-								pinpadMode = PinpadMode.loginUser;	
-								lblLoginRow1.setText("¡Oh no! No tiene permisos para hacer retiros.");
-								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
-								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+								CurrentUser.pinpadMode = PinpadMode.loginUser;
+
+								if(++CurrentUser.loginAttempts >= 2) {
+									cl.show(panelContainer, "panelOperacionCancelada");
+									screenTimeout(5000, "panelIdle");
+								}
+								else {	
+									lblLoginRow1.setText("¡Oh no! No tiene permisos para hacer retiros.");
+									panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
+									RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+								}
 							}
 							break;
 						default:
+							System.out.println("Validando usuario.... 4");
 							lblLoginUser.setText("");
 							lblLoginPassword.setText("");
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
 							asteriscos = "";
-							pinpadMode = PinpadMode.loginUser;							
+							CurrentUser.pinpadMode = PinpadMode.loginUser;							
 							panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 							break;
 						}
 					}
 					else {						
 						if(!user.success) {
+							System.out.println("loginPassword success NO");
+
 							switch(currentOperation) {
 
 							case Deposit:
+								System.out.println("Validando usuario.... 6");
 								//Si es deposito ya lo dejamos pasar
-								pinpadMode = PinpadMode.None;
+								CurrentUser.pinpadMode = PinpadMode.None;
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 								montoDepositado = 0;
 								cl.show(panelContainer, "panelDeposito");
 								Transactions.BorraCashInOPs("CI01GL0001");
 								break;
 							case Dispense:								
+								System.out.println("Validando usuario.... 7");
 								lblLoginUser.setText("");
 								lblLoginPassword.setText("");
 								CurrentUser.loginUser = "";
 								CurrentUser.loginPassword = "";
 								asteriscos = "";
-								pinpadMode = PinpadMode.loginUser;								
+								CurrentUser.pinpadMode = PinpadMode.loginUser;
+								CurrentUser.loginAttempts++;
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 								break;
@@ -1546,87 +1567,99 @@ public class Flow {
 								CurrentUser.loginUser = "";
 								CurrentUser.loginPassword = "";
 								asteriscos = "";
-								pinpadMode = PinpadMode.loginUser;								
+								CurrentUser.pinpadMode = PinpadMode.loginUser;								
 								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 								break;
 							}							
 						}
-						else {													
+						else {
+
+							System.out.println("loginPassword success isValid NO");
+
+
 							lblLoginUser.setText("");
 							lblLoginPassword.setText("");
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
 							asteriscos = "";
-							pinpadMode = PinpadMode.loginUser;		
-							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
-							panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
+							if(++CurrentUser.loginAttempts >= 2) {
+								cl.show(panelContainer, "panelOperacionCancelada");
+								screenTimeout(5000, "panelIdle");
+							}else {
+
+								CurrentUser.pinpadMode = PinpadMode.loginUser;		
+								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
+								panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
+							}
 							return;
 						}
 					}
 
 					break;
 				case retiroToken:
-					System.out.println("VALIDAMOS QUE SEAN IGUALES");
 
-					System.out.println(token + " - " + CurrentUser.tokenConfirmacion);
+					System.out.println("token["  + token + "] valdiation[" + CurrentUser.tokenConfirmacion + "]");
 					if(token.equalsIgnoreCase(CurrentUser.tokenConfirmacion)) {
 
-						if(isDebug) {													
-							Timer screenTimer = new Timer();
-							screenTimer.schedule(new TimerTask() {
-								@Override
-								public void run() {				                
-									cl.show(panelContainer, "panelTerminamos");
-
-									Ptr.print("SI",new HashMap<String,String>());
-									Timer screenTimer2 = new Timer();
-									screenTimer2.schedule(new TimerTask() {
-										@Override
-										public void run() {				                
-											//Revisamos si hay retiros listos
-											cl.show(panelContainer,"panelIdle");											
-											screenTimer.cancel();
-											screenTimer2.cancel();
-										}
-									}, 3000);
-
-								}
-							}, 3000);
+						if(!validateDispense()) {
+							System.out.println("No se puede dispensar en este momento.");							
+							lblPanelError.setText("No se puede dispensar en este momento.");
+							cl.show(panelContainer, "panelError");
+							screenTimeout(5000,"panelIdle");
 						}
 						else {
 
-							if(!validateDisepnse()) {
-								System.out.println("No se puede dispensar en este momento.");							
-								lblPanelError.setText("No se puede dispensar en este momento.");
+							CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
+							cmWithdrawalVo.atmId = "CI01GL0001";
+							cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.loginUser);
+							cmWithdrawalVo.password = CurrentUser.loginPassword;
+							cmWithdrawalVo.reference = CurrentUser.referencia;
+							cmWithdrawalVo.token = CurrentUser.tokenConfirmacion;
+							cmWithdrawalVo.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+							cmWithdrawalVo.amount = JcmGlobalData.montoDispensar;
+
+
+							System.out.println("ConfirmaRetiro");
+							if(!Transactions.ConfirmaRetiro(cmWithdrawalVo)) {
+								System.out.println("Usuario sin permiso para dispensar!");
+								lblPanelError.setText("Lo sentimos, no se pude procesar su petición");
 								cl.show(panelContainer, "panelError");
 								screenTimeout(5000,"panelIdle");
 							}
 							else {
 
-								CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
-								cmWithdrawalVo.atmId = "CI01GL0001";
-								cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.loginUser);
-								cmWithdrawalVo.password = CurrentUser.loginPassword;
-								cmWithdrawalVo.reference = CurrentUser.referencia;
-								cmWithdrawalVo.token = CurrentUser.tokenConfirmacion;
-								cmWithdrawalVo.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-								cmWithdrawalVo.amount = JcmGlobalData.montoDispensar;
+								//Quitamos el retiro del queue
+								CmQueue.queueList.removeFirst();
 
-								System.out.println("ConfirmaRetiro");
-								if(!Transactions.ConfirmaRetiro(cmWithdrawalVo)) {
-									System.out.println("Usuario sin permiso para dispansar!");
-									lblPanelError.setText("Lo sentimos, no se pude procesar su petición");
-									cl.show(panelContainer, "panelError");
-									screenTimeout(5000,"panelIdle");
+
+								if(isDebug) {													
+									Timer screenTimer = new Timer();
+									screenTimer.schedule(new TimerTask() {
+										@Override
+										public void run() {				                
+											cl.show(panelContainer, "panelTerminamos");
+
+											Ptr.print("SI",new HashMap<String,String>());
+											Timer screenTimer2 = new Timer();
+											screenTimer2.schedule(new TimerTask() {
+												@Override
+												public void run() {				                
+													//Revisamos si hay retiros listos
+													cl.show(panelContainer,"panelIdle");											
+													screenTimer.cancel();
+													screenTimer2.cancel();
+												}
+											}, 3000);
+
+										}
+									}, 3000);
 								}
 								else {
-									
-									//Quitamos el retiro del queue
-									CmQueue.queueList.removeFirst();
-									
+
+
 									//Preparamos el retiro
 									token = "";
-									pinpadMode = PinpadMode.None;
+									CurrentUser.pinpadMode = PinpadMode.None;
 
 									switch(dispenseStatus) {
 									case Complete:
@@ -1680,16 +1713,31 @@ public class Flow {
 											}
 										}
 									}, 1000,2000);
-
 								}
 							}
+
 						}
+
 
 					}
 					else {
-						panelToken.setBackground("./images/Scr7TokenIncorrecto.png");
-						CurrentUser.tokenConfirmacion = "";
-						lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);					
+
+						CurrentUser.tokenConfirmacion = "";						
+						lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
+
+						if( ++CurrentUser.tokenAttempts >= 2) {
+							//Intentos superados
+							CurrentUser.loginUser = "";
+							CurrentUser.loginPassword = "";
+							CurrentUser.loginAttempts = 0;
+							CurrentUser.tokenAttempts = 0;
+							cl.show(panelContainer, "panelOperacionCancelada");
+							screenTimeout(5000, "panelIdle");
+						}
+						else {						
+							panelToken.setBackground("./images/Scr7TokenIncorrecto.png");
+						}
+
 					}
 
 
@@ -1699,7 +1747,7 @@ public class Flow {
 
 				}			
 
-				//pinpadMode = PinpadMode.None;
+				//CurrentUser.pinpadMode = PinpadMode.None;
 			}
 		});
 
@@ -1716,7 +1764,7 @@ public class Flow {
 				lblLoginUser.setText("");
 				lblLoginPassword.setText("");
 
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginUser:			
@@ -1741,7 +1789,7 @@ public class Flow {
 
 		btnPinPad1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					System.out.println("NINGUNO PAPA!");
 					break;
@@ -1762,7 +1810,7 @@ public class Flow {
 
 		btnPinPad2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1782,7 +1830,7 @@ public class Flow {
 
 		btnPinPad3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1802,7 +1850,7 @@ public class Flow {
 
 		btnPinPad4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1822,7 +1870,7 @@ public class Flow {
 
 		btnPinPad5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1842,7 +1890,7 @@ public class Flow {
 
 		btnPinPad6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1861,7 +1909,7 @@ public class Flow {
 
 		btnPinPad7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1880,7 +1928,7 @@ public class Flow {
 
 		btnPinPad8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1899,7 +1947,7 @@ public class Flow {
 
 		btnPinPad9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1918,7 +1966,7 @@ public class Flow {
 
 		btnPinPad0.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(pinpadMode) {
+				switch(CurrentUser.pinpadMode) {
 				case None:
 					break;
 				case loginPassword:
@@ -1941,14 +1989,17 @@ public class Flow {
 				panelToken.remove(panelPinPad);
 				panelLogin.remove(panelPinPad);
 				panelLogin.add(panelPinPad);
-				pinpadMode = PinpadMode.loginUser;
+				CurrentUser.pinpadMode = PinpadMode.loginUser;
 				CurrentUser.loginUser = "";
 				CurrentUser.loginPassword = "";
+				CurrentUser.loginAttempts = 0;
+				CurrentUser.tokenAttempts = 0;
 				asteriscos = "";
 				lblLoginUser.setLocation(257, 625);
 				lblLoginPassword.setText(CurrentUser.loginPassword);
 				lblLoginUser.setText(CurrentUser.loginUser);
 				currentOperation = jcmOperation.Deposit;
+				panelLogin.setBackground("./images/Scr7IdentificateDeposito.png");
 				cl.show(panelContainer, "panelLogin");
 				screenTimeout(7000, "panelOperacionCancelada");
 			}
@@ -1958,41 +2009,42 @@ public class Flow {
 		btnIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				if(CmQueue.queueList.isEmpty()) {				
-					btnIdleRetiro.setEnabled(false);
+					btnMenuRetiro.setEnabled(false);
 					cl.show(panelContainer,"panelMenu");
-				
+
 				}else {
-					btnIdleRetiro.setEnabled(true);
+					btnMenuRetiro.setEnabled(true);
 					cl.show(panelContainer,"panelMenu");
 				}
 				screenTimeout(5000,"panelIdle");
 
 			}
 		});
-		
-		btnIdleRetiro.addActionListener(new ActionListener() {
+
+		btnMenuRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-				
+
 				screenTimerTimeout.cancel();
 
 				panelToken.remove(panelPinPad);
 				panelLogin.remove(panelPinPad);
 				panelLogin.add(panelPinPad);
-				pinpadMode = PinpadMode.loginUser;
+				CurrentUser.pinpadMode = PinpadMode.loginUser;
 				CurrentUser.loginUser = "";
 				CurrentUser.loginPassword = "";
+				CurrentUser.loginAttempts = 0;
+				CurrentUser.tokenAttempts = 0;
 				asteriscos = "";
-				
-				
+
 				lblLoginUser.setLocation(257, 525);
 				lblLoginPassword.setText(CurrentUser.loginPassword);
 				lblLoginUser.setText(CurrentUser.loginUser);
 				currentOperation = jcmOperation.Dispense;
-				
+
 				panelLogin.setBackground("./images/Scr7IngresaDatos.png");
 				cl.show(panelContainer, "panelLogin");
 				screenTimeout(7000, "panelOperacionCancelada");
-				
+
 				CmMessageRequest request =  CmQueue.queueList.getFirst();
 
 				token = "" + request.token;
@@ -2335,8 +2387,8 @@ public class Flow {
 			jcms[i].currentOpertion = jcmOperation.Startup;
 			jcms[i].openPort(jcms[i].portId.getName().toString());
 		}
-		
-		
+
+
 
 		cl.show(panelContainer, "panelIdle");	
 	}
@@ -2362,7 +2414,7 @@ public class Flow {
 
 		screenTimerTimeout.cancel();
 
-		switch(pinpadMode) {
+		switch(CurrentUser.pinpadMode) {
 		case None:
 			break;
 		case loginUser:
@@ -2399,8 +2451,7 @@ public class Flow {
 	}
 
 
-	boolean validateDisepnse() {
-
+	boolean validateDispense() {
 
 		if(isDebug) {
 			dispenseStatus = DispenseStatus.Complete;
@@ -2689,8 +2740,6 @@ public class Flow {
 				}            	
 			}
 		}, 1000,1000);
-
-
 	}
 
 	class DenominacionSorter implements Comparator<JcmCassette> 

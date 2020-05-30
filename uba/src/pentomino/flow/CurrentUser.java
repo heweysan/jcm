@@ -18,8 +18,8 @@ public class CurrentUser {
 	static String 		tokenConfirmacion = "";
 	static int 			montoDepositado = 0;	
 	static String 		referencia = "";
-	static int 			inentosLogin = 0;
-	static int 			inentosToken = 0;
+	static int 			loginAttempts = 0;
+	static int 			tokenAttempts = 0;
 	static PinpadMode 	pinpadMode = PinpadMode.None;
 	/**
 	 * @param args

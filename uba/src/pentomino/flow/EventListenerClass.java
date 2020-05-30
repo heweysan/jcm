@@ -1,16 +1,8 @@
 package pentomino.flow;
 import java.util.EventListener;
-import java.util.EventObject;
+
 import javax.swing.event.EventListenerList;
 
-/*
-@SuppressWarnings("serial")
-class MyEvent extends EventObject {
-  public MyEvent(Object source) {
-    super(source);
-  }
-}
-*/
 interface MyEventListener extends EventListener {
   public void myEventOccurred(MyEvent evt);
 }

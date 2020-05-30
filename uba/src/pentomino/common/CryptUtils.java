@@ -1,27 +1,11 @@
 package pentomino.common;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-
 import com.google.gson.Gson;
-
 import pentomino.jcmagent.AgentMessage;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 
 public class CryptUtils {
 

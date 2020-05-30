@@ -20,8 +20,7 @@ public class Config {
 	private static Connection sqlLiteConn = null;
 	
 	private static void connect() { 
-			
-		//System.out.println("Config.connect");
+	
         try { 
         	
         	if(sqlLiteConn != null && !sqlLiteConn.isClosed())
@@ -30,7 +29,6 @@ public class Config {
             String url = "jdbc:sqlite:./Pentomino.Config.db3";
            
             sqlLiteConn = DriverManager.getConnection(url);           
-            
             
         } catch (SQLException e) {
         	if(e.getMessage() != null)
