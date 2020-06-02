@@ -219,7 +219,7 @@ public class protocol extends kermit {
 		}
 	}
 
-	void id003_format(byte LNG, byte CMD, byte[] DATA, boolean zeroData) {
+	public void id003_format(byte LNG, byte CMD, byte[] DATA, boolean zeroData) {
 
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
@@ -240,7 +240,7 @@ public class protocol extends kermit {
 		DATA[LNG - 1] = (byte) ((chkres >> 8) & 0xFF);
 	}
 
-	void id003_format_ext(byte LNG, byte EXT_CMD, byte UNIT, byte CMD, byte DATA1, byte DATA2, byte[] DATA) {
+	public void id003_format_ext(byte LNG, byte EXT_CMD, byte UNIT, byte CMD, byte DATA1, byte DATA2, byte[] DATA) {
 
 		DATA[0] = SYNC;
 		DATA[1] = LNG;
@@ -360,7 +360,7 @@ public class protocol extends kermit {
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
 					//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
-					if((JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) > JcmGlobalData.maxRecyclableChash) {
+					if((JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) > JcmGlobalData.maxRecyclableCash) {
 						id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
 					}
 					else {
@@ -374,7 +374,7 @@ public class protocol extends kermit {
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
 					//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
-					if((JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) > JcmGlobalData.maxRecyclableChash) {
+					if((JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) > JcmGlobalData.maxRecyclableCash) {
 						id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
 					}
 					else {

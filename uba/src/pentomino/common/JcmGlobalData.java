@@ -8,7 +8,7 @@ public class JcmGlobalData {
 	/***
 	 * El maximo de dinero antes de que se vaya a cajita directo.
 	 */
-	public static int maxRecyclableChash = 0;
+	public static int maxRecyclableCash = 0;
 	public static int totalCashInRecyclers1 = 0;
 	public static int totalCashInRecyclers2 = 0;
 	

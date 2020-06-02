@@ -30,6 +30,18 @@ public class CurrentUser {
 	}
 	
 	
+	public static void cleanPinpadData(PinpadMode ppMode) {
+		pinpadMode = ppMode;
+		cleanPinpadData();		
+	}
+	
+	public static void cleanPinpadData() {
+		loginUser = "";
+		loginPassword = "";
+		loginAttempts = 0;
+		tokenAttempts = 0;
+		tokenConfirmacion = "";
+	}
 	
 
 }

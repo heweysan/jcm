@@ -1,11 +1,23 @@
 package pentomino.jcmagent;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.rabbitmq.client.AMQP.BasicProperties;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.config.Config;
+import rabbitClient.Producer;
+import rabbitClient.RabbitMQConnection;
 
 public class DTAServer {
 
+	private static Gson gson = new Gson();
 	
 	 public String ManageAgent(String function, EnvironmentVariables envVars) {
          //Logger.DebugFormat("Received DTA function: {0}", function);
@@ -234,8 +246,8 @@ public class DTAServer {
 
 
 	private String GetConfigDirectivesKeys() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return Config.GetAllDirectives();
 	}
 
 
@@ -253,7 +265,7 @@ public class DTAServer {
 
 	private String GetPulsarConfigKeys() {
 		// TODO Auto-generated method stub
-		return null;
+		return Config.GetAllPulsarParams();
 	}
 
 
@@ -272,7 +284,67 @@ public class DTAServer {
 
 	
 	
-	
+	public void SetupRabbitListener() {
+		 
+		 System.out.println("Receiver.SetupRabbitListener");
+		 
+		 //TODO: Poner validacion de connection status 
+		 
+		 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
+		 String topicQueue = "dta.command.CIXXGS0020";  //CI99XE0001
+		 String atmId = Config.GetDirective("AtmId", "");
+
+		 Map<String,Object> map = null;
+		 BasicProperties props = null;
+		 Channel channel;
+		 try {
+			/*
+			  var exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
+	            var topicQueue = Config.GetDirective("BusinessCommandTopicQueue", "dta.command." + atmId);
+	            var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" };
+			 */
+			
+			Connection connection = RabbitMQConnection.getConnection();
+			channel = connection.createChannel();
+			props = new BasicProperties();
+	        map = new HashMap<String,Object>(); 
+	        map.put("command.dta.CIXXGS0020","*.dta.broadcast");      
+	        props = props.builder().headers(map).build();
+	        
+	        channel.queueDeclare(topicQueue, true, false, false, new HashMap<String,Object>());
+	        
+	        /* var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" }; */
+			channel.queueBind(topicQueue, exchange, "command.dta.CIXXGS0020");
+			channel.queueBind(topicQueue, exchange, "*.dta.broadcast");
+			
+		     DeliverCallback deliverCallback = (consumerTag, message) -> {
+		         String body = new String(message.getBody(), "UTF-8");
+		         
+		         String replyToQueue = message.getProperties().getReplyTo();
+		         
+		         System.out.println(" [x] consumerTag '" + consumerTag + "'");	         
+		         System.out.println(" [x] Received '" + body + "'");
+		         System.out.println(" [x] replyToQueue '" + replyToQueue + "'");	
+		         
+		         SimpleRabbitEnvironmentVariablesContainer responseMap = gson.fromJson(body, SimpleRabbitEnvironmentVariablesContainer.class);
+					
+				String comando = responseMap.getData().Command;
+				System.out.println(" [x] data '" + comando + "'");  
+				
+		         String response = ManageAgent(comando, new EnvironmentVariables());
+		         
+		         Producer myProd = new Producer(); 
+		         myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);         
+		         
+		     };
+		     channel.basicConsume("dta.command.CIXXGS0020", true, deliverCallback, consumerTag -> { });
+		     
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+	 }
 	
 	
 	

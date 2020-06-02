@@ -15,8 +15,10 @@ public class Demo {
 		System.out.println("Demo.main");
 		
 		try {
+			/*
+			
 			DTAServer dtaServer = new DTAServer();
-
+			
 			String jsonString = "{\"data\":{\"Command\":\"LISTFILES\",\"Date\":\"Wed Apr 29 21:36:22 CDT 2020\",\"Parameter\":null,\"Extra\":\"\"}}";
 
 			SimpleRabbitEnvironmentVariablesContainer otherEnvVars = new Gson().fromJson(jsonString,
@@ -24,10 +26,12 @@ public class Demo {
 
 			String response = dtaServer.ManageAgent(otherEnvVars.data.Command, otherEnvVars.data.Convert());
 			System.out.println("response [" + response + "]");
-
+			
 			DtaListener myRec = new DtaListener();
 
 			myRec.SetupRabbitListener();
+			
+			*/
 
 		} catch (Exception e) {
 			e.printStackTrace();

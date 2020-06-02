@@ -2,20 +2,12 @@ package pentomino.jcmagent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.google.gson.Gson;
-import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-
 import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
-import rabbitClient.RabbitMQConnection;
 
 public class RaspiAgent {
 
@@ -28,12 +20,6 @@ public class RaspiAgent {
 	@throws what kind of exception does this method throw
 	*/
 	public static void WriteToJournal(String evt, double amount, double available, String authId, String accountId, String extraData,AccountType acctType, TransactionType type) {
-		
-		/*  EjEMPLO DESDE FLOW
-			JcmWriteToJournal("Withdrawal", 0, 0,"","CardNumber", "", "0", "MXN", "",  "",
-					"FullAtmId", "Withdrawal PresentFailed Timeout", AccountType.Checkings, pentomino.common.TransactionType.ControlMessage
-					, "", "Timeout", 1006, "");
-		*/	
 		
 		String atmId = Config.GetDirective("AtmId", "");
 		
@@ -85,8 +71,7 @@ public class RaspiAgent {
         values.add(extraData);        
         values.add(surcharge);
         values.add(denomination);
-        values.add(arqc);
-        
+        values.add(arqc);        
         values.add(arpc);
         values.add(Integer.toString(acctType.ordinal()));
         values.add(Integer.toString(type.ordinal()));
@@ -103,8 +88,6 @@ public class RaspiAgent {
         values.add(cardHash);
         values.add(cardCrypto);
  			
-		//AgentMessage agentMsg = new AgentMessage(switchAtmId, myEntry); //CIXXGS0020
-		
         AgentMessage agentMsg = new AgentMessage(); //CIXXGS0020 
         
         agentMsg.Agent = "eja";
@@ -117,12 +100,9 @@ public class RaspiAgent {
 		agentMsg.Command = "add";
 		agentMsg.AtmId = switchAtmId;
 		
-		//System.out.println(gson.toJson(agentMsg));
+		System.out.println(gson.toJson(agentMsg));
 		
-		AgentsQueue.bq.add(agentMsg);
-				
-		//SendCommandToRabbit(agentMsg);
-			
+		AgentsQueue.bq.add(agentMsg);			
 		
 	}
 	

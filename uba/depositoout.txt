@@ -1,8 +1,8 @@
 .                            .
 	      DEPOSITO
 		  
-FECHA:    29/05/2020     
-HORA:     18:03:14       
+FECHA:    02/06/2020     
+HORA:     15:51:45       
 
 MONTO:	  $3,720
 
@@ -18,3 +18,37 @@ OPERACION:  23
 USUARIO:    007007
 
 .                            .
+
+4296
+
+2020-02-12 12:03:29.7848588
+
+--------------------------
+gayosso: 
+num cliente:   1182301
+num contrato:  102090153
+30%  20% a meses
+roberto de la cruz 2481
+
+
+https://boinc.bakerlab.org/rosetta/home.php  a8Y
+
+901.66 gas paseos
+
+
+$2262.31  
+$40656.57
+-------------------------------
+
+Received '{"data":{"Command":"SENDFILE","Date":"Mon Jun 01 19:26:21 CDT 2020","File":"5ed59cad602dcf8f1fcf392c","Parameter":{"HostName":"11.50.0.7","port":22,"username":"filemanager","password":":s0pJG-Ex1eX","path":"retrieve/in","SourceFile":"javaDummyFile1.zip"},"Extra":{"refId":"5ed59cad602dcf8f1fcf392d"}}}'
+Received '{"data":{"Command":"SENDLOGS","Date":"Mon Jun 01 19:25:19 CDT 2020","File":"5ed59c71602dcf8f1fcf392a","Parameter":{"HostName":"11.50.0.7","port":22,"username":"filemanager","password":":s0pJG-Ex1eX","path":"retrieve/in"},"Extra":{"refId":"5ed59c72602dcf8f1fcf392b"}}}'
+
+
+CurrentUser.cleanData();
+							CurrentUser.loginUser = "";
+							CurrentUser.loginPassword = "";
+							CurrentUser.loginAttempts = 0;
+							CurrentUser.tokenAttempts = 0;
+
+
+  

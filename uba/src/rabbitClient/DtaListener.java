@@ -13,18 +13,19 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.config.Config;
+import pentomino.jcmagent.DTAServer;
  
 public class DtaListener {
   
  
  public void SetupRabbitListener() {
 	 
-	 System.out.println("Receiver.SetupRabbitListener");
+	 System.out.println("DtaListener.SetupRabbitListener");
 	 
 	 //TODO: Poner validacion de connection status 
 	 
 	 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
-	 String topicQueue = "dta.command.CI99XE0001";
+	 String topicQueue = "dta.command.CIXXGS0020";  //CI99XE0001
 	 String atmId = Config.GetDirective("AtmId", "");
 
 	 Map<String,Object> map = null;
@@ -43,13 +44,13 @@ public class DtaListener {
 		channel = connection.createChannel();
 		props = new BasicProperties();
         map = new HashMap<String,Object>(); 
-        map.put("command.dta.CI99XE0001","*.dta.broadcast");      
+        map.put("command.dta.CIXXGS0020","*.dta.broadcast");      
         props = props.builder().headers(map).build();
         
         channel.queueDeclare(topicQueue, true, false, false, new HashMap<String,Object>());
         
         /* var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" }; */
-		channel.queueBind(topicQueue, exchange, "command.dta.CI99XE0001");
+		channel.queueBind(topicQueue, exchange, "command.dta.CIXXGS0020");
 		channel.queueBind(topicQueue, exchange, "*.dta.broadcast");
 		
 	     DeliverCallback deliverCallback = (consumerTag, message) -> {
@@ -61,16 +62,17 @@ public class DtaListener {
 	         System.out.println(" [x] replyToQueue '" + replyToQueue + "'");	         
 	         	         
 	         /* ESTO SE HACE EN OTRO LADO */
-	         String response =  "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"CI99XE0001\", \"Files\":[\"javaDummyFile1.zip\",\"javaDummyFile2.txt\"]}}";
+	         String response =  "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"CIXXGS0020\", \"Files\":[\"javaDummyFile1.zip\",\"javaDummyFile2.txt\"]}}";
 	         
 	         Producer myProd = new Producer(); 
 	         myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);         
 	         
 	     };
-	     channel.basicConsume("dta.command.CI99XE0001", true, deliverCallback, consumerTag -> { });
+	     channel.basicConsume("dta.command.CIXXGS0020", true, deliverCallback, consumerTag -> { });
 	     
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
+		System.out.println("DtaListener.SetupRabbitListener exception");
 		e.printStackTrace();
 	}
 	 
