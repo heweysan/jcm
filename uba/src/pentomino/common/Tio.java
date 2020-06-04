@@ -43,9 +43,7 @@ public class Tio implements Runnable{
 	
 	public Tio() {
 		
-		System.out.println("TIO constructor");
-		
-		//gpio.shutdown();		
+		System.out.println("TIO constructor");				
 		
 	}
 
@@ -80,11 +78,15 @@ public class Tio implements Runnable{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		
-		System.out.println("TIO RUN");
-       
+		if(JcmGlobalData.isDebug) {
+			logger.debug("Tio starting.... DEBUG");
+			System.out.println("Tio starting.... DEBUG");   
+			return;
+		}
+		
 		logger.debug("Tio starting....");
+		System.out.println("Tio starting....");
 		
 		gpio = GpioFactory.getInstance();
 		try {

@@ -24,6 +24,7 @@ import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.cashmanagement.vo.ExceptionVO;
 import pentomino.cashmanagement.vo.GenericMessageVO;
 import pentomino.cashmanagement.vo.ResponseObjectVO;
+import pentomino.config.Config;
 import rabbitClient.RabbitMQConnection;
 
 
@@ -35,9 +36,7 @@ public class Transactions {
 
 	private Connection connection;
 
-	public static void main(String args[]) throws IOException, InterruptedException{		
-	}
-
+	
 
 	public static ResponseObjectVO InsertaCashInOp(CashInOpVO cashInOp) {
 
@@ -212,6 +211,8 @@ public class Transactions {
 		}	
 
 		
+		
+		
 		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
@@ -219,8 +220,9 @@ public class Transactions {
 		DepositOpVO depositOpVO = new DepositOpVO();
 		ResponseObjectVO returnVO = new ResponseObjectVO();
 
+		String atmId = Config.GetDirective("AtmId", "");
 
-		depositOpVO.atmId = "CI01GL0001"; //"CIXXGS0020";
+		depositOpVO.atmId = atmId; //CIXXGS0020 CI01GL0001
 		depositOpVO.amount = 20L;
 		depositOpVO.b20 = 1;
 
@@ -555,8 +557,7 @@ public class Transactions {
 					map.put("operation-type","process-withdrawal");         
 
 					String replyQueueName = channel.queueDeclare().getQueue();
-					//System.out.println("replyQueueName [" + replyQueueName + "]");
-
+					
 					AMQP.BasicProperties props = new AMQP.BasicProperties
 							.Builder()
 							.correlationId(corrId)
@@ -588,7 +589,14 @@ public class Transactions {
 					if(!result.isEmpty()) {
 						if(result != ""){
 							Map responseMap = gson.fromJson(result, Map.class);
-							if(responseMap.containsKey("exception")){
+							if(responseMap.containsKey("exception")){			
+								System.out.println("TENGO [" + responseMap.get("message") + "]");
+								if( responseMap.get("message").toString().equalsIgnoreCase("Invalid Reference Data")) {
+									//Ponemos como cashedout el retiro pues ya se cobró.
+									CmQueue.queueList.removeFirst();
+									CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
+								}
+								
 								return false;
 							}else{
 								if(responseMap.containsKey("success")) {
@@ -604,8 +612,7 @@ public class Transactions {
 						retData = false;
 					}					
 
-					channel.close();
-					
+					channel.close();					
 					
 				}
 			}catch(Exception e){
@@ -618,6 +625,7 @@ public class Transactions {
 
 		}
 
+		//784512
 	
 	
 	public void close() throws IOException {

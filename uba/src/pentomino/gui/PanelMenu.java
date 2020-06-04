@@ -1,38 +1,33 @@
 package pentomino.gui;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 
+import pentomino.cashmanagement.CmQueue;
+import pentomino.cashmanagement.vo.CmMessageRequest;
 import pentomino.common.PinpadMode;
 import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
-import pentomino.flow.protocol;
 
 public class PanelMenu {
 
 	public JPanel contentPanel;
-	public JButton btnMenuRetiro;
-	public JButton btnMenuDeposito;
+	public static JButton btnMenuRetiro;
+	public static JButton btnMenuDeposito;
 	
 	public PanelMenu() {
 		
 		contentPanel = new JPanel();
-		contentPanel.setOpaque(false);
-		contentPanel.setBackground(Color.blue);
 		contentPanel.setBounds(0, 0, 1920, 1080);
+		contentPanel.setOpaque(false);
 		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);
+		contentPanel.setLayout(null);	
+		
 		
 		btnMenuDeposito = new JButton(new ImageIcon("./images/BTN7Deposito.png"));
 		btnMenuDeposito.setOpaque(false);
@@ -50,6 +45,49 @@ public class PanelMenu {
 		contentPanel.add(btnMenuRetiro);
 		
 		contentPanel.add(new DebugButtons().getPanel());	
+		
+		btnMenuDeposito.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.panelMenuHolder.screenTimerCancel();				
+				CurrentUser.cleanPinpadData(PinpadMode.loginUser);
+				PanelLogin.lblLoginUser.setLocation(257, 625);	
+				PanelLogin.lblLoginUser.setText("");
+				PanelLogin.lblLoginPassword.setText("");
+				CurrentUser.currentOperation = jcmOperation.Deposit;
+				Flow.panelLoginHolder.setBackground("./images/Scr7IdentificateDeposito.png");
+				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");
+				
+			}
+		});
+		
+		btnMenuRetiro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {			
+
+				Flow.panelMenuHolder.screenTimerCancel();			
+				
+				CurrentUser.cleanPinpadData(PinpadMode.loginUser);			
+				CurrentUser.asteriscos = "";
+				
+				PanelLogin.lblLoginUser.setLocation(257, 525);
+				PanelLogin.lblLoginUser.setText("");
+				PanelLogin.lblLoginPassword.setText("");
+				
+				CurrentUser.currentOperation = jcmOperation.Dispense;
+
+				Flow.panelLoginHolder.setBackground("./images/Scr7IngresaDatos.png");
+				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");
+								
+				CmMessageRequest request =  CmQueue.queueList.getFirst();				
+				CurrentUser.token = "" + request.token;
+				Flow.montoRetiro = request.amount;
+				
+				PanelToken.lblTokenMontoRetiro.setText("$" + Flow.montoRetiro);
+				PanelToken.lblToken.setText(CurrentUser.token);
+				CurrentUser.tokenConfirmacion = "";	
+				CurrentUser.referencia = request.reference;
+				PanelToken.lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);				
+			}
+		});
 		
 	}
 	

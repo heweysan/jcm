@@ -171,11 +171,13 @@ public class DTAServer {
 
 	private String DeleteFile(String file) {
 				
+		
+		System.out.println("Solicitau de borrado para [" + file + "]");
 		String returnValue = "NOT_FOUND";
 
         //string[] folders = {Constants.DownloadsDir, Constants.CrashDir, Constants.LogsDir};
 
-		final File folder = new File("/home/you/Desktop");
+		final File folder = new File("./logs");
 		listFilesForFolder(folder);
 
 		File tempFile = new File("c:/temp/temp.txt");
@@ -305,6 +307,12 @@ public class DTAServer {
 			 */
 			
 			Connection connection = RabbitMQConnection.getConnection();
+			if(connection == null) {
+				//TODO: HEWEY AQUI
+				System.out.println("Como dijo Yamamoto: todo baila.");
+				return;
+			}
+			
 			channel = connection.createChannel();
 			props = new BasicProperties();
 	        map = new HashMap<String,Object>(); 
@@ -341,6 +349,7 @@ public class DTAServer {
 		     
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("DTAServer bailo con Bertha esto.");
 			e.printStackTrace();
 		}
 		 

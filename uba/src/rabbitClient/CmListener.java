@@ -23,24 +23,24 @@ public class CmListener {
 
 	exchange:                "ex.cm.topic"
 	routingKey:              "cm.withdrawals.*"
-	
+
 	Mensaje de Notificación
 	{	
 	    "reference":"5ec4801d3bb2f825e3daf0fa", 
 	    "amount":22000, 
 	    "token":"123456"	
 	}
-	
+
 	Para recibirlo yo creo que una buena nomenclatura sería:
-	
+
 	cm.events.CI01GL0001
-	
-	
+
+
 	Contrato para retiros
 	props.headers.put('operation-type','process-withdrawal')
-	
+
 	{
-	    "atmId": "CI01GL0001" ,
+	    "atmId": "CIXXGS0020" ,
 	    "operatorId": 7007,
 	    "password": "p4ssw0rd",
 	    "amount": 22000,
@@ -49,14 +49,14 @@ public class CmListener {
 	    "reference": "5ec389a73bb2f875843672c6",
 	    "operationType": "FLEXPOS_WITHDRAWAL"
 	}
-	
+
 	Response: {"message":"Éxito","success":true,"value":"01960526"}
-	
+
 	Contrato para reversos
 	props.headers.put('operation-type','process-reverse')
-	
+
 	{
-	    "atmId": "CI01GL0001" ,
+	    "atmId": "CIXXGS0020" ,
 	    "operatorId": 7007,
 	    "password": "5123",
 	    "amount": 22000,
@@ -64,40 +64,30 @@ public class CmListener {
 	    "movementId": "01870526",
 	    "operationType": "FLEXPOS_WITHDRAWAL"
 	}
-	
+
 	Response: {"message":"Éxito","value":"01970526","success":true}
 	 */
 	private static Gson gson = new Gson();
 
 	public void SetupRabbitListener() {
 
-		System.out.println("CmListener.SetupRabbitListener");
+		//System.out.println("CmListener.SetupRabbitListener");
 
-		//TODO: Poner validacion de connection status
-
-		String exchange = "ex.cm.topic";
-		String atmId = Config.GetDirective("AtmId", "CI01GL0001");
-		String topicQueue = "cm.events.CI01GL0001";
-		//String topicQueue = "cm.withdrawals.*";
+		String atmId = Config.GetDirective("AtmId", "");
+		
+		String topicQueue = "cm.events." + atmId;
 
 		Channel channel;
 		try {
 
-
-			/*
-			  var exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
-	            var topicQueue = Config.GetDirective("BusinessCommandTopicQueue", "dta.command." + atmId);
-	            var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" };
-			 */
-			/*
-			 exchange:                "ex.cm.topic"
-				 routingKey:              "cm.withdrawals.*"
-			 */
 			Connection connection = RabbitMQConnection.getConnection();
-			channel = connection.createChannel();
 
-			//System.out.println("topicQueue [" + topicQueue + "]");
-			//System.out.println("exchange [" + exchange + "]");
+			if(connection == null) {
+				return;
+			}
+
+
+			channel = connection.createChannel();
 
 			/*
 			 	queue - the name of the queue    		
@@ -111,7 +101,7 @@ public class CmListener {
 			boolean exclusive = false;
 			boolean autoDelete = true;
 
-			//ORIGINAL: 	channel.queueDeclare(topicQueue, true   , false  , false, new HashMap<String,Object>());
+
 			channel.queueDeclare(topicQueue, durable, exclusive, autoDelete, new HashMap<String,Object>());			
 
 
@@ -124,11 +114,11 @@ public class CmListener {
 				String body = new String(message.getBody(), "UTF-8");
 				String replyToQueue = message.getProperties().getReplyTo();
 
-				System.out.println(" [x] consumerTag '" + consumerTag + "'");	         
-				System.out.println(" [x] Received '" + body + "'");
-				System.out.println(" [x] replyToQueue '" + replyToQueue + "'");	         
+				System.out.println("consumerTag [" + consumerTag + "]");	         
+				System.out.println("Received [" + body + "]");
+				System.out.println("replyToQueue [" + replyToQueue + "]");	         
 
-				Map responseMap = gson.fromJson(body, Map.class);
+				Map<?, ?> responseMap = gson.fromJson(body, Map.class);
 				CmMessageRequest myMsg = new CmMessageRequest();
 				myMsg.amount = (double) responseMap.get("amount");
 				myMsg.token = (String) responseMap.get("token");
@@ -139,9 +129,9 @@ public class CmListener {
 
 				EventListenerClass.fireMyEvent(new MyEvent("widthdrawalRequest")); //Peticion de retiro
 
+			};		
 
-			};
-			channel.basicConsume("cm.events.CI01GL0001", true, deliverCallback, consumerTag -> { });
+			channel.basicConsume(topicQueue, true, deliverCallback, consumerTag -> { });
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

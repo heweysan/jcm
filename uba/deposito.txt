@@ -34,6 +34,12 @@ roberto de la cruz 2481
 https://boinc.bakerlab.org/rosetta/home.php  a8Y
 
 901.66 gas paseos
+-----------------------
+superama
+hewey01@gmail.com
+a8
+
+https://meet.google.com/exd-bdcm-pcw
 
 
 $2262.31  
@@ -50,5 +56,14 @@ CurrentUser.cleanData();
 							CurrentUser.loginAttempts = 0;
 							CurrentUser.tokenAttempts = 0;
 
+------------------------------
+
+
+SOEID. LS85887
+PWD: Grumdrop258
+PIN: 22334455
+
+
+MEET: https://meet.google.com/exd-bdcm-pcw
 
   

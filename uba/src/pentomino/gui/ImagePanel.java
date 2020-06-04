@@ -21,8 +21,9 @@ public class ImagePanel extends JPanel{
 	private Image img;
 	public int screenTimeOut = 15000;
 	public String panelRedirect = "";
+	private String _name;
 	Timer screenTimer = new Timer();
-	
+		
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -30,31 +31,38 @@ public class ImagePanel extends JPanel{
 		this(new ImageIcon(img).getImage(),name);
 	}
 
+	public ImagePanel(Image img,String name, int _timeout, String _redirect) {
+		this(new ImageIcon(img).getImage(),name);
+		this.screenTimeOut = _timeout;
+		this.panelRedirect = _redirect;
+	}
+	
+	
 	public ImagePanel(Image img, String name) {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				System.out.println("componentShown ImagePanel [" + name + "]");
-				System.out.println("Entre a [" + name + "]");
+				System.out.println("OnLoad ImagePanel [" + name + "]");
 				screenTimer = new Timer();
 				screenTimer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						System.out.println("AQUI  [" + name + "] me voy a [" + panelRedirect + "]");
+						System.out.println("Redireccionado [" + name + "] -> [" + panelRedirect + "]");
 						screenTimer.cancel();						
-						Flow.redirect(panelRedirect);						
+						Flow.redirect(panelRedirect);					
 					}
 				}, screenTimeOut);		
 			}
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				System.out.println("componentHidden ImagePanel  [" + name + "]");
+				System.out.println("OnUnload  [" + name + "]");
 				screenTimer.cancel();
 			}
 		});
 		
 		this.img = img;
 		this.setName(name);
+		_name = name;
 		Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
 		setPreferredSize(size);
 		setMinimumSize(size);
@@ -62,6 +70,8 @@ public class ImagePanel extends JPanel{
 		setSize(size);
 		setLayout(null);
 	}
+	
+	
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, null);
@@ -74,6 +84,31 @@ public class ImagePanel extends JPanel{
 		this.setOpaque(false);
 		this.img = new ImageIcon(imagePath).getImage();
 		repaint();
+	}
+	
+	public void screenTimerReset(int timeOut, String redirect) {
+		
+		if(!redirect.isEmpty())
+			panelRedirect = redirect;
+		
+		screenTimeOut = timeOut;
+		
+		screenTimer.cancel();
+		screenTimer = new Timer();
+		screenTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				System.out.println("Redireccionado [" + _name + "] -> [" + panelRedirect + "]");
+				screenTimer.cancel();						
+				Flow.redirect(panelRedirect);					
+			}
+		}, screenTimeOut);	
+	}
+	
+	public void screenTimerCancel() {
+		
+		screenTimer.cancel();
+		
 	}
 
 }

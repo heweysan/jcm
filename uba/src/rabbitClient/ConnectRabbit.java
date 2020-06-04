@@ -10,8 +10,6 @@ import com.rabbitmq.client.Channel;
 
 public class ConnectRabbit  {
 	
-	//private final static String QUEUE_NAME = "CIXXGS0020";
-
 	private String Server;
 	private int Port;
 	private String VirtualHost; 

@@ -13,8 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import pentomino.cashmanagement.vo.CmMessageRequest;
-
 
 public class Config {
 

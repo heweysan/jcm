@@ -2,16 +2,13 @@ package pentomino.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import pentomino.flow.Flow;
-
-import javax.swing.JLabel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class DebugButtons {
 
@@ -36,7 +33,7 @@ public class DebugButtons {
 		btnComandos.setBounds(220, 10, 200, 73);
 		btnComandos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.cl.show(Flow.panelContainer,"panelComandos");	
+				Flow.redirect(Flow.panelComandosHolder);	
 			}
 		});
 		
@@ -50,16 +47,16 @@ public class DebugButtons {
 		btnSalir.setBackground(Color.RED);
 		btnSalir.setBounds(430, 10, 200, 73);
 		
-		JButton btnDepositoIdle = new JButton("IDLE");
-		btnDepositoIdle.addActionListener(new ActionListener() {
+		JButton btnIdle = new JButton("IDLE");
+		btnIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-				Flow.cl.show(Flow.panelContainer,"panelIdle");
+				Flow.redirect(Flow.panelIdleHolder);
 			}
 		});
-		btnDepositoIdle.setFont(new Font("Tahoma", Font.BOLD, 22));
-		btnDepositoIdle.setBackground(Color.GREEN);
-		btnDepositoIdle.setBounds(10, 10, 200, 73);
-		panelDebugButtons.add(btnDepositoIdle);
+		btnIdle.setFont(new Font("Tahoma", Font.BOLD, 22));
+		btnIdle.setBackground(Color.GREEN);
+		btnIdle.setBounds(10, 10, 200, 73);
+		panelDebugButtons.add(btnIdle);
 		
 		panelDebugButtons.add(btnSalir);
 		

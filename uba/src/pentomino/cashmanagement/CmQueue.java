@@ -22,7 +22,7 @@ public class CmQueue implements Runnable{
 	
 	private static Connection sqlLiteConn = null;
 	
-	
+	/*
 	public static void main(String[] args) {
 		try {		
 			CmListener myCmListener = new CmListener();
@@ -33,6 +33,7 @@ public class CmQueue implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	*/
 
 	@Override
 	public void run() {
@@ -106,7 +107,7 @@ public class CmQueue implements Runnable{
 	            		myMessage.cashedout = rs.getInt("cashedout");
 	            		myMessage.amount = rs.getDouble("amount");
 	            		myMessage.token = rs.getString("token");
-	            		myMessage.reference = rs.getString("reference");	            		
+	            		myMessage.reference = rs.getString("reference");	
 	            		queueList.add(myMessage);
 	            	}
 	            }	            
@@ -183,6 +184,55 @@ public class CmQueue implements Runnable{
 		}
 	}
 
+	public static void ClosePendingWithdrawal(String reference) {	
+		
+		System.out.println("ClosePendingWithdrawal [" + reference + "]");
+		
+		
+		String sql = "update withdrawals set cashedout = 1 where reference = ?;";
+		
+		lock.lock();
+		try {
+			connect();
+			
+			try (PreparedStatement pstmt  = sqlLiteConn.prepareStatement(sql)){
+	            
+				// set the value
+	            pstmt.setString(1,reference);
+	                        
+	            int res  = pstmt.executeUpdate();
+	            
+	            
+	           System.out.println("insert [" + res + "]");
+	    
+	          
+	            
+	            if (sqlLiteConn != null) {
+	                sqlLiteConn.close();	                
+	            }
+	            	            
+	        } catch (SQLException e) {
+	        	if(e.getMessage() != null)
+	        		System.out.println("CmQueue.ClosePendingWithdrawal SQLException [" +  e.getMessage() + "]");
+	        	else{
+	        		e.printStackTrace();
+	        	}	        	
+	        }		
+		}catch(Exception ge) {
+			if(ge.getMessage() != null)
+				System.out.println("CmQueue.ClosePendingWithdrawal GENERAL EXCEPTION [" +  ge.getMessage() + "]");
+			else{
+				ge.printStackTrace();
+			}
+		}
+		finally{
+			lock.unlock();
+		}
+	}
+
+
+	
+	
 	public static void addPendingWithdrawal(CmMessageRequest myMsg) {
 		
 		queueList.add(myMsg);

@@ -38,8 +38,8 @@ public class protocol extends kermit {
 	private boolean waitingForInitialize = false;
 
 	/* VARIABLES PARA DISPENSADO */
-	int jcmCass1 = 0;
-	int jcmCass2 = 0;
+	public int jcmCass1 = 0;
+	public int jcmCass2 = 0;
 	
 	int cuantos = 0;
 	int cuantos2 = 0;

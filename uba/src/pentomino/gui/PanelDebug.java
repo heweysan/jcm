@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -26,12 +25,12 @@ public class PanelDebug {
 	public JLabel lblContadores2 = new JLabel("rec1/0  rec2/0");
 	public JLabel lblRecycler1 = new JLabel(".");
 	public JLabel lblRecycler2 = new JLabel(".");
-		
+
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	public PanelDebug() {
-		
+
 		contentPanel = new JPanel();
 		//contentPanel = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelComandos");
 		contentPanel.setOpaque(false);
@@ -39,12 +38,12 @@ public class PanelDebug {
 		contentPanel.setBounds(0, 0, 1920, 1080);
 		contentPanel.setBorder(null);
 		contentPanel.setLayout(null);
-		
-		
+
+
 		JPanel panel_comandos = new JPanel();
 		panel_comandos.setBounds(10, 328, 1886, 706);		
 		panel_comandos.setLayout(null);
-		
+
 		JCheckBox chckbxReciclador1 = new JCheckBox("Reciclador 1");
 		chckbxReciclador1.setSelected(true);
 
@@ -57,7 +56,7 @@ public class PanelDebug {
 		chckbxReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		chckbxReciclador2.setBounds(718, 26, 148, 51);
 		contentPanel.add(chckbxReciclador2);
-		
+
 		JButton btnStatusReq = new JButton("Stat Req (11h)");
 		btnStatusReq.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnStatusReq.setBackground(Color.GREEN);
@@ -71,7 +70,7 @@ public class PanelDebug {
 			}
 		});
 
-				
+
 		panel_comandos.add(btnStatusReq);
 
 		JButton btnReset = new JButton("Reset (40h)");
@@ -205,13 +204,13 @@ public class PanelDebug {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxReciclador1.isSelected()) {
 					System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
-				Flow.jcms[0].jcmMessage[3] = 0x01;
-				Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+					Flow.jcms[0].jcmMessage[3] = 0x01;
+					Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
 				}
 				if(chckbxReciclador2.isSelected()) {
 					System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
-				Flow.jcms[1].jcmMessage[3] = 0x01;
-				Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+					Flow.jcms[1].jcmMessage[3] = 0x01;
+					Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
 				}
 			}
 		});
@@ -246,7 +245,7 @@ public class PanelDebug {
 		btnOptionalFuncReq.setBackground(Color.ORANGE);
 		btnOptionalFuncReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format((byte) 5, (byte) 0x85, Flow.jcms[0].jcmMessage, true);
+				Flow.jcms[0].id003_format((byte) 5, (byte) 0x85, Flow.jcms[0].jcmMessage, true);
 			}
 		});
 		btnOptionalFuncReq.setBounds(1059, 225, 200, 50);
@@ -257,7 +256,7 @@ public class PanelDebug {
 		btnEnableDisDenomReq.setBackground(Color.ORANGE);
 		btnEnableDisDenomReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format((byte) 5, (byte) 0x80, Flow.jcms[0].jcmMessage, true);
+				Flow.jcms[0].id003_format((byte) 5, (byte) 0x80, Flow.jcms[0].jcmMessage, true);
 			}
 		});
 		btnEnableDisDenomReq.setBounds(10, 225, 179, 50);
@@ -269,7 +268,7 @@ public class PanelDebug {
 		btnInhibitReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(" CONSULTA DE INHIBIT");
-			Flow.jcms[0].id003_format((byte) 5, (byte) 0x83, Flow.jcms[0].jcmMessage, true);
+				Flow.jcms[0].id003_format((byte) 5, (byte) 0x83, Flow.jcms[0].jcmMessage, true);
 			}
 		});
 		btnInhibitReq.setBounds(712, 225, 157, 50);
@@ -280,7 +279,7 @@ public class PanelDebug {
 		btnDirectionReq.setBackground(Color.ORANGE);
 		btnDirectionReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format((byte) 5, (byte) 0x84, Flow.jcms[0].jcmMessage, true);
+				Flow.jcms[0].id003_format((byte) 5, (byte) 0x84, Flow.jcms[0].jcmMessage, true);
 			}
 		});
 		btnDirectionReq.setBounds(882, 225, 167, 50);
@@ -291,7 +290,7 @@ public class PanelDebug {
 		btnSecurotyDenomReq.setBackground(Color.ORANGE);
 		btnSecurotyDenomReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format((byte) 5, (byte) 0x81, Flow.jcms[0].jcmMessage, true);
+				Flow.jcms[0].id003_format((byte) 5, (byte) 0x81, Flow.jcms[0].jcmMessage, true);
 			}
 		});
 		btnSecurotyDenomReq.setBounds(199, 225, 213, 50);
@@ -302,7 +301,7 @@ public class PanelDebug {
 		btnCommunicationModeReq.setBackground(Color.ORANGE);
 		btnCommunicationModeReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format((byte) 5, (byte) 0x82, Flow.jcms[0].jcmMessage, true);
+				Flow.jcms[0].id003_format((byte) 5, (byte) 0x82, Flow.jcms[0].jcmMessage, true);
 			}
 		});
 		btnCommunicationModeReq.setBounds(468, 225, 234, 50);
@@ -314,10 +313,10 @@ public class PanelDebug {
 		btnVersionRequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxReciclador1.isSelected()) {
-				Flow.jcms[0].id003_format((byte) 5, (byte) 0x88, Flow.jcms[0].jcmMessage, true);
+					Flow.jcms[0].id003_format((byte) 5, (byte) 0x88, Flow.jcms[0].jcmMessage, true);
 				}
 				if(chckbxReciclador2.isSelected()) {
-				Flow.jcms[1].id003_format((byte) 5, (byte) 0x88, Flow.jcms[0].jcmMessage, true);
+					Flow.jcms[1].id003_format((byte) 5, (byte) 0x88, Flow.jcms[0].jcmMessage, true);
 				}
 
 			}
@@ -331,10 +330,10 @@ public class PanelDebug {
 		btnBootVersionrequest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxReciclador1.isSelected()) {
-				Flow.jcms[0].id003_format((byte) 5, (byte) 0x89, Flow.jcms[0].jcmMessage, true);
+					Flow.jcms[0].id003_format((byte) 5, (byte) 0x89, Flow.jcms[0].jcmMessage, true);
 				}
 				if(chckbxReciclador2.isSelected()) {
-				Flow.jcms[1].id003_format((byte) 5, (byte) 0x89, Flow.jcms[1].jcmMessage, true);
+					Flow.jcms[1].id003_format((byte) 5, (byte) 0x89, Flow.jcms[1].jcmMessage, true);
 				}
 			}
 		});
@@ -369,7 +368,7 @@ public class PanelDebug {
 		btnStack3.setBackground(Color.ORANGE);
 		btnStack3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format((byte) 0x5, (byte) 0x49, Flow.jcms[0].jcmMessage, false);
+				Flow.jcms[0].id003_format((byte) 0x5, (byte) 0x49, Flow.jcms[0].jcmMessage, false);
 			}
 		});
 		btnStack3.setBounds(779, 459, 157, 50);
@@ -380,8 +379,8 @@ public class PanelDebug {
 		btnPayOut.setBackground(Color.ORANGE);
 		btnPayOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) 0x1, (byte) 0x1,
-					Flow.jcms[0].jcmMessage);
+				Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) 0x1, (byte) 0x1,
+						Flow.jcms[0].jcmMessage);
 			}
 		});
 		btnPayOut.setBounds(958, 459, 161, 50);
@@ -394,22 +393,22 @@ public class PanelDebug {
 			public void actionPerformed(ActionEvent e) {
 
 				if(chckbxReciclador1.isSelected()) {
-				Flow.jcms[0].currentOpertion = jcmOperation.CollectCass1; 
+					Flow.jcms[0].currentOpertion = jcmOperation.CollectCass1; 
 
 					// primero el inhibit
-				Flow.jcms[0].jcmMessage[3] = 0x01;
-				Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-				Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
-						Flow.jcms[0].jcmMessage);
+					Flow.jcms[0].jcmMessage[3] = 0x01;
+					Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+					Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
+							Flow.jcms[0].jcmMessage);
 				}
 
 				if(chckbxReciclador2.isSelected()) {
-				Flow.jcms[1].currentOpertion = jcmOperation.CollectCass1;
+					Flow.jcms[1].currentOpertion = jcmOperation.CollectCass1;
 					// primero el inhibit
-				Flow.jcms[1].jcmMessage[3] = 0x01;
-				Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
-				Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
-						Flow.jcms[1].jcmMessage);
+					Flow.jcms[1].jcmMessage[3] = 0x01;
+					Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+					Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
+							Flow.jcms[1].jcmMessage);
 				}
 
 			}
@@ -423,12 +422,12 @@ public class PanelDebug {
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxReciclador1.isSelected()) {
-				Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
-						Flow.jcms[0].jcmMessage);
+					Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
+							Flow.jcms[0].jcmMessage);
 				}
 				if(chckbxReciclador2.isSelected()) {
-				Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
-						Flow.jcms[1].jcmMessage);
+					Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2,
+							Flow.jcms[1].jcmMessage);
 				}
 			}
 		});
@@ -443,12 +442,12 @@ public class PanelDebug {
 
 
 				if(chckbxReciclador1.isSelected()) {
-				Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
-						Flow.jcms[0].jcmMessage);
+					Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
+							Flow.jcms[0].jcmMessage);
 				}
 				if(chckbxReciclador2.isSelected()) {
-				Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
-						Flow.jcms[1].jcmMessage);
+					Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4D, (byte) 0x1, (byte) 0x2,
+							Flow.jcms[1].jcmMessage);
 				}
 
 
@@ -456,7 +455,7 @@ public class PanelDebug {
 		});
 		btnEmergencyStop.setBounds(351, 399, 197, 50);
 		panel_comandos.add(btnEmergencyStop);
-		
+
 
 		JButton btnUnitInformationRequest = new JButton("Unit Information Req (92h)");
 		btnUnitInformationRequest.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -638,7 +637,7 @@ public class PanelDebug {
 		JButton btnComandosRegresar = new JButton("Regresar");
 		btnComandosRegresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.cl.show(Flow.panelContainer, "panelDeposito");
+				Flow.redirect(Flow.panelDepositoHolder);
 			}
 		});
 		btnComandosRegresar.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -684,7 +683,7 @@ public class PanelDebug {
 		lblTxtBill1.setBounds(10, 166, 144, 46);
 		panelJCM1.add(lblTxtBill1);
 
-		
+
 		lblBilleteIngresado1.setForeground(Color.WHITE);
 		lblBilleteIngresado1.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblBilleteIngresado1.setBounds(164, 166, 226, 46);
@@ -759,11 +758,11 @@ public class PanelDebug {
 		btnReiniciarJcm2.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnReiniciarJcm2.setBounds(281, 11, 209, 80);
 		panelJCM2.add(btnReiniciarJcm2);
-		
+
 		contentPanel.add(panel_comandos);		
-		
-		
-		
+
+
+
 		/** EVENTS  **/
 		btnRecycleCurrencySetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -875,10 +874,10 @@ public class PanelDebug {
 					Flow.jcms[1].id003_format((byte) 5, (byte) 0x8A, Flow.jcms[1].jcmMessage, true);
 			}
 		});
-		
-		
+
+
 	}
-	
+
 	public JPanel getPanel() {
 		return contentPanel;
 	}

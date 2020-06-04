@@ -1,11 +1,11 @@
 package pentomino.flow;
-import java.util.EventListener;
-
 import javax.swing.event.EventListenerList;
 
-interface MyEventListener extends EventListener {
+/*
+public interface MyEventListener extends EventListener {
   public void myEventOccurred(MyEvent evt);
 }
+*/
 
 public class EventListenerClass {
   protected static EventListenerList listenerList = new EventListenerList();

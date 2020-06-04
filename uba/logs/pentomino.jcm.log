@@ -1188,3 +1188,284 @@
 2020-06-02 16:43:19,624|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
 2020-06-02 16:43:19,624|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
 2020-06-02 16:43:41,705|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-02 18:22:09,363|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 18:22:11,807|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 18:22:11,808|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 18:22:19,010|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-02 18:29:24,762|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 18:29:27,364|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 18:29:27,364|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 18:29:42,443|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-02 18:32:31,135|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 18:32:33,930|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 18:32:33,931|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 18:32:44,163|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-02 18:33:25,020|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 18:33:27,623|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 18:33:27,623|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 18:33:31,947|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-02 18:34:12,816|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 18:34:15,344|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 18:34:15,344|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 18:34:21,501|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-02 20:26:01,772|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 20:26:04,183|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 20:26:04,183|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 20:27:21,428|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 20:27:23,752|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 20:27:23,752|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 20:29:46,472|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 20:29:49,768|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 20:29:49,768|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 20:39:24,972|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 20:39:27,344|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 20:39:27,345|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 20:42:27,503|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 20:42:29,882|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 20:42:29,883|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 21:47:41,347|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 21:47:44,454|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 21:47:44,454|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 21:50:29,336|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 21:50:33,356|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 21:50:33,356|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 21:56:27,007|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 21:56:30,028|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 21:56:30,028|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 22:05:11,202|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 22:05:14,139|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 22:05:14,139|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 22:05:58,253|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 22:06:01,275|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 22:06:01,275|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 22:09:34,163|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 22:09:36,509|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 22:09:36,510|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 22:18:10,176|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 22:18:13,154|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 22:18:13,155|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-02 22:18:48,405|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-02 22:18:51,417|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-02 22:18:51,417|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 12:13:00,202|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:14:45,644|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:15:13,104|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:16:38,913|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:18:27,378|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:18:34,261|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 12:18:34,261|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 12:33:38,872|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:33:45,633|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 12:33:45,633|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 12:56:44,506|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 12:56:51,314|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 12:56:51,315|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 13:36:12,163|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 13:36:18,924|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 13:36:18,924|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:00:44,377|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:01:34,372|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:01:41,093|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 15:01:41,093|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:06:35,349|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:06:42,072|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 15:06:42,072|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:19:05,591|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:19:12,350|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 15:19:12,350|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:21:09,172|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:21:11,692|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 15:21:11,692|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:21:23,170|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 15:21:32,447|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 15:46:12,689|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:46:15,041|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 15:46:15,042|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:46:26,612|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 15:57:12,945|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 15:57:15,940|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 15:57:15,941|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 15:57:26,834|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:04:32,389|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:04:34,787|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:04:34,787|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:04:42,750|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:06:02,791|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:06:05,121|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:06:05,122|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:08:02,717|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:08:05,085|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:08:05,086|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:08:41,898|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:08:44,272|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:08:44,272|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:08:53,963|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:08:56,409|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:08:56,409|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:10:10,106|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:10:12,524|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:10:12,524|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:10:52,204|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:10:54,578|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:10:54,578|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:11:10,660|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:16:26,824|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:16:29,172|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:16:29,172|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:16:35,567|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:26:54,823|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:26:57,211|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:26:57,211|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:27:04,000|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:27:40,835|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:59:08,057|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 16:59:10,515|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 16:59:10,515|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 16:59:16,933|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 16:59:34,209|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 17:01:29,851|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 17:01:32,520|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 17:01:32,520|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 17:01:44,751|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 17:01:49,742|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 17:16:43,200|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 17:16:45,626|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 17:16:45,626|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 17:17:04,396|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 17:17:12,510|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 17:39:28,747|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 17:39:30,429|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 17:39:31,135|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 17:39:31,135|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 17:39:38,145|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 17:39:47,840|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:00:13,799|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 19:00:15,455|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 19:00:16,163|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 19:00:16,216|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 19:00:31,136|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:08:09,797|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 19:08:12,417|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 19:08:13,140|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 19:08:13,140|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 19:08:19,995|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:09:58,036|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 19:09:59,699|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 19:10:00,404|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 19:10:00,404|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 19:10:05,134|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:10:09,972|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:10:21,576|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:14:25,734|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 19:14:27,454|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 19:14:28,160|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 19:14:28,160|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 19:14:40,793|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:14:45,942|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:27:00,308|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 19:27:01,942|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 19:27:02,656|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 19:27:02,656|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 19:27:08,417|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 19:27:15,040|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 21:18:06,352|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 21:18:08,923|DEBUG|p.c.Tio|[Tio Thread]|Tio starting....
+2020-06-03 21:18:09,630|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 21:18:09,630|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 21:23:46,084|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 21:23:47,738|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-03 21:23:48,453|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 21:23:48,453|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 21:27:51,237|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 21:27:52,909|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-03 21:27:53,617|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 21:27:53,618|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 21:28:14,089|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 21:35:44,274|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 21:35:45,888|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-03 21:35:46,592|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 21:35:46,592|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 21:35:58,995|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 21:36:48,075|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-03 21:39:11,278|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-03 21:39:12,975|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-03 21:39:13,677|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-03 21:39:13,677|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-03 21:40:13,333|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:31:52,382|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 12:31:55,153|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 12:31:55,986|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 12:31:55,986|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 12:32:21,030|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:36:04,029|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:41:36,159|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:48:12,151|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 12:48:13,962|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 12:48:14,964|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 12:48:14,965|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 12:49:17,157|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:49:55,967|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:50:08,802|ERROR|p.c.Ptr|[Timer-73]|java.io.FileNotFoundException: SI.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-04 12:54:44,740|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 12:54:46,551|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 12:54:47,322|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 12:54:47,322|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 12:55:01,067|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 12:56:50,022|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 12:56:51,801|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 12:56:52,648|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 12:56:52,648|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 12:57:08,579|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:16:08,393|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:16:10,203|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:16:45,865|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:16:47,633|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:16:48,501|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:16:48,501|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:17:09,715|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:17:56,783|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:20:14,166|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:20:15,943|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:20:21,859|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:20:23,606|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:20:24,394|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:20:24,395|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:20:38,157|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:21:32,873|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:21:34,655|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:21:35,507|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:21:35,507|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:21:54,753|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:22:04,539|ERROR|p.c.Ptr|[Timer-36]|java.io.FileNotFoundException: SI.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-04 13:40:23,662|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:40:25,434|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:40:26,270|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:40:26,270|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:42:01,835|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:45:08,884|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:45:10,617|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:45:11,470|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:45:11,470|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:45:22,323|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:49:38,635|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:49:40,385|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:49:41,204|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:49:41,204|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:49:50,725|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:53:53,040|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:53:54,751|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:53:55,549|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:53:55,549|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:54:05,338|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:54:16,005|ERROR|p.c.Ptr|[Timer-36]|java.io.FileNotFoundException: SI.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-04 13:55:01,054|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:55:49,982|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 13:58:33,622|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 13:58:35,293|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 13:58:36,109|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 13:58:36,109|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-04 13:58:46,918|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-04 14:00:41,379|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-04 14:00:43,084|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-04 14:00:43,861|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-04 14:00:43,862|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]

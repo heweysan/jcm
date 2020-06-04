@@ -31,6 +31,10 @@ public class JcmGlobalData {
 	
 	public static SortedMap<Integer,Integer> denominateInfo = new TreeMap<Integer, Integer>(Collections.reverseOrder());
 	
+	public static boolean isDebug = false;
+	
+	
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub		
 	}
