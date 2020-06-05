@@ -69,7 +69,7 @@ public class PanelDeposito {
 
 					if(JcmGlobalData.isDebug) {						
 						Flow.montoDepositado = 3720;	
-						depositOpVO.atmId = atmId; //CIXXGS0020 CI01GL0001 
+						depositOpVO.atmId = atmId;  
 						depositOpVO.amount = (long) Flow.montoDepositado;
 						depositOpVO.b20 = 1;
 						depositOpVO.b50 = 2;
@@ -82,7 +82,7 @@ public class PanelDeposito {
 						depositOpVO.userName = CurrentUser.getLoginUser();							
 					}
 					else {
-						depositOpVO.atmId = atmId; //CIXXGS0020 CI01GL0001
+						depositOpVO.atmId = atmId; 
 						depositOpVO.amount = (long) Flow.montoDepositado;
 						depositOpVO.b20 = Flow.contadoresDeposito.x20;
 						depositOpVO.b50 = Flow.contadoresDeposito.x50;
@@ -105,10 +105,19 @@ public class PanelDeposito {
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + Flow.montoDepositado);
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", Flow.montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
 
-					Ptr.printDeposit(depositOpVO);
+					
+					
+					if(!Ptr.printDeposit(depositOpVO)){
+						//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
+						Flow.redirect(Flow.panelNoTicketHolder,7000,"panelTerminamos");
+						Flow.panelTerminamosHolder.screenTimeOut = 7000;
+						Flow.panelTerminamosHolder.panelRedirect = "panelIdle";
+					}
+					else {
+						Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
+					}
 
-					//Terminamos el deposito, mandamos a la pantalla y regresamos a idle.
-					Flow.redirect(Flow.panelTerminamos, 5000, "panelIdle");					
+									
 					
 					break;
 				case Dispense:

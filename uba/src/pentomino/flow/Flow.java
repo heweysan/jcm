@@ -2,7 +2,6 @@ package pentomino.flow;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,9 +9,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,8 +33,9 @@ import pentomino.gui.PanelError;
 import pentomino.gui.PanelIdle;
 import pentomino.gui.PanelLogin;
 import pentomino.gui.PanelMenu;
+import pentomino.gui.PanelNoTicket;
 import pentomino.gui.PanelOperacionCancelada;
-import pentomino.gui.PanelRetiraBilletes;
+import pentomino.gui.PanelDispense;
 import pentomino.gui.PanelRetiroParcial;
 import pentomino.gui.PanelToken;
 import pentomino.gui.PinpadListener;
@@ -52,7 +50,7 @@ public class Flow {
 	//https://logging.apache.org/log4j/2.x/manual/layouts.html
 	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
 
-	public static ImagePanel panelTerminamos;
+	public static ImagePanel panelTerminamosHolder;
 	public static ImagePanel panelOperacionCanceladaHolder;
 	public static ImagePanel panelErrorHolder; 
 	public static ImagePanel panelLoginHolder;
@@ -61,8 +59,9 @@ public class Flow {
 	public static ImagePanel panelMenuHolder;
 	public static ImagePanel panelDepositoHolder;
 	public static ImagePanel panelComandosHolder;
-	public static ImagePanel panelRetiraBilletesHolder;
-	public static ImagePanel panelRetiroParcialHolder;
+	//public static ImagePanel panelRetiraBilletesHolder;
+	public static ImagePanel panelDispenseHolder;
+	public static ImagePanel panelNoTicketHolder;
 
 	public static JcmContadores contadoresDeposito = new JcmContadores();	
 
@@ -188,16 +187,11 @@ public class Flow {
 		PanelToken panelToken = new PanelToken();
 		panelTokenHolder.add(panelToken.getPanel());
 
-		panelTerminamos = new ImagePanel(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
-
-		panelRetiraBilletesHolder = new ImagePanel(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiraBilletes");
-		PanelRetiraBilletes panelRetiraBilletes = new PanelRetiraBilletes();
-		panelRetiraBilletesHolder.add(panelRetiraBilletes.getPanel());
-
-
-		panelRetiroParcialHolder = new ImagePanel(new ImageIcon("./images/Scr7RetiroParcial.png").getImage(),"panelRetiroParcial");
-		PanelRetiroParcial panelRetiroParcial = new PanelRetiroParcial();
-		panelRetiroParcialHolder.add(panelRetiroParcial.getPanel());
+		panelTerminamosHolder = new ImagePanel(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
+		
+		panelDispenseHolder = new ImagePanel(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiroParcial");
+		PanelDispense panelDispense = new PanelDispense();
+		panelDispenseHolder.add(panelDispense.getPanel());
 
 		panelErrorHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelError",5000,"panelIdle");
 		PanelError panelError = new PanelError();
@@ -207,6 +201,11 @@ public class Flow {
 		PanelOperacionCancelada panelOperacionCancelada = new PanelOperacionCancelada();
 		panelOperacionCanceladaHolder.add(panelOperacionCancelada.getPanel());
 
+		panelNoTicketHolder = new ImagePanel(new ImageIcon("./images/Scr7NoTicket.png").getImage(),"panelNoTicket",5000,"panelTerminamos");
+		PanelNoTicket panelPanelNoTicket = new PanelNoTicket();
+		panelNoTicketHolder.add(panelPanelNoTicket.getPanel());
+		
+		
 
 		panelContainer.setLayout(cl);		
 		panelContainer.add(panelIdleHolder,"panelIdle");
@@ -215,19 +214,13 @@ public class Flow {
 		panelContainer.add(panelComandosHolder, "panelComandos");
 		panelContainer.add(panelLoginHolder, "panelLogin");
 		panelContainer.add(panelTokenHolder,"panelToken");
-		panelContainer.add(panelTerminamos,"panelTerminamos");
-		panelContainer.add(panelRetiraBilletesHolder,"panelRetiraBilletes");
-		panelContainer.add(panelRetiroParcialHolder,"panelRetiroParcial");
+		panelContainer.add(panelTerminamosHolder,"panelTerminamos");
+		//panelContainer.add(panelRetiraBilletesHolder,"panelRetiraBilletes");
+		panelContainer.add(panelDispenseHolder,"panelRetiroParcial");
 		panelContainer.add(panelErrorHolder,"panelError");
 		panelContainer.add(panelOperacionCanceladaHolder,"panelOperacionCancelada");		
+		panelContainer.add(panelNoTicketHolder,"panelNoTicket");	
 
-
-		JLabel lblRetiraBilletesMontoDispensarParcial = new JLabel("New label");
-		lblRetiraBilletesMontoDispensarParcial.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRetiraBilletesMontoDispensarParcial.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensarParcial.setFont(new Font("Tahoma", Font.BOLD, 60));
-		lblRetiraBilletesMontoDispensarParcial.setBounds(501, 677, 622, 153);
-		panelRetiroParcialHolder.add(lblRetiraBilletesMontoDispensarParcial);
 
 
 		/*		
@@ -292,7 +285,7 @@ public class Flow {
 					
 					
 					CashInOpVO myObj = new CashInOpVO();
-					myObj.atmId = atmId; //CIXXGS0020 CI01GL0001
+					myObj.atmId = atmId; 
 					myObj.amount = (long) billType;
 					myObj.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
 					myObj.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
@@ -334,7 +327,7 @@ public class Flow {
 					}
 
 					CashInOpVO myObj2 = new CashInOpVO();
-					myObj2.atmId = atmId; //CIXXGS0020 CI01GL0001
+					myObj2.atmId = atmId; 
 					myObj2.amount = (long) billType2;
 					myObj2.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
 					myObj2.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
@@ -558,7 +551,7 @@ btnPinPadConfirmar.addActionListener(new ActionListener() {
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
 					montoDepositado = 0;
 					cl.show(panelContainer, "panelDeposito");
-					Transactions.BorraCashInOPs(atmId); //CIXXGS0020 CI01GL0001								
+					Transactions.BorraCashInOPs(atmId); 								
 				}
 				else {						
 					if(!user.success) {
@@ -568,7 +561,7 @@ btnPinPadConfirmar.addActionListener(new ActionListener() {
 						RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 						montoDepositado = 0;
 						cl.show(panelContainer, "panelDeposito");
-						Transactions.BorraCashInOPs(atmId); //CIXXGS0020;CI01GL0001
+						Transactions.BorraCashInOPs(atmId); 
 					}
 					else {	
 						if(++CurrentUser.loginAttempts >= 2) {
@@ -642,7 +635,6 @@ btnPinPadConfirmar.addActionListener(new ActionListener() {
 							screenTimeout(5000, "panelIdle");
 						}
 						else {	
-							lblLoginRow1.setText("¡Oh no! No tiene permisos para hacer retiros.");
 							panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
 						}
@@ -673,7 +665,7 @@ btnPinPadConfirmar.addActionListener(new ActionListener() {
 						RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 						montoDepositado = 0;
 						cl.show(panelContainer, "panelDeposito");
-						Transactions.BorraCashInOPs(atmId); //CIXXGS0020;CI01GL0001);
+						Transactions.BorraCashInOPs(atmId);
 						break;
 					case Dispense:								
 						System.out.println("Validando usuario.... 7");
@@ -733,7 +725,7 @@ btnPinPadConfirmar.addActionListener(new ActionListener() {
 				else {
 
 					CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
-					cmWithdrawalVo.atmId = atmId; //CIXXGS0020;CI01GL0001
+					cmWithdrawalVo.atmId = atmId; 
 					cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
 					cmWithdrawalVo.password = CurrentUser.loginPassword;
 					cmWithdrawalVo.reference = CurrentUser.referencia;
@@ -811,7 +803,7 @@ btnPinPadConfirmar.addActionListener(new ActionListener() {
 										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + JcmGlobalData.montoDispensar);
 										RaspiAgent.WriteToJournal("Withdrawal", montoRetiro,0, "","", "Withdrawal DispenseOk", AccountType.Other, TransactionType.Withdrawal);
 										CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
-										cmWithdrawalVo.atmId = atmId; //CIXXGS0020;CI01GL0001
+										cmWithdrawalVo.atmId = atmId; 
 										cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
 										cmWithdrawalVo.password = CurrentUser.loginPassword;
 										cmWithdrawalVo.reference = CurrentUser.referencia;

@@ -145,7 +145,7 @@ public class PanelToken  implements PinpadListener{
 								screenTimer.schedule(new TimerTask() {
 									@Override
 									public void run() {				  
-										Flow.redirect(Flow.panelTerminamos,7000,"panelIdle");
+										Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
 										
 										Ptr.print("SI",new HashMap<String,String>());
 										
@@ -171,20 +171,25 @@ public class PanelToken  implements PinpadListener{
 								//Preparamos el retiro
 								CurrentUser.token = "";
 								CurrentUser.pinpadMode = PinpadMode.None;
-
+								
 								switch(CurrentUser.dispenseStatus) {
 								case Complete:
-									//HEWEY AQUI lblRetiraBilletesMontoDispensar.setText("$" + JcmGlobalData.montoDispensar);
-									Flow.redirect(Flow.panelRetiraBilletesHolder);
+									Flow.panelDispenseHolder.setBackground("./images/ScrRetiraBilletes.png");
+									PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+									PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + JcmGlobalData.montoDispensar);
+									
 									break;
 								case Partial:
-									//HEWEY AQUI lblRetiraBilletesMontoDispensarParcial.setText("$" + JcmGlobalData.montoDispensar);
-									Flow.redirect(Flow.panelRetiroParcialHolder);									
+									Flow.panelDispenseHolder.setBackground("./images/Scr7RetiroParcial.png");
+									PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(501, 677, 622, 153);
+									PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + JcmGlobalData.montoDispensar);
+																		
 									break;
 								default:
 									break;
 								}
 
+								Flow.redirect(Flow.panelDispenseHolder);
 								System.out.println("ConfirmaRetiro");
 
 								dispense();
@@ -195,11 +200,11 @@ public class PanelToken  implements PinpadListener{
 									@Override
 									public void run() {
 										if(Flow.jcm1cass1Dispensed && Flow.jcm1cass2Dispensed && Flow.jcm2cass1Dispensed && Flow.jcm2cass2Dispensed) {
-											Flow.redirect(Flow.panelTerminamos);
+											
 											RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + JcmGlobalData.montoDispensar);
 											RaspiAgent.WriteToJournal("Withdrawal", Flow.montoRetiro,0, "","", "Withdrawal DispenseOk", AccountType.Other, TransactionType.Withdrawal);
 											CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
-											cmWithdrawalVo.atmId = atmId; //CI01GL0001
+											cmWithdrawalVo.atmId = atmId; 
 											cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
 											cmWithdrawalVo.password = CurrentUser.loginPassword;
 											cmWithdrawalVo.reference = CurrentUser.referencia;
@@ -208,7 +213,15 @@ public class PanelToken  implements PinpadListener{
 
 											System.out.println("ConfirmaRetiro");
 
-											Ptr.printDispense(Flow.montoRetiro,CurrentUser.getLoginUser());
+											if(!Ptr.printDispense(Flow.montoRetiro,CurrentUser.getLoginUser())){
+												//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
+												Flow.redirect(Flow.panelNoTicketHolder,7000,"panelTerminamos");
+												Flow.panelTerminamosHolder.screenTimeOut = 7000;
+											}
+											else {
+												Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
+											}
+											/*
 											Timer screenTimer2 = new Timer();
 											screenTimer2.schedule(new TimerTask() {
 												@Override
@@ -221,6 +234,7 @@ public class PanelToken  implements PinpadListener{
 													screenTimer2.cancel();
 												}
 											}, 1000);
+											*/
 										}
 									}
 								}, 1000,2000);

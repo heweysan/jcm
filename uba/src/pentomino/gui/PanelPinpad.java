@@ -17,7 +17,7 @@ public class PanelPinpad {
 	public JPanel contentPanel;
 	//https://www.javaworld.com/article/2077333/mr-happy-object-teaches-custom-events.html
 	
-	private List _listeners = new ArrayList();
+	private List<PinpadListener> _listeners = new ArrayList<PinpadListener>();
 	
 	/**
 	 * @wbp.parser.entryPoint
@@ -237,7 +237,7 @@ public class PanelPinpad {
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
 							Flow.montoDepositado = 0;
 							Flow.cl.show(Flow.panelContainer, "panelDeposito");
-							Transactions.BorraCashInOPs(atmId); //CIXXGS0020 CI01GL0001								
+							Transactions.BorraCashInOPs(atmId); 								
 						}
 						else {						
 							if(!user.success) {
@@ -247,7 +247,7 @@ public class PanelPinpad {
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 								Flow.montoDepositado = 0;
 								Flow.cl.show(Flow.panelContainer, "panelDeposito");
-								Transactions.BorraCashInOPs(atmId); //CIXXGS0020 CI01GL0001
+								Transactions.BorraCashInOPs(atmId); 
 							}
 							else {	
 								if(++CurrentUser.loginAttempts >= 2) {
@@ -321,7 +321,6 @@ public class PanelPinpad {
 									screenTimeout(5000, "panelIdle");
 								}
 								else {	
-									lblLoginRow1.setText("¡Oh no! No tiene permisos para hacer retiros.");
 									panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 									RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid FALSE",AccountType.Administrative, TransactionType.ControlMessage);
 								}
@@ -352,7 +351,7 @@ public class PanelPinpad {
 								RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 								montoDepositado = 0;
 								Flow.Flow.cl.show(Flow.panelContainer, "panelDeposito");
-								Transactions.BorraCashInOPs(atmId); //CIXXGS0020 CI01GL0001
+								Transactions.BorraCashInOPs(atmId); 
 								break;
 							case Dispense:								
 								System.out.println("Validando usuario.... 7");
@@ -412,7 +411,7 @@ public class PanelPinpad {
 						else {
 
 							CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
-							cmWithdrawalVo.atmId = atmId); //CIXXGS0020 CI01GL0001
+							cmWithdrawalVo.atmId = atmId); 
 							cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
 							cmWithdrawalVo.password = CurrentUser.loginPassword;
 							cmWithdrawalVo.reference = CurrentUser.referencia;
@@ -490,7 +489,7 @@ public class PanelPinpad {
 												RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + JcmGlobalData.montoDispensar);
 												RaspiAgent.WriteToJournal("Withdrawal", montoRetiro,0, "","", "Withdrawal DispenseOk", AccountType.Other, TransactionType.Withdrawal);
 												CmWithdrawal cmWithdrawalVo = new CmWithdrawal();
-												cmWithdrawalVo.atmId = atmId); //CIXXGS0020 CI01GL0001
+												cmWithdrawalVo.atmId = atmId); 
 												cmWithdrawalVo.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
 												cmWithdrawalVo.password = CurrentUser.loginPassword;
 												cmWithdrawalVo.reference = CurrentUser.referencia;
@@ -570,7 +569,7 @@ public class PanelPinpad {
     private synchronized void _firePinKeyEvent(PinKey key) {
     	
     	PinpadEvent mood = new PinpadEvent( this, key );
-        Iterator listeners = _listeners.iterator();
+        Iterator<PinpadListener> listeners = _listeners.iterator();
         while( listeners.hasNext() ) {
             ( (PinpadListener) listeners.next() ).pinKeyReceived( mood );
         }

@@ -1,8 +1,8 @@
 .                            .
 	      DEPOSITO
 		  
-FECHA:    04/06/2020     
-HORA:     13:58:51       
+FECHA:    05/06/2020     
+HORA:     16:08:11       
 
 MONTO:	  $3,720
 

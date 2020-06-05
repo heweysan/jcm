@@ -33,7 +33,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 	public JButton btnMenuDeposito;
 	public final static JLabel lblLoginUser = new JLabel("");
 	public final static JLabel lblLoginPassword = new JLabel("");
-	final JLabel lblLoginRow1 = new JLabel("lblLoginRow1");
+	final JLabel lblLoginRow1 = new JLabel("");
 	private Image img;
 	
 	public PanelLogin() {
@@ -129,7 +129,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
 						Flow.montoDepositado = 0;
 						Flow.redirect(Flow.panelDepositoHolder);
-						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); //CIXXGS0020 CI01GL0001								
+						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 								
 					}
 					else {						
 						if(!user.success) {
@@ -239,7 +239,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid EXCEPTION",AccountType.Administrative, TransactionType.ControlMessage);
 							Flow.montoDepositado = 0;
 							Flow.redirect(Flow.panelDepositoHolder);
-							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); //CIXXGS0020 CI01GL0001
+							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
 							break;
 						case Dispense:								
 							System.out.println("Validando usuario.... 7");

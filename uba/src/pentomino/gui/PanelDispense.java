@@ -7,12 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class PanelRetiraBilletes {
+public class PanelDispense {
 	public JPanel contentPanel;
 
 	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel(".");
 	
-public PanelRetiraBilletes() {
+public PanelDispense() {
 		
 		contentPanel = new JPanel();
 		contentPanel.setBounds(0, 0, 1920, 1080);
@@ -27,6 +27,10 @@ public PanelRetiraBilletes() {
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
 		lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
 		contentPanel.add(lblRetiraBilletesMontoDispensar);
+		
+		//lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+		//lblRetiraBilletesMontoDispensar.setBounds(501, 677, 622, 153);
+		
 }
 
 public JPanel getPanel() {

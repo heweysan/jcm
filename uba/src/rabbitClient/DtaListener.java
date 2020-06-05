@@ -25,9 +25,9 @@ public class DtaListener {
 	 //TODO: Poner validacion de connection status 
 	 
 	 String exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
-	 String topicQueue = "dta.command.CIXXGS0020";  //CI99XE0001
 	 String atmId = Config.GetDirective("AtmId", "");
-
+	 String topicQueue = "dta.command." + atmId;  //CI99XE0001
+	 
 	 Map<String,Object> map = null;
 	 BasicProperties props = null;
 	 Channel channel;
@@ -44,16 +44,19 @@ public class DtaListener {
 		channel = connection.createChannel();
 		props = new BasicProperties();
         map = new HashMap<String,Object>(); 
-        map.put("command.dta.CIXXGS0020","*.dta.broadcast");      
+        map.put("command.dta." + atmId,"*.dta.broadcast");      
         props = props.builder().headers(map).build();
         
         channel.queueDeclare(topicQueue, true, false, false, new HashMap<String,Object>());
         
         /* var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" }; */
-		channel.queueBind(topicQueue, exchange, "command.dta.CIXXGS0020");
+		channel.queueBind(topicQueue, exchange, "command.dta." + atmId);
 		channel.queueBind(topicQueue, exchange, "*.dta.broadcast");
 		
 	     DeliverCallback deliverCallback = (consumerTag, message) -> {
+	    	 
+	    	 System.out.println("DtaListener message received");
+	    	 
 	         String body = new String(message.getBody(), "UTF-8");
 	         String replyToQueue = message.getProperties().getReplyTo();
 	         
@@ -68,7 +71,7 @@ public class DtaListener {
 	         myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);         
 	         
 	     };
-	     channel.basicConsume("dta.command.CIXXGS0020", true, deliverCallback, consumerTag -> { });
+	     channel.basicConsume("dta.command." + atmId, true, deliverCallback, consumerTag -> { });
 	     
 	} catch (IOException e) {
 		// TODO Auto-generated catch block

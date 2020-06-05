@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/slf4j-api-1.7.26.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/slf4j-simple-1.7.26.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/amqp-client-5.9.0.jar"/>
+	<classpathentry kind="lib" path="D:/Repos/JavaJars/jsch-0.1.55.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

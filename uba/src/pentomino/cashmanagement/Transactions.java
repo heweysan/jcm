@@ -222,7 +222,7 @@ public class Transactions {
 
 		String atmId = Config.GetDirective("AtmId", "");
 
-		depositOpVO.atmId = atmId; //CIXXGS0020 CI01GL0001
+		depositOpVO.atmId = atmId; 
 		depositOpVO.amount = 20L;
 		depositOpVO.b20 = 1;
 

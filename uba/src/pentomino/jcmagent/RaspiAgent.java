@@ -88,7 +88,7 @@ public class RaspiAgent {
         values.add(cardHash);
         values.add(cardCrypto);
  			
-        AgentMessage agentMsg = new AgentMessage(); //CIXXGS0020 
+        AgentMessage agentMsg = new AgentMessage(); 
         
         agentMsg.Agent = "eja";
 		agentMsg.Data = extraData;
@@ -113,7 +113,7 @@ public class RaspiAgent {
 		List<String> list = Arrays.asList(str.split("_"));
 		System.out.println(list);
 		 
-		AgentMessage agentMsg = new AgentMessage(); //CIXXGS0020 
+		AgentMessage agentMsg = new AgentMessage(); 
 	        
         agentMsg.Agent = "hma";
         agentMsg.Command = "add";

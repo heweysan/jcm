@@ -40,7 +40,7 @@ public class CmListener {
 	props.headers.put('operation-type','process-withdrawal')
 
 	{
-	    "atmId": "CIXXGS0020" ,
+	    "atmId": "C IXXGS0020" ,
 	    "operatorId": 7007,
 	    "password": "p4ssw0rd",
 	    "amount": 22000,
@@ -56,7 +56,7 @@ public class CmListener {
 	props.headers.put('operation-type','process-reverse')
 
 	{
-	    "atmId": "CIXXGS0020" ,
+	    "atmId": "C IXXGS0020" ,
 	    "operatorId": 7007,
 	    "password": "5123",
 	    "amount": 22000,
