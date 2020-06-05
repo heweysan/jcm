@@ -1,22 +1,19 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import javax.swing.JPanel;
 
-public class PanelNoTicket {
-	
-	public JPanel contentPanel;
+public class PanelOperacionCancelada {
+	public JPanel contentPanel = new JPanel();
 
-	
+	public PanelOperacionCancelada() {
 
-	public PanelNoTicket() {
 
-		contentPanel = new JPanel();
 		contentPanel.setBounds(0, 0, 1920, 1080);
 		contentPanel.setOpaque(false);
 		contentPanel.setBorder(null);
 		contentPanel.setLayout(null);
 
-	
+
 	}
 
 	public JPanel getPanel() {

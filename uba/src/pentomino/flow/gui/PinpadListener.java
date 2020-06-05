@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import javax.swing.JPanel;
 

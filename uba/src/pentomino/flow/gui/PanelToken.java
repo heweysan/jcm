@@ -1,8 +1,7 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -140,15 +139,36 @@ public class PanelToken  implements PinpadListener{
 							CmQueue.queueList.removeFirst();
 							CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
 
-							if(JcmGlobalData.isDebug) {													
+							if(JcmGlobalData.isDebug) {
+								
+								if(Flow.montoRetiro % 2 == 0) {
+									JcmGlobalData.montoDispensar = Flow.montoRetiro;									
+									Flow.panelDispenseHolder.setBackground("./images/ScrRetiraBilletes.png");
+									PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+									PanelDispense.lblRetiraBilletesMontoDispensar.setText("");
+								}else {
+									JcmGlobalData.montoDispensar = (Flow.montoRetiro-1) / 2;
+									Flow.panelDispenseHolder.setBackground("./images/Scr7RetiroParcial.png");
+									PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);//.setBounds(501, 677, 622, 153);
+									PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + JcmGlobalData.montoDispensar);									
+								}
+								
+								Flow.redirect(Flow.panelDispenseHolder);
+								
 								Timer screenTimer = new Timer();
 								screenTimer.schedule(new TimerTask() {
 									@Override
 									public void run() {				  
-										Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
+																			
 										
-										Ptr.print("SI",new HashMap<String,String>());
-										
+										if(!Ptr.printDispense(Flow.montoRetiro,CurrentUser.getLoginUser())){
+											//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
+											Flow.redirect(Flow.panelNoTicketHolder,7000,"panelTerminamos");
+											Flow.panelTerminamosHolder.screenTimeOut = 7000;
+										}
+										else {
+											Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
+										}	
 										
 										Timer screenTimer2 = new Timer();
 										screenTimer2.schedule(new TimerTask() {
@@ -220,30 +240,13 @@ public class PanelToken  implements PinpadListener{
 											}
 											else {
 												Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
-											}
-											/*
-											Timer screenTimer2 = new Timer();
-											screenTimer2.schedule(new TimerTask() {
-												@Override
-												public void run() {
-													//Revisamos si hay retiros listos
-
-													Flow.redirect(Flow.panelIdleHolder);
-
-													screenTimerDispense.cancel();
-													screenTimer2.cancel();
-												}
-											}, 1000);
-											*/
+											}											
 										}
 									}
 								}, 1000,2000);
 							}
 						}
-
 					}
-
-
 				}
 				else {
 

@@ -25,20 +25,19 @@ import pentomino.common.Tio;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
-import pentomino.gui.FlowLayout;
-import pentomino.gui.ImagePanel;
-import pentomino.gui.PanelDebug;
-import pentomino.gui.PanelDeposito;
-import pentomino.gui.PanelError;
-import pentomino.gui.PanelIdle;
-import pentomino.gui.PanelLogin;
-import pentomino.gui.PanelMenu;
-import pentomino.gui.PanelNoTicket;
-import pentomino.gui.PanelOperacionCancelada;
-import pentomino.gui.PanelDispense;
-import pentomino.gui.PanelRetiroParcial;
-import pentomino.gui.PanelToken;
-import pentomino.gui.PinpadListener;
+import pentomino.flow.gui.FlowLayout;
+import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.PanelDebug;
+import pentomino.flow.gui.PanelDeposito;
+import pentomino.flow.gui.PanelDispense;
+import pentomino.flow.gui.PanelError;
+import pentomino.flow.gui.PanelIdle;
+import pentomino.flow.gui.PanelLogin;
+import pentomino.flow.gui.PanelMenu;
+import pentomino.flow.gui.PanelNoTicket;
+import pentomino.flow.gui.PanelOperacionCancelada;
+import pentomino.flow.gui.PanelToken;
+import pentomino.flow.gui.PinpadListener;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.DTAServer;
 import pentomino.jcmagent.RaspiAgent;
@@ -59,7 +58,6 @@ public class Flow {
 	public static ImagePanel panelMenuHolder;
 	public static ImagePanel panelDepositoHolder;
 	public static ImagePanel panelComandosHolder;
-	//public static ImagePanel panelRetiraBilletesHolder;
 	public static ImagePanel panelDispenseHolder;
 	public static ImagePanel panelNoTicketHolder;
 
@@ -215,7 +213,6 @@ public class Flow {
 		panelContainer.add(panelLoginHolder, "panelLogin");
 		panelContainer.add(panelTokenHolder,"panelToken");
 		panelContainer.add(panelTerminamosHolder,"panelTerminamos");
-		//panelContainer.add(panelRetiraBilletesHolder,"panelRetiraBilletes");
 		panelContainer.add(panelDispenseHolder,"panelRetiroParcial");
 		panelContainer.add(panelErrorHolder,"panelError");
 		panelContainer.add(panelOperacionCanceladaHolder,"panelOperacionCancelada");		
@@ -281,8 +278,6 @@ public class Flow {
 						contadoresDeposito.x500++;
 						break;
 					}
-
-					
 					
 					CashInOpVO myObj = new CashInOpVO();
 					myObj.atmId = atmId; 
@@ -302,7 +297,7 @@ public class Flow {
 
 
 					System.out.println("$" + montoDepositado);
-					panelDeposito.lblMontoDepositado.setText("$" + montoDepositado);
+					PanelDeposito.lblMontoDepositado.setText("$" + montoDepositado);
 					panelComandos.lblBilleteIngresado1.setText("$" + billType);
 					break;
 				case "bill2":		
@@ -342,7 +337,7 @@ public class Flow {
 
 					montoDepositado += billType2;					
 					System.out.println("$" + montoDepositado);
-					panelDeposito.lblMontoDepositado.setText("$" + montoDepositado);
+					PanelDeposito.lblMontoDepositado.setText("$" + montoDepositado);
 					panelComandos.lblBilleteIngresado2.setText("$" + billType2);
 					break;					
 				case "clearbill1":
@@ -427,7 +422,56 @@ public class Flow {
 			}
 		});
 
+		initializeJcms();
 
+		/*
+		//Identificamos los puertos disponibles
+		uart.portList = CommPortIdentifier.getPortIdentifiers();
+		contador = 0;
+
+		while (uart.portList.hasMoreElements()) {
+
+			CommPortIdentifier commPort = (CommPortIdentifier) uart.portList.nextElement();
+
+
+			//Checamos que sea un com{x} port
+			if (commPort.getName().toUpperCase().contains("COM")  || commPort.getName().toUpperCase().contains("TTYUSB") ) {
+
+				System.out.println("Puerto [" + commPort.getName().toUpperCase() + "]");
+
+				jcms[contador] = new uart(contador + 1);
+				jcms[contador].portId = commPort;
+				jcms[contador].baud = 9600;
+				jcms[contador].id = contador + 1;
+				contador++;
+			}			
+		}
+
+		if(contador == 0 && JcmGlobalData.isDebug) {
+			jcms[0] = new uart(1);
+			jcms[0].portId = null;
+			jcms[0].baud = 9600;
+			jcms[0].id = 1;
+
+			jcms[1] = new uart(2);
+			jcms[1].portId = null;
+			jcms[1].baud = 9600;
+			jcms[1].id = 2;
+		}
+		else {
+			//Inicializamos los UARTS
+			for(int i = 0; i < contador; i++) {
+				jcms[i].currentOpertion = jcmOperation.Startup;
+				jcms[i].openPort(jcms[i].portId.getName().toString());
+			}
+		}
+		*/
+
+		cl.show(panelContainer, "panelIdle");	
+	}
+
+
+	private void initializeJcms() {
 
 
 		//Identificamos los puertos disponibles
@@ -470,28 +514,19 @@ public class Flow {
 				jcms[i].openPort(jcms[i].portId.getName().toString());
 			}
 		}
-
-		cl.show(panelContainer, "panelIdle");	
+	}
+	
+	public static void redirect(ImagePanel target, int timeout, String timeoutTarget) {	
+		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
 
-
-	public static void redirect(ImagePanel target, int timeout, String timeoutTarget) {
-	
-		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);
-	
+	public static void redirect(String target) {		
+		Flow.cl.show(panelContainer, target);	
 	}
-
-	public static void redirect(String target) {
-		
+	
+	public static void redirect(ImagePanel target) {		
 		Flow.cl.show(panelContainer, target);
-	
-	}
-	
-	public static void redirect(ImagePanel target) {
-		
-		Flow.cl.show(panelContainer, target);
-		target.screenTimerCancel();
-	
+		target.screenTimerCancel();	
 	}
 	
 	public static void actualizaContadoresRecicladores() {

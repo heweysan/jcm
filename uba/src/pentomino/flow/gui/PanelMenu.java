@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

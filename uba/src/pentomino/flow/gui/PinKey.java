@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 public enum PinKey {
 	_1("1"),
@@ -28,7 +28,11 @@ public enum PinKey {
 
 
 
+
 /*
+
+PIPI POPO 2
+
 public class PinKey {
 	public static final PinKey _1   = new PinKey( "happy" );
     public static final PinKey _2 = new PinKey( "annoyed" );

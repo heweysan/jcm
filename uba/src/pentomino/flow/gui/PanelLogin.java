@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.common.AccountType;
+import pentomino.common.JcmGlobalData;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
@@ -128,8 +129,18 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						CurrentUser.pinpadMode = PinpadMode.None;
 						RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", "VALIDAUSUARIO IsValid TRUE",AccountType.Administrative, TransactionType.ControlMessage);
 						Flow.montoDepositado = 0;
+						
+						if(JcmGlobalData.isDebug) {
+							Flow.montoDepositado = 3720;
+							PanelDeposito.lblMontoDepositado.setText("$3,720");
+						}
+						
 						Flow.redirect(Flow.panelDepositoHolder);
-						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 								
+						
+												
+						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
+						
+						
 					}
 					else {						
 						if(!user.success) {

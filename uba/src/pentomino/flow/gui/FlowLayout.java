@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import java.awt.CardLayout;
 import java.awt.Container;

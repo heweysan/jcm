@@ -1,11 +1,15 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import pentomino.flow.Flow;
 
@@ -24,6 +28,8 @@ public class ImagePanel extends JPanel{
 	private String _name;
 	Timer screenTimer = new Timer();
 		
+	final JLabel lblLoginUser = new JLabel("DEBE SALIR EN TODOS LO LADOS");
+	
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -39,6 +45,15 @@ public class ImagePanel extends JPanel{
 	
 	
 	public ImagePanel(Image img, String name) {
+		
+		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
+		lblLoginUser.setForeground(Color.WHITE);
+		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLoginUser.setBounds(257, 625, 496, 87);
+		this.add(lblLoginUser);
+		
+		
+		
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {

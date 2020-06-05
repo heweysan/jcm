@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -27,11 +27,11 @@ public class PanelDeposito {
 	
 	public JPanel contentPanel = new JPanel();
 	
-	public final JLabel lblMontoDepositado = new JLabel(".");
+	public final static JLabel lblMontoDepositado = new JLabel(".");
 	
 	
 	public PanelDeposito() {
-		
+				
 		contentPanel.setBounds(0, 0, 1920, 1080);
 		contentPanel.setOpaque(false);
 		contentPanel.setBorder(null);
@@ -46,15 +46,13 @@ public class PanelDeposito {
 		contentPanel.add(btnAceptar);
 		
 		lblMontoDepositado.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMontoDepositado.setBounds(651, 484, 566, 130);
+		lblMontoDepositado.setBounds(10, 484, 1900, 130);
 		lblMontoDepositado.setForeground(Color.WHITE);
 		lblMontoDepositado.setFont(new Font("Tahoma", Font.BOLD, 50));
 		
 		contentPanel.add(lblMontoDepositado);
 		
 		contentPanel.add(new DebugButtons().getPanel());	
-		
-		
 		
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -104,7 +102,6 @@ public class PanelDeposito {
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, billetesNotesValidated);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + Flow.montoDepositado);
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", Flow.montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
-
 					
 					
 					if(!Ptr.printDeposit(depositOpVO)){
@@ -115,9 +112,7 @@ public class PanelDeposito {
 					}
 					else {
 						Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
-					}
-
-									
+					}		
 					
 					break;
 				case Dispense:
@@ -126,7 +121,8 @@ public class PanelDeposito {
 					break;
 				}
 			}
-		});
+		});		
+	
 		
 	}
 	

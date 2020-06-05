@@ -182,13 +182,13 @@ public class Ptr {
 		}
 		catch( FileNotFoundException fe) {
 			System.out.println("No se encontro el archivo [" + form + ".txt]");
-			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "FORM NOT FOUND");
 			logger.error(fe);
 			return false;
 
 
 		} catch (IOException e) {
-			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "EXCEPTION ");
 			e.printStackTrace();
 			logger.error(e);
 			return false;

@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -25,11 +25,8 @@ public PanelDispense() {
 		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 60));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+		lblRetiraBilletesMontoDispensar.setBounds(10, 509, 1900, 153);
 		contentPanel.add(lblRetiraBilletesMontoDispensar);
-		
-		//lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
-		//lblRetiraBilletesMontoDispensar.setBounds(501, 677, 622, 153);
 		
 }
 

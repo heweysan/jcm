@@ -1,4 +1,4 @@
-package pentomino.gui;
+package pentomino.flow.gui;
 import java.util.EventObject;
 
 public class PinpadEvent extends EventObject {
