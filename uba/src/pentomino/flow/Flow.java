@@ -21,10 +21,10 @@ import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
-import pentomino.common.Tio;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
+import pentomino.core.devices.Tio;
 import pentomino.flow.gui.FlowLayout;
 import pentomino.flow.gui.ImagePanel;
 import pentomino.flow.gui.PanelDebug;
@@ -36,6 +36,7 @@ import pentomino.flow.gui.PanelLogin;
 import pentomino.flow.gui.PanelMenu;
 import pentomino.flow.gui.PanelNoTicket;
 import pentomino.flow.gui.PanelOperacionCancelada;
+import pentomino.flow.gui.PanelPrueba;
 import pentomino.flow.gui.PanelToken;
 import pentomino.flow.gui.PinpadListener;
 import pentomino.jcmagent.AgentsQueue;
@@ -60,6 +61,7 @@ public class Flow {
 	public static ImagePanel panelComandosHolder;
 	public static ImagePanel panelDispenseHolder;
 	public static ImagePanel panelNoTicketHolder;
+	public static PanelPrueba panelPrueba;
 
 	public static JcmContadores contadoresDeposito = new JcmContadores();	
 
@@ -203,6 +205,7 @@ public class Flow {
 		PanelNoTicket panelPanelNoTicket = new PanelNoTicket();
 		panelNoTicketHolder.add(panelPanelNoTicket.getPanel());
 		
+		panelPrueba = new PanelPrueba(new ImageIcon("./images/Scr7SinRetiroAutorizado.png").getImage(),"panelNoTicket",5000,"panelTerminamos");
 		
 
 		panelContainer.setLayout(cl);		
@@ -218,6 +221,7 @@ public class Flow {
 		panelContainer.add(panelOperacionCanceladaHolder,"panelOperacionCancelada");		
 		panelContainer.add(panelNoTicketHolder,"panelNoTicket");	
 
+		panelContainer.add(panelPrueba,"panelPrueba");
 
 
 		/*		
@@ -467,7 +471,9 @@ public class Flow {
 		}
 		*/
 
-		cl.show(panelContainer, "panelIdle");	
+		cl.show(panelContainer, "panelIdle");
+		
+		//cl.show(panelContainer, "panelPrueba");
 	}
 
 
@@ -520,6 +526,10 @@ public class Flow {
 		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
 
+	public static void redirect(JPanel target, int timeout, String timeoutTarget) {	
+		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
+	}
+	
 	public static void redirect(String target) {		
 		Flow.cl.show(panelContainer, target);	
 	}

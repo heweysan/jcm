@@ -1,4 +1,4 @@
-package pentomino.common;
+package pentomino.core.devices;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -23,6 +23,7 @@ import org.cups4j.PrintJob;
 import org.cups4j.PrintRequestResult;
 
 import pentomino.cashmanagement.vo.DepositOpVO;
+import pentomino.common.DeviceEvent;
 import pentomino.jcmagent.RaspiAgent;
 
 public class Ptr {

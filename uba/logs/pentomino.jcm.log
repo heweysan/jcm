@@ -1778,3 +1778,92 @@
 2020-06-05 18:01:12,280|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
 2020-06-05 18:01:12,280|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
 2020-06-05 18:01:18,190|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 18:35:26,884|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 18:35:28,489|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 18:35:29,199|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 18:35:29,199|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 18:36:27,038|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 18:36:28,685|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 18:36:29,415|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 18:36:29,415|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 18:58:02,758|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 18:58:04,474|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 18:58:05,194|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 18:58:05,194|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 18:58:52,160|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 18:58:53,845|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 18:58:54,558|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 18:58:54,558|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 19:10:15,096|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 19:10:16,746|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 19:10:17,451|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 19:10:17,452|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 19:11:50,245|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 19:11:52,263|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 19:11:52,985|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 19:11:52,985|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 19:12:16,359|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 19:12:18,049|DEBUG|p.c.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 19:12:18,756|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 19:12:18,756|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:05:51,052|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:05:52,719|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:05:53,431|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:05:53,431|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:06:57,326|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:06:59,004|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:06:59,715|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:06:59,715|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:08:01,321|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:08:03,150|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:08:03,865|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:08:03,865|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:08:15,396|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:13:25,385|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:13:27,030|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:13:27,737|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:13:27,738|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:13:40,607|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:13:53,751|ERROR|p.c.d.Ptr|[Timer-37]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 20:18:13,564|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:18:15,189|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:18:15,903|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:18:15,903|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:18:36,758|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:18:48,196|ERROR|p.c.d.Ptr|[Timer-39]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 20:22:16,369|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:22:18,013|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:22:18,720|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:22:18,720|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:22:37,198|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:22:48,234|ERROR|p.c.d.Ptr|[Timer-39]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 20:23:26,132|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:23:27,809|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:23:28,510|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:23:28,510|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:23:38,049|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:23:49,021|ERROR|p.c.d.Ptr|[Timer-37]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 20:30:57,962|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:30:59,572|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:31:00,287|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:31:00,287|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:31:19,990|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:31:30,455|ERROR|p.c.d.Ptr|[Timer-39]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 20:34:49,731|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 20:34:51,443|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 20:34:52,161|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 20:34:52,161|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 20:35:20,626|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 20:35:37,830|ERROR|p.c.d.Ptr|[Timer-41]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 21:01:17,547|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 21:01:19,196|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 21:01:19,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 21:01:19,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 21:01:35,147|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 21:01:49,443|ERROR|p.c.d.Ptr|[Timer-39]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)
+2020-06-05 21:06:30,927|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-05 21:06:33,511|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-05 21:06:34,249|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-05 21:06:34,249|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-05 21:06:47,244|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-05 21:06:57,934|ERROR|p.c.d.Ptr|[Timer-37]|java.io.FileNotFoundException: retiro.txt (El sistema no puede encontrar el archivo especificado)

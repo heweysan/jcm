@@ -28,7 +28,7 @@ public class ImagePanel extends JPanel{
 	private String _name;
 	Timer screenTimer = new Timer();
 		
-	final JLabel lblLoginUser = new JLabel("DEBE SALIR EN TODOS LO LADOS");
+	final JLabel lblLoginUser = new JLabel(".");
 	
 	/**
 	 * @wbp.parser.constructor

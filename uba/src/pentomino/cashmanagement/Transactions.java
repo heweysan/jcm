@@ -90,7 +90,7 @@ public class Transactions {
 				if(!result.isEmpty()) {
 
 					if(result != ""){
-						Map responseMap = gson.fromJson(result, Map.class);
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
 						returnVO.success = (Boolean) responseMap.get("success");
 						returnVO.message = (String) responseMap.get("message");
 						returnVO.exception = (ExceptionVO) responseMap.get("exception");
@@ -170,7 +170,7 @@ public class Transactions {
 				if(!result.isEmpty()) {
 
 					if(result != ""){
-						Map responseMap = gson.fromJson(result, Map.class);
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
 						returnVO.success = (Boolean) responseMap.get("success");
 						returnVO.message = (String) responseMap.get("message");
 						returnVO.exception = (ExceptionVO) responseMap.get("exception");
@@ -281,7 +281,7 @@ public class Transactions {
 				if(!result.isEmpty()) {
 
 					if(result != ""){
-						Map responseMap = gson.fromJson(result, Map.class);
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
 						returnVO.success = (Boolean) responseMap.get("success");
 						returnVO.message = (String) responseMap.get("message");
 						returnVO.exception = (ExceptionVO) responseMap.get("exception");
@@ -356,7 +356,7 @@ public class Transactions {
 				//NO SE PUDO CONECTAR O CREDENCIALES INCORRECTA, ALGO MALO PASO
 				returnVO.isValid = false;
 				returnVO.allowWithdrawals = false;
-				returnVO.depositInfo = new ArrayList();
+				returnVO.depositInfo = new ArrayList<Object>();
 				returnVO.success = false;
 				returnVO.profileName = null;
 				returnVO.profileId = (int) 0L;
@@ -400,11 +400,11 @@ public class Transactions {
 
 				if(!result.isEmpty()) {
 					if(result != ""){
-						Map responseMap = gson.fromJson(result, Map.class);
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
 						if(responseMap.containsKey("exception")){
 							returnVO.isValid = false;
 							returnVO.allowWithdrawals = false;
-							returnVO.depositInfo = new ArrayList();
+							returnVO.depositInfo = new ArrayList<Object>();
 							returnVO.success = true;
 							returnVO.profileName = null;
 							returnVO.profileId = (int) 0L;
@@ -416,7 +416,7 @@ public class Transactions {
 							returnVO.totalDeposit = 0;
 						}else{
 							returnVO.isValid = true;
-							returnVO.depositInfo = new ArrayList();;
+							returnVO.depositInfo = new ArrayList<Object>();;
 							returnVO.success = true;
 							returnVO.allowWithdrawals = (Boolean) responseMap.get("allowWithdrawals");
 							returnVO.profileName = (String) responseMap.get("profileName");
@@ -429,7 +429,7 @@ public class Transactions {
 					}else{
 						returnVO.isValid = false;
 						returnVO.allowWithdrawals = false;
-						returnVO.depositInfo = new ArrayList();
+						returnVO.depositInfo = new ArrayList<Object>();
 						returnVO.success = true;
 						returnVO.profileName = null;
 						returnVO.profileId = (int) 0L;
@@ -441,7 +441,7 @@ public class Transactions {
 				}else {
 					returnVO.isValid = false;
 					returnVO.allowWithdrawals = false;
-					returnVO.depositInfo = new ArrayList();
+					returnVO.depositInfo = new ArrayList<Object>();
 					returnVO.success = true;
 					returnVO.profileName = null;
 					returnVO.profileId =  (int) 0L;
@@ -588,7 +588,7 @@ public class Transactions {
 					
 					if(!result.isEmpty()) {
 						if(result != ""){
-							Map responseMap = gson.fromJson(result, Map.class);
+							Map<?, ?> responseMap = gson.fromJson(result, Map.class);
 							if(responseMap.containsKey("exception")){			
 								System.out.println("TENGO [" + responseMap.get("message") + "]");
 								if( responseMap.get("message").toString().equalsIgnoreCase("Invalid Reference Data")) {

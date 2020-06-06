@@ -1,4 +1,4 @@
-package pentomino.common;
+package pentomino.core.devices;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +14,8 @@ import com.pi4j.io.gpio.RaspiPinNumberingScheme;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
+import pentomino.common.DeviceEvent;
+import pentomino.common.JcmGlobalData;
 import pentomino.jcmagent.RaspiAgent;
 
 public class Tio implements Runnable{

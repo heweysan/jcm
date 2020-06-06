@@ -51,11 +51,7 @@ abstract class Screen  extends JPanel{
 	
 	public Screen(Image img, String name) {
 		
-		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
-		lblLoginUser.setForeground(Color.WHITE);
-		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginUser.setBounds(257, 625, 496, 87);
-		this.add(lblLoginUser);
+		this.add(new DebugButtons().getPanel());
 		
 		content();
 		
@@ -68,7 +64,7 @@ abstract class Screen  extends JPanel{
 				screenTimer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						System.out.println("Redireccionado [" + name + "] -> [" + panelRedirect + "]");
+						System.out.println("OnLoad Screen Redireccionado [" + name + "] -> [" + panelRedirect + "]");
 						screenTimer.cancel();						
 						Flow.redirect(panelRedirect);					
 					}
@@ -76,7 +72,7 @@ abstract class Screen  extends JPanel{
 			}
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				System.out.println("OnUnload  Screen [" + name + "]");
+				System.out.println("OnUnload Screen [" + name + "]");
 				screenTimer.cancel();
 			}
 		});
