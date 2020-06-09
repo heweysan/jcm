@@ -66,31 +66,31 @@ public class PanelDeposito {
 					DepositOpVO depositOpVO = new DepositOpVO();
 
 					if(JcmGlobalData.isDebug) {						
-						Flow.montoDepositado = 3720;	
+						CurrentUser.totalAmountInserted = 3720;	
 						depositOpVO.atmId = atmId;  
-						depositOpVO.amount = (long) Flow.montoDepositado;
+						depositOpVO.amount = (long) CurrentUser.totalAmountInserted;
 						depositOpVO.b20 = 1;
 						depositOpVO.b50 = 2;
 						depositOpVO.b100 = 3;
 						depositOpVO.b200 = 4;
 						depositOpVO.b500 = 5;
-						depositOpVO.b1000 = 6;
-						depositOpVO.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
+						depositOpVO.b1000 = 0;
+						depositOpVO.operatorId = Integer.parseInt(CurrentUser.loginUser);
 						depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-						depositOpVO.userName = CurrentUser.getLoginUser();							
+						depositOpVO.userName = CurrentUser.loginUser;							
 					}
 					else {
 						depositOpVO.atmId = atmId; 
-						depositOpVO.amount = (long) Flow.montoDepositado;
-						depositOpVO.b20 = Flow.contadoresDeposito.x20;
-						depositOpVO.b50 = Flow.contadoresDeposito.x50;
-						depositOpVO.b100 = Flow.contadoresDeposito.x100;
-						depositOpVO.b200 = Flow.contadoresDeposito.x200;
-						depositOpVO.b500 = Flow.contadoresDeposito.x500;
+						depositOpVO.amount = (long) CurrentUser.totalAmountInserted;
+						depositOpVO.b20 = Flow.depositBillsCounter.x20;
+						depositOpVO.b50 = Flow.depositBillsCounter.x50;
+						depositOpVO.b100 = Flow.depositBillsCounter.x100;
+						depositOpVO.b200 = Flow.depositBillsCounter.x200;
+						depositOpVO.b500 = Flow.depositBillsCounter.x500;
 						depositOpVO.b1000 = 0;
-						depositOpVO.operatorId = Integer.parseInt(CurrentUser.getLoginUser());
+						depositOpVO.operatorId = Integer.parseInt(CurrentUser.loginUser);
 						depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-						depositOpVO.userName = CurrentUser.getLoginUser();										
+						depositOpVO.userName = CurrentUser.loginUser;										
 					}
 
 					String billetes = "[" + depositOpVO.b20 + "x20|" + depositOpVO.b50 + "x50|" + depositOpVO.b100 + "x100|" + depositOpVO.b200 + "x200|" + depositOpVO.b500 + "x500|" + depositOpVO.b1000 + "x1000]";
@@ -98,20 +98,20 @@ public class PanelDeposito {
 
 					Transactions.ConfirmaDeposito(depositOpVO);
 
-					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted,"" + Flow.montoDepositado);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted,"" + CurrentUser.totalAmountInserted);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, billetesNotesValidated);
-					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + Flow.montoDepositado);
-					RaspiAgent.WriteToJournal("CASH MANAGEMENT", Flow.montoDepositado,0, "","", "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + CurrentUser.totalAmountInserted);
+					RaspiAgent.WriteToJournal("CASH MANAGEMENT", CurrentUser.totalAmountInserted,0, "", CurrentUser.loginUser, "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
 					
 					
 					if(!Ptr.printDeposit(depositOpVO)){
 						//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
-						Flow.redirect(Flow.panelNoTicketHolder,7000,"panelTerminamos");
-						Flow.panelTerminamosHolder.screenTimeOut = 7000;
+						Flow.redirect(Flow.panelNoTicketHolder,5000,"panelTerminamos");
+						Flow.panelTerminamosHolder.screenTimeOut = 5000;
 						Flow.panelTerminamosHolder.panelRedirect = "panelIdle";
 					}
 					else {
-						Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
+						Flow.redirect(Flow.panelTerminamosHolder,5000,"panelIdle");
 					}		
 					
 					break;

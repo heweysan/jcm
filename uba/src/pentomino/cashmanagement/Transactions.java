@@ -19,12 +19,14 @@ import com.rabbitmq.client.Connection;
 
 import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.cashmanagement.vo.CashInOpVO;
+import pentomino.cashmanagement.vo.CmReverse;
 import pentomino.cashmanagement.vo.CmWithdrawal;
 import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.cashmanagement.vo.ExceptionVO;
 import pentomino.cashmanagement.vo.GenericMessageVO;
 import pentomino.cashmanagement.vo.ResponseObjectVO;
 import pentomino.config.Config;
+import pentomino.flow.CurrentUser;
 import rabbitClient.RabbitMQConnection;
 
 
@@ -36,7 +38,7 @@ public class Transactions {
 
 	private Connection connection;
 
-	
+
 
 	public static ResponseObjectVO InsertaCashInOp(CashInOpVO cashInOp) {
 
@@ -72,7 +74,7 @@ public class Transactions {
 
 				channel.basicPublish("ex.cm.topic", "cm.cashin.*",true, props, gson.toJson(requestMessage).getBytes());
 				System.out.println("Sent     [" + gson.toJson(requestMessage) + "]"); 
-									
+
 
 				//Esperamos la respuesta
 
@@ -125,13 +127,13 @@ public class Transactions {
 
 		System.out.println("\n--- BorraCashInOPs ---".toUpperCase()); 
 
-		
+
 		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
 
 		String mensaje = "{\"data\":{\"atmId\":\"" + atmId + "\"}}";
-	
+
 		ResponseObjectVO returnVO = new ResponseObjectVO();
 
 		try{
@@ -143,7 +145,7 @@ public class Transactions {
 				map.put("operation-type","delete-cashin");         
 
 				String replyQueueName = channel.queueDeclare().getQueue();
-				
+
 				AMQP.BasicProperties props = new AMQP.BasicProperties
 						.Builder()
 						.correlationId(corrId)
@@ -153,7 +155,7 @@ public class Transactions {
 
 				channel.basicPublish("ex.cm.topic", "cm.cashin.*",true, props, mensaje.getBytes());
 				System.out.println("Sent     [" + mensaje + "]"); 
-				
+
 				//Esperamos la respuesta
 
 				final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
@@ -166,7 +168,7 @@ public class Transactions {
 				});
 
 				String result = response.take();
-				
+
 				if(!result.isEmpty()) {
 
 					if(result != ""){
@@ -189,7 +191,7 @@ public class Transactions {
 
 				System.out.println("result   [" + result + "]");
 				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
-				
+
 				channel.close();
 				//rabbitConn.close();
 			}
@@ -210,9 +212,9 @@ public class Transactions {
 			logger.debug("InsertaPreDeposito(Deposito) - start"); //$NON-NLS-1$
 		}	
 
-		
-		
-		
+
+
+
 		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
@@ -275,7 +277,7 @@ public class Transactions {
 				}, consumerTag -> {
 				});
 
-				
+
 				String result = response.take();
 
 				if(!result.isEmpty()) {
@@ -295,7 +297,7 @@ public class Transactions {
 					returnVO.message = "Problemas de comunicación con servicios de cashin";
 					returnVO.exception = null;
 				}
-				
+
 				channel.basicCancel(ctag);
 
 				System.out.println("result   [" + result + "]");
@@ -351,7 +353,7 @@ public class Transactions {
 		try{
 
 			Connection rabbitConn = RabbitMQConnection.getConnection();
-			
+
 			if(rabbitConn == null) {
 				//NO SE PUDO CONECTAR O CREDENCIALES INCORRECTA, ALGO MALO PASO
 				returnVO.isValid = false;
@@ -380,8 +382,8 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.auth.*",true, props, mensaje.getBytes());
-				System.out.println("Sent     [" + mensaje + "]"); 
-                                    
+				//System.out.println("Sent     [" + mensaje + "]"); 
+
 
 				//Esperamos la respuesta
 
@@ -451,18 +453,14 @@ public class Transactions {
 				}
 				logger.info("returning ${JsonOutput.toJson(returnVO)}");
 
-
-				System.out.println("result   [" + result + "]");  
 				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
 
 				channel.basicCancel(ctag);
 				channel.close();
-				
-				
-				//HEWEY AQUI rabbitConn.close();
+
 			}
 		}catch(Exception e){
-			System.out.println("ValidaUsuario");
+			System.out.println("ValidaUsuario [EXCEPTION]");
 			e.printStackTrace();
 		}
 
@@ -474,7 +472,7 @@ public class Transactions {
 	public static String ConfirmaDeposito(DepositOpVO depositOpVO)  {
 
 		System.out.println("\n--- ConfirmaDeposito ---".toUpperCase());
-	
+
 		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;		
@@ -491,7 +489,6 @@ public class Transactions {
 				map.put("operation-type","insert-deposit");         
 
 				String replyQueueName = channel.queueDeclare().getQueue();
-				//System.out.println("replyQueueName [" + replyQueueName + "]");
 
 				AMQP.BasicProperties props = new AMQP.BasicProperties
 						.Builder()
@@ -513,7 +510,7 @@ public class Transactions {
 					}
 				}, consumerTag -> {
 				});
-			     
+
 
 				String result = response.take();
 
@@ -522,7 +519,7 @@ public class Transactions {
 				System.out.println("result [" + result + "]");
 
 				channel.close();
-				//rabbitConn.close();
+
 			}
 		}catch(Exception e){
 			System.out.println("ConfirmaDeposito");
@@ -533,101 +530,186 @@ public class Transactions {
 
 	}
 
-	
+
 	//Equivalente a /Deposito  PUT
-		public static boolean ConfirmaRetiro(CmWithdrawal cmWithdrawalVo)  {
+	public static boolean ConfirmaRetiro(CmWithdrawal cmWithdrawalVo)  {
 
-			System.out.println("\n--- ConfirmaRetiro ---".toUpperCase());
-		
-			boolean retData = false;
-			
-			String corrId = UUID.randomUUID().toString();
+		System.out.println("\n--- ConfirmaRetiro ---".toUpperCase());
 
-			Map<String,Object> map = null;		
+		boolean retData = false;
 
-			GenericMessageVO requestMessage = new GenericMessageVO();
-			requestMessage.data = cmWithdrawalVo;			
-			
-			try{
-				Connection rabbitConn = RabbitMQConnection.getConnection();
-				if(rabbitConn != null){
-					Channel channel = rabbitConn.createChannel();  
+		String corrId = UUID.randomUUID().toString();
 
-					map = new HashMap<String,Object>(); 
-					map.put("operation-type","process-withdrawal");         
+		Map<String,Object> map = null;		
 
-					String replyQueueName = channel.queueDeclare().getQueue();
-					
-					AMQP.BasicProperties props = new AMQP.BasicProperties
-							.Builder()
-							.correlationId(corrId)
-							.replyTo(replyQueueName)
-							.headers(map)
-							.build();
+		GenericMessageVO requestMessage = new GenericMessageVO();
+		requestMessage.data = cmWithdrawalVo;			
 
-					channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
-					System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
+		try{
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			if(rabbitConn != null){
+				Channel channel = rabbitConn.createChannel();  
 
-					//Esperamos la respuesta
+				map = new HashMap<String,Object>(); 
+				map.put("operation-type","process-withdrawal");         
 
-					final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+				String replyQueueName = channel.queueDeclare().getQueue();
 
-					String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
-						if (delivery.getProperties().getCorrelationId().equals(corrId)) {
-							response.offer(new String(delivery.getBody(), "UTF-8"));
-						}
-					}, consumerTag -> {
-					});
-				     
+				AMQP.BasicProperties props = new AMQP.BasicProperties
+						.Builder()
+						.correlationId(corrId)
+						.replyTo(replyQueueName)
+						.headers(map)
+						.build();
 
-					String result = response.take();
+				channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
+				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
 
-					channel.basicCancel(ctag);
+				//Esperamos la respuesta
 
-					System.out.println("result [" + result + "]");
-					
-					if(!result.isEmpty()) {
-						if(result != ""){
-							Map<?, ?> responseMap = gson.fromJson(result, Map.class);
-							if(responseMap.containsKey("exception")){			
-								System.out.println("TENGO [" + responseMap.get("message") + "]");
-								if( responseMap.get("message").toString().equalsIgnoreCase("Invalid Reference Data")) {
-									//Ponemos como cashedout el retiro pues ya se cobró.
-									CmQueue.queueList.removeFirst();
-									CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
-								}
-								
-								return false;
-							}else{
-								if(responseMap.containsKey("success")) {
-									retData =  (Boolean) responseMap.get("success");
-								}
+				final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+
+				String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+					if (delivery.getProperties().getCorrelationId().equals(corrId)) {
+						response.offer(new String(delivery.getBody(), "UTF-8"));
+					}
+				}, consumerTag -> {
+				});
+
+
+				String result = response.take();
+
+				channel.basicCancel(ctag);
+
+				System.out.println("result [" + result + "]");
+
+				if(!result.isEmpty()) {
+					if(result != ""){
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
+						if(responseMap.containsKey("exception")){			
+							System.out.println("TENGO [" + responseMap.get("message") + "]");
+							if( responseMap.get("message").toString().equalsIgnoreCase("Invalid Reference Data")) {
+								//Ponemos como cashedout el retiro pues ya se cobró.
+								CmQueue.queueList.removeFirst();
+								CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
 							}
 
+							return false;
 						}else{
-							retData = false;
+							if(responseMap.containsKey("success")) {
+								retData =  (Boolean) responseMap.get("success");
+								CurrentUser.movementId = (String) responseMap.get("value");
+							}
 						}
 
-					}else {
+					}else{
 						retData = false;
-					}					
+					}
 
-					channel.close();					
-					
-				}
-			}catch(Exception e){
-				System.out.println("ConfirmaDeposito Exception");				
-				e.printStackTrace();
-				retData = false;
+				}else {
+					retData = false;
+				}					
+
+				channel.close();					
+
 			}
-
-			return retData;            
-
+		}catch(Exception e){
+			System.out.println("ConfirmaDeposito Exception");				
+			e.printStackTrace();
+			retData = false;
 		}
 
-		//784512
-	
-	
+		return retData;            
+
+	}
+
+	//REVERSO
+	public static boolean WithdrawalReverse(CmReverse cmReverseVo)  {
+
+		System.out.println("\n--- WithdrawalReverse ---".toUpperCase());
+
+		boolean retData = false;
+
+		String corrId = UUID.randomUUID().toString();
+
+		Map<String,Object> map = null;		
+
+		GenericMessageVO requestMessage = new GenericMessageVO();
+		requestMessage.data = cmReverseVo;			
+
+		try{
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+			if(rabbitConn != null){
+				Channel channel = rabbitConn.createChannel();  
+
+				map = new HashMap<String,Object>(); 
+				map.put("operation-type","process-reverse");         
+
+				String replyQueueName = channel.queueDeclare().getQueue();
+
+				AMQP.BasicProperties props = new AMQP.BasicProperties
+						.Builder()
+						.correlationId(corrId)
+						.replyTo(replyQueueName)
+						.headers(map)
+						.build();
+
+				channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
+				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
+
+				//Esperamos la respuesta
+
+				final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+
+				String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+					if (delivery.getProperties().getCorrelationId().equals(corrId)) {
+						response.offer(new String(delivery.getBody(), "UTF-8"));
+					}
+				}, consumerTag -> {
+				});
+
+
+				String result = response.take();
+
+				channel.basicCancel(ctag);
+
+				System.out.println("result [" + result + "]");
+
+				if(!result.isEmpty()) {
+					if(result != ""){
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
+						if(responseMap.containsKey("exception")){			
+														return false;
+						}else{
+							if(responseMap.containsKey("success")) {
+								retData =  (Boolean) responseMap.get("success");
+							}
+						}
+
+					}else{
+						retData = false;
+					}
+
+				}else {
+					retData = false;
+				}					
+
+				channel.close();					
+
+			}
+		}catch(Exception e){
+			System.out.println("WithdrawalReverse Exception");				
+			e.printStackTrace();
+			retData = false;
+		}
+
+		return retData;            
+
+	}
+
+
+
+
 	public void close() throws IOException {
 		connection.close();
 	}

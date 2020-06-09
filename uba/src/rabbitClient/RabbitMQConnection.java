@@ -40,7 +40,7 @@ public class RabbitMQConnection {
 			if(message!= null)
 				System.out.println("RabbitMQConnection.getConnection AFE [" + message + "]");
 			else {
-				System.out.println("RabbitMQConnection.getConnection AFE ALGO EXTRA");
+				System.out.println("RabbitMQConnection.getConnection AFE");
 				afe.printStackTrace();
 			}
 		}	  
@@ -50,7 +50,7 @@ public class RabbitMQConnection {
 			if(message!= null)
 				System.out.println("RabbitMQConnection.getConnection IOE [" + message + "]");
 			else {
-				System.out.println("RabbitMQConnection.getConnection IOE ALGO EXTRA");
+				System.out.println("RabbitMQConnection.getConnection IOE");
 				e.printStackTrace();
 			}			  
 		}      

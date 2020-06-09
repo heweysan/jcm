@@ -30,7 +30,7 @@ public class DTAServer {
 	private static final Logger logger = LogManager.getLogger(Transactions.class.getName());
 
 	public String ManageAgent(String function, EnvironmentVariables envVars) {
-		//Logger.DebugFormat("Received DTA function: {0}", function);
+		
 		System.out.println("DTAServer.ManageAgent");
 
 		switch (function.toUpperCase()) {
@@ -661,8 +661,7 @@ public class DTAServer {
 			};
 			channel.basicConsume("dta.command." + atmId, true, deliverCallback, consumerTag -> { });
 
-		} catch (IOException ioe) {
-			// TODO Auto-generated catch block
+		} catch (IOException ioe) {		
 			System.out.println("DTAServer bailo con Bertha esto.");
 			ioe.printStackTrace();
 		}

@@ -54,9 +54,9 @@ public class PanelMenu {
 				PanelLogin.lblLoginUser.setText("");
 				PanelLogin.lblLoginPassword.setText("");
 				CurrentUser.currentOperation = jcmOperation.Deposit;
+				PanelLogin.lblLoginOpcion.setBounds(240, 530, 87, 87);   //Este es login sin password
 				Flow.panelLoginHolder.setBackground("./images/Scr7IdentificateDeposito.png");
-				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");
-				
+				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");				
 			}
 		});
 		
@@ -74,17 +74,19 @@ public class PanelMenu {
 				
 				CurrentUser.currentOperation = jcmOperation.Dispense;
 
+				PanelLogin.lblLoginOpcion.setBounds(230, 430, 87, 87);   //Este es login con password
+				
 				Flow.panelLoginHolder.setBackground("./images/Scr7IngresaDatos.png");
 				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");
 								
 				CmMessageRequest request =  CmQueue.queueList.getFirst();				
 				CurrentUser.token = "" + request.token;
-				Flow.montoRetiro = request.amount;
+				CurrentUser.WithdrawalRequested = request.amount;
 				
-				PanelToken.lblTokenMontoRetiro.setText("$" + Flow.montoRetiro);
+				PanelToken.lblTokenMontoRetiro.setText("$" + CurrentUser.WithdrawalRequested);
 				PanelToken.lblToken.setText(CurrentUser.token);
 				CurrentUser.tokenConfirmacion = "";	
-				CurrentUser.referencia = request.reference;
+				CurrentUser.reference = request.reference;
 				PanelToken.lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);				
 			}
 		});

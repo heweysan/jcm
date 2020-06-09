@@ -1,12 +1,10 @@
 package pentomino.flow;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import pentomino.cashmanagement.Transactions;
-import pentomino.cashmanagement.vo.CashInOpVO;
-import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
-import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -30,16 +28,20 @@ public class protocol extends kermit {
 
 	public jcmOperation currentOpertion = jcmOperation.None;
 
-	public JcmContadores contadores = new JcmContadores();
+	public JcmContadores billCounters = new JcmContadores();
 
+	public Map<Integer,JcmCassette> cassettes = new HashMap<Integer,JcmCassette>();	
+	
 	public static String loginUser;
 	
 	private boolean processingOperation = false;
 	private boolean waitingForInitialize = false;
 
 	/* VARIABLES PARA DISPENSADO */
-	public int jcmCass1 = 0;
-	public int jcmCass2 = 0;
+	public int billsToDispenseFromCassette1 = 0;
+	public int billsToDispenseFromCassette2 = 0;
+	
+	public int dispensingFromCassette = 0;
 	
 	int cuantos = 0;
 	int cuantos2 = 0;
@@ -205,6 +207,14 @@ public class protocol extends kermit {
 		jcmMessage[2] = (byte) 0x11; // CMD Command,status
 		jcmMessage[3] = (byte) 0x27; // 0-250byte: Data required for a command (may be ommited depending on the CMD)
 		jcmMessage[4] = (byte) 0x56; // CRC 2 byte Check code of CRC method
+		
+		
+		cassettes.put(20,new JcmCassette(20));
+		cassettes.put(50,new JcmCassette(50));
+		cassettes.put(100,new JcmCassette(100));
+		cassettes.put(200,new JcmCassette(200));
+		cassettes.put(500,new JcmCassette(500));
+		cassettes.put(1000,new JcmCassette(1000));
 	}
 
 	public void receiving(byte[] bty) {
@@ -354,38 +364,39 @@ public class protocol extends kermit {
 			bill = bill_value(jcmResponse[3]); // bill = b[3];
 			switch(jcmId) {
 				case 1:
-					JcmGlobalData.totalCashInRecyclers1 += bill;
-					System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecyclers1 + "]");
+					
+					JcmGlobalData.totalCashInRecyclers += bill;					
 					
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
 					//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
-					if((JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) > JcmGlobalData.maxRecyclableCash) {
+					if((JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.maxRecyclableCash) {
 						id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
 					}
 					else {
+						JcmGlobalData.totalCashInRecycler1 += bill;  //Dinero que se puede dispensar
+						System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecycler1 + "]");
 						id003_format((byte)5, (byte) 0x41, jcmMessage,true); //STACK1
 					}
 					break;
 				case 2:
-					JcmGlobalData.totalCashInRecyclers2 += bill;
-					System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecyclers1 + "]");
+					
+					JcmGlobalData.totalCashInRecyclers += bill;
+					
 					
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
 					//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
-					if((JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) > JcmGlobalData.maxRecyclableCash) {
+					if((JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.maxRecyclableCash) {
 						id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
 					}
 					else {
+						JcmGlobalData.totalCashInRecycler2 += bill;
+						System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecycler2 + "]");
 						id003_format((byte)5, (byte) 0x41, jcmMessage,true); //STACK1
 					}
 					break;
-			}
-			
-									
-			
-			
+			}			
 			
 			
 			break;
@@ -399,9 +410,7 @@ public class protocol extends kermit {
 			if (jcmResponse[3] == 0x01)
 				System.out.println("Stacking RecycleBox 1");
 			if (jcmResponse[3] == 0x02)
-				System.out.println("Stacking RecycleBox 2");
-
-			//EventListenerClass.fireMyEvent(new MyEvent("bill" + jcmId));
+				System.out.println("Stacking RecycleBox 2");			
 			
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			break;
@@ -496,11 +505,10 @@ public class protocol extends kermit {
 			if (currentOpertion == jcmOperation.Dispense) {
 				// Validamos si hay que dispensar mas o no
 				EventListenerClass.fireMyEvent(new MyEvent("dispensedCass1" + jcmId));
-				if (jcmCass2 > 0) {
-					cuantos2 = jcmCass2;
-					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos2, (byte) 0x2,
-							jcmMessage);
-					jcmCass2 = 0;
+				if (billsToDispenseFromCassette2 > 0) {
+					cuantos2 = billsToDispenseFromCassette2;
+					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos2, (byte) 0x2,jcmMessage);
+					billsToDispenseFromCassette2 = 0;
 				} else {
 
 					currentOpertion = jcmOperation.None;
@@ -559,16 +567,26 @@ public class protocol extends kermit {
 
 		case SR_PAY_VALID: // 0x23 PAY VALID
 			if (mostrar)
-				System.out
-						.println(baitsToString("JCM[" + jcmId + "] processing PAY VALID", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] processing PAY VALID", jcmResponse, jcmResponse[1]));
+			
 			EventListenerClass.fireMyEvent(new MyEvent("mediaTaken" + jcmId)); //Ya tomaron el dinero
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			break;
 
 		case SR_PAY_STAY: // 0x24 PAY STAY
 			if (mostrar)
-				System.out
-						.println(baitsToString("JCM[" + jcmId + "] processing PAY STAY", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] processing PAY STAY", jcmResponse, jcmResponse[1]));
+			
+			if(dispensingFromCassette == 1) {
+				JcmGlobalData.partialAmountDispensed += Integer.parseInt(recyclerDenom1); 
+				cassettes.get(Integer.parseInt(recyclerDenom1)).Available--;
+			}
+			
+			if(dispensingFromCassette == 2) {				
+				JcmGlobalData.partialAmountDispensed += Integer.parseInt(recyclerDenom2);
+				cassettes.get(Integer.parseInt(recyclerDenom2)).Available--;
+			}
+			
 			EventListenerClass.fireMyEvent(new MyEvent("presentOk" + jcmId)); //El dinero esta presentado 
 			id003_format((byte) 5, STATUS_REQUEST, jcmMessage, true); // STATUS_REQUEST
 			
@@ -752,18 +770,19 @@ public class protocol extends kermit {
 			case Dispense:
 				System.out.println("Procesando Dispense...");
 
-				if (jcmCass1 > 0) {
-					int cuantos = jcmCass1;
-					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos, (byte) 0x1,
-							jcmMessage);
-					jcmCass1 = 0;
+				if (billsToDispenseFromCassette1 > 0) {
+					dispensingFromCassette = 1;
+					int cuantos = billsToDispenseFromCassette1;
+					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos, (byte) 0x1,	jcmMessage);
+					billsToDispenseFromCassette1 = 0;
 				} else {
 					EventListenerClass.fireMyEvent(new MyEvent("dispensedCass1" + jcmId)); //El cassette 1  ya "dispenso"
-					if (jcmCass2 > 0) {
-						int cuantos2 = jcmCass2;
+					if (billsToDispenseFromCassette2 > 0) {
+						dispensingFromCassette = 2;
+						int cuantos2 = billsToDispenseFromCassette2;
 						id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos2, (byte) 0x2,
 								jcmMessage);
-						jcmCass2 = 0;
+						billsToDispenseFromCassette2 = 0;
 					}
 					else {
 						EventListenerClass.fireMyEvent(new MyEvent("dispensedCass2" + jcmId));
@@ -987,25 +1006,25 @@ public class protocol extends kermit {
 				recyclerContadores = "JCM[" + jcmId + "] Rec1 [" + jcmResponse[5] + "] / Rec2 [" + jcmResponse[7] + "]";
 				System.out.println(recyclerContadores);
 
-				contadores.Cass1Available = Byte.toUnsignedInt(jcmResponse[5]);
-				contadores.Cass2Available = Byte.toUnsignedInt(jcmResponse[7]);
+				billCounters.Cass1Available = Byte.toUnsignedInt(jcmResponse[5]);
+				billCounters.Cass2Available = Byte.toUnsignedInt(jcmResponse[7]);
 
 				
 				if(jcmId == 1) {
-					JcmGlobalData.rec1bill1Available = contadores.Cass1Available;
-					JcmGlobalData.rec1bill2Available = contadores.Cass2Available;
+					JcmGlobalData.rec1bill1Available = billCounters.Cass1Available;
+					JcmGlobalData.rec1bill2Available = billCounters.Cass2Available;
 					
-					JcmGlobalData.totalCashInRecyclers1 = ((JcmGlobalData.rec1bill1Denom * contadores.Cass1Available) + (JcmGlobalData.rec1bill2Denom * contadores.Cass2Available)); 
+					JcmGlobalData.totalCashInRecycler1 = ((JcmGlobalData.rec1bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec1bill2Denom * billCounters.Cass2Available)); 
 					
 				}
 				else {
-					JcmGlobalData.rec2bill1Available = contadores.Cass1Available;
-					JcmGlobalData.rec2bill2Available = contadores.Cass2Available;
+					JcmGlobalData.rec2bill1Available = billCounters.Cass1Available;
+					JcmGlobalData.rec2bill2Available = billCounters.Cass2Available;
 					
-					JcmGlobalData.totalCashInRecyclers2 = ((JcmGlobalData.rec2bill1Denom * contadores.Cass1Available) + (JcmGlobalData.rec2bill2Denom * contadores.Cass2Available));
+					JcmGlobalData.totalCashInRecycler2 = ((JcmGlobalData.rec2bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec2bill2Denom * billCounters.Cass2Available));
 				}
 				
-				System.out.println("totalCashInRecyclers [" + (JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2) + "]");
+				System.out.println("totalCashInRecyclers [" + (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) + "]");
 				
 				waitingForInitialize = false;
 				if (currentOpertion == jcmOperation.Reset) {
@@ -1079,29 +1098,30 @@ public class protocol extends kermit {
 				}
 
 				// 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
-				// sacamos que billetes esta reciclando:
-
-				
+				// sacamos que billetes esta reciclando:				
 
 				recyclerDenom1 = hexToDenom(jcmResponse[5]);
-				contadores.Cass1Denom = Integer.parseInt(recyclerDenom1);
+				int denom1 = Integer.parseInt(recyclerDenom1);
+				billCounters.Cass1Denom = denom1;
+				
 
 				recyclerDenom2 = hexToDenom(jcmResponse[7]);
-				contadores.Cass2Denom = Integer.parseInt(recyclerDenom2);
-
-				String broadcastData = "";
+				int denom2 = Integer.parseInt(recyclerDenom2);
+				billCounters.Cass2Denom = denom2;
 				
-				if (jcmId == 1)
-				{
-					JcmGlobalData.rec1bill1Denom = Integer.parseInt(recyclerDenom1);
-					JcmGlobalData.rec1bill2Denom = Integer.parseInt(recyclerDenom2);
-					broadcastData = "Cassette1-" + recyclerDenom1 + ";Cassette2-" + recyclerDenom2
-							+ ";Cassette3-0;Cassette4-0";
+				cassettes.get(denom1).IsRecycler = true;
+				cassettes.get(denom2).IsRecycler = true;
+								
+				
+				if (jcmId == 1){
+					JcmGlobalData.rec1bill1Denom = denom1;
+					JcmGlobalData.rec1bill2Denom = denom2;
+					
+					//broadcastData = "Cassette1-" + recyclerDenom1 + ";Cassette2-" + recyclerDenom2 + ";Cassette3-0;Cassette4-0";
 				}else {
-					JcmGlobalData.rec2bill1Denom = Integer.parseInt(recyclerDenom1);
-					JcmGlobalData.rec2bill2Denom = Integer.parseInt(recyclerDenom2);
-					broadcastData = "Cassette1-0;Cassette2-0;Cassette3-" + recyclerDenom1 + ";Cassette4-"
-							+ recyclerDenom2;
+					JcmGlobalData.rec2bill1Denom = denom1;
+					JcmGlobalData.rec2bill2Denom = denom2;
+					//broadcastData = "Cassette1-0;Cassette2-0;Cassette3-" + recyclerDenom1 + ";Cassette4-"	+ recyclerDenom2;
 				}
 				System.out.println("Rec1[" + recyclerDenom1 + "] Rec2[" + recyclerDenom2 + "]");
 				

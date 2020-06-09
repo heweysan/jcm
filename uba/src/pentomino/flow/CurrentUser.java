@@ -12,27 +12,33 @@ import pentomino.common.jcmOperation;
  */
 public class CurrentUser {
 
-	public static String 		atmId ="";
-	private static String 		loginUser = "";
-	public static String 		loginPassword = "";
-	public static int 			montoRetiro = 0;
-	public static String 		tokenConfirmacion = "";
-	public static int 			montoDepositado = 0;	
-	public static String 		referencia = "";
-	public static int 			loginAttempts = 0;
-	public static int 			tokenAttempts = 0;
-	public static PinpadMode 	pinpadMode = PinpadMode.None;
-	public static String 		asteriscos = "";
-	public static String 		token = "";
-	public static jcmOperation 	currentOperation = jcmOperation.None;
-	public static DispenseStatus dispenseStatus = DispenseStatus.None; 
+	public static String 			atmId ="";
+	public static String 			loginUser = "";
+	public static String 			loginPassword = "";
+	public static String 			tokenConfirmacion = "";
+	public static String 			reference = "";
+	public static int 				loginAttempts = 0;
+	public static int 				tokenAttempts = 0;
+	public static PinpadMode 		pinpadMode = PinpadMode.None;
+	public static String 			asteriscos = "";
+	public static String 			token = "";
+	public static jcmOperation 		currentOperation = jcmOperation.None;
+	public static DispenseStatus 	dispenseStatus = DispenseStatus.None; 
+	public static String			movementId = "";	
+	public static String			BoardStatus = "Available";
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public static double 	 		WithdrawalRequested = 0;
+	public static double  			WithdrawalDispense = 0;
+	public static int 				totalAmountInserted = 0;
+	
+	
+	public static void resetUserData() {
+		pinpadMode = PinpadMode.None;
+		movementId = "";
+		WithdrawalRequested = 0;
+		WithdrawalDispense = 0;
+		totalAmountInserted = 0;
+		cleanPinpadData();		
 	}
 	
 	
@@ -42,7 +48,7 @@ public class CurrentUser {
 	}
 	
 	public static void cleanPinpadData() {
-		setLoginUser("");
+		loginUser = "";
 		loginPassword = "";
 		loginAttempts = 0;
 		tokenAttempts = 0;
@@ -50,15 +56,5 @@ public class CurrentUser {
 		asteriscos = "";
 	}
 
-
-	public static String getLoginUser() {
-		return loginUser;
-	}
-
-
-	public static void setLoginUser(String loginUser) {
-		CurrentUser.loginUser = loginUser;
-	}
-	
 
 }

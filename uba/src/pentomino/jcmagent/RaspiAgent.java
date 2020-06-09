@@ -21,11 +21,9 @@ public class RaspiAgent {
 	*/
 	public static void WriteToJournal(String evt, double amount, double available, String authId, String accountId, String extraData,AccountType acctType, TransactionType type) {
 		
-		String atmId = Config.GetDirective("AtmId", "");
-		
+		String atmId = Config.GetDirective("AtmId", "");		
 		WriteToJournal(evt, amount, 0, authId, "", accountId, "0", "MXN", "",  "",
-				atmId, extraData, acctType, type,"", "", 0, "");
-			
+				atmId, extraData, acctType, type,"", "", 0, "");			
 	}
 	
 	/**
@@ -34,8 +32,10 @@ public class RaspiAgent {
 	@return the value returned by the method
 	@throws what kind of exception does this method throw
 	*/
-	private static void WriteToJournal( String evt, double amount, double available, String authId, String cardNumber
-										, String accountId, String surcharge, String denomination, String arqc, String arpc
+	
+	public static void WriteToJournal( String evt, double amount, double available, String authId, String cardNumber
+										, String accountId										
+										, String surcharge, String denomination, String arqc, String arpc
 										, String switchAtmId, String extraData, AccountType acctType, TransactionType type, String aquirer
 										, String errorCode, int responseCode, String switchAuthId) {
 	
@@ -73,8 +73,8 @@ public class RaspiAgent {
         values.add(denomination);
         values.add(arqc);        
         values.add(arpc);
-        values.add(Integer.toString(acctType.ordinal()));
-        values.add(Integer.toString(type.ordinal()));
+        values.add(acctType.getName());
+        values.add(type.getName());
         values.add(aquirer);
         values.add(errorCode);
         values.add(flagCode);
@@ -111,8 +111,7 @@ public class RaspiAgent {
 		String str = fullEvt.toString();
 
 		List<String> list = Arrays.asList(str.split("_"));
-		System.out.println(list);
-		 
+				 
 		AgentMessage agentMsg = new AgentMessage(); 
 	        
         agentMsg.Agent = "hma";

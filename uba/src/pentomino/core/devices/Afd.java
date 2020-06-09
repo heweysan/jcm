@@ -98,6 +98,7 @@ public class Afd {
 			if(count > JcmGlobalData.availableBillsForRecycling.get(amount)) {				
 				return false;
 			}
+			
 			JcmGlobalData.denominateInfo.put(amount,count);
             
         }
@@ -112,10 +113,15 @@ public class Afd {
 		if(JcmGlobalData.isDebug) {
 			System.out.println("validateDispense  [DEBUG]");
 			
-			Flow.jcms[0].contadores.Cass1Denom = 200;
-			Flow.jcms[0].contadores.Cass2Denom = 100;
-			Flow.jcms[1].contadores.Cass1Denom = 20;
-			Flow.jcms[1].contadores.Cass2Denom = 50;
+			Flow.jcms[0].billCounters.Cass1Denom = 200;
+			Flow.jcms[0].billCounters.Cass2Denom = 100;
+			Flow.jcms[1].billCounters.Cass1Denom = 20;
+			Flow.jcms[1].billCounters.Cass2Denom = 50;
+			
+			Flow.jcms[1].billCounters.Cass1Available = 1;
+			Flow.jcms[0].billCounters.Cass2Available = 3;
+			Flow.jcms[1].billCounters.Cass1Available = 4;
+			Flow.jcms[1].billCounters.Cass2Available = 2;
 			
 			
 			
@@ -123,11 +129,14 @@ public class Afd {
 			JcmGlobalData.availableBillsForRecycling.put(200, 1);
 			JcmGlobalData.availableBillsForRecycling.put(50, 2);
 			JcmGlobalData.availableBillsForRecycling.put(100, 3);	
-			JcmGlobalData.montoDispensar = Flow.montoRetiro;
+			JcmGlobalData.montoDispensar = CurrentUser.WithdrawalRequested;
+			JcmGlobalData.totalCashInRecycler1 = 500;
+			JcmGlobalData.totalCashInRecycler2 = 180;
+			
+			double disponible = JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2;
+			System.out.println("Disponible para dispensar [" + disponible + "]");			
+					
 			if(Afd.denominateInfo(JcmGlobalData.montoDispensar)) {
-				//TODO: Ahorita TODOS los cassettes deben ser diferentes...
-				//Se puede dispensar
-
 				//revisamos si hay cambio o no.
 				if(JcmGlobalData.dispenseChange > 0){				//Dispensado parcial				
 					System.out.println("HAY CAMBIO [" +JcmGlobalData.dispenseChange + "]" );
@@ -137,32 +146,32 @@ public class Afd {
 					CurrentUser.dispenseStatus = DispenseStatus.Complete;
 				
 				//Seteamos los valores para cada casetero			
-				Flow.jcms[0].jcmCass1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].contadores.Cass1Denom, 0);
-				Flow.jcms[0].jcmCass2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].contadores.Cass2Denom, 0);
-				Flow.jcms[1].jcmCass1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].contadores.Cass1Denom, 0);
-				Flow.jcms[1].jcmCass2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].contadores.Cass2Denom, 0);
+				Flow.jcms[0].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass1Denom, 0);
+				Flow.jcms[0].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass2Denom, 0);
+				Flow.jcms[1].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].billCounters.Cass1Denom, 0);
+				Flow.jcms[1].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].billCounters.Cass2Denom, 0);
 
 			}
 			else {			
-				CurrentUser.dispenseStatus = DispenseStatus.NotDispensable;
-				return false;
+				CurrentUser.dispenseStatus = DispenseStatus.Partial;
+				return true;
 			}
 			
 			return true;
 		}
 
-		if(Flow.montoRetiro < 20) {
+		if(CurrentUser.WithdrawalRequested < 20) {
 			CurrentUser.dispenseStatus = DispenseStatus.NotDispensable;
 			System.out.println("De origen no se puede dispensar [menor a 20]");
 			return false;
 		}        
 
 		double sobrante = 0;
-		if(Flow.montoRetiro < 40) {
-			sobrante = Flow.montoRetiro - 20;
+		if(CurrentUser.WithdrawalRequested < 40) {
+			sobrante = CurrentUser.WithdrawalRequested - 20;
 		}
 		else {
-			sobrante = Flow.montoRetiro % 10;
+			sobrante = CurrentUser.WithdrawalRequested % 10;
 		}
 
 		System.out.println("sobrante [" + sobrante + "]");
@@ -171,12 +180,13 @@ public class Afd {
 			CurrentUser.dispenseStatus = DispenseStatus.Partial;
 
 
-		JcmGlobalData.montoDispensar = Flow.montoRetiro - sobrante;
+		JcmGlobalData.montoDispensar = CurrentUser.WithdrawalRequested - sobrante;
+		JcmGlobalData.dispenseChange = sobrante;
 
 		//Checamos los contadores actuales        
 		Flow.actualizaContadoresRecicladores();       
 
-		double disponible = JcmGlobalData.totalCashInRecyclers1 + JcmGlobalData.totalCashInRecyclers2;
+		double disponible = JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2;
 		System.out.println("Disponible para dispensar [" + disponible + "]");
 
 		//No hay dinero para dispensar
@@ -186,7 +196,7 @@ public class Afd {
 		}
 
 		//Checamos que tenga algo de dinero.
-		if(Flow.jcms[0].contadores.Cass1Available == 0 && Flow.jcms[0].contadores.Cass2Available == 0 && Flow.jcms[1].contadores.Cass1Available == 0 && Flow.jcms[1].contadores.Cass2Available == 0){
+		if(Flow.jcms[0].billCounters.Cass1Available == 0 && Flow.jcms[0].billCounters.Cass2Available == 0 && Flow.jcms[1].billCounters.Cass1Available == 0 && Flow.jcms[1].billCounters.Cass2Available == 0){
 			System.out.println("No hay dinero en los caseteros para dispensar");
 			CurrentUser.dispenseStatus = DispenseStatus.NoMoney;
 			return false;
@@ -194,51 +204,51 @@ public class Afd {
 
 
 		//Si es mas de lo que tenemos dispensamos todo lo que tenemos como parcial.
-		if(Flow.montoRetiro > disponible) {			
+		if(CurrentUser.WithdrawalRequested > disponible) {			
 			JcmGlobalData.montoDispensar = disponible;
 			System.out.println("Retiro parcial mas dinero del que hay");
 			CurrentUser.dispenseStatus = DispenseStatus.Partial;
-			Flow.jcms[0].jcmCass1 = Flow.jcms[0].contadores.Cass1Available;
-			Flow.jcms[0].jcmCass2 = Flow.jcms[0].contadores.Cass2Available;
-			Flow.jcms[1].jcmCass1 = Flow.jcms[1].contadores.Cass1Available;
-			Flow.jcms[1].jcmCass2 = Flow.jcms[1].contadores.Cass2Available;
+			Flow.jcms[0].billsToDispenseFromCassette1 = Flow.jcms[0].billCounters.Cass1Available;
+			Flow.jcms[0].billsToDispenseFromCassette2 = Flow.jcms[0].billCounters.Cass2Available;
+			Flow.jcms[1].billsToDispenseFromCassette1 = Flow.jcms[1].billCounters.Cass1Available;
+			Flow.jcms[1].billsToDispenseFromCassette2 = Flow.jcms[1].billCounters.Cass2Available;
 			return true;			
 		}		
 
 
-		System.out.println("Solicitado [" + Flow.montoRetiro + "] disponible [" + disponible + "] sobrante [" + (Flow.montoRetiro - disponible) + "]");
+		System.out.println("Solicitado [" + CurrentUser.WithdrawalRequested + "] disponible [" + disponible + "] sobrante [" + (CurrentUser.WithdrawalRequested - disponible) + "]");
 
 
 		int iBuffer = 0;
 
-		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[0].contadores.Cass1Denom))	{
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].contadores.Cass1Available);
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].contadores.Cass1Denom, Flow.jcms[0].contadores.Cass1Available + iBuffer);
+		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[0].billCounters.Cass1Denom))	{
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].billCounters.Cass1Available);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass1Denom, Flow.jcms[0].billCounters.Cass1Available + iBuffer);
 		}
 		else
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].contadores.Cass1Denom, Flow.jcms[0].contadores.Cass1Available);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass1Denom, Flow.jcms[0].billCounters.Cass1Available);
 
-		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[0].contadores.Cass2Denom))	{		
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].contadores.Cass2Available);
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].contadores.Cass2Denom, Flow.jcms[0].contadores.Cass2Available + iBuffer);
+		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[0].billCounters.Cass2Denom))	{		
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].billCounters.Cass2Available);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass2Denom, Flow.jcms[0].billCounters.Cass2Available + iBuffer);
 		}
 		else
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].contadores.Cass2Denom, Flow.jcms[0].contadores.Cass2Available + iBuffer);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass2Denom, Flow.jcms[0].billCounters.Cass2Available + iBuffer);
 
 
-		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[1].contadores.Cass1Denom))	{
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].contadores.Cass1Available);
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].contadores.Cass1Denom, Flow.jcms[1].contadores.Cass1Available + iBuffer);
+		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[1].billCounters.Cass1Denom))	{
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].billCounters.Cass1Available);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass1Denom, Flow.jcms[1].billCounters.Cass1Available + iBuffer);
 		}
 		else
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].contadores.Cass1Denom, Flow.jcms[1].contadores.Cass1Available + iBuffer);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass1Denom, Flow.jcms[1].billCounters.Cass1Available + iBuffer);
 
-		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[1].contadores.Cass2Denom))	{		
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].contadores.Cass2Available);
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].contadores.Cass2Denom, Flow.jcms[1].contadores.Cass2Available + iBuffer);
+		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[1].billCounters.Cass2Denom))	{		
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].billCounters.Cass2Available);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass2Denom, Flow.jcms[1].billCounters.Cass2Available + iBuffer);
 		}
 		else
-			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].contadores.Cass2Denom, Flow.jcms[1].contadores.Cass2Available + iBuffer);
+			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass2Denom, Flow.jcms[1].billCounters.Cass2Available + iBuffer);
 
 
 		if(Afd.denominateInfo(JcmGlobalData.montoDispensar)) {
@@ -254,10 +264,10 @@ public class Afd {
 				CurrentUser.dispenseStatus = DispenseStatus.Complete;
 
 			//Seteamos los valores para cada casetero			
-			Flow.jcms[0].jcmCass1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].contadores.Cass1Denom, 0);
-			Flow.jcms[0].jcmCass2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].contadores.Cass2Denom, 0);
-			Flow.jcms[1].jcmCass1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].contadores.Cass1Denom, 0);
-			Flow.jcms[1].jcmCass2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].contadores.Cass2Denom, 0);
+			Flow.jcms[0].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass1Denom, 0);
+			Flow.jcms[0].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass2Denom, 0);
+			Flow.jcms[1].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].billCounters.Cass1Denom, 0);
+			Flow.jcms[1].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].billCounters.Cass2Denom, 0);
 
 		}
 		else {			
@@ -265,7 +275,7 @@ public class Afd {
 			return false;
 		}
 
-		System.out.println("jcm1cass1 [" + Flow.jcms[0].jcmCass1 + "] jcm1cass2 [" + Flow.jcms[0].jcmCass2 + "] jcm2cass1 [" + Flow.jcms[1].jcmCass1 + "]jcm2cass2 [" + Flow.jcms[1].jcmCass2 + "]" );
+		System.out.println("jcm1cass1 [" + Flow.jcms[0].billsToDispenseFromCassette1 + "] jcm1cass2 [" + Flow.jcms[0].billsToDispenseFromCassette2 + "] jcm2cass1 [" + Flow.jcms[1].billsToDispenseFromCassette1 + "]jcm2cass2 [" + Flow.jcms[1].billsToDispenseFromCassette2 + "]" );
 
 		return true;
 

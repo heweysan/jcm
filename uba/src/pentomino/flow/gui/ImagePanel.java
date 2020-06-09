@@ -41,8 +41,7 @@ public class ImagePanel extends JPanel{
 		this(new ImageIcon(img).getImage(),name);
 		this.screenTimeOut = _timeout;
 		this.panelRedirect = _redirect;
-	}
-	
+	}	
 	
 	public ImagePanel(Image img, String name) {
 		
@@ -50,9 +49,8 @@ public class ImagePanel extends JPanel{
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginUser.setBounds(257, 625, 496, 87);
-		this.add(lblLoginUser);
-		
-		
+		//this.add(lblLoginUser);
+			
 		
 		addComponentListener(new ComponentAdapter() {
 			@Override

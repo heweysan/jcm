@@ -1,5 +1,4 @@
 package pentomino.flow;
-import java.util.ArrayList;
 
 public class JcmContadores {	
 	
@@ -16,9 +15,8 @@ public class JcmContadores {
 	public int Cass1Available = 0;
 	public int Cass2Available = 0;	
 	
-	public int total = 0;
-	
-	public ArrayList<JcmCassette> Cassettes = new ArrayList<JcmCassette>();
+
+	//private ArrayList<JcmCassette> Cassettes = new ArrayList<JcmCassette>();
 	
 	
 }

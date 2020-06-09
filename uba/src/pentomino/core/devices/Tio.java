@@ -2,6 +2,7 @@ package pentomino.core.devices;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
@@ -16,6 +17,8 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
+import pentomino.flow.EventListenerClass;
+import pentomino.flow.MyEvent;
 import pentomino.jcmagent.RaspiAgent;
 
 public class Tio implements Runnable{
@@ -29,7 +32,6 @@ public class Tio implements Runnable{
     static GpioPinDigitalInput fascia;
     static GpioPinDigitalOutput electroIman;
     static GpioPinDigitalOutput alarma;
-    
     
     private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
 	
@@ -52,14 +54,19 @@ public class Tio implements Runnable{
 	public boolean cierraBoveda() {
 		
 		 electroIman.low();
-	     System.out.println("--> Electroinam ON");
+	     System.out.println("--> Electroiman ON");
 		return true;
 	}
 	
 	public boolean abreBoveda() {
 		
-		electroIman.high();
-	    System.out.println("--> Electroinam OFF");
+		if(JcmGlobalData.isDebug) {
+			EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
+		}
+		else {
+			electroIman.high();
+		}
+	    System.out.println("--> Electroiman OFF");
 		return true;
 	}
 	
@@ -67,14 +74,14 @@ public class Tio implements Runnable{
 	public boolean cierraBoveda21() {
 		
 		 alarma.low();
-	     System.out.println("--> Electroinam ON");
+	     System.out.println("--> Electroiman ON");
 		return true;
 	}
 	
 	public boolean abreBoveda21() {
 		
 		alarma.high();
-	    System.out.println("--> Electroinam OFF");
+	    System.out.println("--> Electroiman OFF");
 		return true;
 	}
 
@@ -180,12 +187,14 @@ public class Tio implements Runnable{
         	   if(event.getState().isHigh()) { 
               		logger.info("BOVEDA ABIERTA");
               		System.out.println("BOVEDA ABIERTA");              		
-              		RaspiAgent.Broadcast(DeviceEvent.AFD_SafeOpen,"");	
+              		RaspiAgent.Broadcast(DeviceEvent.AFD_SafeOpen,"");
+              		EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
               	}           	
               	else{
               		logger.info("BOVEDA CERRADA");
               		System.out.println("BOVEDA CERRADA");              		
-              		RaspiAgent.Broadcast(DeviceEvent.AFD_SafeClosed,"");	
+              		RaspiAgent.Broadcast(DeviceEvent.AFD_SafeClosed,"");
+              		EventListenerClass.fireMyEvent(new MyEvent("SafeClosed"));
               	}           	
            }
 
@@ -202,11 +211,13 @@ public class Tio implements Runnable{
            		logger.info("FASCIA ABIERTA");
            		System.out.println("FASCIA ABIERTA");
            		RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetOpen,"");
+           		EventListenerClass.fireMyEvent(new MyEvent("CabinetOpen"));
            	}           	
            	else{
            		logger.info("FASCIA CERRADA");
            		System.out.println("FASCIA CERRADA");
            		RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetClosed,"");
+           		EventListenerClass.fireMyEvent(new MyEvent("CabinetClosed"));
            	}           	
             
            }
