@@ -283,7 +283,7 @@ public class Flow {
 
 					Transactions.InsertaCashInOp(myObj);
 
-					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType,0, "","", "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
+					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType,0, "",CurrentUser.loginUser, "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted, "" + CurrentUser.totalAmountInserted);
@@ -328,7 +328,7 @@ public class Flow {
 
 					Transactions.InsertaCashInOp(myObj2);
 
-					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType2,0, "","", "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
+					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType2,0, "",CurrentUser.loginUser, "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType2);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType2);
 
@@ -383,19 +383,22 @@ public class Flow {
 					panelComandos.lblContadores2.setText(jcms[1].recyclerContadores);
 					break;		
 				case "dispensedCass11":					
-					//RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[0].cuantos2 * jcms[0].billCounters.Cass2Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass1Denom);
 					//RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[0].cuantos2  + "x" +  jcms[0].billCounters.Cass2Denom);
 					JcmGlobalData.jcm1cass1Dispensed = true;
 					break;
 				case "dispensedCass21":
-					RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[1].cuantos2 * jcms[1].billCounters.Cass2Denom));
-					RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[1].cuantos2  + "x" +  jcms[1].billCounters.Cass2Denom);
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[1].billCounters.Cass1Denom);
+					//RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, "" + (jcms[1].cuantos2 * jcms[1].billCounters.Cass2Denom));
+					//RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + jcms[1].cuantos2  + "x" +  jcms[1].billCounters.Cass2Denom);
 					JcmGlobalData.jcm1cass2Dispensed = true;					
 					break;
 				case "dispensedCass12":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass2Denom);
 					JcmGlobalData.jcm2cass1Dispensed = true;
 					break;
 				case "dispensedCass22":
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[1].billCounters.Cass2Denom);
 					JcmGlobalData.jcm2cass2Dispensed = true;
 					break;					
 				case "presentOk1":
@@ -478,11 +481,13 @@ public class Flow {
 		uart.portList = CommPortIdentifier.getPortIdentifiers();
 		int contador = 0;
 
+		System.out.println("COMM contador " + contador);
+		
 		while (uart.portList.hasMoreElements()) {
 
 			CommPortIdentifier commPort = (CommPortIdentifier) uart.portList.nextElement();
 
-
+			System.out.println("COMM " + commPort.getName());
 			//Checamos que sea un com{x} port
 			if (commPort.getName().toUpperCase().contains("COM")  || commPort.getName().toUpperCase().contains("TTYUSB") ) {
 
@@ -506,6 +511,12 @@ public class Flow {
 			jcms[1].portId = null;
 			jcms[1].baud = 9600;
 			jcms[1].id = 2;
+			
+			jcms[0].currentOpertion = jcmOperation.Startup;
+			jcms[0].openPort("COM3");
+			
+			jcms[1].currentOpertion = jcmOperation.Startup;
+			jcms[1].openPort("COM4");
 		}
 		else {
 			//Inicializamos los UARTS
@@ -534,6 +545,10 @@ public class Flow {
 	}
 
 	public static void actualizaContadoresRecicladores() {
+		
+		jcms[0].recyclerContadoresSet = false;
+		jcms[1].recyclerContadoresSet = false;
+		
 		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcms[0].jcmMessage);
 
 		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcms[1].jcmMessage);

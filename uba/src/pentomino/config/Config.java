@@ -125,7 +125,7 @@ public class Config {
 				ResultSet rs  = pstmt.executeQuery();
 
 				if(rs.isClosed())
-					System.out.println("param [" + param + "] not found in DB setting defValue");
+					System.out.println("param [" + param + "] not found in DB setting defValue [" + defValue + "]");
 				else
 					retVal = rs.getString("Value");
 

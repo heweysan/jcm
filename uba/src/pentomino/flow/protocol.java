@@ -1014,12 +1014,17 @@ public class protocol extends kermit {
 					JcmGlobalData.rec1bill1Available = billCounters.Cass1Available;
 					JcmGlobalData.rec1bill2Available = billCounters.Cass2Available;
 					
-					JcmGlobalData.totalCashInRecycler1 = ((JcmGlobalData.rec1bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec1bill2Denom * billCounters.Cass2Available)); 
+					JcmGlobalData.totalCashInRecycler1 = ((JcmGlobalData.rec1bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec1bill2Denom * billCounters.Cass2Available));
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec1bill1Denom , billCounters.Cass1Available);
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec1bill2Denom , billCounters.Cass2Available);
 					
 				}
 				else {
 					JcmGlobalData.rec2bill1Available = billCounters.Cass1Available;
 					JcmGlobalData.rec2bill2Available = billCounters.Cass2Available;
+					
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec2bill1Denom , billCounters.Cass1Available);
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec2bill2Denom , billCounters.Cass2Available);
 					
 					JcmGlobalData.totalCashInRecycler2 = ((JcmGlobalData.rec2bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec2bill2Denom * billCounters.Cass2Available));
 				}
@@ -1052,6 +1057,8 @@ public class protocol extends kermit {
 					System.out.println(baitsToString("JCM[" + jcmId + "] processing RECYCLER SOFTWARE VERSION REQUEST",
 							jcmResponse, jcmResponse[1]));
 
+				System.out.println("processingOperation [" + processingOperation + "]");
+				
 				if (!processingOperation) {
 					processingOperation = true;
 
@@ -1080,6 +1087,12 @@ public class protocol extends kermit {
 							"jcm[" + jcmId + "] " + new String(recyclerVersion).trim());
 
 				}
+				else{
+					if (currentOpertion == jcmOperation.Reset) {
+				
+					id003_format((byte) 5, (byte) 0x40, jcmMessage, true); // RESET
+					}
+				} 
 
 				break;
 			case (byte) 0x90:
@@ -1137,6 +1150,23 @@ public class protocol extends kermit {
 							jcmResponse, jcmResponse[1]));
 				System.out.println("Recycle Box No. 1 [" + jcmResponse[5] + "]");
 				System.out.println("Recycle Box No. 2 [" + jcmResponse[6] + "]");
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				break;
+			case (byte) 0xE2:
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] protocol processing Current Count Setting  (+E2h)", jcmResponse, jcmResponse[1]));
+					System.out.println("Recycle Box No. [" + jcmResponse[7] + "]");	
+					System.out.println("Seting to [" + jcmResponse[6] + "]");
+					
+					if(jcmResponse[7] == 0x01) {
+						System.out.println("Seteamos el reciclador 2 a 0");						
+												
+						jcmMessage[7] = 0x02;  //REC2
+						//Flow.jcms[0].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
+						//Flow.jcms[0].jcmMessage[9] = 0x00; //RESERVADO
+						//Flow.jcms[0].jcmMessage[10] = 0x02; //REC2
+						id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, jcmMessage);
+					}
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				break;
 			default:

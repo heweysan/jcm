@@ -141,10 +141,21 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						
 						CurrentUser.totalAmountInserted = 0;
 						
+						PanelDeposito.lblMontoDepositado.setText("");
+						
+						Flow.depositBillsCounter.x20 = 0;
+						Flow.depositBillsCounter.x50 = 0;
+						Flow.depositBillsCounter.x100 = 0;
+						Flow.depositBillsCounter.x200 = 0;
+						Flow.depositBillsCounter.x500 = 0;
+						Flow.depositBillsCounter.x1000 = 0;
+						
 						if(JcmGlobalData.isDebug) {
 							CurrentUser.totalAmountInserted = 3720;
 							PanelDeposito.lblMontoDepositado.setText("$3,720");
 						}
+						
+						
 						
 						Flow.redirect(Flow.panelDepositoHolder);
 						

@@ -71,17 +71,17 @@ public class Tio implements Runnable{
 	}
 	
 	
-	public boolean cierraBoveda21() {
+	public boolean alarmOn() {
 		
 		 alarma.low();
-	     System.out.println("--> Electroiman ON");
+	     System.out.println("--> Alarma ON");
 		return true;
 	}
 	
-	public boolean abreBoveda21() {
+	public boolean alarmOff() {
 		
 		alarma.high();
-	    System.out.println("--> Electroiman OFF");
+	    System.out.println("--> Alarma OFF");
 		return true;
 	}
 

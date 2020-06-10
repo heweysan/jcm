@@ -13,118 +13,118 @@ import pentomino.flow.Flow;
 public class Afd {
 
 	public static void main(String[] args) {
-		
-		
-		JcmGlobalData.availableBillsForRecycling.put(20, 4);
-		JcmGlobalData.availableBillsForRecycling.put(200, 1);
-		JcmGlobalData.availableBillsForRecycling.put(50, 2);
-		JcmGlobalData.availableBillsForRecycling.put(100, 3);	
-		
-        System.out.println(denominateInfo(730));		
+
+
 	}
 
 	private static boolean dispenseMixFound = false;
-	
+
 	public static boolean denominateInfo(double montoSolicitado) {
-		
-		
+
+
 		dispenseMixFound = false;
-		
+
 		List<Integer> bills = new ArrayList<Integer>();
-        List<Integer> denominations = new ArrayList<Integer>();
-        
-        //Sacamos las denominaciones que podemos usar.
-        
-        
-        for (SortedMap.Entry<Integer, Integer> entry : JcmGlobalData.availableBillsForRecycling.entrySet()) {           
-            denominations.add(entry.getKey());
-        }  
-             
-        
-        if(montoSolicitado < 20) {
-       	 System.out.println("De origen no se puede dispensar [menor a 20]");
-       	 return false;
-        }        
-        
-        double sobrante = 0;
-        if(montoSolicitado < 40) {
-       	 sobrante = montoSolicitado - 20;
-        }
-        else {
-       	 sobrante = montoSolicitado % 10;
-        }        
-                
-        double dispenseAmount = montoSolicitado - sobrante;
-        
-        JcmGlobalData.dispenseChange = sobrante;
-        JcmGlobalData.dispenseAmount = dispenseAmount;
-        
-        System.out.println("Intento de dispensado por [" + dispenseAmount + "] Sobrante[" + sobrante + "]");
-        
-		return billCombinations(bills, denominations, 0, 0, dispenseAmount);
-	}
-	
-	public static boolean billCombinations(List<Integer> bills, List<Integer> denomination, int highest, double sum, double dispenseAmount) {
-		
-		if(dispenseMixFound)
+		List<Integer> denominations = new ArrayList<Integer>();
+
+		//Sacamos las denominaciones que podemos usar.
+
+
+		for (SortedMap.Entry<Integer, Integer> entry : JcmGlobalData.availableBillsForRecycling.entrySet()) {           
+			denominations.add(entry.getKey());
+		}  
+
+
+		if(montoSolicitado < 20) {
+			System.out.println("De origen no se puede dispensar [menor a 20]");
+			return false;
+		}        
+
+		double sobrante = 0;
+		if(montoSolicitado < 40) {
+			sobrante = montoSolicitado - 20;
+		}
+		else {
+			sobrante = montoSolicitado % 10;
+		}        
+
+		double dispenseAmount = montoSolicitado - sobrante;
+
+		JcmGlobalData.dispenseChange = sobrante;
+		JcmGlobalData.dispenseAmount = dispenseAmount;
+
+		System.out.println("Intento de dispensado por [" + dispenseAmount + "] Sobrante[" + sobrante + "]");
+
+		//Aqui ya se que si tiene mas dinero del que pidio. Veamos cuanto le podemos dar si es que no hay ninguna combnacion con los billetes
+		if(billCombinations(bills, denominations, 0, 0, dispenseAmount))
 			return true;
 		
-        if (sum == dispenseAmount) {        	
-        	dispenseMixFound = Display(bills, denomination);            
-            return dispenseMixFound;
-        }
-        
-        if (sum > dispenseAmount) {         	
-            return false;
-        }      
-        
-        for (Integer billValue : denomination) {
-            if (billValue >= highest) {                        
-            	List<Integer> copy = new ArrayList<Integer>(bills);
-                copy.add(billValue);               
-                billCombinations(copy, denomination, billValue, sum + billValue, dispenseAmount);
-            }
-        }
-        return dispenseMixFound;
-	}
-	
-	static boolean Display(List<Integer> notes, List<Integer> amounts){
-				
-		JcmGlobalData.denominateInfo.clear();
+		//Nos vamos a la combinacion de mayor a menor
+		return false;
 		
+	}
+
+	public static boolean billCombinations(List<Integer> bills, List<Integer> denomination, int highest, double sum, double dispenseAmount) {
+
+		if(dispenseMixFound)
+			return true;
+
+		if (sum == dispenseAmount) {        	
+			dispenseMixFound = Display(bills, denomination);            
+			return dispenseMixFound;
+		}
+
+		if (sum > dispenseAmount) {         	
+			return false;
+		}      
+
+		for (Integer billValue : denomination) {
+			if (billValue >= highest) {                        
+				List<Integer> copy = new ArrayList<Integer>(bills);
+				copy.add(billValue);               
+				billCombinations(copy, denomination, billValue, sum + billValue, dispenseAmount);
+			}
+		}
+		return dispenseMixFound;
+	}
+
+	static boolean Display(List<Integer> notes, List<Integer> amounts){
+
+		JcmGlobalData.denominateInfo.clear();
+
 		for (Integer amount : amounts) {        
 			int count = Collections.frequency(notes, amount);		
-			
+
 			if(count > JcmGlobalData.availableBillsForRecycling.get(amount)) {				
 				return false;
 			}
-			
+
 			JcmGlobalData.denominateInfo.put(amount,count);
-            
-        }
+
+		}
 		System.out.println("---- O C U R R E N C I A ----");
 		System.out.println(JcmGlobalData.denominateInfo);
 		System.out.println("------------------------------");		
 		return true;
-    }
-	
+	}
+
 	public static boolean validateDispense() {
 
 		if(JcmGlobalData.isDebug) {
 			System.out.println("validateDispense  [DEBUG]");
-			
+
 			Flow.jcms[0].billCounters.Cass1Denom = 200;
 			Flow.jcms[0].billCounters.Cass2Denom = 100;
 			Flow.jcms[1].billCounters.Cass1Denom = 20;
 			Flow.jcms[1].billCounters.Cass2Denom = 50;
-			
+
 			Flow.jcms[1].billCounters.Cass1Available = 1;
 			Flow.jcms[0].billCounters.Cass2Available = 3;
 			Flow.jcms[1].billCounters.Cass1Available = 4;
 			Flow.jcms[1].billCounters.Cass2Available = 2;
-			
-			
-			
+
+
+
 			JcmGlobalData.availableBillsForRecycling.put(20, 4);
 			JcmGlobalData.availableBillsForRecycling.put(200, 1);
 			JcmGlobalData.availableBillsForRecycling.put(50, 2);
@@ -132,10 +132,10 @@ public class Afd {
 			JcmGlobalData.montoDispensar = CurrentUser.WithdrawalRequested;
 			JcmGlobalData.totalCashInRecycler1 = 500;
 			JcmGlobalData.totalCashInRecycler2 = 180;
-			
+
 			double disponible = JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2;
 			System.out.println("Disponible para dispensar [" + disponible + "]");			
-					
+
 			if(Afd.denominateInfo(JcmGlobalData.montoDispensar)) {
 				//revisamos si hay cambio o no.
 				if(JcmGlobalData.dispenseChange > 0){				//Dispensado parcial				
@@ -144,7 +144,7 @@ public class Afd {
 				}
 				else
 					CurrentUser.dispenseStatus = DispenseStatus.Complete;
-				
+
 				//Seteamos los valores para cada casetero			
 				Flow.jcms[0].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass1Denom, 0);
 				Flow.jcms[0].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass2Denom, 0);
@@ -156,7 +156,7 @@ public class Afd {
 				CurrentUser.dispenseStatus = DispenseStatus.Partial;
 				return true;
 			}
-			
+
 			return true;
 		}
 
@@ -206,12 +206,17 @@ public class Afd {
 		//Si es mas de lo que tenemos dispensamos todo lo que tenemos como parcial.
 		if(CurrentUser.WithdrawalRequested > disponible) {			
 			JcmGlobalData.montoDispensar = disponible;
+			JcmGlobalData.dispenseAmount = disponible;
+			JcmGlobalData.dispenseChange = CurrentUser.WithdrawalRequested - disponible; 
 			System.out.println("Retiro parcial mas dinero del que hay");
 			CurrentUser.dispenseStatus = DispenseStatus.Partial;
 			Flow.jcms[0].billsToDispenseFromCassette1 = Flow.jcms[0].billCounters.Cass1Available;
 			Flow.jcms[0].billsToDispenseFromCassette2 = Flow.jcms[0].billCounters.Cass2Available;
 			Flow.jcms[1].billsToDispenseFromCassette1 = Flow.jcms[1].billCounters.Cass1Available;
 			Flow.jcms[1].billsToDispenseFromCassette2 = Flow.jcms[1].billCounters.Cass2Available;
+
+			System.out.println("Solicitado [" + CurrentUser.WithdrawalRequested + "] disponible [" + disponible + "] sobrante [" + (CurrentUser.WithdrawalRequested - disponible) + "]");
+
 			return true;			
 		}		
 
@@ -222,14 +227,14 @@ public class Afd {
 		int iBuffer = 0;
 
 		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[0].billCounters.Cass1Denom))	{
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].billCounters.Cass1Available);
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].billCounters.Cass1Denom);
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass1Denom, Flow.jcms[0].billCounters.Cass1Available + iBuffer);
 		}
 		else
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass1Denom, Flow.jcms[0].billCounters.Cass1Available);
 
 		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[0].billCounters.Cass2Denom))	{		
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].billCounters.Cass2Available);
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[0].billCounters.Cass2Denom);
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[0].billCounters.Cass2Denom, Flow.jcms[0].billCounters.Cass2Available + iBuffer);
 		}
 		else
@@ -237,14 +242,14 @@ public class Afd {
 
 
 		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[1].billCounters.Cass1Denom))	{
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].billCounters.Cass1Available);
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].billCounters.Cass1Denom);
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass1Denom, Flow.jcms[1].billCounters.Cass1Available + iBuffer);
 		}
 		else
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass1Denom, Flow.jcms[1].billCounters.Cass1Available + iBuffer);
 
 		if(JcmGlobalData.availableBillsForRecycling.containsKey(Flow.jcms[1].billCounters.Cass2Denom))	{		
-			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].billCounters.Cass2Available);
+			iBuffer = JcmGlobalData.availableBillsForRecycling.get(Flow.jcms[1].billCounters.Cass2Denom);
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass2Denom, Flow.jcms[1].billCounters.Cass2Available + iBuffer);
 		}
 		else

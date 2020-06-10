@@ -510,17 +510,17 @@ public class PanelDebug {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxReciclador1.isSelected()) {
 
-					Flow.jcms[0].jcmMessage[7] = 0x01;  //REC1
-					Flow.jcms[0].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
-					Flow.jcms[0].jcmMessage[9] = 0x00; //RESERVADO
-					Flow.jcms[0].jcmMessage[10] = 0x02; //REC2
+					Flow.jcms[0].jcmMessage[7] = 0x02;  //REC1
+					//Flow.jcms[0].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
+					//Flow.jcms[0].jcmMessage[9] = 0x00; //RESERVADO
+					//Flow.jcms[0].jcmMessage[10] = 0x02; //REC2
 					Flow.jcms[0].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[0].jcmMessage);
 				}
 				if(chckbxReciclador2.isSelected()) {
-					Flow.jcms[1].jcmMessage[7] = 0x01;  //REC1
-					Flow.jcms[1].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
-					Flow.jcms[1].jcmMessage[9] = 0x00; //RESERVADO
-					Flow.jcms[1].jcmMessage[10] = 0x02; //REC2
+					Flow.jcms[1].jcmMessage[7] = 0x02;  //REC1 0x01
+					//Flow.jcms[1].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
+					//Flow.jcms[1].jcmMessage[9] = 0x00; //RESERVADO
+					//Flow.jcms[1].jcmMessage[10] = 0x02; //REC2
 					Flow.jcms[1].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[1].jcmMessage);
 				}
 			}
@@ -760,6 +760,26 @@ public class PanelDebug {
 		panelJCM2.add(btnReiniciarJcm2);
 
 		contentPanel.add(panel_comandos);		
+		
+		JButton btnAlarmaOff = new JButton("ALARMA OFF");
+		btnAlarmaOff.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.miTio.alarmOff();
+			}
+		});
+		btnAlarmaOff.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAlarmaOff.setBounds(882, 632, 203, 48);
+		panel_comandos.add(btnAlarmaOff);
+		
+		JButton btnAlarmaOn = new JButton("ALARMA ON");
+		btnAlarmaOn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.miTio.alarmOn();
+			}
+		});
+		btnAlarmaOn.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAlarmaOn.setBounds(1117, 632, 203, 48);
+		panel_comandos.add(btnAlarmaOn);
 
 
 
@@ -881,5 +901,4 @@ public class PanelDebug {
 	public JPanel getPanel() {
 		return contentPanel;
 	}
-
 }

@@ -166,8 +166,8 @@ public class PanelToken  implements PinpadListener{
 									if(JcmGlobalData.jcm1cass1Dispensed && JcmGlobalData.jcm1cass2Dispensed && JcmGlobalData.jcm2cass1Dispensed && JcmGlobalData.jcm2cass2Dispensed) {
 										screenTimerDispense.cancel();
 										
-										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + JcmGlobalData.montoDispensar);
-										RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalRequested,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
+										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense); //+ JcmGlobalData.montoDispensar
+										RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 
 										System.out.println("CAMBIO [" + JcmGlobalData.dispenseChange + "]");
 										if(JcmGlobalData.dispenseChange > 0) {
