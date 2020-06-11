@@ -107,6 +107,7 @@ public class PanelToken  implements PinpadListener{
 
 				if(CurrentUser.token.equalsIgnoreCase(CurrentUser.tokenConfirmacion)) {
 
+					//Primero validamos si hay dinero para el retiro y de cuanto
 					if(!Afd.validateDispense()) {
 						System.out.println("No se puede dispensar en este momento.");							
 						PanelError.lblPanelError.setText("No se puede dispensar en este momento.");
@@ -123,7 +124,7 @@ public class PanelToken  implements PinpadListener{
 						cmWithdrawalVo.reference = CurrentUser.reference;
 						cmWithdrawalVo.token = CurrentUser.tokenConfirmacion;
 						cmWithdrawalVo.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-						cmWithdrawalVo.amount = JcmGlobalData.montoDispensar;
+						cmWithdrawalVo.amount = CurrentUser.WithdrawalRequested;//JcmGlobalData.montoDispensar;
 
 						if(!Transactions.ConfirmaRetiro(cmWithdrawalVo)) {
 							System.out.println("Usuario sin permiso para dispensar!");
@@ -132,7 +133,8 @@ public class PanelToken  implements PinpadListener{
 						}
 						else {
 
-							//Preparamos el retiro
+							//Se comprobo que si se puede intentar el dispensado de esa cantidad.
+							//Preparamos el retiro.
 							CurrentUser.pinpadMode = PinpadMode.None;
 
 							//Quitamos el retiro del queue
@@ -143,12 +145,12 @@ public class PanelToken  implements PinpadListener{
 							case Complete:
 								Flow.panelDispenseHolder.setBackground("./images/ScrRetiraBilletes.png");
 								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
-								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + JcmGlobalData.dispenseAmount);									
+								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);									
 								break;
 							case Partial:
 								Flow.panelDispenseHolder.setBackground("./images/Scr7RetiroParcial.png");
 								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(501, 677, 622, 153);
-								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + JcmGlobalData.dispenseAmount);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);
 								break;
 							default:
 								break;
@@ -166,20 +168,20 @@ public class PanelToken  implements PinpadListener{
 									if(JcmGlobalData.jcm1cass1Dispensed && JcmGlobalData.jcm1cass2Dispensed && JcmGlobalData.jcm2cass1Dispensed && JcmGlobalData.jcm2cass2Dispensed) {
 										screenTimerDispense.cancel();
 										
-										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense); //+ JcmGlobalData.montoDispensar
+										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense);
 										RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 
-										System.out.println("CAMBIO [" + JcmGlobalData.dispenseChange + "]");
-										if(JcmGlobalData.dispenseChange > 0) {
+										System.out.println("CAMBIO [" + CurrentUser.WithdrawalChange + "]");
+										if( CurrentUser.WithdrawalChange > 0) {
 											CmReverse cmReverseVo = new CmReverse();
 											cmReverseVo.atmId = atmId; 
 											cmReverseVo.operatorId = Integer.parseInt(CurrentUser.loginUser);
 											cmReverseVo.password = CurrentUser.loginPassword;
 											cmReverseVo.movementId = CurrentUser.movementId;
-											cmReverseVo.amount = JcmGlobalData.dispenseChange;
+											cmReverseVo.amount =  CurrentUser.WithdrawalChange;
 											cmReverseVo.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
 
-											//TODO: HEWEY NOTIFICAR A CM EL REVERSE DE LO QUE SOBRO
+											//NOTIFICAMOS A CM EL REVERSE DE LO QUE SOBRO
 											Transactions.WithdrawalReverse(cmReverseVo);
 										}
 

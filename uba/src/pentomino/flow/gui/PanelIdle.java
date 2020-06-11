@@ -43,9 +43,8 @@ public class PanelIdle {
 					Flow.panelMenuHolder.setBackground("./images/Scr7RetiroAutorizado.png");				
 					PanelMenu.btnMenuRetiro.setEnabled(true);	
 				}
-				//Flow.redirect((JPanel)Flow.panelPrueba,5000,"panelIdle");
+				
 				Flow.redirect(Flow.panelMenuHolder,5000,"panelIdle");
-
 			}
 		});
 		

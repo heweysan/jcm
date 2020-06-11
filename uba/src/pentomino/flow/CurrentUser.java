@@ -27,8 +27,21 @@ public class CurrentUser {
 	public static String			movementId = "";	
 	public static String			BoardStatus = "Available";
 	
+	/**
+	 * De cuanto es el retiro, no necesariamente lo que se va  apoder dispensar
+	 */
 	public static double 	 		WithdrawalRequested = 0;
+	/**
+	 * Cuanto es lo que realmente se va a dispensar
+	 */
 	public static double  			WithdrawalDispense = 0;
+	/**
+	 * El sobrante del dispensado. 
+	 * Es decir la diferencia entre lo que pidio y lo que se puede dispensar.
+	 * Por ejemplo pidio 1500 solo toenemos 1000, el cambio es 500.
+	 */
+	public static double  			WithdrawalChange = 0;
+	
 	public static int 				totalAmountInserted = 0;
 	
 	

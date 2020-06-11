@@ -381,8 +381,7 @@ public class protocol extends kermit {
 					break;
 				case 2:
 					
-					JcmGlobalData.totalCashInRecyclers += bill;
-					
+					JcmGlobalData.totalCashInRecyclers += bill;					
 					
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
@@ -431,15 +430,23 @@ public class protocol extends kermit {
 			
 				
 				// Revisamos el status del stacking
-				if (jcmResponse[3] == 0x00)
+				if (jcmResponse[3] == 0x00) {
 					System.out.println("Stacked cash box");
-				if (jcmResponse[3] == 0x01)
+					EventListenerClass.fireMyEvent(new MyEvent("cashbox" + jcmId));
+				}
+				if (jcmResponse[3] == 0x01) {
 					System.out.println("Stacked RecycleBox 1");
+					EventListenerClass.fireMyEvent(new MyEvent("RecycleBox1" + jcmId));
+				}
 				if (jcmResponse[3] == 0x02)
+				{
 					System.out.println("Stacked RecycleBox 2");
+					EventListenerClass.fireMyEvent(new MyEvent("RecycleBox2" + jcmId));
+				}
 				
 				//id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
-				EventListenerClass.fireMyEvent(new MyEvent("clearbill" + jcmId));
+				//Este solo borra el texto de la pantalla, no biggie
+				EventListenerClass.fireMyEvent(new MyEvent("clearbill" + jcmId));  //ESTE YA NO SERI LO HARIA EL FLOW DESPUES DE HACER LOS ANTERIORES
 			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0, jcmMessage);
 			
 				
@@ -578,7 +585,7 @@ public class protocol extends kermit {
 				System.out.println(baitsToString("JCM[" + jcmId + "] processing PAY STAY", jcmResponse, jcmResponse[1]));
 			
 			if(dispensingFromCassette == 1) {
-				JcmGlobalData.partialAmountDispensed += Integer.parseInt(recyclerDenom1); 
+				JcmGlobalData.partialAmountDispensed += Integer.parseInt(recyclerDenom1);				
 				cassettes.get(Integer.parseInt(recyclerDenom1)).Available--;
 			}
 			

@@ -28,8 +28,6 @@ public class Afd {
 		List<Integer> denominations = new ArrayList<Integer>();
 
 		//Sacamos las denominaciones que podemos usar.
-
-
 		for (SortedMap.Entry<Integer, Integer> entry : JcmGlobalData.availableBillsForRecycling.entrySet()) {           
 			denominations.add(entry.getKey());
 		}  
@@ -50,8 +48,8 @@ public class Afd {
 
 		double dispenseAmount = montoSolicitado - sobrante;
 
-		JcmGlobalData.dispenseChange = sobrante;
-		JcmGlobalData.dispenseAmount = dispenseAmount;
+		CurrentUser.WithdrawalChange 	= sobrante;
+		CurrentUser.WithdrawalDispense 	= dispenseAmount;
 
 		System.out.println("Intento de dispensado por [" + dispenseAmount + "] Sobrante[" + sobrante + "]");
 
@@ -123,23 +121,20 @@ public class Afd {
 			Flow.jcms[1].billCounters.Cass1Available = 4;
 			Flow.jcms[1].billCounters.Cass2Available = 2;
 
-
-
 			JcmGlobalData.availableBillsForRecycling.put(20, 4);
 			JcmGlobalData.availableBillsForRecycling.put(200, 1);
 			JcmGlobalData.availableBillsForRecycling.put(50, 2);
 			JcmGlobalData.availableBillsForRecycling.put(100, 3);	
-			JcmGlobalData.montoDispensar = CurrentUser.WithdrawalRequested;
 			JcmGlobalData.totalCashInRecycler1 = 500;
 			JcmGlobalData.totalCashInRecycler2 = 180;
 
 			double disponible = JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2;
 			System.out.println("Disponible para dispensar [" + disponible + "]");			
 
-			if(Afd.denominateInfo(JcmGlobalData.montoDispensar)) {
+			if(Afd.denominateInfo(CurrentUser.WithdrawalRequested)) {
 				//revisamos si hay cambio o no.
-				if(JcmGlobalData.dispenseChange > 0){				//Dispensado parcial				
-					System.out.println("HAY CAMBIO [" +JcmGlobalData.dispenseChange + "]" );
+				if(CurrentUser.WithdrawalChange > 0){				//Dispensado parcial				
+					System.out.println("Sobrante  [" + CurrentUser.WithdrawalChange + "]" );
 					CurrentUser.dispenseStatus = DispenseStatus.Partial;
 				}
 				else
@@ -168,6 +163,7 @@ public class Afd {
 
 		double sobrante = 0;
 		if(CurrentUser.WithdrawalRequested < 40) {
+			//Si es menor a 40 le restamos 20 para saber cuanto cambio queda
 			sobrante = CurrentUser.WithdrawalRequested - 20;
 		}
 		else {
@@ -180,8 +176,9 @@ public class Afd {
 			CurrentUser.dispenseStatus = DispenseStatus.Partial;
 
 
-		JcmGlobalData.montoDispensar = CurrentUser.WithdrawalRequested - sobrante;
-		JcmGlobalData.dispenseChange = sobrante;
+		//Se va a dispensar lo que solicito menos el sobrante.
+		CurrentUser.WithdrawalDispense = CurrentUser.WithdrawalRequested - sobrante;
+		CurrentUser.WithdrawalChange = sobrante;
 
 		//Checamos los contadores actuales        
 		Flow.actualizaContadoresRecicladores();       
@@ -205,11 +202,18 @@ public class Afd {
 
 		//Si es mas de lo que tenemos dispensamos todo lo que tenemos como parcial.
 		if(CurrentUser.WithdrawalRequested > disponible) {			
-			JcmGlobalData.montoDispensar = disponible;
-			JcmGlobalData.dispenseAmount = disponible;
-			JcmGlobalData.dispenseChange = CurrentUser.WithdrawalRequested - disponible; 
+			
 			System.out.println("Retiro parcial mas dinero del que hay");
+			CurrentUser.WithdrawalDispense = disponible;
+			CurrentUser.WithdrawalChange = CurrentUser.WithdrawalRequested - disponible;			
 			CurrentUser.dispenseStatus = DispenseStatus.Partial;
+			
+			JcmGlobalData.denominateInfo.clear();
+			JcmGlobalData.denominateInfo.put(Flow.jcms[0].billCounters.Cass1Denom,Flow.jcms[0].billCounters.Cass1Available);
+			JcmGlobalData.denominateInfo.put(Flow.jcms[0].billCounters.Cass2Denom,Flow.jcms[0].billCounters.Cass2Available);
+			JcmGlobalData.denominateInfo.put(Flow.jcms[1].billCounters.Cass1Denom,Flow.jcms[1].billCounters.Cass1Available);
+			JcmGlobalData.denominateInfo.put(Flow.jcms[1].billCounters.Cass2Denom,Flow.jcms[1].billCounters.Cass2Available);
+			
 			Flow.jcms[0].billsToDispenseFromCassette1 = Flow.jcms[0].billCounters.Cass1Available;
 			Flow.jcms[0].billsToDispenseFromCassette2 = Flow.jcms[0].billCounters.Cass2Available;
 			Flow.jcms[1].billsToDispenseFromCassette1 = Flow.jcms[1].billCounters.Cass1Available;
@@ -256,13 +260,14 @@ public class Afd {
 			JcmGlobalData.availableBillsForRecycling.put(Flow.jcms[1].billCounters.Cass2Denom, Flow.jcms[1].billCounters.Cass2Available + iBuffer);
 
 
-		if(Afd.denominateInfo(JcmGlobalData.montoDispensar)) {
+		//Sacamos la tabla de dispensado para el monto solicitado
+		if(Afd.denominateInfo(CurrentUser.WithdrawalDispense)) {
 			//TODO: Ahorita TODOS los cassettes deben ser diferentes...
 			//Se puede dispensar
 
 			//revisamos si hay cambio o no.
-			if(JcmGlobalData.dispenseChange > 0){				//Dispensado parcial				
-				System.out.println("HAY CAMBIO [" +JcmGlobalData.dispenseChange + "]" );
+			if(CurrentUser.WithdrawalChange > 0){				//Dispensado parcial				
+				System.out.println("HAY CAMBIO [" + CurrentUser.WithdrawalChange + "]" );
 				CurrentUser.dispenseStatus = DispenseStatus.Partial;
 			}
 			else
