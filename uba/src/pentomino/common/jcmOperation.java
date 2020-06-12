@@ -8,5 +8,6 @@ public enum jcmOperation {
     Dispense,
     PreDispense,
     CollectCass1,
-    CollectCass2
+    CollectCass2,
+    Dotacion
 }

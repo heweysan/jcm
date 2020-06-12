@@ -1,4 +1,5 @@
 package pentomino.flow;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -41,6 +42,10 @@ import pentomino.flow.gui.PanelOperacionCancelada;
 import pentomino.flow.gui.PanelToken;
 import pentomino.flow.gui.PinpadListener;
 import pentomino.flow.gui.admin.PanelAdminContadoresActuales;
+import pentomino.flow.gui.admin.PanelAdminContadoresEnCero;
+import pentomino.flow.gui.admin.PanelAdminDotarCancelar;
+import pentomino.flow.gui.admin.PanelAdminDotarResultados;
+import pentomino.flow.gui.admin.PanelAdminError;
 import pentomino.flow.gui.admin.PanelAdminLogin;
 import pentomino.flow.gui.admin.PanelAdminMenu;
 import pentomino.jcmagent.AgentsQueue;
@@ -64,9 +69,16 @@ public class Flow {
 	public static ImagePanel panelComandosHolder;
 	public static ImagePanel panelDispenseHolder;
 	public static ImagePanel panelNoTicketHolder;
+	
+	//FLUJO ADMNISTRATIVO
 	public static ImagePanel panelAdminLoginHolder;
 	public static ImagePanel panelAdminMenuHolder;
 	public static ImagePanel panelAdminContadoresActualesHolder;
+	public static ImagePanel panelAdminContadoresEnCeroHolder;
+	public static ImagePanel panelAdminDotarCancelarHolder;
+	public static ImagePanel panelAdminDotarResultadosHolder;
+	public static ImagePanel panelAdminErrorHolder;
+	
 	
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
 	
@@ -148,12 +160,13 @@ public class Flow {
 		//Caliz rapido para los cassettes
 		if(JcmGlobalData.isDebug) {
 			
+			/*
 			UpdateCountersDeposit(0, jcms[0].recyclerDenom1);
 			UpdateCountersAcepted(jcms[0].recyclerDenom2);
 			UpdateCountersDeposit(0, jcms[0].recyclerDenom1);
 			UpdateCountersDeposit(0, jcms[0].recyclerDenom1);
 			UpdateCountersDispense(0, jcms[0].recyclerDenom1);  //dispensamos 1
-			
+			*/
 			
 		}
 		
@@ -237,10 +250,27 @@ public class Flow {
 		panelAdminMenuHolder.add(panelAdminMenu.getPanel());
 		
 		
-		panelAdminContadoresActualesHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminMenu",25000,"panelTerminamos");
+		panelAdminContadoresActualesHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresActuales",10000,"panelTerminamos");
 		PanelAdminContadoresActuales panelAdminContadoresActuales = new PanelAdminContadoresActuales();
 		panelAdminContadoresActualesHolder.add(panelAdminContadoresActuales.getPanel());
 		
+		
+		panelAdminContadoresEnCeroHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresEnCero",10000,"panelTerminamos");
+		PanelAdminContadoresEnCero panelAdminContadoresEnCero = new PanelAdminContadoresEnCero();
+		panelAdminContadoresEnCeroHolder.add(panelAdminContadoresEnCero.getPanel());
+		
+		panelAdminDotarCancelarHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarCancelar");
+		PanelAdminDotarCancelar panelAdminDotarCancelar = new PanelAdminDotarCancelar();
+		panelAdminDotarCancelarHolder.add(panelAdminDotarCancelar.getPanel());
+		
+		panelAdminDotarResultadosHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarResultados");
+		PanelAdminDotarResultados panelAdminDotarResultados = new PanelAdminDotarResultados();
+		panelAdminDotarResultadosHolder.add(panelAdminDotarResultados.getPanel());
+		
+		panelAdminErrorHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminError");
+		PanelAdminError panelAdminError = new PanelAdminError();
+		panelAdminErrorHolder.add(panelAdminError.getPanel());
+
 		
 		
 		panelContainer.setLayout(cl);		
@@ -260,7 +290,10 @@ public class Flow {
 		panelContainer.add(panelAdminLoginHolder,"panelAdminLogin");
 		panelContainer.add(panelAdminMenuHolder,"panelAdminMenu");
 		panelContainer.add(panelAdminContadoresActualesHolder,"panelAdminContadoresActuales");
-		
+		panelContainer.add(panelAdminContadoresEnCeroHolder,"panelAdminContadoresEnCero");
+		panelContainer.add(panelAdminDotarCancelarHolder,"panelAdminDotarCancelar");
+		panelContainer.add(panelAdminDotarResultadosHolder,"panelAdminDotarResultados");
+		panelContainer.add(panelAdminErrorHolder,"panelAdminError");
 				
 		/*		
 		Timer screenTimer = new Timer();
@@ -530,7 +563,7 @@ public class Flow {
 		//cl.show(panelContainer, "panelIdle");
 		PanelAdminContadoresActuales.GetCurrentCounters();
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
-		cl.show(panelContainer, "panelAdminContadoresActuales");
+		cl.show(panelContainer, "panelAdminLogin");
 
 	}
 

@@ -100,7 +100,7 @@ public class Producer {
 	
 	public void SendMessage(String message, String exchange, String routingKey,Map<String,Object> headers) {
 
-		System.out.println("Producer.SendResponse");	
+		System.out.println("Producer.SendMessage");	
 
 		Map<String,Object> map = null;
 		BasicProperties props = null;	         
@@ -141,7 +141,7 @@ public class Producer {
 				//rabbitConn.close();
 			}
 		}catch(Exception e){
-			System.out.println("Producer.SendResponse Exception");
+			System.out.println("Producer.SendMessage Exception");
 			e.printStackTrace();
 		}	 
 

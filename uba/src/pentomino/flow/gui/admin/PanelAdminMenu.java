@@ -16,6 +16,8 @@ import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.PanelLogin;
 import pentomino.flow.gui.PanelToken;
+import javax.swing.Icon;
+import java.awt.Color;
 
 public class PanelAdminMenu {
 	
@@ -23,6 +25,8 @@ public class PanelAdminMenu {
 	public static JButton btnAdminMenuCorte;
 	public static JButton btnAdminMenuImpresionContadores;
 	public static JButton btnAdminMenuReiniciarRaspberry;
+	private JButton btnAdminMenuEstatusDispositivos;
+	private JButton btnAdminMenuSalir;
 	
 public PanelAdminMenu() {
 		
@@ -33,22 +37,42 @@ public PanelAdminMenu() {
 		contentPanel.setLayout(null);	
 		
 		
-		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/BTN7Deposito.png"));
+		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminImpContadores.png"));
 		btnAdminMenuImpresionContadores.setOpaque(false);
-		btnAdminMenuImpresionContadores.setBounds(360, 502, 492, 498);
+		btnAdminMenuImpresionContadores.setBounds(31, 449, 361, 140);
 		btnAdminMenuImpresionContadores.setOpaque(false);
 		btnAdminMenuImpresionContadores.setContentAreaFilled(false);
 		btnAdminMenuImpresionContadores.setBorderPainted(false);
 		contentPanel.add(btnAdminMenuImpresionContadores);
 		
-		btnAdminMenuCorte = new JButton(new ImageIcon("./images/BTN7Retiro.png"));		
+		btnAdminMenuCorte = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminCorteDotacion.png"));		
 		btnAdminMenuCorte.setOpaque(false);
 		btnAdminMenuCorte.setContentAreaFilled(false);
 		btnAdminMenuCorte.setBorderPainted(false);
-		btnAdminMenuCorte.setBounds(989, 502, 492, 498);
+		btnAdminMenuCorte.setBounds(31, 811, 388, 132);
 		contentPanel.add(btnAdminMenuCorte);
 		
 		contentPanel.add(new DebugButtons().getPanel());	
+		
+		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminEstDisp.png"));
+		btnAdminMenuEstatusDispositivos.setOpaque(false);
+		btnAdminMenuEstatusDispositivos.setContentAreaFilled(false);
+		btnAdminMenuEstatusDispositivos.setBorderPainted(false);
+		btnAdminMenuEstatusDispositivos.setBounds(1522, 596, 388, 132);
+		contentPanel.add(btnAdminMenuEstatusDispositivos);
+		
+		btnAdminMenuSalir = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminSalir.png"));
+		btnAdminMenuSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.redirect(Flow.panelIdleHolder);	
+			}
+		});
+		btnAdminMenuSalir.setBackground(Color.BLUE);
+		btnAdminMenuSalir.setOpaque(false);
+		btnAdminMenuSalir.setContentAreaFilled(false);
+		btnAdminMenuSalir.setBorderPainted(false);
+		btnAdminMenuSalir.setBounds(1508, 901, 388, 132);
+		contentPanel.add(btnAdminMenuSalir);
 		
 		btnAdminMenuImpresionContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -67,31 +91,9 @@ public PanelAdminMenu() {
 		btnAdminMenuCorte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
 
-				Flow.panelMenuHolder.screenTimerCancel();			
-				
-				CurrentUser.cleanPinpadData(PinpadMode.loginUser);			
-				CurrentUser.asteriscos = "";
-				
-				PanelLogin.lblLoginUser.setLocation(257, 525);
-				PanelLogin.lblLoginUser.setText("");
-				PanelLogin.lblLoginPassword.setText("");
-				
-				CurrentUser.currentOperation = jcmOperation.Dispense;
-
-				PanelLogin.lblLoginOpcion.setBounds(230, 430, 87, 87);   //Este es login con password
-				
-				Flow.panelLoginHolder.setBackground("./images/Scr7IngresaDatos.png");
-				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");
-								
-				CmMessageRequest request =  CmQueue.queueList.getFirst();				
-				CurrentUser.token = "" + request.token;
-				CurrentUser.WithdrawalRequested = request.amount;
-				
-				PanelToken.lblTokenMontoRetiro.setText("$" + CurrentUser.WithdrawalRequested);
-				PanelToken.lblToken.setText(CurrentUser.token);
-				CurrentUser.tokenConfirmacion = "";	
-				CurrentUser.reference = request.reference;
-				PanelToken.lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);				
+				CurrentUser.currentOperation = jcmOperation.Dotacion;
+				PanelAdminContadoresActuales.GetCurrentCounters();
+				Flow.redirect(Flow.panelAdminContadoresActualesHolder,15000,"panelAdminMenu");			
 			}
 		});
 		
