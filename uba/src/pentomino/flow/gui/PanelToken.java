@@ -33,7 +33,7 @@ public class PanelToken  implements PinpadListener{
 
 	public static JLabel lblToken = new JLabel(".");
 	public static JLabel lblTokenConfirmacion = new JLabel(".");
-	JLabel lblTokenMensaje = new JLabel(".");
+	public static JLabel lblTokenMensaje = new JLabel(".");
 	public static JLabel lblTokenMontoRetiro = new JLabel(".");
 
 	public PanelToken() {
@@ -68,9 +68,9 @@ public class PanelToken  implements PinpadListener{
 
 
 		lblTokenMensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTokenMensaje.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblTokenMensaje.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblTokenMensaje.setForeground(Color.WHITE);
-		lblTokenMensaje.setBounds(190, 93, 583, 75);
+		lblTokenMensaje.setBounds(22, 93, 957, 75);
 		contentPanel.add(lblTokenMensaje);
 
 		PanelPinpad panelPinpad = new PanelPinpad();

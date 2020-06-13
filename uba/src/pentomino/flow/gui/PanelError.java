@@ -22,9 +22,9 @@ public class PanelError {
 		contentPanel.setLayout(null);
 
 		lblPanelError.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPanelError.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		lblPanelError.setFont(new Font("Tahoma", Font.PLAIN, 50));
 		lblPanelError.setForeground(Color.WHITE);
-		lblPanelError.setBounds(10, 500, 1877, 103);
+		lblPanelError.setBounds(10, 500, 1900, 103);
 		contentPanel.add(lblPanelError);
 	}
 

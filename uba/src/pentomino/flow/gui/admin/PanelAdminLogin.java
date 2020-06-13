@@ -175,17 +175,19 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 						/*WriteToJournal("ADMIN", 0, 0, "", "", Client.Client.Hash["adminUser"].ToString(), "", "", "", "",
 								GetAtmId("Financial", GetConfigurationDirective("FullAtmId")), "LOGIN FALLBACK OK", AccountType.None, Pentomino.Common.TransactionType.Administrative, "", "", 0);
 						 */
-						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", CurrentUser.loginUser, "LOGIN FALLBACK OK", AccountType.None, TransactionType.Administrative);		
+
+						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FALLBACK OK","","",""
+								,Config.GetDirective("FullAtmId", "Financial") ,"OGIN FALLBACK OK",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 
 						Flow.redirect(Flow.panelAdminMenuHolder,5000, "panelIdle");
 					}
 					else {
-						/*
-						WriteToJournal("ADMIN", 0, 0, "", "", Client.Client.Hash["adminUser"].ToString(), "", "", "", "",
-								GetAtmId("Financial", GetConfigurationDirective("FullAtmId")), "LOGIN FALLBACK Fail", AccountType.None, Pentomino.Common.TransactionType.Administrative, "", "Invalid password", 1010);
-								Client.Client.Hash["LoginError"] = "Usuario inválido";
-						 */	
-						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", CurrentUser.loginUser, "LOGIN FALLBACK Fail", AccountType.None, TransactionType.Administrative);
+
+
+
+						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FALLBACK Fail","","",""
+								,Config.GetDirective("FullAtmId", "Financial") ,"Usuario inválido",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+
 						PanelAdminError.lblSubMensaje.setText("Usuario inválido");
 						Flow.redirect(Flow.panelAdminErrorHolder,5000, "panelAdminLogin");
 					}
@@ -193,14 +195,19 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 				else{
 
 					//Cualquier resultado falso es cadena vacia.
-					String atmName = Config.GetDirective("FullAtmId","");
-					String adminMenuOptions = AccountClient.LoginAdminAccess(CurrentUser.loginUser, CurrentUser.loginPassword);
 
-					/*
-					if (adminMenuOptions.isEmpty()) {
-						Flow.redirect(Flow.panelAdminMenuHolder,5000, "panelIdle");
+					String adminMenuOptions = AccountClient.LoginAdminAccess(CurrentUser.loginUser, CurrentUser.loginPassword);
+					if (adminMenuOptions.equalsIgnoreCase("0")) {
+
+						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FAIL","","",""
+								,Config.GetDirective("FullAtmId", "Financial") ,"LOGIN FAIL",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+
+						PanelAdminError.lblSubMensaje.setText("Usuario inválido.");
+						Flow.redirect(Flow.panelAdminErrorHolder,5000, "panelAdminLogin");
 					}
-					*/					
+					else
+						Flow.redirect(Flow.panelAdminMenuHolder);
+
 				}
 				break;
 			default:

@@ -53,6 +53,7 @@ public class PanelMenu {
 				PanelLogin.lblLoginUser.setLocation(257, 625);	
 				PanelLogin.lblLoginUser.setText("");
 				PanelLogin.lblLoginPassword.setText("");
+				PanelLogin.lblLoginMensaje.setText("");
 				CurrentUser.currentOperation = jcmOperation.Deposit;
 				PanelLogin.lblLoginOpcion.setBounds(240, 530, 87, 87);   //Este es login sin password
 				Flow.panelLoginHolder.setBackground("./images/Scr7IdentificateDeposito.png");

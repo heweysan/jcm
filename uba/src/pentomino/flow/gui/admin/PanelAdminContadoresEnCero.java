@@ -2,18 +2,16 @@ package pentomino.flow.gui.admin;
 
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import pentomino.config.Config;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
-import javax.swing.Icon;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class PanelAdminContadoresEnCero {
 
@@ -110,9 +108,17 @@ public class PanelAdminContadoresEnCero {
 		lblTotal.setBounds(652, 484, 129, 35);
 		contentPanel.add(lblTotal);
 
-		JButton btnEnviarCeros = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminGuardar.png"));
+		JButton btnEnviarCeros = new JButton(new ImageIcon("./images/Btn_AdminGuardar.png"));
 		btnEnviarCeros.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				boolean res = PanelAdminDotarResultados.actualizaContadoresCeros();
+				
+				if(res)
+					PanelAdminDotarResultados.lblMensaje.setText("La operación se registró con éxito");
+				else
+					PanelAdminDotarResultados.lblMensaje.setText("Se presentó un error al modificar los contadores");
+				
 				Flow.redirect(Flow.panelAdminDotarResultadosHolder);
 			}
 		});
@@ -123,7 +129,7 @@ public class PanelAdminContadoresEnCero {
 		btnEnviarCeros.setBounds(1660, 643, 250, 90);
 		contentPanel.add(btnEnviarCeros);
 
-		JButton btnSalir = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminCancelar.png"));
+		JButton btnSalir = new JButton(new ImageIcon("./images/Btn_AdminCancelar.png"));
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminDotarCancelarHolder);

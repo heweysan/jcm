@@ -35,7 +35,7 @@ public class RabbitMQConnection {
 		factory.setConnectionTimeout(5000);
 		factory.setPort(c.Port);
 		factory.setAutomaticRecoveryEnabled(true); 
-
+		
 		try {
 			conn = factory.newConnection();
 		} 

@@ -4,359 +4,239 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import com.google.gson.Gson;
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.config.Config;
+import pentomino.flow.gui.admin.AdminLogin;
 import pentomino.rabbitqueuebroker.Credentials;
 import pentomino.rabbitqueuebroker.RabbitMQConnection;
 
 public class AccountClient {
 
-	private static Credentials _credentials;
 	private static String _myRoutingKey;
 	private static String _atmName;
 	private static boolean _listening = false;;
+	private static String replyQueueName = "";
+	private static String correlationId = "";
 
+	private static Gson gson = new Gson();
+	
+	static Connection conn = null;
+	
+	private final static CountDownLatch loginLatch = new CountDownLatch (1);
+
+	private static boolean callbackResults;
+	
 	public static String LoginAdminAccess(String user, String password) {
 
-		String response = SendAndReceive("adminAccess", String.format("%s,%s", user, password));
+		AdminLogin myLogin = new AdminLogin();
+		myLogin.username = user;
+		myLogin.password = password;
+		
+		String requestMessage = gson.toJson(gson.toJson(myLogin));		
+		
+		String response = SendAndReceive("adminAccess", requestMessage);
+		
+		callbackResults = true;
+        loginLatch.countDown ();
+		
 		return response;
 	}
 
-	public static void Init() {
-
-		System.out.println("AccountClient Init");
-		
-		_credentials = new Credentials();
-		_credentials.HostName = Config.GetPulsarParam("AccountsHost","");           
-		_credentials.Port = Integer.parseInt(Config.GetPulsarParam("AccountsPort",""));
-		_credentials.UserName = Config.GetPulsarParam("AccountsUser","");
-		_credentials.Password = Config.GetPulsarParam("AccountsPassword","");
-		_credentials.VirtualHost = Config.GetPulsarParam("AccountsVH","");
-		_atmName = Config.GetDirective("AtmId", "");;
-
-		if (!_listening) {
-			_myRoutingKey = Config.GetPulsarParam("AccountsRoutingKey","");
-
-			String accountsExchange = Config.GetPulsarParam("AccountsExchange","");
-
-			
-			System.out.println("_credentials.HostName [" + _credentials.HostName + "]");
-			System.out.println("_credentials.Port [" + _credentials.Port + "]");
-			System.out.println("_credentials.UserName [" + _credentials.UserName + "]");
-			System.out.println("_credentials.Password [" + _credentials.Password + "]");
-			System.out.println("_credentials.VirtualHost [" + _credentials.VirtualHost + "]");
-			System.out.println("_atmName [" + _atmName + "]");
-			System.out.println("_myRoutingKey [" + _myRoutingKey + "]");
-			System.out.println("accountsExchange [" + accountsExchange + "]");
-			
-			ListenForMessages(_atmName, accountsExchange,_myRoutingKey, _credentials);		
-			
-			/*
-			new Thread(() => {
-				Consumer.ListenForMessages(_atmName, Config.GetPulsarParam("AccountsExchange"),
-						_myRoutingKey, _credentials);                    
-			}).Start();
-
-			 */
-
-			_listening = true;
-		}
-
-		
-	}
-
 	
-	 public static void ListenForMessages(String queue, String exchange, String routingKey, Credentials c) {
-         Consume(queue, exchange, routingKey, c);
-     }
 
-	 public static void ListenForMessages2(String queue, String exchange, String routingKey, Credentials c) {
-         Consume2(queue, exchange, routingKey, c);
-     }
+
 
 	private static String SendAndReceive(String operation, String message) {
-		
+
 		System.out.println("AccountClient SendAndReceive");
+
+		String atmId = Config.GetDirective("AtmId", "");
+		String hostname = Config.GetPulsarParam("AccountsHost",""); 
+		int port = Integer.parseInt(Config.GetPulsarParam("AccountsPort",""));
+		String username = Config.GetPulsarParam("AccountsUser","");
+		String password = Config.GetPulsarParam("AccountsPassword","");
+		String virtualhost = Config.GetPulsarParam("AccountsVH","");
+		String exchange = Config.GetPulsarParam("AccountsExchange","");
+		int timeout = 15000;
+
+		try {
+			ConfigureConnection(hostname, port, username, password, virtualhost, atmId, message);
+		} catch (IOException | TimeoutException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
-		Init();
-		int totalSleep = 0;
-		String correlationId = "ACC" + UUID.randomUUID().toString();
+		Worker first = new Worker(7000, loginLatch, "WORKER-1"); 
+		
+		first.start();
+		
+		try {
+			if (loginLatch.await (5L, TimeUnit.SECONDS)) {
+				System.out.println("SALIENDO COOL");
+			    return "OK";
+			}
+			else
+			{
+				System.out.println("SALIENDO TIMEOUT");
+			    return "0"; // Timeout exceeded
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+      
+		
+		return "0";
+	}
 
-		Map<String,Object> headers = null;
-		headers = new HashMap<String,Object>();
-		headers.put("accounts-endpoint","red_blu");   
-		headers.put("accounts-source-type","affiliation");
 
+	private static Connection ConfigureConnection(String hostName, int port, String username, String password, String virtualHost, String queue, String requestMessage) throws IOException, TimeoutException, InterruptedException {
+
+		System.out.println("ConfigureConnection");
+		
+		if(conn != null && conn.isOpen()) {		
+			System.out.println("OPEN!");
+			return conn;
+		}
+
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setUsername(username);
+		factory.setPassword(password);
+		factory.setVirtualHost(virtualHost);
+		factory.setHost(hostName);
+		factory.setConnectionTimeout(5000);
+		factory.setPort(port);
+		factory.setAutomaticRecoveryEnabled(false);
+		factory.setTopologyRecoveryEnabled(false);
+		factory.setNetworkRecoveryInterval(20000);
+		factory.setRequestedHeartbeat(10);
+
+		
+		conn = factory.newConnection();
+		
+		
+		Channel channel = conn.createChannel();
+		
 		/*
-		new Thread(() => {
-			Consumer.ListenForMessages(_atmName, AtmVariables.GetConfig("AccountsExchange"),
-					_myRoutingKey, _credentials);
-		}).Start();
+	 	queue - the name of the queue    		
+	    durable - true if we are declaring a durable queue (the queue will survive a server restart)
+	    exclusive - true if we are declaring an exclusive queue
+	    autoDelete - true if we are declaring an autodelete queue (server will delete it when no longer in use)
+	    arguments - other properties (construction arguments) for the queue 
 		 */
+
+		replyQueueName = queue;
 		
-		String accountsExchange = Config.GetPulsarParam("AccountsExchange","");
+		channel.queueDeclare(queue, true, false, false, new HashMap<String,Object>());
+		channel.basicQos(0,100,false);
+		 
+		final BlockingQueue<String> response = new ArrayBlockingQueue<>(5);
 		
-		ListenForMessages2(_atmName, accountsExchange,_myRoutingKey, _credentials);
+		correlationId = UUID.randomUUID().toString();
 
-		SendMessage(accountsExchange, Config.GetPulsarParam("AccountsQueue",""), message, _atmName, correlationId, "accounts", headers, operation, _credentials);
-
-		_myRoutingKey = "accounts";       
-
-		/*
-		while (!Responses.ContainsKey(correlationId) && totalSleep < 60000) {
-			totalSleep += 1500;
-			Thread.Sleep(1500);
-		}
-
-		return Responses.ContainsKey(correlationId) ? Responses[correlationId] : null;
-		*/
+		System.out.println("ConfigureConnection basicConsume");
 		
-		return "";
-	}
-
-	public static boolean SendMessage(String exchange, String queue, String message, String replyToQueue, String correlationId, String routingKey, Map<String, Object> headers, String operationType, Credentials c) {
-		try {
-
-			Connection rabbitConn = RabbitMQConnection.getConnection(c);
-
-			Channel channel = rabbitConn.createChannel();
-
-			//QueueFactory.AddQueue(replyToQueue, exchange, null, c);
-
-			///var endcodedMessage = Encoding.UTF8.GetBytes(message);
-
-			BasicProperties props = new BasicProperties();
-			if (headers == null) {
-				System.out.println("HEaders vacios");
-				headers = new HashMap<String,Object>();
-			}
-
-			/*
-             props = new BasicProperties();
-				props = props.builder().build();
-
-				if(headers != null && !headers.isEmpty())
-					props = props.builder().headers(map).build();
-
-
-				//props = props.builder().headers(map).build();
-				props = props.builder().correlationId(correlationId).build();
-				props = props.builder().replyTo(replyToQueue).build();
-			 */
-
-			headers.put("clas-operation-type", operationType);
-
-			props = props.builder().build();
-			props = props.builder().headers(headers).build();
-			props = props.builder().expiration("20000").build();
-			props = props.builder().correlationId(correlationId).build();
-			props = props.builder().replyTo(replyToQueue).build();
-
-			//props.SetPersistent(true);
-
-			//channel.basicPublish("ex.cm.topic", "cm.cashin.*",true, props, gson.toJson(requestMessage).getBytes());
-			System.out.println("SendMessage [" + exchange + "] [" + routingKey + "] [" + message + "]");
-			channel.basicPublish(exchange, routingKey,true, props, message.getBytes());
-
-			return true;
-		} catch (Exception e) {
-
-			System.out.println("Exceptipn Men " + e.getMessage());
-			/*
-				using (var wtr = new StreamWriter("C:\\Pentomino\\Logs\\RabbitClient.txt", true))
-				wtr.WriteLine("Producer exception: " + e.Message + Environment.NewLine + e.StackTrace);
-			 */
-
-			return false;
-
-		}
-	}
-
-	private static void Consume(String queue, String exchange, String routingKey, Credentials c) {
-
-		//var channel = QueueFactory.AddQueue(queue, exchange, null, c);
-
-		//var subscription = new Subscription(channel, queue, false);
 		
-		System.out.println("AccountClient.Consume");
-
+		DeliverCallback deliverCallback = (consumerTag, message) -> {
+			String body = new String(message.getBody(), "UTF-8");
+			String replyToQueue = message.getProperties().getReplyTo();
+			
+			
+			
+			System.out.println("[Account Cient Validation] Received [" + body + "] replyToQueue [" + replyToQueue + "]" );
+			System.out.println("[Account Cient Validation] correlationId sent [" + correlationId + "] correlationId received [" + message.getProperties().getCorrelationId() + "]" );
+			//message.getProperties().getCorrelationId()
+			//ea.BasicProperties.CorrelationId == correlationId
+			
+				if(correlationId.equalsIgnoreCase(message.getProperties().getCorrelationId())) {
+					System.out.println("SI LLEGO CARNALIN");
+						channel.basicAck( message.getEnvelope().getDeliveryTag(), false);
+	                    conn.close();
+					}
+			
+			
+		};		
+		
+		channel.basicConsume(replyQueueName, false, deliverCallback, consumerTag -> { });	
+		
 		
 		Map<String,Object> map = null;
-		BasicProperties props = null;
-		Channel channel;
-		try {
-
-			System.out.println("AccountClient.Consume queue [" + queue + "] exchange [" + exchange + "] routingKey [" + routingKey + "]");
-			
-			Connection connection = RabbitMQConnection.getConnection(c);
-			if(connection == null) {
-				//TODO: HEWEY AQUI
-				System.out.println("Como dijo Yamamoto: todo baila.");
-				return;
-			}
-
-			channel = connection.createChannel();
-			props = new BasicProperties();
-			map = new HashMap<String,Object>(); 
-
-			props = props.builder().headers(map).build();
-
-			
-			channel.queueDeclare(queue, true, false, false, new HashMap<String,Object>());
-
-
-
-			DeliverCallback deliverCallback = (consumerTag, message) -> {
-				String body = new String(message.getBody(), "UTF-8");
-
-				String replyToQueue = message.getProperties().getReplyTo();
-			};
-			
-			boolean autoAck = false;	
-			
-			
-			channel.basicConsume(queue, autoAck, deliverCallback, consumerTag -> { });
-
-		} catch (IOException ioe) {		
-			System.out.println("DTAServer bailo con Bertha esto.");
-			ioe.printStackTrace();
-		}
-	}
-
-
-	private static void Consume2(String queue, String exchange, String routingKey, Credentials c) {
-
-		//var channel = QueueFactory.AddQueue(queue, exchange, null, c);
-
-		//var subscription = new Subscription(channel, queue, false);
+		map = new HashMap<String,Object>();
+		map.put("accounts-endpoint","red_blu");
+		map.put("accounts-source-type","accountClient");
+		map.put("operation-type","adminAccess");
 		
-		System.out.println("AccountClient.Consume2");
+
+		AMQP.BasicProperties props = new AMQP.BasicProperties
+				.Builder()
+				.correlationId(correlationId)
+				.replyTo(replyQueueName)
+				.headers(map)
+				.build();
+		
+		String routingKey = "pentomino.affiliations.atms";
+		
+	
+
+		try {
+			System.out.println("ConfigureConnection basicPublish [" + requestMessage + "]");
+			String AccountsExchange = Config.GetPulsarParam("AccountsExchange","");
+			System.out.println("AccountsExchange [" + AccountsExchange + "]");
+			channel.basicPublish(AccountsExchange,routingKey,true, props, requestMessage.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		
-		Map<String,Object> map = null;
-		BasicProperties props = null;
-		Channel channel;
-		try {
-
-			Connection connection = RabbitMQConnection.getConnection2(c);
-			if(connection == null) {
-				//TODO: HEWEY AQUI
-				System.out.println("Como dijo Yamamoto: todo baila.");
-				return;
-			}
-
-			channel = connection.createChannel();
-			props = new BasicProperties();
-			map = new HashMap<String,Object>(); 
-
-			props = props.builder().headers(map).build();
-
-			channel.queueDeclare(queue, true, false, false, new HashMap<String,Object>());
-
-
-
-			DeliverCallback deliverCallback = (consumerTag, message) -> {
-				String body = new String(message.getBody(), "UTF-8");
-
-				String replyToQueue = message.getProperties().getReplyTo();
-
-				System.out.println("[DTAServer] Received '" + body + "'");
-
-
-				/*
-				String response = "";
-
-				try {
-					Producer myProd = new Producer(); 
-					myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);
-				}
-				catch(Exception e) {
-					System.out.println("SendResponse Exception ");
-					e.printStackTrace();
-				}
-				*/
-
-			};
-			
-			boolean autoAck = false;	
-			
-			
-			channel.basicConsume(queue, autoAck, deliverCallback, consumerTag -> { });
-
-		} catch (IOException ioe) {		
-			System.out.println("DTAServer bailo con Bertha esto.");
-			ioe.printStackTrace();
-		}
+		return conn;
 	}
-
-
-	public void SetupRabbitListener(String queue, String exchange, String routingKey, Credentials c) {
-
-		System.out.println("AccountClient.SetupRabbitListener");
 
 	
-		Map<String,Object> map = null;
-		BasicProperties props = null;
-		Channel channel;
-		try {
-
-			Connection connection = RabbitMQConnection.getConnection(c);
-			if(connection == null) {
-				//TODO: HEWEY AQUI
-				System.out.println("Como dijo Yamamoto: todo baila.");
-				return;
-			}
-
-			channel = connection.createChannel();
-			props = new BasicProperties();
-			map = new HashMap<String,Object>(); 
-
-			props = props.builder().headers(map).build();
-
-			channel.queueDeclare(queue, true, false, false, new HashMap<String,Object>());
-
-
-
-			DeliverCallback deliverCallback = (consumerTag, message) -> {
-				String body = new String(message.getBody(), "UTF-8");
-
-				String replyToQueue = message.getProperties().getReplyTo();
-
-				System.out.println("[DTAServer] Received '" + body + "'");
-
-
-				/*
-				String response = "";
-
-				try {
-					Producer myProd = new Producer(); 
-					myProd.SendResponse(response, "", replyToQueue, null, message.getProperties().getCorrelationId(), replyToQueue);
-				}
-				catch(Exception e) {
-					System.out.println("SendResponse Exception ");
-					e.printStackTrace();
-				}
-				*/
-
-			};
-			
-			boolean autoAck = false;	
-			
-			
-			channel.basicConsume(queue, autoAck, deliverCallback, consumerTag -> { });
-
-		} catch (IOException ioe) {		
-			System.out.println("DTAServer bailo con Bertha esto.");
-			ioe.printStackTrace();
-		}
-
-	}
-
+	// A class to represent threads for which 
+	// the main thread waits. 
+	static class Worker extends Thread 
+	{ 
+	    private int delay; 
+	    private CountDownLatch latch; 
+	  
+	    public Worker(int delay, CountDownLatch latch, String name) 
+	    { 
+	        super(name); 
+	        this.delay = delay; 
+	        this.latch = latch; 
+	    } 
+	  
+	    @Override
+	    public void run() 
+	    { 
+	        try
+	        { 
+	            Thread.sleep(delay); 
+	            latch.countDown(); 
+	            System.out.println(Thread.currentThread().getName() 
+	                            + " finished"); 
+	        } 
+	        catch (InterruptedException e) 
+	        { 
+	            e.printStackTrace(); 
+	        } 
+	    } 
+	} 
 
 
 }

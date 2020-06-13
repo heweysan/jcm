@@ -48,13 +48,13 @@ public class PanelDebug {
 		chckbxReciclador1.setSelected(true);
 
 		chckbxReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		chckbxReciclador1.setBounds(542, 26, 148, 51);
+		chckbxReciclador1.setBounds(725, 26, 262, 51);
 		contentPanel.add(chckbxReciclador1);
 
 		JCheckBox chckbxReciclador2 = new JCheckBox("Reciclador 2");		
 		chckbxReciclador2.setSelected(true);
 		chckbxReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		chckbxReciclador2.setBounds(718, 26, 148, 51);
+		chckbxReciclador2.setBounds(1050, 26, 233, 51);
 		contentPanel.add(chckbxReciclador2);
 
 		JButton btnStatusReq = new JButton("Stat Req (11h)");
@@ -780,6 +780,26 @@ public class PanelDebug {
 		btnAlarmaOn.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAlarmaOn.setBounds(1117, 632, 203, 48);
 		panel_comandos.add(btnAlarmaOn);
+		
+		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
+		btnAdminLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.redirect("panelAdminLogin");
+			}
+		});
+		btnAdminLogin.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		btnAdminLogin.setBounds(1436, 26, 347, 122);
+		contentPanel.add(btnAdminLogin);
+		
+		JButton btnNewButton = new JButton("ADMIN MENU");
+		btnNewButton.setBounds(1436, 195, 347, 122);
+		contentPanel.add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.redirect("panelAdminMenu");
+			}
+		});
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 
 
 

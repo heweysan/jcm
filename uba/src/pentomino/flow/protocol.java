@@ -428,26 +428,13 @@ public class protocol extends kermit {
 			// Actualizacion de contadores de reciclaje
 			recyclerContadoresSet = false;
 			
-				
-				// Revisamos el status del stacking
-				if (jcmResponse[3] == 0x00) {
-					System.out.println("Stacked cash box");
-					EventListenerClass.fireMyEvent(new MyEvent("cashbox" + jcmId));
-				}
-				if (jcmResponse[3] == 0x01) {
-					System.out.println("Stacked RecycleBox 1");
-					EventListenerClass.fireMyEvent(new MyEvent("RecycleBox1" + jcmId));
-				}
-				if (jcmResponse[3] == 0x02)
-				{
-					System.out.println("Stacked RecycleBox 2");
-					EventListenerClass.fireMyEvent(new MyEvent("RecycleBox2" + jcmId));
-				}
+				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0, jcmMessage);
+				EventListenerClass.fireMyEvent(new MyEvent("moneyIn" + jcmId));
 				
 				//id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
 				//Este solo borra el texto de la pantalla, no biggie
-				EventListenerClass.fireMyEvent(new MyEvent("clearbill" + jcmId));  //ESTE YA NO SERI LO HARIA EL FLOW DESPUES DE HACER LOS ANTERIORES
-			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0, jcmMessage);
+				EventListenerClass.fireMyEvent(new MyEvent("clearbill" + jcmId));  //ESTE YA NO SERIA LO HARIA EL FLOW DESPUES DE HACER LOS ANTERIORES
+			
 			
 				
 			break;

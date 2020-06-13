@@ -246,10 +246,9 @@ public class Config {
 					System.out.println("sql [" + sql + "]");
 
 					pstmt.close();
-
-					System.out.println("insert 1");
+					
 					pstmt = sqlLiteConn.prepareStatement(sql);
-					System.out.println("insert 2");
+					
 					pstmt.clearParameters();
 					// value
 					pstmt.setString(1,key);

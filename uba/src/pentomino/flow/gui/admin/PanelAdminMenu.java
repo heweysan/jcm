@@ -1,5 +1,6 @@
 package pentomino.flow.gui.admin;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,17 +8,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import pentomino.cashmanagement.CmQueue;
-import pentomino.cashmanagement.vo.CmMessageRequest;
 import pentomino.common.PinpadMode;
 import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.PanelLogin;
-import pentomino.flow.gui.PanelToken;
-import javax.swing.Icon;
-import java.awt.Color;
 
 public class PanelAdminMenu {
 	
@@ -37,7 +33,7 @@ public PanelAdminMenu() {
 		contentPanel.setLayout(null);	
 		
 		
-		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminImpContadores.png"));
+		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
 		btnAdminMenuImpresionContadores.setOpaque(false);
 		btnAdminMenuImpresionContadores.setBounds(31, 449, 361, 140);
 		btnAdminMenuImpresionContadores.setOpaque(false);
@@ -45,7 +41,7 @@ public PanelAdminMenu() {
 		btnAdminMenuImpresionContadores.setBorderPainted(false);
 		contentPanel.add(btnAdminMenuImpresionContadores);
 		
-		btnAdminMenuCorte = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminCorteDotacion.png"));		
+		btnAdminMenuCorte = new JButton(new ImageIcon("./images/Btn_AdminCorteDotacion.png"));		
 		btnAdminMenuCorte.setOpaque(false);
 		btnAdminMenuCorte.setContentAreaFilled(false);
 		btnAdminMenuCorte.setBorderPainted(false);
@@ -54,14 +50,14 @@ public PanelAdminMenu() {
 		
 		contentPanel.add(new DebugButtons().getPanel());	
 		
-		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminEstDisp.png"));
+		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("./images/Btn_AdminEstDisp.png"));
 		btnAdminMenuEstatusDispositivos.setOpaque(false);
 		btnAdminMenuEstatusDispositivos.setContentAreaFilled(false);
 		btnAdminMenuEstatusDispositivos.setBorderPainted(false);
 		btnAdminMenuEstatusDispositivos.setBounds(1522, 596, 388, 132);
 		contentPanel.add(btnAdminMenuEstatusDispositivos);
 		
-		btnAdminMenuSalir = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminSalir.png"));
+		btnAdminMenuSalir = new JButton(new ImageIcon("./images/Btn_AdminSalir.png"));
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelIdleHolder);	

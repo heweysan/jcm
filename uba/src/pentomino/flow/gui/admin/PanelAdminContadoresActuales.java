@@ -1,6 +1,8 @@
 package pentomino.flow.gui.admin;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,10 +16,6 @@ import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
 import pentomino.jcmagent.RaspiAgent;
-
-import javax.swing.Icon;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class PanelAdminContadoresActuales {
 	
@@ -43,7 +41,7 @@ public class PanelAdminContadoresActuales {
 		contentPanel.add(new DebugButtons().getPanel());	
 		
 		
-		JButton btnImprimirContadores = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminImpContadores.png"));
+		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
 		btnImprimirContadores.setBounds(41, 939, 250, 90);
 		btnImprimirContadores.setContentAreaFilled(false);
 		btnImprimirContadores.setBorderPainted(false);
@@ -123,7 +121,7 @@ public class PanelAdminContadoresActuales {
 		lblTotal.setBounds(652, 484, 129, 35);
 		contentPanel.add(lblTotal);
 		
-		JButton btnEnviarCeros = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminCeros.png"));
+		JButton btnEnviarCeros = new JButton(new ImageIcon("./images/Btn_AdminCeros.png"));
 		btnEnviarCeros.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -140,7 +138,7 @@ public class PanelAdminContadoresActuales {
 		btnEnviarCeros.setBounds(1660, 643, 250, 90);
 		contentPanel.add(btnEnviarCeros);
 		
-		JButton btnSalir = new JButton(new ImageIcon("D:\\Repos\\HeweySan\\jcm\\uba\\images\\Btn_AdminSalir.png"));
+		JButton btnSalir = new JButton(new ImageIcon("./images/Btn_AdminSalir.png"));
 		btnSalir.setOpaque(false);
 		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnSalir.setContentAreaFilled(false);
@@ -188,28 +186,7 @@ public class PanelAdminContadoresActuales {
 		
 	}
 	
-	private static void printValue(int value, int count) {
-		switch(value) {
-		case 20:
-			lbl20.setText("" + count);
-			break;
-		case 50:
-			lbl50.setText("" + count);
-			break;
-		case 100:
-			lbl100.setText("" + count);
-			break;
-		case 200:
-			lbl200.setText("" + count);
-			break;
-		case 500:
-			lbl500.setText("" + count);
-			break;
-		case 1000:
-			lbl1000.setText("" + count);
-			break;
-		}
-	}
+
 	
 	
 	private static void doBeaStuff() {
