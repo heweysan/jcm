@@ -195,13 +195,21 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 				else{
 
 					//Cualquier resultado falso es cadena vacia.
-
-					String adminMenuOptions = AccountClient.LoginAdminAccess(CurrentUser.loginUser, CurrentUser.loginPassword);
+					AccountClient myA = new AccountClient();
+					String adminMenuOptions = myA.LoginAdminAccess(CurrentUser.loginUser, CurrentUser.loginPassword);
+					
 					if (adminMenuOptions.equalsIgnoreCase("0")) {
 
 						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FAIL","","",""
 								,Config.GetDirective("FullAtmId", "Financial") ,"LOGIN FAIL",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 
+						lblLoginUser.setText("");
+						lblLoginPassword.setText("");
+						CurrentUser.asteriscos = "";
+						CurrentUser.loginUser = "";
+						CurrentUser.loginPassword = "";
+						CurrentUser.pinpadMode = PinpadMode.loginUser;
+						
 						PanelAdminError.lblSubMensaje.setText("Usuario inválido.");
 						Flow.redirect(Flow.panelAdminErrorHolder,5000, "panelAdminLogin");
 					}
