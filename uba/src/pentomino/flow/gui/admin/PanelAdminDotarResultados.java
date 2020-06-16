@@ -194,7 +194,7 @@ public class PanelAdminDotarResultados {
 
 		if(ok20 && ok50 && ok100 && ok200 && ok500 && ok1000) {
 
-			BEA.BusinessEvent(BusinessEvent.CashCollectionException, true,false,json);
+			BEA.BusinessEvent(BusinessEvent.CashCollectionEnded, true,false,json);
 
 			String corteCount = Config.GetPersistence("CorteCount","0");
 			if (corteCount.isEmpty())

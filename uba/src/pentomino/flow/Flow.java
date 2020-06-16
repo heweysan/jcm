@@ -530,7 +530,23 @@ public class Flow {
 					}
 										
 					break;
-				
+				case "reboot":
+					//JCM 2
+					System.out.println("reboot");
+					//String command = "sleep 5; reboot";
+					String command = "sudo reboot";
+					Runtime runtime = Runtime.getRuntime();
+					try {
+						System.out.println("Reiniciando CAJERITO");
+						Process process = runtime.exec(command);
+						//runtime.exec(command);
+					} catch (IOException ex) {
+						// TODO Auto-generated catch block
+						ex.printStackTrace();
+						
+					}
+										
+					break;
 				
 
 				}
@@ -541,7 +557,7 @@ public class Flow {
 
 		//cl.show(panelContainer, "panelIdle");
 
-		cl.show(panelContainer, "panelAdminLogin");
+		cl.show(panelContainer, "panelAdminMenu");
 
 	}
 
