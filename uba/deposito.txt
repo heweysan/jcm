@@ -58,12 +58,20 @@ CurrentUser.cleanData();
 
 ------------------------------
 
+javaDummyFile1.zip
+javaDummyFile1
 
 SOEID. LS85887
 PWD: Grumdrop258
 PIN: 22334455
 
 
+RM1
+
+
 MEET: https://meet.google.com/exd-bdcm-pcw
 
+String atmId = Config.GetDirective("AtmId", "");
+
+784512
   

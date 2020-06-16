@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.common.AccountType;
+import pentomino.common.BusinessEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
@@ -21,6 +22,7 @@ import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
 public class PanelLogin extends JPanel implements PinpadListener {
@@ -156,11 +158,14 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						}
 						
 						
+						BEA.BusinessEvent(BusinessEvent.DepositStart, true, true,"");
+						
+						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
 						
 						Flow.redirect(Flow.panelDepositoHolder);
 						
 												
-						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
+						
 						
 						
 					}

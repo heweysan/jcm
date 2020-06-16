@@ -106,7 +106,7 @@ public class AgentsQueue  implements Runnable{
 				map.put("acq-channelId","red-blu");
 				props = props.builder().headers(map).build();
 				channel.basicPublish(exchange, routingKey,true, props, gson.toJson(payload).getBytes());              
-
+				
 				channel.close();
 
 			}

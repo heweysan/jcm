@@ -281,6 +281,9 @@ public class Afd {
 
 		}
 		else {			
+			
+			//No hubo una denominacion directa, 
+			
 			CurrentUser.dispenseStatus = DispenseStatus.NotDispensable;
 			return false;
 		}

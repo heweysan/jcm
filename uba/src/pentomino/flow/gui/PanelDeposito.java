@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.AccountType;
+import pentomino.common.BusinessEvent;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.TransactionType;
@@ -21,6 +22,7 @@ import pentomino.config.Config;
 import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
 public class PanelDeposito {
@@ -102,7 +104,7 @@ public class PanelDeposito {
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, billetesNotesValidated);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + CurrentUser.totalAmountInserted);
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", CurrentUser.totalAmountInserted,0, "", CurrentUser.loginUser, "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
-					
+					BEA.BusinessEvent(BusinessEvent.DepositEnd, true, false,"");
 					
 					if(!Ptr.printDeposit(depositOpVO)){
 						//Si no pudo imprimir lo mandamos a la pantalla de no impresion.

@@ -506,15 +506,25 @@ public class DTAServer {
 	private String RestartAtm() {
 		// TODO Auto-generated method stub
 
+		String command = "sleep 5; sudo reboot";
+		Runtime runtime = Runtime.getRuntime();
+		try {
+			//Process process = runtime.exec(command);
+			runtime.exec(command);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "{\"data\":{\"ReturnValue\":\"NOK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+		}
+		
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
-
-		//False
-		//return "{\"data\":{\"ReturnValue\":\"NOK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+	
+		
 	}
 
 
 	private String GetPulsarConfigKeys() {
-		// TODO Auto-generated method stub
+		
 		return Config.GetAllPulsarParams();
 	}
 

@@ -109,7 +109,7 @@ public class RaspiAgent {
 	public static void Broadcast(DeviceEvent fullEvt, String data) {		
 		
 		String str = fullEvt.toString();
-
+		
 		List<String> list = Arrays.asList(str.split("_"));
 				 
 		AgentMessage agentMsg = new AgentMessage(); 

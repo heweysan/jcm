@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import pentomino.common.AccountType;
+import pentomino.common.BusinessEvent;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
@@ -26,6 +27,7 @@ import pentomino.flow.gui.PinKey;
 import pentomino.flow.gui.PinpadEvent;
 import pentomino.flow.gui.PinpadListener;
 import pentomino.jcmagent.AccountClient;
+import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
 
@@ -90,6 +92,18 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 		panelPinpad.addPinKeyListener(this);
 
 		contentPanel.add(panelPinpad.getPanel());
+		
+		/*
+		 * @param businessEvent
+		 * @param inSession def(false)
+		 * @param newSession def(false)
+		 * @param attributes def("")
+		*/
+		BEA.BusinessEvent(BusinessEvent.SessionStart, true, true, "");
+		
+		BEA.BusinessEvent(BusinessEvent.SessionEnd, true, false, "");
+		
+		
 	}
 
 
@@ -172,9 +186,6 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 					}
 
 					if(CurrentUser.loginPassword.equalsIgnoreCase(dailyPass)) {
-						/*WriteToJournal("ADMIN", 0, 0, "", "", Client.Client.Hash["adminUser"].ToString(), "", "", "", "",
-								GetAtmId("Financial", GetConfigurationDirective("FullAtmId")), "LOGIN FALLBACK OK", AccountType.None, Pentomino.Common.TransactionType.Administrative, "", "", 0);
-						 */
 
 						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FALLBACK OK","","",""
 								,Config.GetDirective("FullAtmId", "Financial") ,"OGIN FALLBACK OK",AccountType.None, TransactionType.ControlMessage, "","",0,"");
@@ -182,8 +193,6 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 						Flow.redirect(Flow.panelAdminMenuHolder,5000, "panelIdle");
 					}
 					else {
-
-
 
 						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FALLBACK Fail","","",""
 								,Config.GetDirective("FullAtmId", "Financial") ,"Usuario inválido",AccountType.None, TransactionType.ControlMessage, "","",0,"");

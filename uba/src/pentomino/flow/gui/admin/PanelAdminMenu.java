@@ -8,12 +8,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import pentomino.common.BusinessEvent;
 import pentomino.common.PinpadMode;
 import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.PanelLogin;
+import pentomino.jcmagent.BEA;
 
 public class PanelAdminMenu {
 	
@@ -60,6 +62,9 @@ public PanelAdminMenu() {
 		btnAdminMenuSalir = new JButton(new ImageIcon("./images/Btn_AdminSalir.png"));
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				BEA.BusinessEvent(BusinessEvent.AdministrativeOperatonEnded, true, false,"");
+				
 				Flow.redirect(Flow.panelIdleHolder);	
 			}
 		});
