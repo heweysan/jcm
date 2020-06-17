@@ -3,9 +3,9 @@ package pentomino.flow.gui;
 import javax.swing.JPanel;
 
 public interface PinpadListener 
-	{
-	    
-		public void pinKeyReceived( PinpadEvent event );
-	    
-	    public JPanel getPanel();
-	}
+{
+
+	public void pinKeyReceived( PinpadEvent event );
+
+	public JPanel getPanel();
+}

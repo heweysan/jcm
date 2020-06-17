@@ -37,7 +37,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 	public final static JLabel lblLoginUser = new JLabel("");
 	public final static JLabel lblLoginPassword = new JLabel("");
 	public final static JLabel lblLoginOpcion = new JLabel(".");
-	public final static JLabel lblLoginMensaje = new JLabel("");
+	public final static JLabel lblLoginMensaje = new JLabel("No tienes permisos para hacer retiros.");
 	private Image img;
 	
 	public PanelLogin() {
@@ -64,12 +64,13 @@ public class PanelLogin extends JPanel implements PinpadListener {
 		contentPanel.add(lblLoginPassword);
 
 		contentPanel.add(new DebugButtons().getPanel());
+		lblLoginMensaje.setBackground(Color.LIGHT_GRAY);
 		
 		
 		lblLoginMensaje.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginMensaje.setForeground(Color.WHITE);
-		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 50));
-		lblLoginMensaje.setBounds(91, 79, 837, 70);
+		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblLoginMensaje.setBounds(10, 300, 947, 70);
 		contentPanel.add(lblLoginMensaje);
 		
 		lblLoginOpcion.setFont(new Font("Tahoma", Font.BOLD, 88));
@@ -255,7 +256,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 								Flow.redirect(Flow.panelOperacionCanceladaHolder,5000,"panleIdle");								
 							}
 							else {	
-								lblLoginMensaje.setText("¡Oh no! No tienes permisos para hacer retiros.");
+								lblLoginMensaje.setText("No tienes permisos para hacer retiros.");
 								Flow.panelLoginHolder.setBackground("./images/Scr7DatosIncorrectos.png");								
 							}
 						}

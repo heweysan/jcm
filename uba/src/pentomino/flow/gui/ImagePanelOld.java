@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import pentomino.flow.Flow;
 
-public  abstract class ImagePanel extends JPanel {
+public class ImagePanelOld extends JPanel{
 
 
 	private static final long serialVersionUID = 1L;
@@ -23,33 +23,28 @@ public  abstract class ImagePanel extends JPanel {
 	private String _name;
 	Timer screenTimer = new Timer();
 	
+		
+	
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ImagePanel(String img,String name) {
+	public ImagePanelOld(String img,String name) {
 		this(new ImageIcon(img).getImage(),name);
-		System.out.println("Constructor 1");
-		
-
 	}
 
-	public ImagePanel(Image img,String name, int _timeout, String _redirect) {
+	public ImagePanelOld(Image img,String name, int _timeout, String _redirect) {
 		this(new ImageIcon(img).getImage(),name);
 		this.screenTimeOut = _timeout;
 		this.panelRedirect = _redirect;
-		System.out.println("Constructor 2");
 	}	
 	
-	public ImagePanel(Image img, String name) {
-		System.out.println("Constructor 3");
-
-		ContentPanel();
+	public ImagePanelOld(Image img, String name) {
 		
 		addComponentListener(new ComponentAdapter() {
 			
 			@Override
 			public void componentShown(ComponentEvent e) {
-				System.out.println("componentShown ImagePanel del abrstarct [" + name + "]");
+				System.out.println("OnLoad ImagePanel [" + name + "]");
 				screenTimer = new Timer();
 				screenTimer.schedule(new TimerTask() {
 					@Override
@@ -58,14 +53,12 @@ public  abstract class ImagePanel extends JPanel {
 						screenTimer.cancel();						
 						Flow.redirect(panelRedirect);					
 					}
-				}, screenTimeOut);	
-				OnLoad();
+				}, screenTimeOut);		
 			}
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				System.out.println("componentHidden OnUnload del abstract [" + name + "]");
+				System.out.println("OnUnload  [" + name + "]");
 				screenTimer.cancel();
-				OnUnload();
 			}
 		});
 		
@@ -81,11 +74,7 @@ public  abstract class ImagePanel extends JPanel {
 		setLayout(null);
 	}
 	
-	public abstract void ContentPanel();
 	
-	public abstract void OnLoad();
-	
-	public abstract void OnUnload();
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, null);
@@ -124,10 +113,6 @@ public  abstract class ImagePanel extends JPanel {
 		screenTimer.cancel();
 		
 	}
-	
-
-
-
 
 }
 

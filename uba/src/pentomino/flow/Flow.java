@@ -29,6 +29,7 @@ import pentomino.config.Config;
 import pentomino.core.devices.Tio;
 import pentomino.flow.gui.FlowLayout;
 import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.ImagePanelOld;
 import pentomino.flow.gui.PanelDebug;
 import pentomino.flow.gui.PanelDeposito;
 import pentomino.flow.gui.PanelDispense;
@@ -45,6 +46,7 @@ import pentomino.flow.gui.admin.PanelAdminContadoresEnCero;
 import pentomino.flow.gui.admin.PanelAdminDotarCancelar;
 import pentomino.flow.gui.admin.PanelAdminDotarResultados;
 import pentomino.flow.gui.admin.PanelAdminError;
+import pentomino.flow.gui.admin.PanelAdminEstatusDispositivos;
 import pentomino.flow.gui.admin.PanelAdminLogin;
 import pentomino.flow.gui.admin.PanelAdminMenu;
 import pentomino.jcmagent.AgentsQueue;
@@ -57,27 +59,27 @@ public class Flow {
 
 	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
 
-	public static ImagePanel panelTerminamosHolder;
-	public static ImagePanel panelOperacionCanceladaHolder;
-	public static ImagePanel panelErrorHolder; 
-	public static ImagePanel panelLoginHolder;
-	public static ImagePanel panelTokenHolder;
-	public static ImagePanel panelIdleHolder;
-	public static ImagePanel panelMenuHolder;
-	public static ImagePanel panelDepositoHolder;
-	public static ImagePanel panelComandosHolder;
-	public static ImagePanel panelDispenseHolder;
-	public static ImagePanel panelNoTicketHolder;
+	public static ImagePanelOld panelTerminamosHolder;
+	public static ImagePanelOld panelOperacionCanceladaHolder;
+	public static ImagePanelOld panelErrorHolder; 
+	public static ImagePanelOld panelLoginHolder;
+	public static ImagePanelOld panelTokenHolder;
+	public static ImagePanelOld panelIdleHolder;
+	public static ImagePanelOld panelMenuHolder;
+	public static ImagePanelOld panelDepositoHolder;
+	public static ImagePanelOld panelComandosHolder;
+	public static ImagePanelOld panelDispenseHolder;
+	public static ImagePanelOld panelNoTicketHolder;
 
 	//FLUJO ADMNISTRATIVO
-	public static ImagePanel panelAdminLoginHolder;
-	public static ImagePanel panelAdminMenuHolder;
-	public static ImagePanel panelAdminContadoresActualesHolder;
-	public static ImagePanel panelAdminContadoresEnCeroHolder;
-	public static ImagePanel panelAdminDotarCancelarHolder;
-	public static ImagePanel panelAdminDotarResultadosHolder;
-	public static ImagePanel panelAdminErrorHolder;
-
+	public static ImagePanel panelAdminLogin;	
+	public static ImagePanel panelAdminDotarCancelar;
+	public static ImagePanel panelAdminDotarResultados;
+	public static ImagePanel panelAdminError;	
+	public static ImagePanel panelAdminMenu;
+	public static ImagePanel panelAdminContadoresActuales;
+	public static ImagePanel panelAdminContadoresEnCero;
+	public static ImagePanel panelAdminEstatusDispositivos;
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
 
@@ -188,79 +190,58 @@ public class Flow {
 		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 
-		panelIdleHolder = new ImagePanel(new ImageIcon("./images/Scr7Inicio.png").getImage(),"panelIdle");
+		panelIdleHolder = new ImagePanelOld(new ImageIcon("./images/Scr7Inicio.png").getImage(),"panelIdle");
 		PanelIdle panelIdle = new PanelIdle();
 		panelIdleHolder.add(panelIdle.getPanel());
 
-		panelMenuHolder = new ImagePanel(new ImageIcon("./images/Scr7SinRetiroAutorizado.png").getImage(),"panelMenu");
+		panelMenuHolder = new ImagePanelOld(new ImageIcon("./images/Scr7SinRetiroAutorizado.png").getImage(),"panelMenu");
 		PanelMenu panelMenu = new PanelMenu();
 		panelMenuHolder.add(panelMenu.getPanel());
 
-		panelDepositoHolder = new ImagePanel(new ImageIcon("./images/Scr7MontoIngresado.png").getImage(),"panelDeposito");
+		panelDepositoHolder = new ImagePanelOld(new ImageIcon("./images/Scr7MontoIngresado.png").getImage(),"panelDeposito");
 		PanelDeposito panelDeposito = new PanelDeposito();
 		panelDepositoHolder.add(panelDeposito.getPanel());
 
-		panelComandosHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelComandos");
+		panelComandosHolder = new ImagePanelOld(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelComandos");
 		PanelDebug panelComandos = new PanelDebug();
 		panelComandosHolder.add(panelComandos.getPanel());		
 
-		panelLoginHolder = new ImagePanel(new ImageIcon("./images/Scr7IdentificateDeposito.png").getImage(),"panelLogin");
+		panelLoginHolder = new ImagePanelOld(new ImageIcon("./images/Scr7IdentificateDeposito.png").getImage(),"panelLogin");
 		PinpadListener panelLogin = new PanelLogin();
 		panelLoginHolder.add(panelLogin.getPanel());
 
-		panelTokenHolder = new ImagePanel(new ImageIcon("./images/Scr7ConfirmaToken.png").getImage(),"panelToken");
+		panelTokenHolder = new ImagePanelOld(new ImageIcon("./images/Scr7ConfirmaToken.png").getImage(),"panelToken");
 		PanelToken panelToken = new PanelToken();
 		panelTokenHolder.add(panelToken.getPanel());
 
-		panelTerminamosHolder = new ImagePanel(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
+		panelTerminamosHolder = new ImagePanelOld(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
 
-		panelDispenseHolder = new ImagePanel(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiroParcial");
+		panelDispenseHolder = new ImagePanelOld(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiroParcial");
 		PanelDispense panelDispense = new PanelDispense();
 		panelDispenseHolder.add(panelDispense.getPanel());
 
-		panelErrorHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelError",5000,"panelIdle");
+		panelErrorHolder = new ImagePanelOld(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelError",5000,"panelIdle");
 		PanelError panelError = new PanelError();
 		panelErrorHolder.add(panelError.getPanel());
 
-		panelOperacionCanceladaHolder = new ImagePanel(new ImageIcon("./images/Scr7OperacionCancelada.png").getImage(),"panelOperacionCancelada",5000,"panelIdle");
+		panelOperacionCanceladaHolder = new ImagePanelOld(new ImageIcon("./images/Scr7OperacionCancelada.png").getImage(),"panelOperacionCancelada",5000,"panelIdle");
 		PanelOperacionCancelada panelOperacionCancelada = new PanelOperacionCancelada();
 		panelOperacionCanceladaHolder.add(panelOperacionCancelada.getPanel());
 
-		panelNoTicketHolder = new ImagePanel(new ImageIcon("./images/Scr7NoTicket.png").getImage(),"panelNoTicket",5000,"panelTerminamos");
+		panelNoTicketHolder = new ImagePanelOld(new ImageIcon("./images/Scr7NoTicket.png").getImage(),"panelNoTicket",5000,"panelTerminamos");
 		PanelNoTicket panelPanelNoTicket = new PanelNoTicket();
 		panelNoTicketHolder.add(panelPanelNoTicket.getPanel());
 
 
-		panelAdminLoginHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminLogin",25000,"panelTerminamos");
-		PanelAdminLogin panelAdminLogin = new PanelAdminLogin();
-		panelAdminLoginHolder.add(panelAdminLogin.getPanel());
 
-		panelAdminMenuHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminMenu",25000,"panelTerminamos");
-		PanelAdminMenu panelAdminMenu = new PanelAdminMenu();
-		panelAdminMenuHolder.add(panelAdminMenu.getPanel());
-
-
-		panelAdminContadoresActualesHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresActuales",10000,"panelTerminamos");
-		PanelAdminContadoresActuales panelAdminContadoresActuales = new PanelAdminContadoresActuales();
-		panelAdminContadoresActualesHolder.add(panelAdminContadoresActuales.getPanel());
-
-
-		panelAdminContadoresEnCeroHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresEnCero",10000,"panelTerminamos");
-		PanelAdminContadoresEnCero panelAdminContadoresEnCero = new PanelAdminContadoresEnCero();
-		panelAdminContadoresEnCeroHolder.add(panelAdminContadoresEnCero.getPanel());
-
-		panelAdminDotarCancelarHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarCancelar");
-		PanelAdminDotarCancelar panelAdminDotarCancelar = new PanelAdminDotarCancelar();
-		panelAdminDotarCancelarHolder.add(panelAdminDotarCancelar.getPanel());
-
-		panelAdminDotarResultadosHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarResultados");
-		PanelAdminDotarResultados panelAdminDotarResultados = new PanelAdminDotarResultados();
-		panelAdminDotarResultadosHolder.add(panelAdminDotarResultados.getPanel());
-
-		panelAdminErrorHolder = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminError");
-		PanelAdminError panelAdminError = new PanelAdminError();
-		panelAdminErrorHolder.add(panelAdminError.getPanel());
-
+		panelAdminLogin = new PanelAdminLogin(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminLogin",25000,"panelTerminamos"); 
+		panelAdminMenu = new PanelAdminMenu(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminMenu",25000,"panelTerminamos");
+		panelAdminContadoresActuales = new PanelAdminContadoresActuales(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresActuales",10000,"panelTerminamos");
+		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresEnCero",10000,"panelTerminamos");
+		panelAdminDotarCancelar = new PanelAdminDotarCancelar(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarCancelar");
+		panelAdminDotarResultados = new PanelAdminDotarResultados(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarResultados");
+		panelAdminError = new PanelAdminError(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminError");
+		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminEstatusDispositivos");
 
 
 		panelContainer.setLayout(cl);		
@@ -277,13 +258,14 @@ public class Flow {
 		panelContainer.add(panelNoTicketHolder,"panelNoTicket");
 
 		//FLUJO ADMINISTRATIVO
-		panelContainer.add(panelAdminLoginHolder,"panelAdminLogin");
-		panelContainer.add(panelAdminMenuHolder,"panelAdminMenu");
-		panelContainer.add(panelAdminContadoresActualesHolder,"panelAdminContadoresActuales");
-		panelContainer.add(panelAdminContadoresEnCeroHolder,"panelAdminContadoresEnCero");
-		panelContainer.add(panelAdminDotarCancelarHolder,"panelAdminDotarCancelar");
-		panelContainer.add(panelAdminDotarResultadosHolder,"panelAdminDotarResultados");
-		panelContainer.add(panelAdminErrorHolder,"panelAdminError");
+		panelContainer.add(panelAdminLogin,"panelAdminLogin");		
+		panelContainer.add(panelAdminMenu,"panelAdminMenu");
+		panelContainer.add(panelAdminContadoresActuales,"panelAdminContadoresActuales");
+		panelContainer.add(panelAdminContadoresEnCero,"panelAdminContadoresEnCero");		
+		panelContainer.add(panelAdminDotarCancelar,"panelAdminDotarCancelar");
+		panelContainer.add(panelAdminDotarResultados,"panelAdminDotarResultados");
+		panelContainer.add(panelAdminError,"panelAdminError");
+		panelContainer.add(panelAdminEstatusDispositivos,"panelAdminEstatusDispositivos");
 
 		/*		
 		Timer screenTimer = new Timer();
@@ -507,7 +489,7 @@ public class Flow {
 					break;
 				case "SafeOpen":
 					System.out.println("Safe Open");
-					redirect(Flow.panelAdminLoginHolder,15000,"panelIdle");	
+					redirect(Flow.panelAdminLogin,15000,"panelIdle");	
 					break;
 				
 				case "moneyIn1":
@@ -530,34 +512,26 @@ public class Flow {
 					}
 										
 					break;
-				case "reboot":
-					//JCM 2
-					System.out.println("reboot");
-					//String command = "sleep 5; reboot";
-					String command = "sudo reboot";
+				case "reboot":					
+					System.out.println("reboot");					
+					String command = "shutdown -r +1";
 					Runtime runtime = Runtime.getRuntime();
 					try {
-						System.out.println("Reiniciando CAJERITO");
-						Process process = runtime.exec(command);
-						//runtime.exec(command);
+						runtime.exec(command);
 					} catch (IOException ex) {
 						// TODO Auto-generated catch block
 						ex.printStackTrace();
-						
-					}
-										
+					}					
 					break;
-				
-
 				}
 			}
 		});
 
 		initializeJcms();
 
-		//cl.show(panelContainer, "panelIdle");
+		cl.show(panelContainer, "panelIdle");
 
-		cl.show(panelContainer, "panelAdminMenu");
+		//cl.show(panelContainer, "panelAdminEstatusDispositivos");
 
 	}
 
@@ -718,7 +692,7 @@ public class Flow {
 		}
 	}
 
-	public static void redirect(ImagePanel target, int timeout, String timeoutTarget) {	
+	public static void redirect(ImagePanelOld target, int timeout, String timeoutTarget) {	
 		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
 
@@ -730,9 +704,14 @@ public class Flow {
 		Flow.cl.show(panelContainer, target);	
 	}
 
-	public static void redirect(ImagePanel target) {		
+	public static void redirect(ImagePanelOld target) {		
 		Flow.cl.show(panelContainer, target);
 		target.screenTimerCancel();	
+	}
+	
+	public static void redirect(JPanel target) {		
+		Flow.cl.show(panelContainer, target);
+		//target.screenTimerCancel();	
 	}
 
 	public static void actualizaContadoresRecicladores() {

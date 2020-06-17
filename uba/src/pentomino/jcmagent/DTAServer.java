@@ -112,9 +112,7 @@ public class DTAServer {
 
 		case "GOOFFLINE":
 			//TODO: REVISAR Config.SetPersistence("ForceOoS", true);
-
 			return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
-
 		}
 
 		return "Pentomino-ReturnValue: NOK";
@@ -506,10 +504,11 @@ public class DTAServer {
 	private String RestartAtm() {
 		// TODO Auto-generated method stub
 
-		String command = "sleep 5; sudo reboot";
-		Runtime runtime = Runtime.getRuntime();
+		System.out.println("RestartAtm");
+		//String command = "sleep 5; reboot";
+		String command = "shutdown -r +1";
+		Runtime runtime = Runtime.getRuntime();		
 		try {
-			//Process process = runtime.exec(command);
 			runtime.exec(command);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

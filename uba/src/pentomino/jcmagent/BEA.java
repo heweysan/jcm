@@ -62,10 +62,7 @@ public class BEA {
 	private static void GetNewSessionId() {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-		Date hoy = new Date();
-		String yyyyMMddHHmmss = dateFormat.format(hoy);
-		System.out.println("yyyyMMddHHmmss [" + yyyyMMddHHmmss + "]");
-
+		String yyyyMMddHHmmss = dateFormat.format(new Date());
 		SessionId = yyyyMMddHHmmss;
 	}
 

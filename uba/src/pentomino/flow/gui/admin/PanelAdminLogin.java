@@ -22,6 +22,7 @@ import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
+import pentomino.flow.gui.ImagePanel;
 import pentomino.flow.gui.PanelPinpad;
 import pentomino.flow.gui.PinKey;
 import pentomino.flow.gui.PinpadEvent;
@@ -31,67 +32,96 @@ import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
 
-public class PanelAdminLogin extends JPanel implements PinpadListener {
+public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public JPanel contentPanel= new JPanel();
+	
 	public JButton btnMenuRetiro;
 	public JButton btnMenuDeposito;
 	public static JLabel lblLoginUser = new JLabel("");
 	public static JLabel lblLoginPassword = new JLabel("");
 	public static JLabel lblLoginOpcion = new JLabel(".");
-	final JLabel lblLoginRow1 = new JLabel("Ingrese su clave de usuario");
+	public static JLabel lblLoginRow1 = new JLabel("Ingrese su clave de usuario");
 	private Image img;
 
 	private static String dailyPass = "";
 
-	public PanelAdminLogin() {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelAdminLogin(String img,String name) {
+		super(new ImageIcon(img).getImage(),name);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+	}
 
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);	
+	public PanelAdminLogin(Image img,String name, int _timeout, String _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+	}	
 
-		contentPanel.add(new DebugButtons().getPanel());
+	public PanelAdminLogin(Image img, String name) {
+		super(img,name);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+	}
+	
+	
+	@Override
+	public void ContentPanel() {
+
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+
+		add(new DebugButtons().getPanel());
 
 		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginUser.setBounds(350, 545, 496, 87);
-		contentPanel.add(lblLoginUser);
-		contentPanel.add(new DebugButtons().getPanel());
+		add(lblLoginUser);
+		add(new DebugButtons().getPanel());
 
 
 		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginPassword.setForeground(Color.WHITE);
 		lblLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
 		lblLoginPassword.setBounds(424, 786, 496, 87);
-		contentPanel.add(lblLoginPassword);
+		add(lblLoginPassword);
 
-		contentPanel.add(new DebugButtons().getPanel());
+		add(new DebugButtons().getPanel());
 
 
 		lblLoginRow1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginRow1.setForeground(Color.WHITE);
 		lblLoginRow1.setFont(new Font("Tahoma", Font.BOLD, 60));
 		lblLoginRow1.setBounds(91, 91, 837, 70);
-		contentPanel.add(lblLoginRow1);
+		add(lblLoginRow1);
 
 		lblLoginOpcion.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginOpcion.setForeground(Color.WHITE);
 		lblLoginOpcion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginOpcion.setBounds(230, 520, 87, 87);   //Este es login sin password
-		contentPanel.add(lblLoginOpcion);
-		contentPanel.add(new DebugButtons().getPanel());
+		add(lblLoginOpcion);
+		add(new DebugButtons().getPanel());
 
 
 		PanelPinpad panelPinpad = new PanelPinpad();
 		panelPinpad.addPinKeyListener(this);
 
-		contentPanel.add(panelPinpad.getPanel());
+		add(panelPinpad.getPanel());
 		
 		/*
 		 * @param businessEvent
@@ -109,7 +139,7 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 
 
 	public JPanel getPanel() {
-		return contentPanel;
+		return this;
 	}
 
 	public void pinKeyReceived(PinpadEvent event) {
@@ -117,7 +147,7 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 		PinKey digito = event.key();
 
 		//Flow.panelLoginHolder.screenTimer.cancel();
-		Flow.panelAdminLoginHolder.screenTimerReset(700000,"");
+		Flow.panelAdminLogin.screenTimerReset(700000,"");
 
 		switch(digito)
 		{
@@ -190,7 +220,7 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FALLBACK OK","","",""
 								,Config.GetDirective("FullAtmId", "Financial") ,"OGIN FALLBACK OK",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 
-						Flow.redirect(Flow.panelAdminMenuHolder,5000, "panelIdle");
+						Flow.redirect(Flow.panelAdminMenu,5000, "panelIdle");
 					}
 					else {
 
@@ -198,7 +228,7 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 								,Config.GetDirective("FullAtmId", "Financial") ,"Usuario inválido",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 
 						PanelAdminError.lblSubMensaje.setText("Usuario inválido");
-						Flow.redirect(Flow.panelAdminErrorHolder,5000, "panelAdminLogin");
+						Flow.redirect(Flow.panelAdminError,5000, "panelAdminLogin");
 					}
 				}
 				else{
@@ -220,10 +250,10 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 						CurrentUser.pinpadMode = PinpadMode.loginUser;
 						
 						PanelAdminError.lblSubMensaje.setText("Usuario inválido.");
-						Flow.redirect(Flow.panelAdminErrorHolder,5000, "panelAdminLogin");
+						Flow.redirect(Flow.panelAdminError,5000, "panelAdminLogin");
 					}
 					else
-						Flow.redirect(Flow.panelAdminMenuHolder);
+						Flow.redirect(Flow.panelAdminMenu);
 
 				}
 				break;
@@ -275,6 +305,18 @@ public class PanelAdminLogin extends JPanel implements PinpadListener {
 	public static void resetFormData() {
 
 
+	}
+
+	@Override
+	public void OnLoad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void OnUnload() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

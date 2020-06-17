@@ -1,7 +1,6 @@
 package pentomino.rabbitqueuebroker;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.AuthenticationFailureException;

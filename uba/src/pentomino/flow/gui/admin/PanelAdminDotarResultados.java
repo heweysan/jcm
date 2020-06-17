@@ -3,13 +3,13 @@ package pentomino.flow.gui.admin;
 
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import pentomino.common.AccountType;
@@ -19,35 +19,53 @@ import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.DebugButtons;
+import pentomino.flow.gui.ImagePanel;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
-public class PanelAdminDotarResultados {
+public class PanelAdminDotarResultados extends ImagePanel{
 
-	public JPanel contentPanel;
+	
 
 	public static JLabel lblMensaje = new JLabel("");
+	
+	private static final long serialVersionUID = 1L;
 
-	public PanelAdminDotarResultados() {
-		contentPanel = new JPanel();
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);	
 
-		contentPanel.add(new DebugButtons().getPanel());	
+	public PanelAdminDotarResultados(String img,String name) {
+		this(new ImageIcon(img).getImage(),name);
+	}
+
+	public PanelAdminDotarResultados(Image img,String name, int _timeout, String _redirect) {
+		super(img,name,_timeout,_redirect);
+	}	
+
+	public PanelAdminDotarResultados(Image img, String name) {
+		super(img,name);
+	}
+	
+
+	@Override
+	public void ContentPanel() {
+		
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+
+		add(new DebugButtons().getPanel());	
 
 
 		lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMensaje.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		lblMensaje.setBounds(10, 213, 1900, 84);
-		contentPanel.add(lblMensaje);
+		add(lblMensaje);
 
 
 		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelAdminMenuHolder);	
+				Flow.redirect(Flow.panelAdminMenu);	
 			}
 		});
 		btnImprimirContadores.setBounds(41, 939, 250, 90);
@@ -55,12 +73,12 @@ public class PanelAdminDotarResultados {
 		btnImprimirContadores.setBorderPainted(false);
 		btnImprimirContadores.setOpaque(false);
 		btnImprimirContadores.setFont(new Font("Tahoma", Font.BOLD, 40));
-		contentPanel.add(btnImprimirContadores);
+		add(btnImprimirContadores);
 
 		JButton btnRegresar = new JButton(new ImageIcon("./images/Btn_AdminRegresar.png"));
 		btnRegresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelAdminMenuHolder);	
+				Flow.redirect(Flow.panelAdminMenu);	
 			}
 		});
 		btnRegresar.setOpaque(false);
@@ -68,17 +86,13 @@ public class PanelAdminDotarResultados {
 		btnRegresar.setContentAreaFilled(false);
 		btnRegresar.setBorderPainted(false);
 		btnRegresar.setBounds(1660, 877, 250, 90);
-		contentPanel.add(btnRegresar);
+		add(btnRegresar);
 
-	}
-
-
-	public JPanel getPanel() {
-		return contentPanel;
 	}
 
 	public static boolean actualizaContadoresCeros() {
 
+		System.out.println("actualizaContadoresCeros");
 
 		String d20 = Config.GetPersistence("Accepted20", "-1");
 		String d50 = Config.GetPersistence("Accepted50", "-1");
@@ -210,6 +224,18 @@ public class PanelAdminDotarResultados {
 		BEA.BusinessEvent(BusinessEvent.CashCollectionException, true,false,"");
 		return false;
 
+	}
+
+	@Override
+	public void OnLoad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void OnUnload() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
