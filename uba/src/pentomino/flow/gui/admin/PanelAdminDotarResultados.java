@@ -3,7 +3,6 @@ package pentomino.flow.gui.admin;
 
 
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,9 +15,9 @@ import pentomino.common.AccountType;
 import pentomino.common.BusinessEvent;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
+import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.ImagePanel;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
@@ -31,30 +30,20 @@ public class PanelAdminDotarResultados extends ImagePanel{
 	
 	private static final long serialVersionUID = 1L;
 
-
-	public PanelAdminDotarResultados(String img,String name) {
-		this(new ImageIcon(img).getImage(),name);
-	}
-
-	public PanelAdminDotarResultados(Image img,String name, int _timeout, String _redirect) {
+	public PanelAdminDotarResultados(String img,String name, int _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
-	}	
-
-	public PanelAdminDotarResultados(Image img, String name) {
-		super(img,name);
-	}
-	
-
-	@Override
-	public void ContentPanel() {
-		
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);
 		setLayout(null);	
+	}	
 
-		add(new DebugButtons().getPanel());	
 
+
+	@Override
+	public void ContentPanel() {
+		
+		
 
 		lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMensaje.setFont(new Font("Tahoma", Font.PLAIN, 40));
@@ -65,10 +54,10 @@ public class PanelAdminDotarResultados extends ImagePanel{
 		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelAdminMenu);	
+				Ptr.printContadores();
 			}
 		});
-		btnImprimirContadores.setBounds(41, 939, 250, 90);
+		btnImprimirContadores.setBounds(41, 877, 250, 90);
 		btnImprimirContadores.setContentAreaFilled(false);
 		btnImprimirContadores.setBorderPainted(false);
 		btnImprimirContadores.setOpaque(false);

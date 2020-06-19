@@ -2,20 +2,15 @@ package pentomino.flow.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.common.AccountType;
 import pentomino.common.BusinessEvent;
-import pentomino.common.JcmGlobalData;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
@@ -25,45 +20,51 @@ import pentomino.flow.Flow;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
-public class PanelLogin extends JPanel implements PinpadListener {
-	
+public class PanelLogin extends ImagePanel implements PinpadListener {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public JPanel contentPanel= new JPanel();
 	public JButton btnMenuRetiro;
 	public JButton btnMenuDeposito;
 	public final static JLabel lblLoginUser = new JLabel("");
 	public final static JLabel lblLoginPassword = new JLabel("");
 	public final static JLabel lblLoginOpcion = new JLabel(".");
-	public final static JLabel lblLoginMensaje = new JLabel("No tienes permisos para hacer retiros.");
-	private Image img;
+	public final static JLabel lblLoginMensaje = new JLabel("");
 	
-	public PanelLogin() {
+	
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelLogin(String img,String name, int _timeout, ImagePanel _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+	}	
+
+	
+	@Override
+	public void ContentPanel() {
 		
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);	
-		
-		contentPanel.add(new DebugButtons().getPanel());
 		
 		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginUser.setBounds(257, 625, 496, 87);
-		contentPanel.add(lblLoginUser);
-		contentPanel.add(new DebugButtons().getPanel());
+		add(lblLoginUser);
+		add(new DebugButtons().getPanel());
 		
 		
 		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginPassword.setForeground(Color.WHITE);
 		lblLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
 		lblLoginPassword.setBounds(257, 793, 496, 87);
-		contentPanel.add(lblLoginPassword);
+		add(lblLoginPassword);
 
-		contentPanel.add(new DebugButtons().getPanel());
+		add(new DebugButtons().getPanel());
 		lblLoginMensaje.setBackground(Color.LIGHT_GRAY);
 		
 		
@@ -71,36 +72,33 @@ public class PanelLogin extends JPanel implements PinpadListener {
 		lblLoginMensaje.setForeground(Color.WHITE);
 		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblLoginMensaje.setBounds(10, 300, 947, 70);
-		contentPanel.add(lblLoginMensaje);
+		add(lblLoginMensaje);
 		
 		lblLoginOpcion.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginOpcion.setForeground(Color.WHITE);
 		lblLoginOpcion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginOpcion.setBounds(230, 520, 87, 87);   //Este es login sin password
-		contentPanel.add(lblLoginOpcion);
-		contentPanel.add(new DebugButtons().getPanel());
+		add(lblLoginOpcion);
+		add(new DebugButtons().getPanel());
 		
 			
 		PanelPinpad panelPinpad = new PanelPinpad();
 		panelPinpad.addPinKeyListener(this);
 		
-		contentPanel.add(panelPinpad.getPanel());
+		add(panelPinpad.getPanel());
+		
+		
 		
 	}
 	
 	
-	public JPanel getPanel() {
-		return contentPanel;
-	}
-
 
 	
 	public void pinKeyReceived(PinpadEvent event) {
 		
-		PinKey digito = event.key();
+		PinKey digito = event.key();		
 		
-		//Flow.panelLoginHolder.screenTimer.cancel();
-		Flow.panelLoginHolder.screenTimerReset(7000,"");
+		screenTimerReset(10000,Flow.panelOperacionCancelada);
 
 		switch(digito)
         {
@@ -112,7 +110,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 			lblLoginUser.setText("");
 			lblLoginPassword.setText("");			
 			CurrentUser.asteriscos = "";							
-			Flow.redirect(Flow.panelOperacionCanceladaHolder,5000, "panelIdle");
+			Flow.redirect(Flow.panelOperacionCancelada,5000, Flow.panelIdle);
 		break;
 		case _Ok:
 			
@@ -151,22 +149,15 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						Flow.depositBillsCounter.x100 = 0;
 						Flow.depositBillsCounter.x200 = 0;
 						Flow.depositBillsCounter.x500 = 0;
-						Flow.depositBillsCounter.x1000 = 0;
+						Flow.depositBillsCounter.x1000 = 0;						
 						
-						if(JcmGlobalData.isDebug) {
-							CurrentUser.totalAmountInserted = 3720;
-							PanelDeposito.lblMontoDepositado.setText("$3,720");
-						}
-						
-						
+						Config.SetPersistence("BoardStatus", "Busy");
+						BEA.BusinessEvent(BusinessEvent.SessionStart, false, true,"");
 						BEA.BusinessEvent(BusinessEvent.DepositStart, true, true,"");
 						
 						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
 						
-						Flow.redirect(Flow.panelDepositoHolder);
-						
-												
-						
+						Flow.redirect(Flow.panelDeposito);
 						
 						
 					}
@@ -179,7 +170,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE (Se deja depositar)",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 							
 							CurrentUser.totalAmountInserted = 0;
-							Flow.redirect(Flow.panelDepositoHolder);
+							Flow.redirect(Flow.panelDeposito);
 							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
 						}
 						else {	
@@ -187,7 +178,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 								//Intentos superados
 								CurrentUser.loginUser = "";
 								CurrentUser.cleanPinpadData();
-								Flow.redirect(Flow.panelOperacionCanceladaHolder,5000,"panelIdle");
+								Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
 							}
 							else {
 										
@@ -200,7 +191,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 								lblLoginPassword.setText("");
 								CurrentUser.asteriscos = "";
 								CurrentUser.pinpadMode = PinpadMode.loginUser;
-								Flow.panelLoginHolder.setBackground("./images/Scr7UsuarioIncorrecto.png");
+								Flow.panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
 							}
 							return;
 						}
@@ -238,8 +229,8 @@ public class PanelLogin extends JPanel implements PinpadListener {
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
 									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid TRUE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 							CurrentUser.pinpadMode = PinpadMode.retiroToken;
-							Flow.panelTokenHolder.setBackground("./images/Scr7ConfirmaToken.png");
-							Flow.redirect(Flow.panelTokenHolder);
+							Flow.panelToken.setBackground("./images/Scr7ConfirmaToken.png");
+							Flow.redirect(Flow.panelToken);
 						}
 						else {
 							System.out.println("loginPassword success y isvalid y dispense y NO allowsWithdrawals");
@@ -253,11 +244,11 @@ public class PanelLogin extends JPanel implements PinpadListener {
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
 
 							if(++CurrentUser.loginAttempts >= 2) {
-								Flow.redirect(Flow.panelOperacionCanceladaHolder,5000,"panleIdle");								
+								Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);								
 							}
 							else {	
 								lblLoginMensaje.setText("No tienes permisos para hacer retiros.");
-								Flow.panelLoginHolder.setBackground("./images/Scr7DatosIncorrectos.png");								
+								Flow.panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");								
 							}
 						}
 						break;
@@ -269,7 +260,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						CurrentUser.loginPassword = "";
 						CurrentUser.asteriscos = "";
 						CurrentUser.pinpadMode = PinpadMode.loginUser;							
-						Flow.panelLoginHolder.setBackground("./images/Scr7DatosIncorrectos.png");
+						Flow.panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 						break;
 					}
 				}
@@ -286,7 +277,7 @@ public class PanelLogin extends JPanel implements PinpadListener {
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
 									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid EXCEPTION",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 							CurrentUser.totalAmountInserted = 0;
-							Flow.redirect(Flow.panelDepositoHolder);
+							Flow.redirect(Flow.panelDeposito);
 							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
 							break;
 						case Dispense:								
@@ -322,14 +313,14 @@ public class PanelLogin extends JPanel implements PinpadListener {
 						CurrentUser.loginPassword = "";
 						CurrentUser.asteriscos = "";
 						if(++CurrentUser.loginAttempts >= 2) {
-							Flow.redirect(Flow.panelOperacionCanceladaHolder,5000,"panelIdle");
+							Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
 							
 						}else {
 
 							CurrentUser.pinpadMode = PinpadMode.loginUser;		
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
 									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
-							Flow.panelLoginHolder.setBackground("./images/Scr7DatosIncorrectos.png");
+							Flow.panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 						}
 						return;
 					}
@@ -369,19 +360,22 @@ public class PanelLogin extends JPanel implements PinpadListener {
 
 	}
 	
-	public void paintComponent(Graphics g) {
-		g.drawImage(img, 0, 0, null);
+
+	@Override
+	public void OnLoad() {
+		System.out.println("OnLoad PanelLogin");
+		CurrentUser.pinpadMode = PinpadMode.loginUser;
+		lblLoginUser.setText("");
+		lblLoginPassword.setText("");
+		lblLoginMensaje.setText("");
+		
 	}
 
-	// Metodo donde le pasaremos la dirección de la imagen a cargar.
-	public void setBackground(String imagePath) {
-
-		// Construimos la imagen y se la asignamos al atributo background.
-		this.setOpaque(false);
-		this.img = new ImageIcon(imagePath).getImage();
-		repaint();
+	@Override
+	public void OnUnload() {
+		System.out.println("OnUnload PanelLogin");
+		
 	}
-
 }
 
 

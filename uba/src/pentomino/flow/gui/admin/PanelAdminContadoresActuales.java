@@ -1,18 +1,16 @@
 package pentomino.flow.gui.admin;
 
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import pentomino.config.Config;
+import pentomino.core.devices.Ptr;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.ImagePanel;
 
 public class PanelAdminContadoresActuales extends ImagePanel {
@@ -21,22 +19,19 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private JButton btnImprimirContadores; 
+	
 
-
-
-	public PanelAdminContadoresActuales(String img,String name) {
-		super(new ImageIcon(img).getImage(),name);
-	}
-
-	public PanelAdminContadoresActuales(Image img,String name, int _timeout, String _redirect) {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelAdminContadoresActuales(String img,String name, int _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
 	}	
-
-	public PanelAdminContadoresActuales(Image img, String name) {
-		super(img,name);
-	}
-
-
 
 
 	static JLabel lbl20 = new JLabel("-");
@@ -50,17 +45,20 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 	@Override
 	public void ContentPanel() {
 
-
-		setBounds(0, 0, 120, 574);
+		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);
 		setLayout(null);	
+		
 
-		add(new DebugButtons().getPanel());	
 
-
-		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
-		btnImprimirContadores.setBounds(41, 939, 250, 90);
+		btnImprimirContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
+		btnImprimirContadores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Ptr.printContadores();
+			}
+		});
+		btnImprimirContadores.setBounds(41, 877, 250, 90);
 		btnImprimirContadores.setContentAreaFilled(false);
 		btnImprimirContadores.setBorderPainted(false);
 		btnImprimirContadores.setOpaque(false);
@@ -139,7 +137,7 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 		JButton btnEnviarCeros = new JButton(new ImageIcon("./images/Btn_AdminCeros.png"));
 		btnEnviarCeros.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {								
-				Flow.redirect(Flow.panelAdminContadoresEnCero,30000,"panelAdminMenu");
+				Flow.redirect(Flow.panelAdminContadoresEnCero,30000,Flow.panelAdminMenu);
 			}
 		});
 		btnEnviarCeros.setOpaque(false);
@@ -159,17 +157,13 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnSalir.setContentAreaFilled(false);
 		btnSalir.setBorderPainted(false);
-		btnSalir.setBounds(1660, 877, 250, 90);
+		btnSalir.setBounds(1670, 877, 250, 90);
 		add(btnSalir);
 
 
 
 	}
 
-
-	public JPanel getPanel() {
-		return this;
-	}
 
 
 	public static void GetCurrentCounters() {

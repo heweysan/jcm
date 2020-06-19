@@ -16,28 +16,36 @@ import pentomino.common.jcmOperation;
 import pentomino.flow.Flow;
 import pentomino.flow.protocol;
 
-public class PanelDebug {
-
-	public JPanel contentPanel;
-	public JLabel lblBilleteIngresado1 = new JLabel("$0");
-	public JLabel lblBilleteIngresado2 = new JLabel("$0");
-	public JLabel lblContadores1 = new JLabel("rec1/0  rec2/0");
-	public JLabel lblContadores2 = new JLabel("rec1/0  rec2/0");
-	public JLabel lblRecycler1 = new JLabel(".");
-	public JLabel lblRecycler2 = new JLabel(".");
+public class PanelDebug  extends ImagePanel {
 
 	/**
-	 * @wbp.parser.entryPoint
+	 * 
 	 */
-	public PanelDebug() {
+	private static final long serialVersionUID = 1L;
 
-		contentPanel = new JPanel();
-		//contentPanel = new ImagePanel(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelComandos");
-		contentPanel.setOpaque(false);
-		contentPanel.setBackground(Color.blue);
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);
+	
+	public static JLabel lblBilleteIngresado1 = new JLabel("$0");
+	public static JLabel lblBilleteIngresado2 = new JLabel("$0");
+	public static JLabel lblContadores1 = new JLabel("rec1/0  rec2/0");
+	public static JLabel lblContadores2 = new JLabel("rec1/0  rec2/0");
+	public static JLabel lblRecycler1 = new JLabel(".");
+	public static JLabel lblRecycler2 = new JLabel(".");
+
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelDebug(String img,String name, int _timeout, ImagePanel _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);
+	}	
+
+
+	@Override
+	public void ContentPanel() {
+
 
 
 		JPanel panel_comandos = new JPanel();
@@ -49,13 +57,13 @@ public class PanelDebug {
 
 		chckbxReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		chckbxReciclador1.setBounds(725, 26, 262, 51);
-		contentPanel.add(chckbxReciclador1);
+		add(chckbxReciclador1);
 
 		JCheckBox chckbxReciclador2 = new JCheckBox("Reciclador 2");		
 		chckbxReciclador2.setSelected(true);
 		chckbxReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		chckbxReciclador2.setBounds(1050, 26, 233, 51);
-		contentPanel.add(chckbxReciclador2);
+		chckbxReciclador2.setBounds(979, 26, 233, 51);
+		add(chckbxReciclador2);
 
 		JButton btnStatusReq = new JButton("Stat Req (11h)");
 		btnStatusReq.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -70,8 +78,6 @@ public class PanelDebug {
 			}
 		});
 
-
-		panel_comandos.add(btnStatusReq);
 
 		JButton btnReset = new JButton("Reset (40h)");
 		btnReset.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -360,7 +366,7 @@ public class PanelDebug {
 
 			}
 		});
-		btnStatusRequestExt.setBounds(559, 459, 194, 50);
+		btnStatusRequestExt.setBounds(256, 460, 194, 50);
 		panel_comandos.add(btnStatusRequestExt);
 
 		JButton btnStack3 = new JButton("Stack-3 (49h)");
@@ -371,7 +377,7 @@ public class PanelDebug {
 				Flow.jcms[0].id003_format((byte) 0x5, (byte) 0x49, Flow.jcms[0].jcmMessage, false);
 			}
 		});
-		btnStack3.setBounds(779, 459, 157, 50);
+		btnStack3.setBounds(476, 460, 157, 50);
 		panel_comandos.add(btnStack3);
 
 		JButton btnPayOut = new JButton("Pay Out (+4Ah)");
@@ -383,7 +389,7 @@ public class PanelDebug {
 						Flow.jcms[0].jcmMessage);
 			}
 		});
-		btnPayOut.setBounds(958, 459, 161, 50);
+		btnPayOut.setBounds(655, 460, 161, 50);
 		panel_comandos.add(btnPayOut);
 
 		JButton btnCollect = new JButton("Collect (+4Bh+Data)");
@@ -465,7 +471,7 @@ public class PanelDebug {
 				Flow.jcms[0].id003_format((byte) 0x5, (byte) 0x92, Flow.jcms[0].jcmMessage, false);
 			}
 		});
-		btnUnitInformationRequest.setBounds(313, 459, 236, 50);
+		btnUnitInformationRequest.setBounds(10, 460, 236, 50);
 		panel_comandos.add(btnUnitInformationRequest);
 
 		JButton btnRecycleRefillModeSetting = new JButton("Recycle Refill Mode Setting (D4h+Data)");
@@ -511,21 +517,15 @@ public class PanelDebug {
 				if(chckbxReciclador1.isSelected()) {
 
 					Flow.jcms[0].jcmMessage[7] = 0x02;  //REC1
-					//Flow.jcms[0].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
-					//Flow.jcms[0].jcmMessage[9] = 0x00; //RESERVADO
-					//Flow.jcms[0].jcmMessage[10] = 0x02; //REC2
 					Flow.jcms[0].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[0].jcmMessage);
 				}
 				if(chckbxReciclador2.isSelected()) {
 					Flow.jcms[1].jcmMessage[7] = 0x02;  //REC1 0x01
-					//Flow.jcms[1].jcmMessage[8] = 0x00; //CUANTOS EN EL REC2
-					//Flow.jcms[1].jcmMessage[9] = 0x00; //RESERVADO
-					//Flow.jcms[1].jcmMessage[10] = 0x02; //REC2
 					Flow.jcms[1].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[1].jcmMessage);
 				}
 			}
 		});
-		btnCurrentCountSetting.setBounds(10, 458, 289, 50);
+		btnCurrentCountSetting.setBounds(1216, 459, 289, 50);
 		panel_comandos.add(btnCurrentCountSetting);
 
 		JButton btnRecycleCurrencyReqSetting = new JButton("Recycle Currency Req (+90h)");
@@ -631,31 +631,19 @@ public class PanelDebug {
 
 		JLabel lblNewLabel = new JLabel("Set denomination (debe estar DISABLE (INHIBIT))");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel.setBounds(559, 347, 425, 41);
+		lblNewLabel.setBounds(559, 353, 425, 41);
 		panel_comandos.add(lblNewLabel);
 
 		JButton btnComandosRegresar = new JButton("Regresar");
 		btnComandosRegresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelDepositoHolder);
+				Flow.redirect(Flow.panelDeposito);
 			}
 		});
 		btnComandosRegresar.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnComandosRegresar.setBackground(Color.ORANGE);
-		btnComandosRegresar.setBounds(10, 11, 207, 73);
-		contentPanel.add(btnComandosRegresar);
-
-		JButton btnComandosSalir = new JButton("SALIR");
-		btnComandosSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-
-		btnComandosSalir.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnComandosSalir.setBackground(Color.RED);
-		btnComandosSalir.setBounds(227, 11, 200, 73);
-		contentPanel.add(btnComandosSalir);
+		btnComandosRegresar.setBounds(1332, 26, 207, 73);
+		add(btnComandosRegresar);
 
 		JPanel panelJCM1 = new JPanel();
 		panelJCM1.setBackground(Color.BLACK);
@@ -663,7 +651,7 @@ public class PanelDebug {
 		panelJCM1.setOpaque(false);
 		panelJCM1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelJCM1.setBounds(10, 92, 630, 225);
-		contentPanel.add(panelJCM1);
+		add(panelJCM1);
 
 		//JLabel lblRecycler1 = new JLabel(".");
 		lblRecycler1.setForeground(Color.WHITE);
@@ -714,7 +702,7 @@ public class PanelDebug {
 		panelJCM2.setOpaque(false);
 		panelJCM2.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelJCM2.setBounds(667, 92, 630, 225);
-		contentPanel.add(panelJCM2);
+		add(panelJCM2);
 
 		//JLabel lblRecycler2 = new JLabel(".");
 		lblRecycler2.setForeground(Color.WHITE);
@@ -759,7 +747,7 @@ public class PanelDebug {
 		btnReiniciarJcm2.setBounds(281, 11, 209, 80);
 		panelJCM2.add(btnReiniciarJcm2);
 
-		contentPanel.add(panel_comandos);		
+		add(panel_comandos);		
 		
 		JButton btnAlarmaOff = new JButton("ALARMA OFF");
 		btnAlarmaOff.addActionListener(new ActionListener() {
@@ -781,22 +769,41 @@ public class PanelDebug {
 		btnAlarmaOn.setBounds(1117, 632, 203, 48);
 		panel_comandos.add(btnAlarmaOn);
 		
+		JButton btnCurrentCountSetting_1 = new JButton("Current Count\u00A0Setting (E2h+Data)");
+		btnCurrentCountSetting_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(chckbxReciclador1.isSelected()) {
+
+					Flow.jcms[0].jcmMessage[7] = 0x01;  //REC1
+					Flow.jcms[0].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[0].jcmMessage);
+				}
+				if(chckbxReciclador2.isSelected()) {
+					Flow.jcms[1].jcmMessage[7] = 0x01;  //REC1 0x01
+					Flow.jcms[1].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[1].jcmMessage);
+				}
+			}
+		});
+		btnCurrentCountSetting_1.setFont(new Font("Dialog", Font.BOLD, 12));
+		btnCurrentCountSetting_1.setBackground(Color.GREEN);
+		btnCurrentCountSetting_1.setBounds(1561, 460, 289, 50);
+		panel_comandos.add(btnCurrentCountSetting_1);
+		
 		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
 		btnAdminLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect("panelAdminLogin");
+				Flow.redirect(Flow.panelAdminLogin);
 			}
 		});
 		btnAdminLogin.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		btnAdminLogin.setBounds(1436, 26, 347, 122);
-		contentPanel.add(btnAdminLogin);
+		btnAdminLogin.setBounds(1549, 26, 347, 122);
+		add(btnAdminLogin);
 		
 		JButton btnNewButton = new JButton("ADMIN MENU");
-		btnNewButton.setBounds(1436, 195, 347, 122);
-		contentPanel.add(btnNewButton);
+		btnNewButton.setBounds(1549, 195, 347, 122);
+		add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect("panelAdminMenu");
+				Flow.redirect(Flow.panelAdminMenu);
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -918,7 +925,16 @@ public class PanelDebug {
 
 	}
 
-	public JPanel getPanel() {
-		return contentPanel;
+
+	@Override
+	public void OnLoad() {
+		System.out.println("OnLoad PanelDebug");
+		
+	}
+
+	@Override
+	public void OnUnload() {
+		System.out.println("OnUnload PanelDebug");
+		
 	}
 }

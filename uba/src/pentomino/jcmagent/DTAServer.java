@@ -20,6 +20,7 @@ import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.cashmanagement.Transactions;
 import pentomino.config.Config;
+import pentomino.flow.Flow;
 import rabbitClient.Producer;
 import rabbitClient.RabbitMQConnection;
 
@@ -35,6 +36,17 @@ public class DTAServer {
 
 		switch (function.toUpperCase()) {
 		case "RESTARTATM":
+			boolean busy = false;
+            do {
+                try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}                
+                busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+            } while (busy);
+            Flow.redirect(Flow.panelReinicio);
 			return RestartAtm();
 
 		case "CLOSEFLOW":
@@ -112,6 +124,7 @@ public class DTAServer {
 
 		case "GOOFFLINE":
 			//TODO: REVISAR Config.SetPersistence("ForceOoS", true);
+			System.out.println("GOOFFLINE");
 			return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
 		}
 

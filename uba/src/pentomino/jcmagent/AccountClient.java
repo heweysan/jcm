@@ -28,7 +28,7 @@ public class AccountClient {
 
 	static Connection conn = null;
 
-	private final static CountDownLatch loginLatch = new CountDownLatch (1);
+	private static CountDownLatch loginLatch = new CountDownLatch (1);
 	private static String returnMessage = "";
 
 	public String LoginAdminAccess(String user, String password) {
@@ -37,10 +37,11 @@ public class AccountClient {
 		myLogin.username = user;
 		myLogin.password = password;
 
-		returnMessage = "";		
+		returnMessage = "0";		
 		
 		SendAndReceive("adminAccess", gson.toJson(myLogin));
 		
+		System.out.println("LoginAdminAccess returnMessage [" + returnMessage + "]");
 		return returnMessage;
 	}
 
@@ -120,7 +121,8 @@ public class AccountClient {
 
 		
 		replyQueueName = queue;
-
+		
+		loginLatch = new CountDownLatch (1);
 		
 		channel.queueDeclare(queue, true, false, false, new HashMap<String,Object>());
 		channel.basicQos(0,20,false);
@@ -137,18 +139,17 @@ public class AccountClient {
 
 
 			if(correlationId.equalsIgnoreCase(message.getProperties().getCorrelationId())) {
-				System.out.println("SI LLEGO CARNALIN");
-				channel.basicAck( message.getEnvelope().getDeliveryTag(), false);
-				conn.close();
+				System.out.println("SI LLEGO CARNALIN [" + body + "]");
+				channel.basicAck( message.getEnvelope().getDeliveryTag(), false);							
 				returnMessage = body;
-				loginLatch.countDown();
+				System.out.println("ConfigureConnectionOrig returnMessage [" + returnMessage + "]");				
+				conn.close();
+				loginLatch.countDown();				
 			}
 
 		};		
 
 		channel.basicConsume(replyQueueName, false, deliverCallback, consumerTag -> { });	
-
-		
 		
 		Map<String,Object> map = null;
 		map = new HashMap<String,Object>();

@@ -33,7 +33,7 @@ public class DebugButtons {
 		btnComandos.setBounds(220, 10, 200, 73);
 		btnComandos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelComandosHolder);	
+				Flow.redirect(Flow.panelDebug);	
 			}
 		});
 		
@@ -50,7 +50,7 @@ public class DebugButtons {
 		JButton btnIdle = new JButton("IDLE");
 		btnIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-				Flow.redirect(Flow.panelIdleHolder);
+				Flow.redirect(Flow.panelIdle);
 			}
 		});
 		btnIdle.setFont(new Font("Tahoma", Font.BOLD, 22));

@@ -1,17 +1,17 @@
 .                            .
 	      DEPOSITO
 		  
-FECHA:    08/06/2020     
-HORA:     18:31:19       
+FECHA:    17/06/2020     
+HORA:     20:31:20       
 
 MONTO:	  $3,720
 
 PIEZAS    BILLETES      MONTO
-1            $20          $20
-2            $50         $100
-3           $100         $300
-4           $200         $800
-5           $500       $2,500
+0            $20           $0
+0            $50           $0
+0           $100           $0
+0           $200           $0
+0           $500           $0
 
 REFERENCIA: 13579
 OPERACION:  23
@@ -58,12 +58,20 @@ CurrentUser.cleanData();
 
 ------------------------------
 
+javaDummyFile1.zip
+javaDummyFile1
 
 SOEID. LS85887
 PWD: Grumdrop258
 PIN: 22334455
 
 
+RM1
+
+
 MEET: https://meet.google.com/exd-bdcm-pcw
 
+String atmId = Config.GetDirective("AtmId", "");
+
+784512
   

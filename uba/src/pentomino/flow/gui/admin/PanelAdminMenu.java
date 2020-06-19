@@ -1,24 +1,21 @@
 package pentomino.flow.gui.admin;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import pentomino.common.BusinessEvent;
-import pentomino.common.PinpadMode;
 import pentomino.common.jcmOperation;
+import pentomino.config.Config;
+import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
 import pentomino.flow.MyEvent;
-import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.ImagePanel;
-import pentomino.flow.gui.PanelLogin;
 import pentomino.jcmagent.BEA;
 
 public class PanelAdminMenu extends ImagePanel {
@@ -38,15 +35,7 @@ public class PanelAdminMenu extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelAdminMenu(String img,String name) {
-		super(new ImageIcon(img).getImage(),name);
-		setBounds(0, 0, 1920, 1080);
-		setOpaque(false);
-		setBorder(null);
-		setLayout(null);
-	}
-
-	public PanelAdminMenu(Image img,String name, int _timeout, String _redirect) {
+	public PanelAdminMenu(String img,String name, int _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
@@ -54,23 +43,10 @@ public class PanelAdminMenu extends ImagePanel {
 		setLayout(null);
 	}	
 
-	public PanelAdminMenu(Image img, String name) {
-		super(img,name);
-		setBounds(0, 0, 1920, 1080);
-		setOpaque(false);
-		setBorder(null);
-		setLayout(null);
-	}
 
 
 	@Override
 	public void ContentPanel() {
-
-
-		setBounds(0, 0, 1920, 1080);
-		setOpaque(false);
-		setBorder(null);
-		setLayout(null);	
 
 
 		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
@@ -88,8 +64,6 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuCorte.setBounds(31, 810, 388, 132);
 		add(btnAdminMenuCorte);
 
-		add(new DebugButtons().getPanel());	
-
 		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("./images/Btn_AdminEstDisp.png"));
 		btnAdminMenuEstatusDispositivos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -106,9 +80,9 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				//BEA.BusinessEvent(BusinessEvent.SessionEnd, true, false, "");
 				BEA.BusinessEvent(BusinessEvent.AdministrativeOperatonEnded, true, false,"");
-
-				Flow.redirect(Flow.panelIdleHolder);	
+				Flow.redirect(Flow.panelIdle);	
 			}
 		});
 		btnAdminMenuSalir.setBackground(Color.BLUE);
@@ -122,6 +96,21 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuReiniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reiniciando CAJERITO BUTTON");
+				boolean busy = false;
+	            do {
+	                try {	                	
+						Thread.sleep(2000);
+					} catch (InterruptedException ie) {
+						// TODO Auto-generated catch block
+						ie.printStackTrace();
+					}                
+	                busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+	                System.out.println("BUSY [" + busy +"]");
+	            } while (busy);
+	            System.out.println("");
+	            Flow.redirect(Flow.panelReinicio);
+							
+				
 				EventListenerClass.fireMyEvent(new MyEvent("reboot"));
 			}
 		});
@@ -133,15 +122,7 @@ public class PanelAdminMenu extends ImagePanel {
 
 		btnAdminMenuImpresionContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.panelMenuHolder.screenTimerCancel();				
-				CurrentUser.cleanPinpadData(PinpadMode.loginUser);
-				PanelLogin.lblLoginUser.setLocation(257, 625);	
-				PanelLogin.lblLoginUser.setText("");
-				PanelLogin.lblLoginPassword.setText("");
-				CurrentUser.currentOperation = jcmOperation.Deposit;
-				PanelLogin.lblLoginOpcion.setBounds(240, 530, 87, 87);   //Este es login sin password
-				Flow.panelLoginHolder.setBackground("./images/Scr7IdentificateDeposito.png");
-				Flow.redirect(Flow.panelAdminContadoresActuales,7000,"panelOperacionCancelada");				
+				Ptr.printContadores();				
 			}
 		});
 
@@ -150,29 +131,23 @@ public class PanelAdminMenu extends ImagePanel {
 
 				CurrentUser.currentOperation = jcmOperation.Dotacion;
 				PanelAdminContadoresActuales.GetCurrentCounters();
-				Flow.redirect(Flow.panelAdminContadoresActuales,15000,"panelAdminMenu");			
+				Flow.redirect(Flow.panelAdminContadoresActuales,15000,Flow.panelAdminMenu);			
 			}
 		});
 	}
 
 
-
-	public JPanel getPanel() {
-		return this;
-		//return contentPanel;
-	}
-
 	@Override
 	public void OnLoad() {
 		// TODO Auto-generated method stub
-		System.out.println("Aqui carga este jalisco");
+		System.out.println("OnLoad PanelAdminMenu");
 
 	}
 
 	@Override
 	public void OnUnload() {
 		// TODO Auto-generated method stub
-		System.out.println("Aqui se sale este jalisco");
+		System.out.println("OnUnload PanelAdminMenu");
 	}
 
 

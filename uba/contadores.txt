@@ -1,0 +1,20 @@
+.                            .
+	      DEPOSITO
+		  
+FECHA:    <fecha>
+HORA:     <hora>
+
+MONTO:	  <monto>
+
+PIEZAS    BILLETES      MONTO
+<b020>        $20    <monto20>
+<b050>        $50    <monto50>
+<b100>       $100    <monto100>
+<b200>       $200    <monto200>
+<b500>       $500    <monto500>
+<b1000>      $1000    <monto1000>
+
+CORTE:      <corte>
+USUARIO:    <usuario>
+
+.                            .

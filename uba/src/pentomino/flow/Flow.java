@@ -9,7 +9,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -29,7 +28,6 @@ import pentomino.config.Config;
 import pentomino.core.devices.Tio;
 import pentomino.flow.gui.FlowLayout;
 import pentomino.flow.gui.ImagePanel;
-import pentomino.flow.gui.ImagePanelOld;
 import pentomino.flow.gui.PanelDebug;
 import pentomino.flow.gui.PanelDeposito;
 import pentomino.flow.gui.PanelDispense;
@@ -37,10 +35,13 @@ import pentomino.flow.gui.PanelError;
 import pentomino.flow.gui.PanelIdle;
 import pentomino.flow.gui.PanelLogin;
 import pentomino.flow.gui.PanelMenu;
+import pentomino.flow.gui.PanelMenuSinFondo;
 import pentomino.flow.gui.PanelNoTicket;
+import pentomino.flow.gui.PanelOos;
 import pentomino.flow.gui.PanelOperacionCancelada;
+import pentomino.flow.gui.PanelReinicio;
+import pentomino.flow.gui.PanelTerminamos;
 import pentomino.flow.gui.PanelToken;
-import pentomino.flow.gui.PinpadListener;
 import pentomino.flow.gui.admin.PanelAdminContadoresActuales;
 import pentomino.flow.gui.admin.PanelAdminContadoresEnCero;
 import pentomino.flow.gui.admin.PanelAdminDotarCancelar;
@@ -59,17 +60,20 @@ public class Flow {
 
 	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
 
-	public static ImagePanelOld panelTerminamosHolder;
-	public static ImagePanelOld panelOperacionCanceladaHolder;
-	public static ImagePanelOld panelErrorHolder; 
-	public static ImagePanelOld panelLoginHolder;
-	public static ImagePanelOld panelTokenHolder;
-	public static ImagePanelOld panelIdleHolder;
-	public static ImagePanelOld panelMenuHolder;
-	public static ImagePanelOld panelDepositoHolder;
-	public static ImagePanelOld panelComandosHolder;
-	public static ImagePanelOld panelDispenseHolder;
-	public static ImagePanelOld panelNoTicketHolder;
+	public static ImagePanel panelTerminamos;
+	public static ImagePanel panelOperacionCancelada;
+	public static ImagePanel panelError; 
+	public static ImagePanel panelLogin;
+	public static ImagePanel panelToken;
+	public static ImagePanel panelIdle;
+	public static ImagePanel panelMenu;
+	public static ImagePanel panelDeposito;
+	public static ImagePanel panelDebug;
+	public static ImagePanel panelDispense;
+	public static ImagePanel panelNoTicket;
+	public static ImagePanel panelMenuSinFondo;
+	public static ImagePanel panelReinicio;
+	public static ImagePanel panelOos;
 
 	//FLUJO ADMNISTRATIVO
 	public static ImagePanel panelAdminLogin;	
@@ -105,7 +109,7 @@ public class Flow {
 
 	public static int jcm1LastBillInsertedWorking = 0; 
 	public static int jcm2LastBillInsertedWorking = 0;
-	
+
 	public static void main(String[] args) {
 
 		logger.info("----- FLOW MAIN -----");
@@ -113,17 +117,6 @@ public class Flow {
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 		System.out.println(System.getProperty("os.name") + " isDebug[" + JcmGlobalData.isDebug + "]");
 
-		//Seteamos algunas cosas de origen
-		if(JcmGlobalData.isDebug) {
-
-			initializeJcms();
-
-			jcms[0].recyclerDenom1 = "20";
-			jcms[0].recyclerDenom2 = "50";
-			jcms[1].recyclerDenom1 = "100";
-			jcms[1].recyclerDenom2 = "200";
-
-		}
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -159,11 +152,35 @@ public class Flow {
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();	
 
+		initializeJcms();
+
+		
+		
+		
 		GetCurrentCassettesConfig();
-
-
+		
+		JcmGlobalData.atmId = Config.GetDirective("AtmId", "-----");
+		
+		Config.SetPersistence("BoardStatus", "Available");
 
 		initialize();
+		
+		//"Recycle Currency Req (+90h)";
+		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[0].jcmMessage);
+		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[1].jcmMessage);
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//CURRENT COUNT REQUEST
+		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[0].jcmMessage);
+		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
+		
+		cl.show(panelContainer, "panelIdle");
 	}
 
 	/**
@@ -173,7 +190,9 @@ public class Flow {
 
 		System.out.println("INITIALIZE...");
 
-		JcmGlobalData.maxRecyclableCash = Integer.parseInt(Config.GetDirective("maxRecyclableCash","1500"));
+		JcmGlobalData.setMaxRecyclableCash(Integer.parseInt(Config.GetDirective("maxRecyclableCash","0")));
+
+		System.out.println("maxRecyclableCash [" + JcmGlobalData.getMaxRecyclableCash() + "]");
 
 		panelContainer.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -181,7 +200,7 @@ public class Flow {
 		panelContainer.setBounds(0, 0, 1920, 1080);
 
 		mainFrame = new JFrame("Frame Principal");
-		mainFrame.getContentPane().setBackground(Color.DARK_GRAY);
+		mainFrame.getContentPane().setBackground(Color.GREEN);
 		mainFrame.setBounds(100, 100, 1920, 1084);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.getContentPane().setLayout(null);
@@ -190,72 +209,59 @@ public class Flow {
 		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 
-		panelIdleHolder = new ImagePanelOld(new ImageIcon("./images/Scr7Inicio.png").getImage(),"panelIdle");
-		PanelIdle panelIdle = new PanelIdle();
-		panelIdleHolder.add(panelIdle.getPanel());
+		
+		
+		
+		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
+		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
+		panelMenuSinFondo = new PanelMenuSinFondo("./images/Scr7HolaDepositamos.png","panelMenuSinFondo",0,null);
+		panelDeposito = new PanelDeposito("./images/Scr7MontoIngresado.png","panelDeposito",0,null);			
+		panelDebug = new PanelDebug("./images/Scr7Placeholder.png","panelDebug",0,null);
+		panelLogin = new PanelLogin("./images/Scr7IdentificateDeposito.png","panelLogin",0,null);
+		panelToken = new PanelToken("./images/Scr7ConfirmaToken.png","panelToken",0,null);
+		panelTerminamos = new PanelTerminamos("./images/ScrTerminamos.png","panelTerminamos",5000,Flow.panelIdle);
+		panelDispense = new PanelDispense("./images/Scr7TomaBilletes.png","panelRetiroParcial",0,null);
+		panelError = new PanelError("./images/Scr7Placeholder.png","panelError",5000,Flow.panelIdle);		
+		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",5000,Flow.panelIdle);		
+		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
+		panelReinicio  = new PanelReinicio("./images/Scr7Placeholder.png","panelReinicio",0,null);
+		panelOos  = new PanelOos("./images/Scr7FueraDeServicio.png","panelOos",0,null);
+		
 
-		panelMenuHolder = new ImagePanelOld(new ImageIcon("./images/Scr7SinRetiroAutorizado.png").getImage(),"panelMenu");
-		PanelMenu panelMenu = new PanelMenu();
-		panelMenuHolder.add(panelMenu.getPanel());
+		//FLUJO ADMINISTRATIVO
 
-		panelDepositoHolder = new ImagePanelOld(new ImageIcon("./images/Scr7MontoIngresado.png").getImage(),"panelDeposito");
-		PanelDeposito panelDeposito = new PanelDeposito();
-		panelDepositoHolder.add(panelDeposito.getPanel());
-
-		panelComandosHolder = new ImagePanelOld(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelComandos");
-		PanelDebug panelComandos = new PanelDebug();
-		panelComandosHolder.add(panelComandos.getPanel());		
-
-		panelLoginHolder = new ImagePanelOld(new ImageIcon("./images/Scr7IdentificateDeposito.png").getImage(),"panelLogin");
-		PinpadListener panelLogin = new PanelLogin();
-		panelLoginHolder.add(panelLogin.getPanel());
-
-		panelTokenHolder = new ImagePanelOld(new ImageIcon("./images/Scr7ConfirmaToken.png").getImage(),"panelToken");
-		PanelToken panelToken = new PanelToken();
-		panelTokenHolder.add(panelToken.getPanel());
-
-		panelTerminamosHolder = new ImagePanelOld(new ImageIcon("./images/ScrTerminamos.png").getImage(),"panelTerminamos");
-
-		panelDispenseHolder = new ImagePanelOld(new ImageIcon("./images/ScrRetiraBilletes.png").getImage(),"panelRetiroParcial");
-		PanelDispense panelDispense = new PanelDispense();
-		panelDispenseHolder.add(panelDispense.getPanel());
-
-		panelErrorHolder = new ImagePanelOld(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelError",5000,"panelIdle");
-		PanelError panelError = new PanelError();
-		panelErrorHolder.add(panelError.getPanel());
-
-		panelOperacionCanceladaHolder = new ImagePanelOld(new ImageIcon("./images/Scr7OperacionCancelada.png").getImage(),"panelOperacionCancelada",5000,"panelIdle");
-		PanelOperacionCancelada panelOperacionCancelada = new PanelOperacionCancelada();
-		panelOperacionCanceladaHolder.add(panelOperacionCancelada.getPanel());
-
-		panelNoTicketHolder = new ImagePanelOld(new ImageIcon("./images/Scr7NoTicket.png").getImage(),"panelNoTicket",5000,"panelTerminamos");
-		PanelNoTicket panelPanelNoTicket = new PanelNoTicket();
-		panelNoTicketHolder.add(panelPanelNoTicket.getPanel());
+		panelAdminLogin = new PanelAdminLogin("./images/Scr7Placeholder.png","panelAdminLogin",25000,Flow.panelTerminamos); 
+		panelAdminMenu = new PanelAdminMenu("./images/Scr7Placeholder.png","panelAdminMenu",25000,Flow.panelTerminamos);
+		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/Scr7Placeholder.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
+		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/Scr7Placeholder.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
+		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/Scr7Placeholder.png","panelAdminDotarCancelar",0,null);
+		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/Scr7Placeholder.png","panelAdminDotarResultados",0,null);
+		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
+		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/Scr7Placeholder.png","panelAdminEstatusDispositivos",0,null);
 
 
-
-		panelAdminLogin = new PanelAdminLogin(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminLogin",25000,"panelTerminamos"); 
-		panelAdminMenu = new PanelAdminMenu(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminMenu",25000,"panelTerminamos");
-		panelAdminContadoresActuales = new PanelAdminContadoresActuales(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresActuales",10000,"panelTerminamos");
-		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminContadoresEnCero",10000,"panelTerminamos");
-		panelAdminDotarCancelar = new PanelAdminDotarCancelar(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarCancelar");
-		panelAdminDotarResultados = new PanelAdminDotarResultados(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminDotarResultados");
-		panelAdminError = new PanelAdminError(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminError");
-		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos(new ImageIcon("./images/Scr7Placeholder.png").getImage(),"panelAdminEstatusDispositivos");
-
-
+		//Valores Iniciales
+		PanelIdle.lblAtmId.setText(JcmGlobalData.atmId);
+		
+		
 		panelContainer.setLayout(cl);		
-		panelContainer.add(panelIdleHolder,"panelIdle");
-		panelContainer.add(panelMenuHolder,"panelMenu");
-		panelContainer.add(panelDepositoHolder,"panelDeposito");
-		panelContainer.add(panelComandosHolder, "panelComandos");
-		panelContainer.add(panelLoginHolder, "panelLogin");
-		panelContainer.add(panelTokenHolder,"panelToken");
-		panelContainer.add(panelTerminamosHolder,"panelTerminamos");
-		panelContainer.add(panelDispenseHolder,"panelRetiroParcial");
-		panelContainer.add(panelErrorHolder,"panelError");
-		panelContainer.add(panelOperacionCanceladaHolder,"panelOperacionCancelada");		
-		panelContainer.add(panelNoTicketHolder,"panelNoTicket");
+		
+		panelContainer.add(panelIdle,"panelIdle");
+		panelContainer.add(panelMenu,"panelMenu");
+		panelContainer.add(panelDeposito,"panelDeposito");
+		panelContainer.add(panelDebug, "panelDebug");
+		panelContainer.add(panelLogin, "panelLogin");
+		panelContainer.add(panelToken,"panelToken");
+		panelContainer.add(panelTerminamos,"panelTerminamos");
+		panelContainer.add(panelDispense,"panelRetiroParcial");
+		panelContainer.add(panelError,"panelError");
+		panelContainer.add(panelOperacionCancelada,"panelOperacionCancelada");		
+		panelContainer.add(panelNoTicket,"panelNoTicket");		
+		panelContainer.add(panelMenuSinFondo,"panelMenuSinFondo");
+		panelContainer.add(panelReinicio,"panelReinicio");
+		panelContainer.add(panelOos,"panelOos");
+		
+
 
 		//FLUJO ADMINISTRATIVO
 		panelContainer.add(panelAdminLogin,"panelAdminLogin");		
@@ -266,29 +272,9 @@ public class Flow {
 		panelContainer.add(panelAdminDotarResultados,"panelAdminDotarResultados");
 		panelContainer.add(panelAdminError,"panelAdminError");
 		panelContainer.add(panelAdminEstatusDispositivos,"panelAdminEstatusDispositivos");
-
-		/*		
-		Timer screenTimer = new Timer();
-		screenTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {				                
-				//Revisamos si hay retiros listos									
-				//panelIdle.setBackground("./images/BTN7_NO.png");						
-				//screenTimer.cancel();
-				cl.show(panelContainer, "miPipad");
-			}
-		}, 3000);
-
-		Timer btnRetiroAlertBlinker = new Timer(500, new ActionListener() {
-			boolean on=false;
-			public void actionPerformed(ActionEvent e) {
-				// blink the button background on and off
-				btnRetiro.setBackground( on ? Color.ORANGE : null);
-				on = !on;
-			}
-		});        
-		 */
-
+		
+		
+		
 
 
 		String atmId = Config.GetDirective("AtmId", "");
@@ -298,6 +284,8 @@ public class Flow {
 			public void myEventOccurred(MyEvent evt) {
 				//FIRE
 				System.out.println("myEventOccurred [" + evt.getSource() + "]");
+
+
 
 				switch(evt.getSource().toString()) {
 
@@ -309,32 +297,46 @@ public class Flow {
 					break;
 				case "bill1":							
 					int billType = jcms[0].bill;
+					boolean isRecyclable1 = true;
+					if(JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
+						isRecyclable1 = false;
+					}
 					switch(billType)
 					{
-					case 20:
-						depositBillsCounter.x20++;
+					case 20:						
 						jcm1LastBillInserted = 20;
-						jcms[0].cassettes.get(20).Available++;
+						if(isRecyclable1) {
+							depositBillsCounter.x20++;						
+							jcms[0].cassettes.get(20).Available++;
+						}
 						break;
 					case 50:
-						jcms[0].cassettes.get(50).Available++;
 						jcm1LastBillInserted = 50;
-						depositBillsCounter.x50++;
+						if(isRecyclable1) {
+							jcms[0].cassettes.get(50).Available++;						
+							depositBillsCounter.x50++;
+						}
 						break;
 					case 100:
-						jcms[0].cassettes.get(100).Available++;
 						jcm1LastBillInserted = 100;
-						depositBillsCounter.x100++;
+						if(isRecyclable1) {
+							jcms[0].cassettes.get(100).Available++;						
+							depositBillsCounter.x100++;
+						}
 						break;
 					case 200:
-						jcms[0].cassettes.get(200).Available++;
 						jcm1LastBillInserted = 200;
-						depositBillsCounter.x200++;
+						if(isRecyclable1) {
+							jcms[0].cassettes.get(200).Available++;						
+							depositBillsCounter.x200++;
+						}
 						break;
 					case 500:
-						jcms[0].cassettes.get(500).Available++;
 						jcm1LastBillInserted = 500;
-						depositBillsCounter.x500++;
+						if(isRecyclable1) {
+							jcms[0].cassettes.get(500).Available++;						
+							depositBillsCounter.x500++;
+						}
 						break;
 					}
 
@@ -356,36 +358,53 @@ public class Flow {
 
 					System.out.println("$" + CurrentUser.totalAmountInserted);
 					PanelDeposito.lblMontoDepositado.setText("$" + CurrentUser.totalAmountInserted);
-					panelComandos.lblBilleteIngresado1.setText("$" + billType);
+					PanelDebug.lblBilleteIngresado1.setText("$" + billType);
 					break;
 				case "bill2":		
 					int billType2 = jcms[1].bill;
+					boolean isRecyclable2 = true;
+					if(JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
+						isRecyclable2 = false;
+					}
 					switch(billType2)
 					{
 					case 20:
-						jcms[1].cassettes.get(20).Available++;
 						jcm2LastBillInserted = 20;
-						depositBillsCounter.x20++;
+						if(isRecyclable2) {
+							jcms[1].cassettes.get(20).Available++;
+
+							depositBillsCounter.x20++;
+						}
 						break;
 					case 50:
-						jcms[1].cassettes.get(50).Available++;
 						jcm2LastBillInserted = 50;
-						depositBillsCounter.x50++;
+						if(isRecyclable2) {
+							jcms[1].cassettes.get(50).Available++;
+
+							depositBillsCounter.x50++;
+						}
 						break;
 					case 100:
-						jcms[1].cassettes.get(100).Available++;
 						jcm2LastBillInserted = 100;
-						depositBillsCounter.x100++;
+						if(isRecyclable2) {
+							jcms[1].cassettes.get(100).Available++;
+
+							depositBillsCounter.x100++;
+						}
 						break;
 					case 200:
-						jcms[1].cassettes.get(200).Available++;
 						jcm2LastBillInserted = 200;
-						depositBillsCounter.x200++;
+						if(isRecyclable2) {
+							jcms[1].cassettes.get(200).Available++;						
+							depositBillsCounter.x200++;
+						}
 						break;
 					case 500:
-						jcms[1].cassettes.get(500).Available++;
 						jcm2LastBillInserted = 500;
-						depositBillsCounter.x500++;
+						if(isRecyclable2) {
+							jcms[1].cassettes.get(500).Available++;						
+							depositBillsCounter.x500++;
+						}
 						break;
 					}
 
@@ -405,17 +424,20 @@ public class Flow {
 					CurrentUser.totalAmountInserted += billType2;					
 					System.out.println("$" + CurrentUser.totalAmountInserted);
 					PanelDeposito.lblMontoDepositado.setText("$" + CurrentUser.totalAmountInserted);
-					panelComandos.lblBilleteIngresado2.setText("$" + billType2);
+					PanelDebug.lblBilleteIngresado2.setText("$" + billType2);
 					break;					
 				case "clearbill1":
-					panelComandos.lblBilleteIngresado1.setText("");
+					PanelDebug.lblBilleteIngresado1.setText("");
 					break;
 				case "clearbill2":
-					panelComandos.lblBilleteIngresado2.setText("");
+					PanelDebug.lblBilleteIngresado2.setText("");
 					break;		
 				case "recyclerBills1":
 
-					panelComandos.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
+					PanelDebug.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
+
+					PanelAdminEstatusDispositivos.lblJcm1Denom1.setText(jcms[0].recyclerDenom1);
+					PanelAdminEstatusDispositivos.lblJcm1Denom2.setText(jcms[0].recyclerDenom2);
 
 					recyclerBills1Set = true;					
 					if(recyclerBills2Set) {
@@ -430,7 +452,10 @@ public class Flow {
 					break;
 				case "recyclerBills2":
 
-					panelComandos.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
+					PanelDebug.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
+
+					PanelAdminEstatusDispositivos.lblJcm2Denom1.setText(jcms[1].recyclerDenom1);
+					PanelAdminEstatusDispositivos.lblJcm2Denom2.setText(jcms[1].recyclerDenom2);
 
 					recyclerBills2Set = true;
 					if(recyclerBills1Set) {				
@@ -445,11 +470,11 @@ public class Flow {
 
 					break;
 				case "recyclerContadores1":
-					panelComandos.lblContadores1.setText(jcms[0].recyclerContadores);
+					PanelDebug.lblContadores1.setText(jcms[0].recyclerContadores);
 					break;
 				case "recyclerContadores2":
 
-					panelComandos.lblContadores2.setText(jcms[1].recyclerContadores);
+					PanelDebug.lblContadores2.setText(jcms[1].recyclerContadores);
 					break;		
 				case "dispensedCass11":					
 					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass1Denom);
@@ -489,9 +514,9 @@ public class Flow {
 					break;
 				case "SafeOpen":
 					System.out.println("Safe Open");
-					redirect(Flow.panelAdminLogin,15000,"panelIdle");	
+					redirect(Flow.panelAdminLogin,15000,Flow.panelIdle);	
 					break;
-				
+
 				case "moneyIn1":
 					//JCM 1  moneyIn
 					System.out.println("moneyIn1"); 
@@ -500,7 +525,7 @@ public class Flow {
 						jcm1LastBillInserted = 0;
 						UpdateCountersDeposit(0, Integer.toString(jcm1LastBillInsertedWorking));
 					}
-					
+
 					break;
 				case "moneyIn2":
 					//JCM 2
@@ -510,7 +535,7 @@ public class Flow {
 						jcm2LastBillInserted = 0;
 						UpdateCountersDeposit(1, Integer.toString(jcm2LastBillInsertedWorking));
 					}
-										
+
 					break;
 				case "reboot":					
 					System.out.println("reboot");					
@@ -527,11 +552,20 @@ public class Flow {
 			}
 		});
 
-		initializeJcms();
+		//initializeJcms();
 
-		cl.show(panelContainer, "panelIdle");
 
-		//cl.show(panelContainer, "panelAdminEstatusDispositivos");
+		System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+		jcms[0].jcmMessage[3] = 0x01;
+		jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+
+		System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+		jcms[1].jcmMessage[3] = 0x01;
+		jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+
+		//cl.show(panelContainer, "panelIdle");
+
+		//cl.show(panelContainer, panelDeposito);
 
 	}
 
@@ -576,9 +610,10 @@ public class Flow {
 
 		String cassette = JcmGlobalData.getKey(jcm, denom);
 
-		if(cassette.isEmpty()) {
+			
+		if(cassette.isEmpty() || JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
 			//No esta en las denomonaciones lo mandamos a accepted
-			System.out.println("No esta en las denomonaciones lo mandamos a accepted");
+			System.out.println("No esta en las denomonaciones lo mandamos a accepted o es directo a AC");
 			UpdateCountersAcepted(denom);
 		}
 		else {
@@ -592,7 +627,7 @@ public class Flow {
 			originalValue++;
 
 			System.out.println("UpdateCountersDeposit FINAL totalValue [" + totalValue + "] originalValue [" + originalValue + "]");
-			
+
 			Config.SetPersistence("Cassette" + cassette + "Total", Integer.toString(totalValue));
 			Config.SetPersistence("Cassette" + cassette + "Original", Integer.toString(originalValue));
 		}
@@ -692,27 +727,20 @@ public class Flow {
 		}
 	}
 
-	public static void redirect(ImagePanelOld target, int timeout, String timeoutTarget) {	
+	/**
+	 * 
+	 * @param target  - A que pantalla se va a ir
+	 * @param timeout - El timeout de la nueva pantalla
+	 * @param timeoutTarget - A donde se va a ir la pantalla despues del time out
+	 */
+	public static void redirect(ImagePanel target, int timeout, ImagePanel timeoutTarget) {
 		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
 
-	public static void redirect(JPanel target, int timeout, String timeoutTarget) {	
-		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
-	}
-
-	public static void redirect(String target) {		
+	public static void redirect(ImagePanel target) {
 		Flow.cl.show(panelContainer, target);	
 	}
 
-	public static void redirect(ImagePanelOld target) {		
-		Flow.cl.show(panelContainer, target);
-		target.screenTimerCancel();	
-	}
-	
-	public static void redirect(JPanel target) {		
-		Flow.cl.show(panelContainer, target);
-		//target.screenTimerCancel();	
-	}
 
 	public static void actualizaContadoresRecicladores() {
 

@@ -2,7 +2,6 @@ package pentomino.flow.gui.admin;
 
 
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import pentomino.flow.Flow;
-import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.ImagePanel;
 
 public class PanelAdminContadoresEnCero extends ImagePanel {
@@ -21,17 +19,17 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 
 
-	public PanelAdminContadoresEnCero(String img,String name) {
-		this(new ImageIcon(img).getImage(),name);
-	}
-
-	public PanelAdminContadoresEnCero(Image img,String name, int _timeout, String _redirect) {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelAdminContadoresEnCero(String img,String name, int _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);
 	}	
 
-	PanelAdminContadoresEnCero(Image img, String name) {
-		super(img,name);
-	}
 
 
 	static JLabel lbl20 = new JLabel("0");
@@ -50,10 +48,6 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 		setOpaque(false);
 		setBorder(null);
 		setLayout(null);	
-
-		add(new DebugButtons().getPanel());
-
-
 
 
 		JLabel lblNewLabel = new JLabel("$20");

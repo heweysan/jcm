@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import pentomino.common.DeviceEvent;
@@ -15,26 +14,40 @@ import pentomino.common.jcmOperation;
 import pentomino.flow.Flow;
 import pentomino.jcmagent.RaspiAgent;
 
-public class PanelDispense {
-	public JPanel contentPanel;
+public class PanelDispense extends ImagePanel {
 
-	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel(".");
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	public PanelDispense() {
 
-		contentPanel = new JPanel();
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);
 
-		contentPanel.add(new DebugButtons().getPanel());		
+	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel("$1000");
 
-		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 60));
+	/**
+	 * @wbp.parser.constructor
+	 */
+
+	public PanelDispense(String img,String name, int _timeout, ImagePanel _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);
+	}	
+
+
+	@Override
+	public void ContentPanel() {
+
+	
+
+		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.LEFT);
+		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 55));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(10, 509, 1900, 153);
-		contentPanel.add(lblRetiraBilletesMontoDispensar);
+		lblRetiraBilletesMontoDispensar.setBounds(1193, 923, 551, 111);
+		add(lblRetiraBilletesMontoDispensar);
 
 	}
 
@@ -107,9 +120,17 @@ public class PanelDispense {
 		}, 1000,1000);
 	}
 
+	@Override
+	public void OnLoad() {
+		System.out.println("OnLoad PanelDispense");
+		
+		
 
-	public JPanel getPanel() {
-		return contentPanel;
+	}
+
+	@Override
+	public void OnUnload() {
+		System.out.println("OnUnload PanelDispense");
 	}
 
 }

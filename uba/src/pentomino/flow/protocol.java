@@ -365,31 +365,34 @@ public class protocol extends kermit {
 			switch(jcmId) {
 				case 1:
 					
-					JcmGlobalData.totalCashInRecyclers += bill;					
+									
 					
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
 					//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
-					if((JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.maxRecyclableCash) {
+					if(JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
+						System.out.println("JCM1 Diecto a AC");
 						id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
 					}
 					else {
+						JcmGlobalData.totalCashInRecyclers += bill;	
 						JcmGlobalData.totalCashInRecycler1 += bill;  //Dinero que se puede dispensar
 						System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecycler1 + "]");
 						id003_format((byte)5, (byte) 0x41, jcmMessage,true); //STACK1
 					}
 					break;
-				case 2:
-					
-					JcmGlobalData.totalCashInRecyclers += bill;					
+				case 2:				
+									
 					
 					EventListenerClass.fireMyEvent(new MyEvent("escrow" + jcmId));
 					
 					//Checamos si el monto en reciclador es mayor a lo permitido. En ese caso lo mandamos a la cajita
-					if((JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.maxRecyclableCash) {
+					if(JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
+						System.out.println("JCM2 Diecto a AC");
 						id003_format((byte)5, (byte) 0x49, jcmMessage,true); //STACK3
 					}
 					else {
+						JcmGlobalData.totalCashInRecyclers += bill;	
 						JcmGlobalData.totalCashInRecycler2 += bill;
 						System.out.println("JCM[" + jcmId + "] TotalCash [" + JcmGlobalData.totalCashInRecycler2 + "]");
 						id003_format((byte)5, (byte) 0x41, jcmMessage,true); //STACK1
@@ -431,7 +434,6 @@ public class protocol extends kermit {
 				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0, jcmMessage);
 				EventListenerClass.fireMyEvent(new MyEvent("moneyIn" + jcmId));
 				
-				//id003_format((byte)5, (byte) 0x11, jcmMessage,true); //STATUS_REQUEST
 				//Este solo borra el texto de la pantalla, no biggie
 				EventListenerClass.fireMyEvent(new MyEvent("clearbill" + jcmId));  //ESTE YA NO SERIA LO HARIA EL FLOW DESPUES DE HACER LOS ANTERIORES
 			

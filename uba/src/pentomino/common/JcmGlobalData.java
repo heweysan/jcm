@@ -6,6 +6,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import pentomino.config.Config;
+
 public class JcmGlobalData {
 	
 	public static boolean isDebug = false;
@@ -13,12 +15,15 @@ public class JcmGlobalData {
 	/***
 	 * El maximo de dinero antes de que se vaya a cajita directo.
 	 */
-	public static int maxRecyclableCash = 0;
+	private static int maxRecyclableCash = 0;
 	
 	public static int totalCashInRecycler1 = 0;
 	public static int totalCashInRecycler2 = 0;
 	
 	public static int totalCashInRecyclers = 0;
+	
+	public static String atmId = "";
+	
 	
 	/*
 	 * Las denominaciones para dispensar de cadad cajita 
@@ -102,6 +107,14 @@ public class JcmGlobalData {
 	
 	public static void main(String[] args) {
 			
+	}
+
+	public static int getMaxRecyclableCash() {
+		return Integer.parseInt(Config.GetDirective("maxRecyclableCash","0"));
+	}
+
+	public static void setMaxRecyclableCash(int maxRecyclableCash) {
+		JcmGlobalData.maxRecyclableCash = maxRecyclableCash;
 	}
 
 }

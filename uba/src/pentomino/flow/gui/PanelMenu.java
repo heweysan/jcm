@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import pentomino.cashmanagement.CmQueue;
 import pentomino.cashmanagement.vo.CmMessageRequest;
@@ -14,20 +13,32 @@ import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 
-public class PanelMenu {
+public class PanelMenu extends ImagePanel {
 
-	public JPanel contentPanel;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public static JButton btnMenuRetiro;
 	public static JButton btnMenuDeposito;
 	
-	public PanelMenu() {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelMenu(String img,String name, int _timeout, ImagePanel _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);
+	}	
+
+
+	@Override
+	public void ContentPanel() {
 		
-		contentPanel = new JPanel();
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);	
-		
+
 		
 		btnMenuDeposito = new JButton(new ImageIcon("./images/BTN7Deposito.png"));
 		btnMenuDeposito.setOpaque(false);
@@ -35,50 +46,40 @@ public class PanelMenu {
 		btnMenuDeposito.setOpaque(false);
 		btnMenuDeposito.setContentAreaFilled(false);
 		btnMenuDeposito.setBorderPainted(false);
-		contentPanel.add(btnMenuDeposito);
+		add(btnMenuDeposito);
 		
 		btnMenuRetiro = new JButton(new ImageIcon("./images/BTN7Retiro.png"));		
 		btnMenuRetiro.setOpaque(false);
 		btnMenuRetiro.setContentAreaFilled(false);
 		btnMenuRetiro.setBorderPainted(false);
 		btnMenuRetiro.setBounds(989, 502, 492, 498);
-		contentPanel.add(btnMenuRetiro);
-		
-		contentPanel.add(new DebugButtons().getPanel());	
-		
+		add(btnMenuRetiro);
+			
 		btnMenuDeposito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.panelMenuHolder.screenTimerCancel();				
+				Flow.panelMenu.screenTimerCancel();				
 				CurrentUser.cleanPinpadData(PinpadMode.loginUser);
-				PanelLogin.lblLoginUser.setLocation(257, 625);	
-				PanelLogin.lblLoginUser.setText("");
-				PanelLogin.lblLoginPassword.setText("");
-				PanelLogin.lblLoginMensaje.setText("");
+				PanelLogin.lblLoginUser.setLocation(257, 625);					
 				CurrentUser.currentOperation = jcmOperation.Deposit;
 				PanelLogin.lblLoginOpcion.setBounds(240, 530, 87, 87);   //Este es login sin password
-				Flow.panelLoginHolder.setBackground("./images/Scr7IdentificateDeposito.png");
-				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");				
+				Flow.panelLogin.setBackground("./images/Scr7IdentificateDeposito.png");
+				Flow.redirect(Flow.panelLogin,7000,Flow.panelOperacionCancelada);				
 			}
 		});
 		
 		btnMenuRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
 
-				Flow.panelMenuHolder.screenTimerCancel();			
+				Flow.panelMenu.screenTimerCancel();			
 				
 				CurrentUser.cleanPinpadData(PinpadMode.loginUser);			
-				CurrentUser.asteriscos = "";
-				
-				PanelLogin.lblLoginUser.setLocation(257, 525);
-				PanelLogin.lblLoginUser.setText("");
-				PanelLogin.lblLoginPassword.setText("");
-				
+				CurrentUser.asteriscos = "";				
+				PanelLogin.lblLoginUser.setLocation(257, 525);				
 				CurrentUser.currentOperation = jcmOperation.Dispense;
-
 				PanelLogin.lblLoginOpcion.setBounds(230, 430, 87, 87);   //Este es login con password
 				
-				Flow.panelLoginHolder.setBackground("./images/Scr7IngresaDatos.png");
-				Flow.redirect(Flow.panelLoginHolder,7000,"panelOperacionCancelada");
+				Flow.panelLogin.setBackground("./images/Scr7IngresaDatos.png");
+				Flow.redirect(Flow.panelLogin,7000,Flow.panelOperacionCancelada);
 								
 				CmMessageRequest request =  CmQueue.queueList.getFirst();				
 				CurrentUser.token = "" + request.token;
@@ -94,9 +95,15 @@ public class PanelMenu {
 		
 	}
 	
-	
-	public JPanel getPanel() {
-		return contentPanel;
+	@Override
+	public void OnLoad() {
+		System.out.println("OnLoad PanelMennu");
+
+	}
+
+	@Override
+	public void OnUnload() {
+		System.out.println("OnUnload PanelMenu");
 	}
 	
 	

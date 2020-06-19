@@ -106,7 +106,7 @@ public class Config {
 
 	public static String GetDirective(String param, String defValue) {
 
-		if(DirectiveParamHashmap.containsKey(param)) {
+		if(DirectiveParamHashmap.containsKey(param) && !param.equalsIgnoreCase("ForceOos")) {
 			return DirectiveParamHashmap.get(param);
 		}
 
@@ -159,7 +159,7 @@ public class Config {
 
 	public static String GetPersistence(String param, String defValue) {
 
-		if(PersistenceParamHashmap.containsKey(param)) {
+		if(PersistenceParamHashmap.containsKey(param) && !param.equalsIgnoreCase("BoardStatus")) {
 			//System.out.println("Persistence param retrieved from Map");
 			return PersistenceParamHashmap.get(param);
 		}
@@ -261,7 +261,7 @@ public class Config {
 
 					int res  = pstmt.executeUpdate();
 
-					System.out.println("insert [" + res + "]");
+					//System.out.println("insert [" + res + "]");
 
 					PersistenceParamHashmap.put(key,value);
 
@@ -290,7 +290,7 @@ public class Config {
 					rs.close();
 					int res  = pstmt.executeUpdate();
 
-					System.out.println("update [" + res + "]");
+					//System.out.println("update [" + res + "]");
 
 					PersistenceParamHashmap.put(key,value);
 
@@ -395,7 +395,7 @@ public class Config {
 					rs.close();
 					int res  = pstmt.executeUpdate();
 
-					System.out.println("update [" + res + "]");
+					//System.out.println("update [" + res + "]");
 
 					DirectiveParamHashmap.put(key,value);
 
@@ -673,7 +673,7 @@ public class Config {
 					rs.close();
 					int res  = pstmt.executeUpdate();
 
-					System.out.println("update [" + res + "]");
+					//System.out.println("update [" + res + "]");
 
 					DirectiveParamHashmap.put(key,value);
 

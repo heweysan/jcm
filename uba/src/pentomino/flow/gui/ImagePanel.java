@@ -16,70 +16,72 @@ import pentomino.flow.Flow;
 public  abstract class ImagePanel extends JPanel {
 
 
+
+
 	private static final long serialVersionUID = 1L;
 	private Image img;
 	public int screenTimeOut = 15000;
-	public String panelRedirect = "";
+	public ImagePanel panelRedirect = null;
 	private String _name;
 	Timer screenTimer = new Timer();
 	
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ImagePanel(String img,String name) {
-		this(new ImageIcon(img).getImage(),name);
-		System.out.println("Constructor 1");
+	public ImagePanel(String img,String name, int _timeout, ImagePanel _redirect) {
 		
-
-	}
-
-	public ImagePanel(Image img,String name, int _timeout, String _redirect) {
-		this(new ImageIcon(img).getImage(),name);
+	
 		this.screenTimeOut = _timeout;
 		this.panelRedirect = _redirect;
-		System.out.println("Constructor 2");
-	}	
-	
-	public ImagePanel(Image img, String name) {
-		System.out.println("Constructor 3");
 
+		add(new DebugButtons().getPanel());
+		
 		ContentPanel();
 		
 		addComponentListener(new ComponentAdapter() {
 			
 			@Override
 			public void componentShown(ComponentEvent e) {
-				System.out.println("componentShown ImagePanel del abrstarct [" + name + "]");
+				
+				OnLoad();
+				if(screenTimeOut == 0 || panelRedirect == null)
+					return;
+				
+				//System.out.println("componentShown [" + name + "]");
 				screenTimer = new Timer();
 				screenTimer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						System.out.println("Redireccionado [" + name + "] -> [" + panelRedirect + "]");
+						//System.out.println("Redireccionado [" + name + "] -> [" + panelRedirect.getName() + "]");
 						screenTimer.cancel();						
 						Flow.redirect(panelRedirect);					
 					}
 				}, screenTimeOut);	
-				OnLoad();
+				
 			}
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				System.out.println("componentHidden OnUnload del abstract [" + name + "]");
-				screenTimer.cancel();
 				OnUnload();
+				//System.out.println("componentHidden [" + name + "]");
+				screenTimer.cancel();
+				
 			}
 		});
 		
 		
-		this.img = img;
+		this.img = new ImageIcon(img).getImage();
 		this.setName(name);
 		_name = name;
-		Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+		Dimension size = new Dimension(this.img.getWidth(null), this.img.getHeight(null));
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);
 		setSize(size);
 		setLayout(null);
+		
+		
 	}
+
 	
 	public abstract void ContentPanel();
 	
@@ -100,10 +102,13 @@ public  abstract class ImagePanel extends JPanel {
 		repaint();
 	}
 	
-	public void screenTimerReset(int timeOut, String redirect) {
+	public void screenTimerReset(int timeOut, ImagePanel redirect) {
 		
-		if(!redirect.isEmpty())
-			panelRedirect = redirect;
+		if(timeOut == 0 || redirect == null)
+			return;
+			
+			
+		panelRedirect = redirect;
 		
 		screenTimeOut = timeOut;
 		
@@ -112,7 +117,7 @@ public  abstract class ImagePanel extends JPanel {
 		screenTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println("Redireccionado [" + _name + "] -> [" + panelRedirect + "]");
+				//System.out.println("Redireccionado [" + _name + "] -> [" + panelRedirect.getName() + "]");
 				screenTimer.cancel();						
 				Flow.redirect(panelRedirect);					
 			}

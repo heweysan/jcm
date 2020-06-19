@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import pentomino.cashmanagement.CmQueue;
@@ -14,6 +13,7 @@ import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CmReverse;
 import pentomino.cashmanagement.vo.CmWithdrawal;
 import pentomino.common.AccountType;
+import pentomino.common.BusinessEvent;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.PinpadMode;
@@ -23,72 +23,80 @@ import pentomino.core.devices.Afd;
 import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
 
 
-public class PanelToken  implements PinpadListener{
+public class PanelToken extends ImagePanel implements PinpadListener {
 
-	public JPanel contentPanel = new JPanel();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	public static JLabel lblToken = new JLabel(".");
 	public static JLabel lblTokenConfirmacion = new JLabel(".");
 	public static JLabel lblTokenMensaje = new JLabel(".");
 	public static JLabel lblTokenMontoRetiro = new JLabel(".");
 
-	public PanelToken() {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public PanelToken(String img,String name, int _timeout, ImagePanel _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+	}	
 
-		contentPanel.setBounds(0, 0, 1920, 1080);
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(null);
-		contentPanel.setLayout(null);
+	
+	@Override
+	public void ContentPanel() {
 
-		contentPanel.add(new DebugButtons().getPanel());
 
 
 		lblTokenConfirmacion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenConfirmacion.setForeground(Color.WHITE);
 		lblTokenConfirmacion.setFont(new Font("Tahoma", Font.BOLD, 50));
 		lblTokenConfirmacion.setBounds(190, 773, 583, 66);
-		contentPanel.add(lblTokenConfirmacion);
+		add(lblTokenConfirmacion);
 
 
 		lblToken.setForeground(Color.WHITE);
 		lblToken.setHorizontalAlignment(SwingConstants.CENTER);
 		lblToken.setFont(new Font("Tahoma", Font.BOLD, 50));
 		lblToken.setBounds(190, 594, 583, 66);
-		contentPanel.add(lblToken);
+		add(lblToken);
 
 
 		lblTokenMontoRetiro.setForeground(Color.WHITE);
 		lblTokenMontoRetiro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenMontoRetiro.setFont(new Font("Tahoma", Font.BOLD, 99));
 		lblTokenMontoRetiro.setBounds(190, 321, 583, 136);
-		contentPanel.add(lblTokenMontoRetiro);
+		add(lblTokenMontoRetiro);
 
 
 		lblTokenMensaje.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTokenMensaje.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblTokenMensaje.setForeground(Color.WHITE);
 		lblTokenMensaje.setBounds(22, 93, 957, 75);
-		contentPanel.add(lblTokenMensaje);
+		add(lblTokenMensaje);
 
 		PanelPinpad panelPinpad = new PanelPinpad();
 		panelPinpad.addPinKeyListener(this);
 
-		contentPanel.add(panelPinpad.getPanel());
+		add(panelPinpad.getPanel());
 
 
 	}
 
-	public JPanel getPanel() {
-		return contentPanel;
-	}	
-
 	public void pinKeyReceived(PinpadEvent event) {
 
 		PinKey digito = event.key();		
-		Flow.panelTokenHolder.screenTimerReset(7000,"");
+		Flow.panelToken.screenTimerReset(7000,Flow.panelOperacionCancelada);
 
 		switch(digito){
 
@@ -96,7 +104,7 @@ public class PanelToken  implements PinpadListener{
 			System.out.println("Es cancel Papawh");        	
 			CurrentUser.cleanPinpadData();
 			lblToken.setText("");										
-			Flow.redirect(Flow.panelOperacionCanceladaHolder,5000, "panelIdle");
+			Flow.redirect(Flow.panelOperacionCancelada,5000, Flow.panelIdle);
 			break;
 		case _Ok:
 
@@ -111,7 +119,7 @@ public class PanelToken  implements PinpadListener{
 					if(!Afd.validateDispense()) {
 						System.out.println("No se puede dispensar en este momento.");							
 						PanelError.lblPanelError.setText("No se puede dispensar en este momento.");
-						Flow.redirect(Flow.panelErrorHolder,10000,"panelIdle");							
+						Flow.redirect(Flow.panelError,10000,Flow.panelIdle);							
 					}
 					else {
 
@@ -129,34 +137,35 @@ public class PanelToken  implements PinpadListener{
 						if(!Transactions.ConfirmaRetiro(cmWithdrawalVo)) {
 							System.out.println("Usuario sin permiso para dispensar!");
 							PanelError.lblPanelError.setText("Lo siento, no pude procesar tu petición");
-							Flow.redirect(Flow.panelErrorHolder,7000,"panelIdle");
+							Flow.redirect(Flow.panelError,7000,Flow.panelIdle);
 						}
 						else {
 
 							//Se comprobo que si se puede intentar el dispensado de esa cantidad.
 							//Preparamos el retiro.
 							CurrentUser.pinpadMode = PinpadMode.None;
-
+							Config.SetPersistence("BoardStatus", "Busy");
+							BEA.BusinessEvent(BusinessEvent.SessionStart, false, true,"");
 							//Quitamos el retiro del queue
 							CmQueue.queueList.removeFirst();
 							CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
 
 							switch(CurrentUser.dispenseStatus) {
 							case Complete:
-								Flow.panelDispenseHolder.setBackground("./images/ScrRetiraBilletes.png");
+								Flow.panelDispense.setBackground("./images/ScrRetiraBilletes.png");
 								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);									
 								break;
 							case Partial:
-								Flow.panelDispenseHolder.setBackground("./images/Scr7RetiroParcial.png");
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(501, 677, 622, 153);
+								Flow.panelDispense.setBackground("./images/Scr7RetiroParcial.png");
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(1193, 923, 551, 111);
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);
 								break;
 							default:
 								break;
 							}							
 
-							Flow.redirect(Flow.panelDispenseHolder);
+							Flow.redirect(Flow.panelDispense);
 
 							PanelDispense.dispense();	
 
@@ -187,12 +196,10 @@ public class PanelToken  implements PinpadListener{
 
 										if(!Ptr.printDispense(CurrentUser.WithdrawalRequested,CurrentUser.loginUser)){
 											//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
-											Flow.redirect(Flow.panelNoTicketHolder,5000,"panelTerminamos");
-											Flow.panelTerminamosHolder.screenTimeOut = 7000;
-											Flow.panelTerminamosHolder.panelRedirect = "panelIdle";
+											Flow.redirect(Flow.panelNoTicket,5000,Flow.panelTerminamos);											
 										}
 										else {
-											Flow.redirect(Flow.panelTerminamosHolder,7000,"panelIdle");
+											Flow.redirect(Flow.panelTerminamos);
 										}
 										
 									}
@@ -208,10 +215,10 @@ public class PanelToken  implements PinpadListener{
 
 					if( ++CurrentUser.tokenAttempts >= 2) {						
 						CurrentUser.cleanPinpadData();																				
-						Flow.redirect(Flow.panelOperacionCanceladaHolder, 5000, "panelIdle");														
+						Flow.redirect(Flow.panelOperacionCancelada, 5000, Flow.panelIdle);														
 					}
 					else {						
-						Flow.panelTokenHolder.setBackground("./images/Scr7TokenIncorrecto.png");
+						Flow.panelToken.setBackground("./images/Scr7TokenIncorrecto.png");
 					}
 				}
 
@@ -243,7 +250,19 @@ public class PanelToken  implements PinpadListener{
 
 	}
 
+	@Override
+	public void OnLoad() {
+		System.out.println("OnLoad PanelToken");
+		CurrentUser.pinpadMode = PinpadMode.retiroToken;
 
+		
+	}
+
+	@Override
+	public void OnUnload() {
+		System.out.println("OnUnload PanelToken");
+		
+	}
 
 }
 

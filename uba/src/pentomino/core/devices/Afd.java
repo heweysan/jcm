@@ -108,53 +108,7 @@ public class Afd {
 
 	public static boolean validateDispense() {
 
-		if(JcmGlobalData.isDebug) {
-			System.out.println("validateDispense  [DEBUG]");
-
-			Flow.jcms[0].billCounters.Cass1Denom = 200;
-			Flow.jcms[0].billCounters.Cass2Denom = 100;
-			Flow.jcms[1].billCounters.Cass1Denom = 20;
-			Flow.jcms[1].billCounters.Cass2Denom = 50;
-
-			Flow.jcms[1].billCounters.Cass1Available = 1;
-			Flow.jcms[0].billCounters.Cass2Available = 3;
-			Flow.jcms[1].billCounters.Cass1Available = 4;
-			Flow.jcms[1].billCounters.Cass2Available = 2;
-
-			JcmGlobalData.availableBillsForRecycling.put(20, 4);
-			JcmGlobalData.availableBillsForRecycling.put(200, 1);
-			JcmGlobalData.availableBillsForRecycling.put(50, 2);
-			JcmGlobalData.availableBillsForRecycling.put(100, 3);	
-			JcmGlobalData.totalCashInRecycler1 = 500;
-			JcmGlobalData.totalCashInRecycler2 = 180;
-
-			double disponible = JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2;
-			System.out.println("Disponible para dispensar [" + disponible + "]");			
-
-			if(Afd.denominateInfo(CurrentUser.WithdrawalRequested)) {
-				//revisamos si hay cambio o no.
-				if(CurrentUser.WithdrawalChange > 0){				//Dispensado parcial				
-					System.out.println("Sobrante  [" + CurrentUser.WithdrawalChange + "]" );
-					CurrentUser.dispenseStatus = DispenseStatus.Partial;
-				}
-				else
-					CurrentUser.dispenseStatus = DispenseStatus.Complete;
-
-				//Seteamos los valores para cada casetero			
-				Flow.jcms[0].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass1Denom, 0);
-				Flow.jcms[0].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[0].billCounters.Cass2Denom, 0);
-				Flow.jcms[1].billsToDispenseFromCassette1 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].billCounters.Cass1Denom, 0);
-				Flow.jcms[1].billsToDispenseFromCassette2 = JcmGlobalData.denominateInfo.getOrDefault(Flow.jcms[1].billCounters.Cass2Denom, 0);
-
-			}
-			else {			
-				CurrentUser.dispenseStatus = DispenseStatus.Partial;
-				return true;
-			}
-
-			return true;
-		}
-
+		
 		if(CurrentUser.WithdrawalRequested < 20) {
 			CurrentUser.dispenseStatus = DispenseStatus.NotDispensable;
 			System.out.println("De origen no se puede dispensar [menor a 20]");

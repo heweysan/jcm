@@ -24,6 +24,8 @@ import org.cups4j.PrintRequestResult;
 
 import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.DeviceEvent;
+import pentomino.config.Config;
+import pentomino.flow.CurrentUser;
 import pentomino.jcmagent.RaspiAgent;
 
 public class Ptr {
@@ -101,7 +103,7 @@ public class Ptr {
 
 	public static boolean printDeposit(DepositOpVO depositOpVO) {
 
-		System.out.println("Prt.printDeposit"); 
+		System.out.println("Ptr.printDeposit"); 
 
 		Date date = new Date(); 
 
@@ -129,6 +131,62 @@ public class Ptr {
 
 	}
 
+	public static boolean printContadores() {
+
+		System.out.println("Ptr.printContadores"); 
+
+		Date date = new Date(); 
+
+		currencyFormat.setMaximumFractionDigits(0);
+
+		int total = 0;
+		int total20 = 0;
+		int total50 = 0;
+		int total100 = 0;
+		int total200 = 0;
+		int total500 = 0;
+		int total1000 = 0;
+		
+		int b20 = Integer.parseInt(Config.GetPersistence("Accepted20", "0"));
+		int b50 = Integer.parseInt(Config.GetPersistence("Accepted50", "0"));
+		int b100 = Integer.parseInt(Config.GetPersistence("Accepted100", "0"));
+		int b200 = Integer.parseInt(Config.GetPersistence("Accepted200", "0"));
+		int b500 = Integer.parseInt(Config.GetPersistence("Accepted500", "0"));
+		int b1000 = Integer.parseInt(Config.GetPersistence("Accepted1000", "0"));
+		
+		total20 = 20 * b20;
+		total50 = 50 * b50;
+		total100 = 100 * b100;
+		total200 = 200 * b200;
+		total500 = 500 * b500;
+		total1000 = 1000 * b1000;
+		
+		total = total20 + total50 + total100 + total200 + total500 + total1000; 
+		
+		Map<String,String> printMap = new HashMap<String,String>();
+		printMap.put("<fecha>",String.format("%1$-15s",dateFormat.format(date)));
+		printMap.put("<hora>",String.format("%1$-15s",timeFormat.format(date)));
+		printMap.put("<monto>",currencyFormat.format(total));
+		printMap.put("<b020>",String.format("%1$-5s",b20));
+		printMap.put("<b050>",String.format("%1$-5s",b50));
+		printMap.put("<b100>",String.format("%1$-5s",b100));
+		printMap.put("<b200>",String.format("%1$-5s",b200));
+		printMap.put("<b500>",String.format("%1$-5s",b500));
+		printMap.put("<b1000>",String.format("%1$-5s",b1000));
+		printMap.put("<monto20>",String.format("%1$9s",currencyFormat.format(total20)));
+		printMap.put("<monto50>",String.format("%1$9s",currencyFormat.format(total50)));
+		printMap.put("<monto100>",String.format("%1$9s",currencyFormat.format(total100)));
+		printMap.put("<monto200>",String.format("%1$9s",currencyFormat.format(total200)));
+		printMap.put("<monto500>",String.format("%1$9s",currencyFormat.format(total500)));
+		printMap.put("<monto1000>",String.format("%1$9s",currencyFormat.format(total1000)));
+		printMap.put("<usuario>",CurrentUser.loginUser);		
+		printMap.put("<corte>",Config.GetPersistence("CorteCount", "-1"));
+		
+		return print("contadores",printMap);
+
+	}
+	
+	
 	public static boolean printDispense(double montoRetiro, String currentUser) {
 
 		System.out.println("Prt.printDispense"); 

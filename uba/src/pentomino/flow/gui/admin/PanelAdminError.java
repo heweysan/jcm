@@ -2,15 +2,12 @@ package pentomino.flow.gui.admin;
 
 
 import java.awt.Font;
-import java.awt.Image;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import pentomino.common.PinpadMode;
 import pentomino.flow.CurrentUser;
-import pentomino.flow.gui.DebugButtons;
 import pentomino.flow.gui.ImagePanel;
 
 public class PanelAdminError  extends ImagePanel {
@@ -24,16 +21,7 @@ public class PanelAdminError  extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelAdminError(String img,String name) {
-		super(new ImageIcon(img).getImage(),name);
-		setBounds(0, 0, 1920, 1080);
-		setOpaque(false);
-		setBorder(null);
-		setLayout(null);
-		
-	}
-
-	public PanelAdminError(Image img,String name, int _timeout, String _redirect) {
+	public PanelAdminError(String img,String name, int _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
@@ -41,15 +29,6 @@ public class PanelAdminError  extends ImagePanel {
 		setLayout(null);
 		
 	}	
-
-	public PanelAdminError(Image img, String name) {
-		super(img,name);
-		setBounds(0, 0, 1920, 1080);
-		setOpaque(false);
-		setBorder(null);
-		setLayout(null);
-	}
-	
 
 	@Override
 	public void ContentPanel() {
@@ -59,9 +38,6 @@ public class PanelAdminError  extends ImagePanel {
 		setOpaque(false);
 		setBorder(null);
 		setLayout(null);	
-
-		add(new DebugButtons().getPanel());
-
 
 		JLabel lblMensaje = new JLabel("Error al autenticar al usuario, vuelve a intentarlo.");
 		lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);

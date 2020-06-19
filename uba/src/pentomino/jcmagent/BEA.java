@@ -38,24 +38,9 @@ public class BEA {
 		String data = "" + businessEvent.getBusinessEventName() + ";" + session + ";" + attributes;
 		
 		System.out.println("data [" + data + "]");
-		
-		InvBroadcast(java.lang.System.currentTimeMillis(), data);
+				InvBroadcast(java.lang.System.currentTimeMillis(), data);
 
-		/// <summary>Broadcasts an event through the XFS bus, acting on behalf of the
-		/// sender. Used for device emulation layer</summary>
-		/// <param name="device">Device to emulate. (AFD, PTR, EPP, PIN, TIO, DEVICEBUS,
-		/// Unknown, etc)</param>
-		/// <param name="evt">Event to emulate</param>
-		/// <param name="timestamp">Timestamp. Usually set to DateTime.Now</param>
-		/// <param name="data">Event data. Set to string.Empty if unused</param>
-		// InvBroadcast("DEVICEBUS", "BusinessEvent", DateTime.Now,
-		/// string.Format("{0};{1};{2};", businessEvent, inSession ? SessionId : "",
-		/// attributes));
-		// InvBroadcast("DEVICEBUS", "BusinessEvent", DateTime.Now,
-		/// string.Format("{0};{1};{2};", businessEvent, inSession ? SessionId : "",
-		/// attributes));
-		// public static void InvBroadcast(string device, string evt, System.DateTime
-		/// timestamp, string data)
+
 
 	}
 
