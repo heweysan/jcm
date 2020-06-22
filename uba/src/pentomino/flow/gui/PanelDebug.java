@@ -661,8 +661,8 @@ public class PanelDebug  extends ImagePanel {
 
 		JLabel lblTitleReciclador1 = new JLabel("Reciclador 1");
 		lblTitleReciclador1.setForeground(Color.WHITE);
-		lblTitleReciclador1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTitleReciclador1.setBounds(10, 11, 161, 28);
+		lblTitleReciclador1.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblTitleReciclador1.setBounds(10, 11, 246, 80);
 		panelJCM1.add(lblTitleReciclador1);
 
 		JLabel lblTxtBill1 = new JLabel("Billete:");
@@ -712,8 +712,8 @@ public class PanelDebug  extends ImagePanel {
 
 		JLabel lblTitleReciclador2 = new JLabel("Reciclador 2");
 		lblTitleReciclador2.setForeground(Color.WHITE);
-		lblTitleReciclador2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTitleReciclador2.setBounds(10, 11, 144, 28);
+		lblTitleReciclador2.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblTitleReciclador2.setBounds(10, 11, 261, 80);
 		panelJCM2.add(lblTitleReciclador2);
 
 		//JLabel lblBilleteIngresado2 = new JLabel("$0");

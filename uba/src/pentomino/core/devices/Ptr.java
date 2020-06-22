@@ -53,9 +53,7 @@ public class Ptr {
 
 			for(String media : cupsPrinter.getMediaSupported()){
 				System.out.println("MEDIA [" + media + "]");
-			}       
-
-
+			} 
 
 			for(String media : cupsPrinter.getMimeTypesSupported()){
 				System.out.println("MIME [" + media + "]");
@@ -232,7 +230,7 @@ public class Ptr {
 				}
 
 				fw.write(line + System.getProperty("line.separator"));
-				System.out.println(line);
+				//System.out.println(line);
 				line = reader.readLine();
 
 			}

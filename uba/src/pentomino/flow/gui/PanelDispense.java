@@ -23,7 +23,7 @@ public class PanelDispense extends ImagePanel {
 
 
 
-	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel("$1000");
+	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel("$0");
 
 	/**
 	 * @wbp.parser.constructor
@@ -40,13 +40,10 @@ public class PanelDispense extends ImagePanel {
 
 	@Override
 	public void ContentPanel() {
-
-	
-
 		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.LEFT);
 		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 55));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(1193, 923, 551, 111);
+		lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
 		add(lblRetiraBilletesMontoDispensar);
 
 	}
@@ -63,19 +60,12 @@ public class PanelDispense extends ImagePanel {
 		RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, ""+ ((Flow.jcms[0].billsToDispenseFromCassette1 * Flow.jcms[0].billCounters.Cass1Denom) + (Flow.jcms[0].billsToDispenseFromCassette2 * Flow.jcms[0].billCounters.Cass2Denom) + (Flow.jcms[1].billsToDispenseFromCassette1 * Flow.jcms[1].billCounters.Cass1Denom) + (Flow.jcms[1].billsToDispenseFromCassette2 * Flow.jcms[1].billCounters.Cass2Denom)));
 		RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + Flow.jcms[0].billsToDispenseFromCassette1  + "x" +  Flow.jcms[0].billCounters.Cass1Denom + ";" + Flow.jcms[0].billsToDispenseFromCassette2  + "x" +  Flow.jcms[0].billCounters.Cass2Denom
 				+ ";" + Flow.jcms[1].billsToDispenseFromCassette1  + "x" +  Flow.jcms[1].billCounters.Cass1Denom + ";" + Flow.jcms[1].billsToDispenseFromCassette2  + "x" +  Flow.jcms[1].billCounters.Cass2Denom);
-
-		if(JcmGlobalData.isDebug) {
-			JcmGlobalData.jcm1cass1Dispensed = true;
-			JcmGlobalData.jcm1cass2Dispensed = true;
-			JcmGlobalData.jcm2cass1Dispensed = true;
-			JcmGlobalData.jcm2cass2Dispensed = true;
-			return;
-		}
+	
+				
 
 		//Checamos para JCM1
-		if(Flow.jcms[0].billsToDispenseFromCassette1 > 0 || Flow.jcms[0].billsToDispenseFromCassette2 > 0) {				
-
-			System.out.println("Deshabilitamos JCM[1] para dispense");
+		if(Flow.jcms[0].billsToDispenseFromCassette1 > 0 || Flow.jcms[0].billsToDispenseFromCassette2 > 0) {
+			System.out.println("Deshabilitamos JCM[0] para dispense");
 			Flow.jcms[0].currentOpertion = jcmOperation.Dispense;
 			Flow.jcms[0].dispensingFromCassette = 1;
 			
@@ -88,7 +78,7 @@ public class PanelDispense extends ImagePanel {
 			JcmGlobalData.jcm1cass1Dispensed = true;
 			JcmGlobalData.jcm1cass2Dispensed = true;
 			Flow.jcms[0].dispensingFromCassette = -1;
-		}
+		}		
 
 
 		Timer screenTimerDispense = new Timer();

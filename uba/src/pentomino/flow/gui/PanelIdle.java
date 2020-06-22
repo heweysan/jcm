@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +28,7 @@ import javax.swing.SwingConstants;
 
 public class PanelIdle  extends ImagePanel {
 
-	
+
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -48,10 +52,11 @@ public class PanelIdle  extends ImagePanel {
 	public static JLabel lblPanelError = new JLabel("");
 
 	Timer screenTimerDispense = new Timer();
-	
+	Timer screenTimerNetwork = new Timer();
+
 	@Override
 	public void ContentPanel() {
-		
+
 		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
 		btnAdminLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -64,8 +69,8 @@ public class PanelIdle  extends ImagePanel {
 		lblAtmId.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblAtmId.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		
-		
+
+
 		lblAtmId.setForeground(Color.WHITE);
 		lblAtmId.setBounds(1452, 950, 407, 47);
 		add(lblAtmId);
@@ -88,7 +93,7 @@ public class PanelIdle  extends ImagePanel {
 					Flow.redirect(Flow.panelMenuSinFondo,5000,Flow.panelIdle);	
 					return;
 				}
-				
+
 				if(JcmGlobalData.getMaxRecyclableCash() == 0 ) {
 					Flow.redirect(Flow.panelMenuSinFondo,5000,Flow.panelIdle);
 				}
@@ -112,14 +117,15 @@ public class PanelIdle  extends ImagePanel {
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad PanelIdle");
+
 		System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
 		Flow.jcms[0].jcmMessage[3] = 0x01;
 		Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-		
+
 		System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
 		Flow.jcms[1].jcmMessage[3] = 0x01;
 		Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
-		
+
 		if(Flow.jcms[0].billCounters.Cass1Available == 0 && Flow.jcms[0].billCounters.Cass2Available == 0 && Flow.jcms[1].billCounters.Cass1Available == 0 && Flow.jcms[1].billCounters.Cass2Available == 0){
 			System.out.println("No hay dinero en los caseteros para dispensar ponemos pantalla de sin billetes");
 			Flow.panelIdle.setBackground("./images/Scr7SinEfectivo.png");			
@@ -127,8 +133,9 @@ public class PanelIdle  extends ImagePanel {
 		else {
 			Flow.panelIdle.setBackground("./images/Scr7Inicio.png");
 		}
-		
-		
+
+
+
 		screenTimerDispense = new Timer();
 		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -138,15 +145,41 @@ public class PanelIdle  extends ImagePanel {
 					RaspiAgent.WriteToJournal("Financial",0,0, "",CurrentUser.loginUser, "Entrando a ForceOoS[true]", AccountType.None, TransactionType.Administrative);
 					Flow.redirect(Flow.panelOos);
 					screenTimerDispense.cancel();
-				}        	
+				}  
 			}
 		}, 1000,60000);
+
+		screenTimerNetwork = new Timer();
+		screenTimerNetwork.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {				
+				if(!netIsAvailable()) {
+					Flow.redirect(Flow.panelErrorComunicate);
+					screenTimerNetwork.cancel();
+				}
+			}
+		}, 1000,60000);
+	}
+
+
+	private static boolean netIsAvailable() {    
+		System.out.println("netIsAvailable");
+		try {			
+			Socket socket2 = new Socket();
+			socket2.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);			
+			socket2.close();
+			return true;
+		} catch (UnknownHostException e) {		
+		} catch (IOException e) {		
+		}
+		return false;
 	}
 
 	@Override
 	public void OnUnload() {
 		System.out.println("OnUnload PanelIdle");
 		screenTimerDispense.cancel();
+		screenTimerNetwork.cancel();
 
 	}
 }

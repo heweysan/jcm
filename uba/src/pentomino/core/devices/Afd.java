@@ -56,10 +56,10 @@ public class Afd {
 		//Aqui ya se que si tiene mas dinero del que pidio. Veamos cuanto le podemos dar si es que no hay ninguna combnacion con los billetes
 		if(billCombinations(bills, denominations, 0, 0, dispenseAmount))
 			return true;
-		
+
 		//Nos vamos a la combinacion de mayor a menor
 		return false;
-		
+
 	}
 
 	public static boolean billCombinations(List<Integer> bills, List<Integer> denomination, int highest, double sum, double dispenseAmount) {
@@ -108,7 +108,7 @@ public class Afd {
 
 	public static boolean validateDispense() {
 
-		
+
 		if(CurrentUser.WithdrawalRequested < 20) {
 			CurrentUser.dispenseStatus = DispenseStatus.NotDispensable;
 			System.out.println("De origen no se puede dispensar [menor a 20]");
@@ -156,18 +156,18 @@ public class Afd {
 
 		//Si es mas de lo que tenemos dispensamos todo lo que tenemos como parcial.
 		if(CurrentUser.WithdrawalRequested > disponible) {			
-			
+
 			System.out.println("Retiro parcial mas dinero del que hay");
 			CurrentUser.WithdrawalDispense = disponible;
 			CurrentUser.WithdrawalChange = CurrentUser.WithdrawalRequested - disponible;			
 			CurrentUser.dispenseStatus = DispenseStatus.Partial;
-			
+
 			JcmGlobalData.denominateInfo.clear();
 			JcmGlobalData.denominateInfo.put(Flow.jcms[0].billCounters.Cass1Denom,Flow.jcms[0].billCounters.Cass1Available);
 			JcmGlobalData.denominateInfo.put(Flow.jcms[0].billCounters.Cass2Denom,Flow.jcms[0].billCounters.Cass2Available);
 			JcmGlobalData.denominateInfo.put(Flow.jcms[1].billCounters.Cass1Denom,Flow.jcms[1].billCounters.Cass1Available);
 			JcmGlobalData.denominateInfo.put(Flow.jcms[1].billCounters.Cass2Denom,Flow.jcms[1].billCounters.Cass2Available);
-			
+
 			Flow.jcms[0].billsToDispenseFromCassette1 = Flow.jcms[0].billCounters.Cass1Available;
 			Flow.jcms[0].billsToDispenseFromCassette2 = Flow.jcms[0].billCounters.Cass2Available;
 			Flow.jcms[1].billsToDispenseFromCassette1 = Flow.jcms[1].billCounters.Cass1Available;
@@ -235,9 +235,9 @@ public class Afd {
 
 		}
 		else {			
-			
+
 			//No hubo una denominacion directa, 
-			
+
 			CurrentUser.dispenseStatus = DispenseStatus.NotDispensable;
 			return false;
 		}
@@ -246,5 +246,12 @@ public class Afd {
 
 		return true;
 
+	}
+
+	public static void UpdateCurrentCountRequest() {
+
+		Flow.jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[0].jcmMessage);
+
+		Flow.jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
 	}
 }

@@ -73,7 +73,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.cashin.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("Sent     [" + gson.toJson(requestMessage) + "]"); 
+				//System.out.println("Sent     [" + gson.toJson(requestMessage) + "]"); 
 
 
 				//Esperamos la respuesta
@@ -109,8 +109,8 @@ public class Transactions {
 
 				channel.basicCancel(ctag);
 
-				System.out.println("result   [" + result  + "]");
-				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
+				//System.out.println("result   [" + result  + "]");
+				//System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
 
 				channel.close();
 				//rabbitConn.close();
@@ -154,7 +154,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.cashin.*",true, props, mensaje.getBytes());
-				System.out.println("Sent     [" + mensaje + "]"); 
+				//System.out.println("Sent     [" + mensaje + "]"); 
 
 				//Esperamos la respuesta
 
@@ -189,8 +189,8 @@ public class Transactions {
 
 				channel.basicCancel(ctag);
 
-				System.out.println("result   [" + result + "]");
-				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
+				//System.out.println("result   [" + result + "]");
+				//System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
 
 				channel.close();
 				//rabbitConn.close();
@@ -261,7 +261,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.deposits.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("Sent     [" + gson.toJson(requestMessage) + "]"); 
+				//System.out.println("Sent     [" + gson.toJson(requestMessage) + "]"); 
 
 
 				//Esperamos la respuesta
@@ -300,8 +300,8 @@ public class Transactions {
 
 				channel.basicCancel(ctag);
 
-				System.out.println("result   [" + result + "]");
-				System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
+				//System.out.println("result   [" + result + "]");
+				//System.out.println("returnVO [" + gson.toJson(returnVO)  + "]");
 
 				channel.close();
 				//rabbitConn.close();
@@ -453,7 +453,7 @@ public class Transactions {
 				}
 				logger.info("returning ${JsonOutput.toJson(returnVO)}");
 
-				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
+				//System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
 
 				channel.basicCancel(ctag);
 				channel.close();
@@ -498,7 +498,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.deposits.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
+				//System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
 
 				//Esperamos la respuesta
 
@@ -516,7 +516,7 @@ public class Transactions {
 
 				channel.basicCancel(ctag);
 
-				System.out.println("result [" + result + "]");
+				//System.out.println("result [" + result + "]");
 
 				channel.close();
 
@@ -563,7 +563,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("ConfirmaRetiro Sent [" + gson.toJson(requestMessage) + "]");
+				//System.out.println("ConfirmaRetiro Sent [" + gson.toJson(requestMessage) + "]");
 
 				//Esperamos la respuesta
 
@@ -655,7 +655,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
+				//System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
 
 				//Esperamos la respuesta
 
@@ -673,7 +673,7 @@ public class Transactions {
 
 				channel.basicCancel(ctag);
 
-				System.out.println("result [" + result + "]");
+				//System.out.println("result [" + result + "]");
 
 				if(!result.isEmpty()) {
 					if(result != ""){

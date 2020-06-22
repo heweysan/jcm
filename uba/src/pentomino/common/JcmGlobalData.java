@@ -83,7 +83,7 @@ public class JcmGlobalData {
 	   
 		if(jcm == 0) {
 			for (Entry<String, String> entry : jcm1cassetteDataValues.entrySet()) {
-				System.out.println("entry.getValue() [" + entry.getValue() + "]");
+				//System.out.println("entry.getValue() [" + entry.getValue() + "]");
 		        if (entry.getValue().equals(denom)) {
 		            return entry.getKey();
 		        }

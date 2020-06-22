@@ -153,12 +153,12 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 							switch(CurrentUser.dispenseStatus) {
 							case Complete:
 								Flow.panelDispense.setBackground("./images/ScrRetiraBilletes.png");
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(1193, 923, 551, 111);
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);									
 								break;
 							case Partial:
-								Flow.panelDispense.setBackground("./images/Scr7RetiroParcial.png");
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(1193, 923, 551, 111);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+								Flow.panelDispense.setBackground("./images/Scr7RetiroParcial.png");								
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);
 								break;
 							default:
@@ -180,6 +180,9 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense);
 										RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 
+										//Actualizamos los contadores internos del JCM
+										Afd.UpdateCurrentCountRequest();
+										
 										System.out.println("CAMBIO [" + CurrentUser.WithdrawalChange + "]");
 										if( CurrentUser.WithdrawalChange > 0) {
 											CmReverse cmReverseVo = new CmReverse();
@@ -194,7 +197,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 											Transactions.WithdrawalReverse(cmReverseVo);
 										}
 
-										if(!Ptr.printDispense(CurrentUser.WithdrawalRequested,CurrentUser.loginUser)){
+										if(!Ptr.printDispense(CurrentUser.WithdrawalDispense,CurrentUser.loginUser)){
 											//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
 											Flow.redirect(Flow.panelNoTicket,5000,Flow.panelTerminamos);											
 										}

@@ -365,6 +365,10 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 	public void OnLoad() {
 		System.out.println("OnLoad PanelLogin");
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
+		CurrentUser.loginUser = "";
+		CurrentUser.loginPassword = "";
+		CurrentUser.asteriscos = "";
+		CurrentUser.loginAttempts = 0;
 		lblLoginUser.setText("");
 		lblLoginPassword.setText("");
 		lblLoginMensaje.setText("");
@@ -374,7 +378,9 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 	@Override
 	public void OnUnload() {
 		System.out.println("OnUnload PanelLogin");
-		
+		lblLoginUser.setText("");
+		lblLoginPassword.setText("");
+		lblLoginMensaje.setText("");
 	}
 }
 

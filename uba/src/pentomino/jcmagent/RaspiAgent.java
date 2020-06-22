@@ -100,7 +100,7 @@ public class RaspiAgent {
 		agentMsg.Command = "add";
 		agentMsg.AtmId = switchAtmId;
 		
-		System.out.println(gson.toJson(agentMsg));
+		//System.out.println(gson.toJson(agentMsg));
 		
 		AgentsQueue.bq.add(agentMsg);			
 		
@@ -123,7 +123,7 @@ public class RaspiAgent {
 		agentMsg.Data = data;
 		agentMsg.AtmId = Config.GetDirective("AtmId", "");
 		
-		System.out.println(gson.toJson(agentMsg));
+		//System.out.println("Broadcast [" + gson.toJson(agentMsg) + "]");
 		
 		AgentsQueue.bq.add(agentMsg);
 		

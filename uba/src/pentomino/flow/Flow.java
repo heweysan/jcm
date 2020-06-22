@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +35,7 @@ import pentomino.flow.gui.PanelDebug;
 import pentomino.flow.gui.PanelDeposito;
 import pentomino.flow.gui.PanelDispense;
 import pentomino.flow.gui.PanelError;
+import pentomino.flow.gui.PanelErrorComunicate;
 import pentomino.flow.gui.PanelIdle;
 import pentomino.flow.gui.PanelLogin;
 import pentomino.flow.gui.PanelMenu;
@@ -74,6 +78,7 @@ public class Flow {
 	public static ImagePanel panelMenuSinFondo;
 	public static ImagePanel panelReinicio;
 	public static ImagePanel panelOos;
+	public static ImagePanel panelErrorComunicate;
 
 	//FLUJO ADMNISTRATIVO
 	public static ImagePanel panelAdminLogin;	
@@ -110,6 +115,8 @@ public class Flow {
 	public static int jcm1LastBillInsertedWorking = 0; 
 	public static int jcm2LastBillInsertedWorking = 0;
 
+	
+
 	public static void main(String[] args) {
 
 		logger.info("----- FLOW MAIN -----");
@@ -117,6 +124,8 @@ public class Flow {
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 		System.out.println(System.getProperty("os.name") + " isDebug[" + JcmGlobalData.isDebug + "]");
 
+		System.out.println("netIsAvailable [" + netIsAvailable() + "]");
+		
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -128,6 +137,21 @@ public class Flow {
 				}
 			}
 		});
+	}
+	
+	private static boolean netIsAvailable() {    
+		System.out.println("netIsAvailable");
+		try {			
+			Socket socket2 = new Socket();
+			socket2.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);			
+			socket2.close();
+			System.out.println("netIsAvailable true");
+			return true;
+		} catch (UnknownHostException e) {		
+		} catch (IOException e) {		
+		}
+		System.out.println("netIsAvailable false");
+		return false;
 	}
 
 	/**
@@ -154,33 +178,42 @@ public class Flow {
 
 		initializeJcms();
 
-		
-		
-		
+
+
+
 		GetCurrentCassettesConfig();
-		
+
 		JcmGlobalData.atmId = Config.GetDirective("AtmId", "-----");
-		
+
 		Config.SetPersistence("BoardStatus", "Available");
 
 		initialize();
-		
+
 		//"Recycle Currency Req (+90h)";
 		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[0].jcmMessage);
 		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[1].jcmMessage);
-		
+
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//CURRENT COUNT REQUEST
 		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[0].jcmMessage);
 		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
+
 		
-		cl.show(panelContainer, "panelIdle");
+		if(!netIsAvailable()) {
+			cl.show(panelContainer,"panelErrorComunicate");
+			
+		}
+		else {
+			cl.show(panelContainer, "panelIdle");
+		}
+		
+		
 	}
 
 	/**
@@ -208,10 +241,6 @@ public class Flow {
 		mainFrame.getContentPane().add(panelContainer);
 		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
-
-		
-		
-		
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
 		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
 		panelMenuSinFondo = new PanelMenuSinFondo("./images/Scr7HolaDepositamos.png","panelMenuSinFondo",0,null);
@@ -225,8 +254,8 @@ public class Flow {
 		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",5000,Flow.panelIdle);		
 		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
 		panelReinicio  = new PanelReinicio("./images/Scr7Placeholder.png","panelReinicio",0,null);
-		panelOos  = new PanelOos("./images/Scr7FueraDeServicio.png","panelOos",0,null);
-		
+		panelOos = new PanelOos("./images/Scr7FueraDeServicio.png","panelOos",0,null);
+		panelErrorComunicate = new PanelErrorComunicate("./images/Scr7Error.png","panelErrorComunicate",0,null);
 
 		//FLUJO ADMINISTRATIVO
 
@@ -242,10 +271,10 @@ public class Flow {
 
 		//Valores Iniciales
 		PanelIdle.lblAtmId.setText(JcmGlobalData.atmId);
-		
-		
+
+
 		panelContainer.setLayout(cl);		
-		
+
 		panelContainer.add(panelIdle,"panelIdle");
 		panelContainer.add(panelMenu,"panelMenu");
 		panelContainer.add(panelDeposito,"panelDeposito");
@@ -259,9 +288,11 @@ public class Flow {
 		panelContainer.add(panelNoTicket,"panelNoTicket");		
 		panelContainer.add(panelMenuSinFondo,"panelMenuSinFondo");
 		panelContainer.add(panelReinicio,"panelReinicio");
-		panelContainer.add(panelOos,"panelOos");
+		panelContainer.add(panelOos,"panelOos");		
+		panelContainer.add(panelErrorComunicate,"panelErrorComunicate");
 		
 
+		
 
 		//FLUJO ADMINISTRATIVO
 		panelContainer.add(panelAdminLogin,"panelAdminLogin");		
@@ -272,9 +303,9 @@ public class Flow {
 		panelContainer.add(panelAdminDotarResultados,"panelAdminDotarResultados");
 		panelContainer.add(panelAdminError,"panelAdminError");
 		panelContainer.add(panelAdminEstatusDispositivos,"panelAdminEstatusDispositivos");
-		
-		
-		
+
+
+
 
 
 		String atmId = Config.GetDirective("AtmId", "");
@@ -285,8 +316,6 @@ public class Flow {
 				//FIRE
 				System.out.println("myEventOccurred [" + evt.getSource() + "]");
 
-
-
 				switch(evt.getSource().toString()) {
 
 				case "escrow1":
@@ -296,48 +325,51 @@ public class Flow {
 					RaspiAgent.Broadcast(DeviceEvent.DEP_ItemsInserted, "JCM 2");
 					break;
 				case "bill1":							
-					int billType = jcms[0].bill;
-					boolean isRecyclable1 = true;
-					if(JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
-						isRecyclable1 = false;
-					}
+					int billType = jcms[0].currentInsertedBill;
+					boolean isRecyclable1 = jcms[0].recycleCurrentInsertedBill;
+
 					switch(billType)
 					{
 					case 20:						
 						jcm1LastBillInserted = 20;
-						if(isRecyclable1) {
-							depositBillsCounter.x20++;						
+						depositBillsCounter.x20++;
+						if(isRecyclable1) {													
 							jcms[0].cassettes.get(20).Available++;
 						}
 						break;
 					case 50:
 						jcm1LastBillInserted = 50;
+						depositBillsCounter.x50++;
 						if(isRecyclable1) {
-							jcms[0].cassettes.get(50).Available++;						
-							depositBillsCounter.x50++;
+							jcms[0].cassettes.get(50).Available++;
 						}
 						break;
 					case 100:
 						jcm1LastBillInserted = 100;
+						depositBillsCounter.x100++;
 						if(isRecyclable1) {
-							jcms[0].cassettes.get(100).Available++;						
-							depositBillsCounter.x100++;
+							jcms[0].cassettes.get(100).Available++;
 						}
 						break;
 					case 200:
 						jcm1LastBillInserted = 200;
+						depositBillsCounter.x200++;
 						if(isRecyclable1) {
-							jcms[0].cassettes.get(200).Available++;						
-							depositBillsCounter.x200++;
+							jcms[0].cassettes.get(200).Available++;
 						}
 						break;
 					case 500:
 						jcm1LastBillInserted = 500;
+						depositBillsCounter.x500++;
 						if(isRecyclable1) {
-							jcms[0].cassettes.get(500).Available++;						
-							depositBillsCounter.x500++;
+							jcms[0].cassettes.get(500).Available++;
 						}
 						break;
+					}
+
+					if(isRecyclable1) {
+						JcmGlobalData.totalCashInRecyclers += jcm1LastBillInserted;	
+						JcmGlobalData.totalCashInRecycler1 += jcm1LastBillInserted;  //Dinero que se puede dispensar
 					}
 
 					CashInOpVO myObj = new CashInOpVO();
@@ -356,58 +388,61 @@ public class Flow {
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted, "" + CurrentUser.totalAmountInserted);
 
+					UpdateCountersDeposit(0, Integer.toString(jcm1LastBillInserted),isRecyclable1);
+
 					System.out.println("$" + CurrentUser.totalAmountInserted);
 					PanelDeposito.lblMontoDepositado.setText("$" + CurrentUser.totalAmountInserted);
 					PanelDebug.lblBilleteIngresado1.setText("$" + billType);
 					break;
 				case "bill2":		
-					int billType2 = jcms[1].bill;
-					boolean isRecyclable2 = true;
-					if(JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
-						isRecyclable2 = false;
-					}
+					int billType2 = jcms[1].currentInsertedBill;
+					boolean isRecyclable2 = jcms[1].recycleCurrentInsertedBill;;
+
 					switch(billType2)
 					{
 					case 20:
 						jcm2LastBillInserted = 20;
+						depositBillsCounter.x20++;
 						if(isRecyclable2) {
 							jcms[1].cassettes.get(20).Available++;
-
-							depositBillsCounter.x20++;
 						}
 						break;
 					case 50:
 						jcm2LastBillInserted = 50;
+						depositBillsCounter.x50++;
 						if(isRecyclable2) {
 							jcms[1].cassettes.get(50).Available++;
-
-							depositBillsCounter.x50++;
 						}
 						break;
 					case 100:
 						jcm2LastBillInserted = 100;
+						depositBillsCounter.x100++;
 						if(isRecyclable2) {
 							jcms[1].cassettes.get(100).Available++;
-
-							depositBillsCounter.x100++;
 						}
 						break;
 					case 200:
 						jcm2LastBillInserted = 200;
+						depositBillsCounter.x200++;
 						if(isRecyclable2) {
-							jcms[1].cassettes.get(200).Available++;						
-							depositBillsCounter.x200++;
+							jcms[1].cassettes.get(200).Available++;
 						}
 						break;
 					case 500:
 						jcm2LastBillInserted = 500;
+						depositBillsCounter.x500++;
 						if(isRecyclable2) {
-							jcms[1].cassettes.get(500).Available++;						
-							depositBillsCounter.x500++;
+							jcms[1].cassettes.get(500).Available++;
 						}
 						break;
 					}
 
+					
+					if(isRecyclable2) {
+						JcmGlobalData.totalCashInRecyclers += jcm2LastBillInserted;	
+						JcmGlobalData.totalCashInRecycler2 += jcm2LastBillInserted;  //Dinero que se puede dispensar
+					}
+					
 					CashInOpVO myObj2 = new CashInOpVO();
 					myObj2.atmId = atmId; 
 					myObj2.amount = (long) billType2;
@@ -420,6 +455,10 @@ public class Flow {
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType2,0, "",CurrentUser.loginUser, "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType2);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInReceived, "" + billType2);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted, "" + CurrentUser.totalAmountInserted);
+
+					UpdateCountersDeposit(1, Integer.toString(jcm2LastBillInserted),isRecyclable2);
+
 
 					CurrentUser.totalAmountInserted += billType2;					
 					System.out.println("$" + CurrentUser.totalAmountInserted);
@@ -473,40 +512,44 @@ public class Flow {
 					PanelDebug.lblContadores1.setText(jcms[0].recyclerContadores);
 					break;
 				case "recyclerContadores2":
-
 					PanelDebug.lblContadores2.setText(jcms[1].recyclerContadores);
 					break;		
 				case "dispensedCass11":					
-					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass1Denom);
-					UpdateCountersDispense(0, Integer.toString(jcms[0].billCounters.Cass1Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass1Denom);					
 					JcmGlobalData.jcm1cass1Dispensed = true;
 					break;
 				case "dispensedCass21":
-					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[1].billCounters.Cass1Denom);
-					UpdateCountersDispense(0, Integer.toString(jcms[0].billCounters.Cass2Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass2Denom);					
 					JcmGlobalData.jcm1cass2Dispensed = true;					
 					break;
 				case "dispensedCass12":
-					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[0].billCounters.Cass2Denom);
-					UpdateCountersDispense(1, Integer.toString(jcms[1].billCounters.Cass1Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[1].billCounters.Cass1Denom);					
 					JcmGlobalData.jcm2cass1Dispensed = true;
 					break;
 				case "dispensedCass22":
-					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[1].billCounters.Cass2Denom);
-					UpdateCountersDispense(1, Integer.toString(jcms[1].billCounters.Cass2Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SubdispenseOk, "" + jcms[1].billCounters.Cass2Denom);					
 					JcmGlobalData.jcm2cass2Dispensed = true;
 					break;					
 				case "presentOk1":
-					RaspiAgent.Broadcast(DeviceEvent.AFD_PresentOk, "JCM[1]");
-					//TODO AQUI: UpdateCountersDispense(jcms[0].recyclerDenom1);
+					RaspiAgent.Broadcast(DeviceEvent.AFD_PresentOk, "JCM[1]");					
 					break;
 				case "presentOk2":
 					RaspiAgent.Broadcast(DeviceEvent.AFD_PresentOk, "JCM[2]");
 					break;
-				case "mediaTaken1":
+				case "mediaTaken11":
+					UpdateCountersDispense(0, Integer.toString(jcms[0].billCounters.Cass1Denom));
 					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[1]");
 					break;
-				case "mediaTaken2":
+				case "mediaTaken21":
+					UpdateCountersDispense(0, Integer.toString(jcms[0].billCounters.Cass2Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[1]");
+					break;
+				case "mediaTaken12":
+					UpdateCountersDispense(1, Integer.toString(jcms[1].billCounters.Cass1Denom));
+					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[2]");
+					break;
+				case "mediaTaken22":
+					UpdateCountersDispense(1, Integer.toString(jcms[1].billCounters.Cass2Denom));
 					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[2]");
 					break;
 				case "widthdrawalRequest":
@@ -523,7 +566,7 @@ public class Flow {
 					if(jcm1LastBillInserted != 0) {
 						jcm1LastBillInsertedWorking = jcm1LastBillInserted;
 						jcm1LastBillInserted = 0;
-						UpdateCountersDeposit(0, Integer.toString(jcm1LastBillInsertedWorking));
+						//UpdateCountersDeposit(0, Integer.toString(jcm1LastBillInsertedWorking));
 					}
 
 					break;
@@ -533,7 +576,7 @@ public class Flow {
 					if(jcm2LastBillInserted != 0) {
 						jcm2LastBillInsertedWorking = jcm2LastBillInserted;
 						jcm2LastBillInserted = 0;
-						UpdateCountersDeposit(1, Integer.toString(jcm2LastBillInsertedWorking));
+						//UpdateCountersDeposit(1, Integer.toString(jcm2LastBillInsertedWorking));
 					}
 
 					break;
@@ -580,6 +623,7 @@ public class Flow {
 	 */
 	private void UpdateCountersDispense(Integer jcm, String denom) {
 
+		System.out.println("UpdateCountersDispense jcm[" + jcm + "] denom [" + denom + "]" );
 		String cassette = JcmGlobalData.getKey(jcm, denom);
 
 		int dispensedValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Dispensed", "0"));
@@ -604,14 +648,15 @@ public class Flow {
 	 * Cassette[n]Dispensed = los dispensados
 	 * Cassette[n]Total		= Original menos los dispensados
 	 */
-	private void UpdateCountersDeposit(Integer jcm, String denom) {
+	private void UpdateCountersDeposit(Integer jcm, String denom, boolean isRecyclable) {
 
 		System.out.println("UpdateCountersDeposit jcm [" + jcm + "] denom [" + denom + "]");
 
 		String cassette = JcmGlobalData.getKey(jcm, denom);
+		
+		System.out.println("cassete [" + cassette + "]");
 
-			
-		if(cassette.isEmpty() || JcmGlobalData.getMaxRecyclableCash() == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.getMaxRecyclableCash()) {
+		if(!isRecyclable) {
 			//No esta en las denomonaciones lo mandamos a accepted
 			System.out.println("No esta en las denomonaciones lo mandamos a accepted o es directo a AC");
 			UpdateCountersAcepted(denom);
@@ -651,9 +696,7 @@ public class Flow {
 		accepted++;
 
 		Config.SetPersistence("Accepted" + denom, Integer.toString(accepted));
-
-
-		//Accepted20				
+				
 	}
 
 	/**
@@ -727,6 +770,9 @@ public class Flow {
 		}
 	}
 
+	
+	
+	
 	/**
 	 * 
 	 * @param target  - A que pantalla se va a ir

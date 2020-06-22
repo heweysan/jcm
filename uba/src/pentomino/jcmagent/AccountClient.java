@@ -135,7 +135,7 @@ public class AccountClient {
 		DeliverCallback deliverCallback = (consumerTag, message) -> {
 			String body = new String(message.getBody(), "UTF-8");
 
-			System.out.println(" [Account Client Validation] Received [" + body + "] correlationId sent [" + correlationId + "] correlationId received [" + message.getProperties().getCorrelationId() + "]" );
+			//System.out.println(" [Account Client Validation] Received [" + body + "] correlationId sent [" + correlationId + "] correlationId received [" + message.getProperties().getCorrelationId() + "]" );
 
 
 			if(correlationId.equalsIgnoreCase(message.getProperties().getCorrelationId())) {

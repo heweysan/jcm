@@ -272,7 +272,7 @@ public class Config {
 				}
 				else {
 					//Hacemos el update del dato.
-					System.out.println("param [" + key + "] found in DB updating");
+					//System.out.println("param [" + key + "] found in DB updating");
 					id = rs.getString("id");
 					sql = "update entries set Value = ?, Updated = ? WHERE id = ?  COLLATE NOCASE;";
 					pstmt.close();
@@ -377,7 +377,7 @@ public class Config {
 				}
 				else {
 					//Hacemos el update del dato.
-					System.out.println("param [" + key + "] found in DB updating");
+					//System.out.println("param [" + key + "] found in DB updating");
 					id = rs.getString("id");
 					sql = "update Directives set Value = ?, Updated = ? WHERE id = ?  COLLATE NOCASE;";
 					pstmt.close();
@@ -655,7 +655,7 @@ public class Config {
 				}
 				else {
 					//Hacemos el update del dato.
-					System.out.println("param [" + key + "] found in DB updating");
+					//System.out.println("param [" + key + "] found in DB updating");
 					id = rs.getString("id");
 					sql = "update PulsarParams set Value = ?, Updated = ? WHERE id = ?  COLLATE NOCASE;";
 					pstmt.close();

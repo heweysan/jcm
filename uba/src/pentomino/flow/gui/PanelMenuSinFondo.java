@@ -47,6 +47,7 @@ public class PanelMenuSinFondo extends ImagePanel {
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CurrentUser.currentOperation = jcmOperation.Deposit;
+				Flow.panelLogin.setBackground("./images/Scr7IdentificateDeposito.png");
 				Flow.redirect(Flow.panelLogin);
 			}
 		});		

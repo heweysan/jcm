@@ -98,6 +98,9 @@ public class PanelDeposito extends ImagePanel{
 					String billetes = "[" + depositOpVO.b20 + "x20|" + depositOpVO.b50 + "x50|" + depositOpVO.b100 + "x100|" + depositOpVO.b200 + "x200|" + depositOpVO.b500 + "x500|" + depositOpVO.b1000 + "x1000]";
 					String billetesNotesValidated = "" + depositOpVO.b20 + "x20;" + depositOpVO.b50 + "x50;" + depositOpVO.b100 + "x100;" + depositOpVO.b200 + "x200;" + depositOpVO.b500 + "x500;" + depositOpVO.b1000 + "x1000";
 
+					System.out.println("billetes " + billetes);
+					System.out.println("billetesNotesValidated " + billetesNotesValidated);
+					
 					Transactions.ConfirmaDeposito(depositOpVO);
 
 					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted,"" + CurrentUser.totalAmountInserted);
@@ -141,11 +144,7 @@ public class PanelDeposito extends ImagePanel{
 		Flow.jcms[1].jcmMessage[3] = 0x00;
 		Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
 		
-		
-		if(JcmGlobalData.isDebug) {
-			CurrentUser.totalAmountInserted = 3720;
-			PanelDeposito.lblMontoDepositado.setText("$3,720");
-		}
+
 	}
 
 	@Override

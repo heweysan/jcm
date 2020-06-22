@@ -32,7 +32,7 @@ public class Producer {
 				map.put("acq-channelId","red-blu");
 				props = props.builder().headers(map).build();
 				channel.basicPublish(exchange, routingKey,true, props, jsonMessage.getBytes());
-				System.out.println(" Message Sent '" + jsonMessage + "'"); 
+				//System.out.println("Message Sent '" + jsonMessage + "'"); 
 
 				channel.close();
 				//rabbitConn.close();
@@ -78,15 +78,15 @@ public class Producer {
 				props = props.builder().correlationId(correlationId).build();
 				props = props.builder().replyTo(replyToQueue).build();
 
-				System.out.println(" Message Sent '" + message + "'"); 
-				System.out.println(" exchange '" + exchange + "'"); 
-				System.out.println(" routingKey '" + routingKey + "'"); 
-				System.out.println(" correlationId '" + correlationId + "'"); 
-				System.out.println(" replyToQueue '" + replyToQueue + "'");
+				//System.out.println("Message Sent '" + message + "'"); 
+				//System.out.println("exchange '" + exchange + "'"); 
+				//System.out.println("routingKey '" + routingKey + "'"); 
+				//System.out.println("correlationId '" + correlationId + "'"); 
+				//System.out.println("replyToQueue '" + replyToQueue + "'");
 				
 				channel.basicPublish(exchange, routingKey,true, props, message.getBytes());	         
 
-				System.out.println("Message Sent ... OK");
+				//System.out.println("Message Sent ... OK");
 
 				channel.close();
 				//rabbitConn.close();
@@ -123,9 +123,9 @@ public class Producer {
 				props = props.builder().headers(headers).build();
 				
 
-				System.out.println(" Message Sent '" + message + "'"); 
-				System.out.println(" exchange '" + exchange + "'"); 
-				System.out.println(" routingKey '" + routingKey + "'"); 
+				//System.out.println("Message Sent '" + message + "'"); 
+				//System.out.println("exchange '" + exchange + "'"); 
+				//System.out.println("routingKey '" + routingKey + "'"); 
 				
 				System.out.println("PROPS");
 				for (Map.Entry<String, Object> entry : props.getHeaders().entrySet()) {
@@ -135,7 +135,7 @@ public class Producer {
 				
 				channel.basicPublish(exchange, routingKey,true, props, message.getBytes());	         
 
-				System.out.println("Message Sent ... OK");
+				//System.out.println("Message Sent ... OK");
 
 				channel.close();
 				//rabbitConn.close();
