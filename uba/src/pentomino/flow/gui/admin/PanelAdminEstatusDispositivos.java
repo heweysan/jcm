@@ -29,6 +29,9 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 	public static JLabel lblJcm2Denom1;
 	public static JLabel lblJcm2Denom2;
 	
+	public static JLabel lblJcm1Status = new JLabel();
+	public static JLabel lblJcm2Status = new JLabel();
+	
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -92,53 +95,63 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		add(btnRegresar);
 
 		JLabel lblJcm1 = new JLabel("JCM1");
+		lblJcm1.setForeground(Color.WHITE);
 		lblJcm1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1.setBounds(61, 143, 494, 140);
+		lblJcm1.setBounds(373, 334, 494, 140);
 		add(lblJcm1);
 
 		JLabel lblJcm2 = new JLabel("JCM2");
+		lblJcm2.setForeground(Color.WHITE);
 		lblJcm2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2.setBounds(614, 143, 494, 140);
+		lblJcm2.setBounds(926, 334, 494, 140);
 		add(lblJcm2);
 
-		JLabel lblJcm1Status = new JLabel("Status OK");
+		lblJcm1Status = new JLabel("Status OK");
+		lblJcm1Status.setForeground(Color.WHITE);
 		lblJcm1Status.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Status.setBounds(61, 294, 290, 46);
+		lblJcm1Status.setBounds(373, 485, 432, 46);
 		add(lblJcm1Status);
 
-		JLabel lblJcm2Status = new JLabel("Status OK");
+		lblJcm2Status = new JLabel("Status OK");
+		lblJcm2Status.setForeground(Color.WHITE);
 		lblJcm2Status.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Status.setBounds(596, 294, 290, 46);
+		lblJcm2Status.setBounds(908, 485, 432, 46);
 		add(lblJcm2Status);
 
 		JLabel lblJcm1Texto1 = new JLabel("Denominaciones");
+		lblJcm1Texto1.setForeground(Color.WHITE);
 		lblJcm1Texto1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Texto1.setBounds(61, 395, 290, 46);
+		lblJcm1Texto1.setBounds(373, 586, 290, 46);
 		add(lblJcm1Texto1);
 
 		JLabel lblJcm2Texto1 = new JLabel("Denominaciones");
+		lblJcm2Texto1.setForeground(Color.WHITE);
 		lblJcm2Texto1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Texto1.setBounds(596, 395, 290, 46);
+		lblJcm2Texto1.setBounds(908, 586, 290, 46);
 		add(lblJcm2Texto1);
 
 		lblJcm1Denom1 = new JLabel("N/A");
+		lblJcm1Denom1.setForeground(Color.WHITE);
 		lblJcm1Denom1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Denom1.setBounds(61, 479, 150, 46);
+		lblJcm1Denom1.setBounds(373, 670, 150, 46);
 		add(lblJcm1Denom1);
 
 		lblJcm1Denom2 = new JLabel("N/A");
+		lblJcm1Denom2.setForeground(Color.WHITE);
 		lblJcm1Denom2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Denom2.setBounds(259, 479, 150, 46);
+		lblJcm1Denom2.setBounds(571, 670, 150, 46);
 		add(lblJcm1Denom2);
 
 		lblJcm2Denom1 = new JLabel("N/A");
+		lblJcm2Denom1.setForeground(Color.WHITE);
 		lblJcm2Denom1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Denom1.setBounds(596, 479, 150, 46);
+		lblJcm2Denom1.setBounds(908, 670, 150, 46);
 		add(lblJcm2Denom1);
 
 		lblJcm2Denom2 = new JLabel("N/A");
+		lblJcm2Denom2.setForeground(Color.WHITE);
 		lblJcm2Denom2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Denom2.setBounds(794, 479, 150, 46);
+		lblJcm2Denom2.setBounds(1106, 670, 150, 46);
 		add(lblJcm2Denom2);
 
 		btnPruebaDeImpresion.addActionListener(new ActionListener() {
@@ -160,10 +173,20 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad PanelAdminEstatusDispositivos");
-
+		
 		Flow.jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[0].jcmMessage);
 		Flow.jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[1].jcmMessage);
-
+		
+		if(Flow.jcms[0].recycleBoxStatus.isEmpty() && Flow.jcms[0].stackerStatus.isEmpty())
+			lblJcm1Status.setText("Status OK");
+		else
+			lblJcm1Status.setText("Status " + Flow.jcms[0].recycleBoxStatus + " " + Flow.jcms[0].stackerStatus);
+		
+		if(Flow.jcms[1].recycleBoxStatus.isEmpty() && Flow.jcms[1].stackerStatus.isEmpty())
+			lblJcm2Status.setText("Status OK");
+		else
+			lblJcm2Status.setText("Status " + Flow.jcms[1].recycleBoxStatus + " " + Flow.jcms[1].stackerStatus);
+		
 
 	}
 

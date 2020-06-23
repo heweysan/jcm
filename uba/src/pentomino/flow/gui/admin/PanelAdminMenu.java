@@ -49,22 +49,22 @@ public class PanelAdminMenu extends ImagePanel {
 	public void ContentPanel() {
 
 
-		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
+		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png"));
 		btnAdminMenuImpresionContadores.setOpaque(false);
-		btnAdminMenuImpresionContadores.setBounds(31, 450, 361, 140);
+		btnAdminMenuImpresionContadores.setBounds(31, 680, 574, 171);
 		btnAdminMenuImpresionContadores.setOpaque(false);
 		btnAdminMenuImpresionContadores.setContentAreaFilled(false);
 		btnAdminMenuImpresionContadores.setBorderPainted(false);
 		add(btnAdminMenuImpresionContadores);
 
-		btnAdminMenuCorte = new JButton(new ImageIcon("./images/Btn_AdminCorteDotacion.png"));		
+		btnAdminMenuCorte = new JButton(new ImageIcon("./images/BTN_7p_Admin_corte.png"));		
 		btnAdminMenuCorte.setOpaque(false);
 		btnAdminMenuCorte.setContentAreaFilled(false);
 		btnAdminMenuCorte.setBorderPainted(false);
-		btnAdminMenuCorte.setBounds(31, 810, 388, 132);
+		btnAdminMenuCorte.setBounds(31, 450, 574, 171);
 		add(btnAdminMenuCorte);
 
-		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("./images/Btn_AdminEstDisp.png"));
+		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("./images/BTN_7p_Admin_EstatusDispositivos.png"));
 		btnAdminMenuEstatusDispositivos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminEstatusDispositivos);
@@ -73,10 +73,10 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuEstatusDispositivos.setOpaque(false);
 		btnAdminMenuEstatusDispositivos.setContentAreaFilled(false);
 		btnAdminMenuEstatusDispositivos.setBorderPainted(false);
-		btnAdminMenuEstatusDispositivos.setBounds(1522, 450, 388, 132);
+		btnAdminMenuEstatusDispositivos.setBounds(1299, 680, 574, 171);
 		add(btnAdminMenuEstatusDispositivos);
 
-		btnAdminMenuSalir = new JButton(new ImageIcon("./images/Btn_AdminSalir.png"));
+		btnAdminMenuSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Salir.png"));
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -89,10 +89,10 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuSalir.setOpaque(false);
 		btnAdminMenuSalir.setContentAreaFilled(false);
 		btnAdminMenuSalir.setBorderPainted(false);
-		btnAdminMenuSalir.setBounds(1522, 918, 388, 132);
+		btnAdminMenuSalir.setBounds(1299, 900, 574, 171);
 		add(btnAdminMenuSalir);
 
-		JButton btnAdminMenuReiniciar = new JButton(new ImageIcon("./images/Btn_AdminReiniciarATM.png"));
+		JButton btnAdminMenuReiniciar = new JButton(new ImageIcon("./images/BTN_7p_Admin_ReiniciarAtm.png"));
 		btnAdminMenuReiniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reiniciando CAJERITO BUTTON");
@@ -117,7 +117,7 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuReiniciar.setOpaque(false);
 		btnAdminMenuReiniciar.setContentAreaFilled(false);
 		btnAdminMenuReiniciar.setBorderPainted(false);
-		btnAdminMenuReiniciar.setBounds(1522, 810, 388, 132);
+		btnAdminMenuReiniciar.setBounds(1299, 450, 574, 171);
 		add(btnAdminMenuReiniciar);
 
 		btnAdminMenuImpresionContadores.addActionListener(new ActionListener() {

@@ -157,7 +157,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);									
 								break;
 							case Partial:
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(690, 579, 622, 153);
 								Flow.panelDispense.setBackground("./images/Scr7RetiroParcial.png");								
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);
 								break;

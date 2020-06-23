@@ -239,12 +239,12 @@ public class Flow {
 		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.getContentPane().add(panelContainer);
-		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
+		mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
 		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
 		panelMenuSinFondo = new PanelMenuSinFondo("./images/Scr7HolaDepositamos.png","panelMenuSinFondo",0,null);
-		panelDeposito = new PanelDeposito("./images/Scr7MontoIngresado.png","panelDeposito",0,null);			
+		panelDeposito = new PanelDeposito("./images/Scr7DepositoIndicadores.png","panelDeposito",0,null);			
 		panelDebug = new PanelDebug("./images/Scr7Placeholder.png","panelDebug",0,null);
 		panelLogin = new PanelLogin("./images/Scr7IdentificateDeposito.png","panelLogin",0,null);
 		panelToken = new PanelToken("./images/Scr7ConfirmaToken.png","panelToken",0,null);
@@ -260,13 +260,13 @@ public class Flow {
 		//FLUJO ADMINISTRATIVO
 
 		panelAdminLogin = new PanelAdminLogin("./images/Scr7Placeholder.png","panelAdminLogin",25000,Flow.panelTerminamos); 
-		panelAdminMenu = new PanelAdminMenu("./images/Scr7Placeholder.png","panelAdminMenu",25000,Flow.panelTerminamos);
-		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/Scr7Placeholder.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
+		panelAdminMenu = new PanelAdminMenu("./images/SCR_P7Admin_MenuAdmin.png","panelAdminMenu",25000,Flow.panelTerminamos);
+		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
 		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/Scr7Placeholder.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
 		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/Scr7Placeholder.png","panelAdminDotarCancelar",0,null);
 		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/Scr7Placeholder.png","panelAdminDotarResultados",0,null);
 		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
-		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/Scr7Placeholder.png","panelAdminEstatusDispositivos",0,null);
+		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/SCR_P7Admin_EstatusDispositivos.png","panelAdminEstatusDispositivos",0,null);
 
 
 		//Valores Iniciales
@@ -473,6 +473,8 @@ public class Flow {
 					break;		
 				case "recyclerBills1":
 
+					PanelDeposito.lblJCMDer.setText(jcms[0].recyclerDenom1 + " / " + jcms[0].recyclerDenom2);
+					
 					PanelDebug.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
 
 					PanelAdminEstatusDispositivos.lblJcm1Denom1.setText(jcms[0].recyclerDenom1);
@@ -491,6 +493,8 @@ public class Flow {
 					break;
 				case "recyclerBills2":
 
+					PanelDeposito.lblJCMIzq.setText(jcms[1].recyclerDenom1 + " / " + jcms[1].recyclerDenom2);
+					
 					PanelDebug.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 
 					PanelAdminEstatusDispositivos.lblJcm2Denom1.setText(jcms[1].recyclerDenom1);
@@ -591,6 +595,13 @@ public class Flow {
 						ex.printStackTrace();
 					}					
 					break;
+				case "dispenseERROR1":
+					PanelDispense.dispenseError();
+					break;
+				case "dispenseERROR2":
+					PanelDispense.dispenseError();
+					break;
+
 				}
 			}
 		});

@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
+import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -21,9 +22,11 @@ public class PanelDispense extends ImagePanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
+	public static Timer screenTimerDispense = new Timer();
 
 	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel("$0");
+	
+	public static boolean dispenseError = false;
 
 	/**
 	 * @wbp.parser.constructor
@@ -43,19 +46,22 @@ public class PanelDispense extends ImagePanel {
 		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.LEFT);
 		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 55));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(408, 579, 622, 153);
+		lblRetiraBilletesMontoDispensar.setBounds(690, 878, 622, 153);
 		add(lblRetiraBilletesMontoDispensar);
 
 	}
 
 	public static void dispense() {
 
+		dispenseError = false;
+		
 		// Iniciamos el dispensado
 		JcmGlobalData.jcm1cass1Dispensed = false;
 		JcmGlobalData.jcm1cass2Dispensed = false;
 		JcmGlobalData.jcm2cass1Dispensed = false;
 		JcmGlobalData.jcm2cass2Dispensed = false;
 
+		JcmGlobalData.partialAmountDispensed = 0;
 
 		RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateOk, ""+ ((Flow.jcms[0].billsToDispenseFromCassette1 * Flow.jcms[0].billCounters.Cass1Denom) + (Flow.jcms[0].billsToDispenseFromCassette2 * Flow.jcms[0].billCounters.Cass2Denom) + (Flow.jcms[1].billsToDispenseFromCassette1 * Flow.jcms[1].billCounters.Cass1Denom) + (Flow.jcms[1].billsToDispenseFromCassette2 * Flow.jcms[1].billCounters.Cass2Denom)));
 		RaspiAgent.Broadcast(DeviceEvent.AFD_DenominateInfo, "" + Flow.jcms[0].billsToDispenseFromCassette1  + "x" +  Flow.jcms[0].billCounters.Cass1Denom + ";" + Flow.jcms[0].billsToDispenseFromCassette2  + "x" +  Flow.jcms[0].billCounters.Cass2Denom
@@ -81,7 +87,7 @@ public class PanelDispense extends ImagePanel {
 		}		
 
 
-		Timer screenTimerDispense = new Timer();
+		screenTimerDispense = new Timer();
 
 		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -104,10 +110,37 @@ public class PanelDispense extends ImagePanel {
 						JcmGlobalData.jcm2cass2Dispensed = true;
 						Flow.jcms[1].dispensingFromCassette = -1;
 					}
+					
+					
 					screenTimerDispense.cancel();
 				}            	
 			}
 		}, 1000,1000);
+	}
+	
+	
+	public static void dispenseError() {
+		
+		screenTimerDispense.cancel();
+				
+		
+		System.out.println("Dispensado parcial [" + JcmGlobalData.partialAmountDispensed + "]");
+		
+		if(JcmGlobalData.partialAmountDispensed == 0) {
+			//DO NOTHING
+		}
+		else {
+			//Si dispenso algo tenemos que sumar lo que no dispenso al reverso para mandarlo.
+			System.out.println("Reverso original [" + CurrentUser.WithdrawalChange + "]");
+			CurrentUser.WithdrawalChange += (CurrentUser.WithdrawalDispense - JcmGlobalData.partialAmountDispensed); 
+			System.out.println("Reverso nuevo  [" + CurrentUser.WithdrawalChange + "]");
+		}
+		
+		JcmGlobalData.jcm1cass1Dispensed = true;
+		JcmGlobalData.jcm1cass2Dispensed = true;
+		JcmGlobalData.jcm2cass1Dispensed = true;
+		JcmGlobalData.jcm2cass2Dispensed = true;
+		
 	}
 
 	@Override

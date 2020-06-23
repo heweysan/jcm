@@ -16,6 +16,9 @@ public class protocol extends kermit {
 	public int currentInsertedBill;
 	public boolean recycleCurrentInsertedBill = false;
 
+	public String recycleBoxStatus = "";
+	public String stackerStatus = "";
+	
 	byte[] version = new byte[50];
 	byte[] recyclerVersion = new byte[50];
 
@@ -568,6 +571,8 @@ public class protocol extends kermit {
 				System.out.println(
 						baitsToString("JCM[" + jcmId + "] processing INITIALIZE", jcmResponse, jcmResponse[1]));
 
+			recycleBoxStatus = "";
+			stackerStatus = "";
 			// Para que ya no procese la operaicon anterior
 			processingOperation = false;
 
@@ -670,6 +675,13 @@ public class protocol extends kermit {
 
 			// Pedimos Informacion del error
 			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x1A, (byte)0x0, (byte)0x0, jcmMessage);
+			
+			if(currentOpertion == jcmOperation.Dispense) {
+				currentOpertion = jcmOperation.DispenseFail;
+				System.out.println("Error durante el dispensado");
+				EventListenerClass.fireMyEvent(new MyEvent("dispenseERROR" + jcmId));
+			}
+			
 			// Mandamos el clear
 			// id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte)
 			// 0x1, (byte) 0x2,jcmMessage);
@@ -700,7 +712,10 @@ public class protocol extends kermit {
 			if (mostrar)
 				System.out.println(baitsToString("JCM[" + jcmId + "] processing SR_ERR_STACKER_OPEN", jcmResponse,
 						jcmResponse[1]));
+			stackerStatus = "Stacker Open";
+			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "jcm[" + jcmId + "] SR_ERR_STACKER_OPEN");
+			
 			break;
 		case SR_ERR_JAM_IN_ACCEPTOR: // 0x45 JAM_IN_ACCEPTOR
 			if (mostrar)
@@ -914,9 +929,21 @@ public class protocol extends kermit {
 			case (byte) 0x10: // NORMAL
 				if (mostrar)
 					System.out.println(baitsToString("JCM[" + jcmId + "] processing NORMAL",jcmResponse, jcmResponse[1]));
-			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
-			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
-			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+			
+			recycleBoxStatus = "";
+			stackerStatus = "";
+			
+			if(currentOpertion == jcmOperation.DispenseFail) {
+				currentOpertion = jcmOperation.Reset;
+				//Primero hacemos los get versions...				
+				id003_format((byte)5, protocol.SSR_VERSION, jcmMessage,true); //SSR_VERSION 0x88
+			}
+			else {
+			
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
+				RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+			}
 			break;
 
 			case (byte) 0x11: // EMPTY
@@ -1002,10 +1029,13 @@ public class protocol extends kermit {
 			case (byte) 0x45: //  RECYCLE BOX OPEN  
 				if (mostrar)
 					System.out.println(baitsToString("JCM[" + jcmId + "] processing  RECYCLE BOX OPEN",jcmResponse, jcmResponse[1]));
-			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			//id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "The Recycler Box is not seated.");
-			RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "RECYCLE BOX OPEN");				
+			RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "RECYCLE BOX OPEN");
+			recycleBoxStatus = "RECYCLE BOX OPEN";
+			
 			break;
 			case (byte) 0x4A: //HARDWARE ERROR 
 				if (mostrar)

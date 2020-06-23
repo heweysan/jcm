@@ -31,6 +31,9 @@ public class PanelDeposito extends ImagePanel{
 
 
 	public final static JLabel lblMontoDepositado = new JLabel("$0");
+	
+	public static JLabel lblJCMIzq = new JLabel();
+	public static JLabel lblJCMDer = new JLabel();
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -49,7 +52,7 @@ public class PanelDeposito extends ImagePanel{
 
 
 		JButton btnAceptar = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
-		btnAceptar.setBounds(547, 757, 782, 159);
+		btnAceptar.setBounds(546, 891, 782, 159);
 		btnAceptar.setContentAreaFilled(false);
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setOpaque(false);
@@ -57,13 +60,27 @@ public class PanelDeposito extends ImagePanel{
 		add(btnAceptar);
 
 		lblMontoDepositado.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMontoDepositado.setBounds(10, 484, 1900, 130);
+		lblMontoDepositado.setBounds(10, 721, 1900, 130);
 		lblMontoDepositado.setForeground(Color.WHITE);
 		lblMontoDepositado.setFont(new Font("Tahoma", Font.BOLD, 50));
 
 		add(lblMontoDepositado);
 
 		add(new DebugButtons().getPanel());	
+		
+		lblJCMIzq = new JLabel("- / -");
+		lblJCMIzq.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJCMIzq.setForeground(Color.WHITE);
+		lblJCMIzq.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblJCMIzq.setBounds(401, 396, 264, 66);
+		add(lblJCMIzq);
+		
+		lblJCMDer = new JLabel("- / -");
+		lblJCMDer.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJCMDer.setForeground(Color.WHITE);
+		lblJCMDer.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblJCMDer.setBounds(915, 396, 264, 66);
+		add(lblJCMDer);
 
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -73,6 +90,14 @@ public class PanelDeposito extends ImagePanel{
 				switch(CurrentUser.currentOperation) {
 				case Deposit:
 
+					System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+					Flow.jcms[0].jcmMessage[3] = 0x01;
+					Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+
+					System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+					Flow.jcms[1].jcmMessage[3] = 0x01;
+					Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+					
 					System.out.println("totalAmountInserted [" + CurrentUser.totalAmountInserted + ")");
 					if(CurrentUser.totalAmountInserted == 0) {
 						Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
@@ -136,6 +161,9 @@ public class PanelDeposito extends ImagePanel{
 		CurrentUser.totalAmountInserted = 0;
 		CurrentUser.currentOperation = jcmOperation.Deposit;
 		
+		
+		lblMontoDepositado.setText("");
+		
 		System.out.println("RE INHIBIT JCM1");
 		Flow.jcms[0].jcmMessage[3] = 0x00;
 		Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
@@ -151,5 +179,4 @@ public class PanelDeposito extends ImagePanel{
 	public void OnUnload() {		
 		System.out.println("OnUnload [PanelDeposito]");
 	}
-
 }
