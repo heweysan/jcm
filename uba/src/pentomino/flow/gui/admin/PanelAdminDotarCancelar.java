@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 
 import pentomino.flow.Flow;
 import pentomino.flow.gui.ImagePanel;
+import java.awt.Color;
 
 public class PanelAdminDotarCancelar extends ImagePanel {
 
@@ -32,9 +33,10 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 	public void ContentPanel() {
 
 		JLabel lblNewLabel = new JLabel("\u00BFEsta seguro que desea cancelar los cambios?");
+		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblNewLabel.setBounds(10, 213, 1900, 84);
+		lblNewLabel.setBounds(10, 406, 1900, 84);
 		add(lblNewLabel);
 
 

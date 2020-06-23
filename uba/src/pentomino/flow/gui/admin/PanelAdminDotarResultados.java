@@ -21,6 +21,7 @@ import pentomino.flow.Flow;
 import pentomino.flow.gui.ImagePanel;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
+import java.awt.Color;
 
 public class PanelAdminDotarResultados extends ImagePanel{
 
@@ -42,12 +43,13 @@ public class PanelAdminDotarResultados extends ImagePanel{
 
 	@Override
 	public void ContentPanel() {
+		lblMensaje.setForeground(Color.WHITE);
 		
 		
 
 		lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMensaje.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblMensaje.setBounds(10, 213, 1900, 84);
+		lblMensaje.setBounds(10, 435, 1900, 84);
 		add(lblMensaje);
 
 

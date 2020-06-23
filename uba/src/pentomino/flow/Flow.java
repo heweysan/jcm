@@ -262,7 +262,7 @@ public class Flow {
 		panelAdminLogin = new PanelAdminLogin("./images/Scr7Placeholder.png","panelAdminLogin",25000,Flow.panelTerminamos); 
 		panelAdminMenu = new PanelAdminMenu("./images/SCR_P7Admin_MenuAdmin.png","panelAdminMenu",25000,Flow.panelTerminamos);
 		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
-		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/Scr7Placeholder.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
+		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
 		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/Scr7Placeholder.png","panelAdminDotarCancelar",0,null);
 		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/Scr7Placeholder.png","panelAdminDotarResultados",0,null);
 		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
