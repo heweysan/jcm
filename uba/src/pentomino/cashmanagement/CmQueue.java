@@ -142,7 +142,7 @@ public class CmQueue implements Runnable{
 				pstmt.setString(3,myMessage.token);
 				pstmt.setInt(4,0);
 
-				int res  = pstmt.executeUpdate();
+				pstmt.executeUpdate();
 				
 				if (sqlLiteConn != null) {
 					sqlLiteConn.close();	                
@@ -183,8 +183,7 @@ public class CmQueue implements Runnable{
 				// set the value
 				pstmt.setString(1,reference);
 
-				int res  = pstmt.executeUpdate();
-
+				pstmt.executeUpdate();
 
 				if (sqlLiteConn != null) {
 					sqlLiteConn.close();	                

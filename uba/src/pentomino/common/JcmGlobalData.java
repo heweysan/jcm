@@ -12,11 +12,6 @@ public class JcmGlobalData {
 	
 	public static boolean isDebug = false;
 	
-	/***
-	 * El maximo de dinero antes de que se vaya a cajita directo.
-	 */
-	private static int maxRecyclableCash = 0;
-	
 	public static int totalCashInRecycler1 = 0;
 	public static int totalCashInRecycler2 = 0;
 	
@@ -114,7 +109,6 @@ public class JcmGlobalData {
 	}
 
 	public static void setMaxRecyclableCash(int maxRecyclableCash) {
-		JcmGlobalData.maxRecyclableCash = maxRecyclableCash;
 	}
 
 }

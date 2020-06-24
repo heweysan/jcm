@@ -16,7 +16,7 @@ public class CMUserVO implements Serializable {
 	
 	public Boolean isValid;
 	
-	public List depositInfo;
+	public List<?> depositInfo;
 	
 	public String profileName;
 	

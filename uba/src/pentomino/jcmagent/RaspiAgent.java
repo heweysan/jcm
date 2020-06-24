@@ -3,7 +3,6 @@ package pentomino.jcmagent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.google.gson.Gson;
 import pentomino.common.AccountType;
 import pentomino.common.DeviceEvent;
 import pentomino.common.TransactionType;
@@ -11,7 +10,6 @@ import pentomino.config.Config;
 
 public class RaspiAgent {
 
-	private static Gson gson = new Gson();
 	
 	/**
 	The Desciption of the method to explain what the method does
@@ -100,7 +98,6 @@ public class RaspiAgent {
 		agentMsg.Command = "add";
 		agentMsg.AtmId = switchAtmId;
 		
-		//System.out.println(gson.toJson(agentMsg));
 		
 		AgentsQueue.bq.add(agentMsg);			
 		
@@ -122,8 +119,6 @@ public class RaspiAgent {
 		agentMsg.Timestamp = java.lang.System.currentTimeMillis();
 		agentMsg.Data = data;
 		agentMsg.AtmId = Config.GetDirective("AtmId", "");
-		
-		//System.out.println("Broadcast [" + gson.toJson(agentMsg) + "]");
 		
 		AgentsQueue.bq.add(agentMsg);
 		

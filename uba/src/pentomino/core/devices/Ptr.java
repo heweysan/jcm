@@ -67,7 +67,7 @@ public class Ptr {
 
 			InputStream textStream = null; 
 			try { 
-				textStream = new FileInputStream("retiroout.txt"); 
+				textStream = new FileInputStream("./Form/retiroout.txt"); 
 			} catch (FileNotFoundException ffne) { 
 
 				System.out.println(ffne.getMessage());
@@ -211,7 +211,7 @@ public class Ptr {
 		BufferedReader reader;
 		FileWriter fw = null;
 		try {
-			fw = new FileWriter(form + "out.txt");
+			fw = new FileWriter("./Form/" + form + "out.txt");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			System.out.println("Ptr.print IOException");
@@ -222,7 +222,7 @@ public class Ptr {
 		}		
 
 		try {
-			reader = new BufferedReader(new FileReader(form + ".txt"));
+			reader = new BufferedReader(new FileReader("./Form/" + form + ".txt"));
 			String line = reader.readLine();
 			while (line != null) {
 				for (Entry<String, String> entry : formData.entrySet()) {
@@ -238,7 +238,7 @@ public class Ptr {
 			fw.close();
 		}
 		catch( FileNotFoundException fe) {
-			System.out.println("No se encontro el archivo [" + form + ".txt]");
+			System.out.println("No se encontro el archivo [./Form/" + form + ".txt]");
 			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "FORM NOT FOUND");
 			logger.error(fe);
 			return false;
@@ -256,7 +256,7 @@ public class Ptr {
 		// Input the file
 		InputStream textStream = null; 
 		try { 
-			textStream = new FileInputStream(form + "out.txt"); 
+			textStream = new FileInputStream("./Form/" + form + "out.txt"); 
 		} catch (FileNotFoundException ffne) { 
 
 			System.out.println(ffne.getMessage());

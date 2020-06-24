@@ -7,8 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JLabel;
-
 import pentomino.flow.Flow;
 
 public class PanelErrorComunicate  extends ImagePanel {

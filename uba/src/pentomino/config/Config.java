@@ -257,11 +257,11 @@ public class Config {
 					pstmt.setString(2,value);
 
 					pstmt.setString(3, dateFormat.format(date));
-					System.out.println("insert 3");
+				
 
-					int res  = pstmt.executeUpdate();
+					 pstmt.executeUpdate();
 
-					//System.out.println("insert [" + res + "]");
+			
 
 					PersistenceParamHashmap.put(key,value);
 
@@ -288,9 +288,9 @@ public class Config {
 					// id
 					pstmt.setString(3,id);
 					rs.close();
-					int res  = pstmt.executeUpdate();
+					pstmt.executeUpdate();
 
-					//System.out.println("update [" + res + "]");
+				
 
 					PersistenceParamHashmap.put(key,value);
 
@@ -393,9 +393,8 @@ public class Config {
 					// id
 					pstmt.setString(3,id);
 					rs.close();
-					int res  = pstmt.executeUpdate();
+					pstmt.executeUpdate();
 
-					//System.out.println("update [" + res + "]");
 
 					DirectiveParamHashmap.put(key,value);
 
@@ -671,9 +670,7 @@ public class Config {
 					// id
 					pstmt.setString(3,id);
 					rs.close();
-					int res  = pstmt.executeUpdate();
-
-					//System.out.println("update [" + res + "]");
+					pstmt.executeUpdate();
 
 					DirectiveParamHashmap.put(key,value);
 

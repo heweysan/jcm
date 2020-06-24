@@ -34,8 +34,8 @@ public class PanelMenuSinFondo extends ImagePanel {
 
 	@Override
 	public void ContentPanel() {
-		JButton btnAceptar = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
-		btnAceptar.setBounds(547, 757, 782, 159);
+		JButton btnAceptar = new JButton(new ImageIcon("./images/BTN7SiDepositemos.png"));
+		btnAceptar.setBounds(570, 770, 782, 159);
 		btnAceptar.setContentAreaFilled(false);
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setOpaque(false);

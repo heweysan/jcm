@@ -54,6 +54,8 @@ import pentomino.flow.gui.admin.PanelAdminError;
 import pentomino.flow.gui.admin.PanelAdminEstatusDispositivos;
 import pentomino.flow.gui.admin.PanelAdminLogin;
 import pentomino.flow.gui.admin.PanelAdminMenu;
+import pentomino.flow.gui.admin.PanelAdminResetDispositivos;
+import pentomino.flow.gui.admin.PanelAdminUsuarioInvalido;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.DTAServer;
 import pentomino.jcmagent.RaspiAgent;
@@ -89,6 +91,8 @@ public class Flow {
 	public static ImagePanel panelAdminContadoresActuales;
 	public static ImagePanel panelAdminContadoresEnCero;
 	public static ImagePanel panelAdminEstatusDispositivos;
+	public static ImagePanel panelAdminUsuarioInvalido;
+	public static ImagePanel panelAdminResetDispositivos;
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
 
@@ -178,9 +182,6 @@ public class Flow {
 
 		initializeJcms();
 
-
-
-
 		GetCurrentCassettesConfig();
 
 		JcmGlobalData.atmId = Config.GetDirective("AtmId", "-----");
@@ -206,11 +207,10 @@ public class Flow {
 
 		
 		if(!netIsAvailable()) {
-			cl.show(panelContainer,"panelErrorComunicate");
-			
+			redirect(panelErrorComunicate);
 		}
 		else {
-			cl.show(panelContainer, "panelIdle");
+			redirect(panelIdle);			
 		}
 		
 		
@@ -249,7 +249,7 @@ public class Flow {
 		panelLogin = new PanelLogin("./images/Scr7IdentificateDeposito.png","panelLogin",0,null);
 		panelToken = new PanelToken("./images/Scr7ConfirmaToken.png","panelToken",0,null);
 		panelTerminamos = new PanelTerminamos("./images/ScrTerminamos.png","panelTerminamos",5000,Flow.panelIdle);
-		panelDispense = new PanelDispense("./images/Scr7TomaBilletes.png","panelRetiroParcial",0,null);
+		panelDispense = new PanelDispense("./images/Scr7RetiroParcial.png","panelRetiroParcial",0,null);  //Scr7RetiroParcial  Scr7TomaBilletes
 		panelError = new PanelError("./images/Scr7Placeholder.png","panelError",5000,Flow.panelIdle);		
 		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",5000,Flow.panelIdle);		
 		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
@@ -259,7 +259,7 @@ public class Flow {
 
 		//FLUJO ADMINISTRATIVO
 
-		panelAdminLogin = new PanelAdminLogin("./images/Scr7Placeholder.png","panelAdminLogin",25000,Flow.panelTerminamos); 
+		panelAdminLogin = new PanelAdminLogin("./images/SCR_P7Admin_Usuario.png","panelAdminLogin",25000,Flow.panelTerminamos); 
 		panelAdminMenu = new PanelAdminMenu("./images/SCR_P7Admin_MenuAdmin.png","panelAdminMenu",25000,Flow.panelTerminamos);
 		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
 		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
@@ -267,8 +267,10 @@ public class Flow {
 		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/Scr7Placeholder.png","panelAdminDotarResultados",0,null);
 		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
 		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/SCR_P7Admin_EstatusDispositivos.png","panelAdminEstatusDispositivos",0,null);
-
-
+		panelAdminUsuarioInvalido = new PanelAdminUsuarioInvalido("./images/SCR_P7Admin_UsuarioInvalido.png","panelAdminUsuarioInvalido",5000,Flow.panelAdminLogin);
+		panelAdminResetDispositivos = new PanelAdminResetDispositivos("./images/Scr7Placeholder.png","panelAdminResetDispositivos",5000,Flow.panelAdminEstatusDispositivos);
+		
+		
 		//Valores Iniciales
 		PanelIdle.lblAtmId.setText(JcmGlobalData.atmId);
 
@@ -303,9 +305,9 @@ public class Flow {
 		panelContainer.add(panelAdminDotarResultados,"panelAdminDotarResultados");
 		panelContainer.add(panelAdminError,"panelAdminError");
 		panelContainer.add(panelAdminEstatusDispositivos,"panelAdminEstatusDispositivos");
-
-
-
+		panelContainer.add(panelAdminUsuarioInvalido,"panelAdminUsuarioInvalido");
+		panelContainer.add(panelAdminResetDispositivos,"panelAdminResetDispositivos");
+		
 
 
 		String atmId = Config.GetDirective("AtmId", "");

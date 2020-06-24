@@ -52,7 +52,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 		setLayout(null);	
 	}	
 
-	
+
 	@Override
 	public void ContentPanel() {
 
@@ -153,11 +153,11 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 							switch(CurrentUser.dispenseStatus) {
 							case Complete:
 								Flow.panelDispense.setBackground("./images/ScrRetiraBilletes.png");
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(1193, 923, 551, 111);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(667, 940, 622, 92);
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);									
 								break;
 							case Partial:
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(690, 579, 622, 153);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(667, 600, 622, 92); 
 								Flow.panelDispense.setBackground("./images/Scr7RetiroParcial.png");								
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);
 								break;
@@ -176,13 +176,13 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 									//Esperamos que ya se dispensara de todos los jcms.
 									if(JcmGlobalData.jcm1cass1Dispensed && JcmGlobalData.jcm1cass2Dispensed && JcmGlobalData.jcm2cass1Dispensed && JcmGlobalData.jcm2cass2Dispensed) {
 										screenTimerDispense.cancel();
-										
+
 										RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense);
 										RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 
 										//Actualizamos los contadores internos del JCM
 										Afd.UpdateCurrentCountRequest();
-										
+
 										System.out.println("CAMBIO [" + CurrentUser.WithdrawalChange + "]");
 										if( CurrentUser.WithdrawalChange > 0) {
 											CmReverse cmReverseVo = new CmReverse();
@@ -204,7 +204,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 										else {
 											Flow.redirect(Flow.panelTerminamos);
 										}
-										
+
 									}
 								}
 							}, 1000,2000);
@@ -258,13 +258,13 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 		System.out.println("OnLoad PanelToken");
 		CurrentUser.pinpadMode = PinpadMode.retiroToken;
 
-		
+
 	}
 
 	@Override
 	public void OnUnload() {
 		System.out.println("OnUnload PanelToken");
-		
+
 	}
 
 }

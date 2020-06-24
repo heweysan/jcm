@@ -3,17 +3,13 @@ package rabbitClient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import com.rabbitmq.client.AMQP;
+
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.config.Config;
-import pentomino.jcmagent.DTAServer;
  
 public class DtaListener {
   

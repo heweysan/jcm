@@ -512,11 +512,7 @@ public class Transactions {
 				});
 
 
-				String result = response.take();
-
 				channel.basicCancel(ctag);
-
-				//System.out.println("result [" + result + "]");
 
 				channel.close();
 

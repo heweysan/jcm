@@ -24,7 +24,7 @@ public class PanelDispense extends ImagePanel {
 
 	public static Timer screenTimerDispense = new Timer();
 
-	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel("$0");
+	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel(".");
 	
 	public static boolean dispenseError = false;
 
@@ -43,10 +43,10 @@ public class PanelDispense extends ImagePanel {
 
 	@Override
 	public void ContentPanel() {
-		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.LEFT);
+		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 55));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(690, 878, 622, 153);
+		lblRetiraBilletesMontoDispensar.setBounds(667, 600, 622, 92); // 667, 600, 622, 92          667, 940, 622, 92
 		add(lblRetiraBilletesMontoDispensar);
 
 	}

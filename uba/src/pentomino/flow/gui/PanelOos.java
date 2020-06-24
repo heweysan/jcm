@@ -4,7 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import pentomino.common.AccountType;
-import pentomino.common.JcmGlobalData;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;

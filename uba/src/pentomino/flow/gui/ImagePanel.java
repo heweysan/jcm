@@ -22,7 +22,7 @@ public  abstract class ImagePanel extends JPanel {
 	private Image img;
 	public int screenTimeOut = 15000;
 	public ImagePanel panelRedirect = null;
-	private String _name;
+	//private String _name;
 	Timer screenTimer = new Timer();
 	
 	/**
@@ -71,7 +71,7 @@ public  abstract class ImagePanel extends JPanel {
 		
 		this.img = new ImageIcon(img).getImage();
 		this.setName(name);
-		_name = name;
+		//_name = name;
 		Dimension size = new Dimension(this.img.getWidth(null), this.img.getHeight(null));
 		setPreferredSize(size);
 		setMinimumSize(size);

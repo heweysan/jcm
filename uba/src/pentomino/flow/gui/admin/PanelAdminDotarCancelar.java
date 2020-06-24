@@ -26,11 +26,20 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 	 * @wbp.parser.constructor
 	 */
 	public PanelAdminDotarCancelar(String img,String name, int _timeout, ImagePanel _redirect) {
-		super(img,name,_timeout,_redirect);	
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);
 	}	
 
 	@Override
 	public void ContentPanel() {
+			
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("\u00BFEsta seguro que desea cancelar los cambios?");
 		lblNewLabel.setForeground(Color.WHITE);
@@ -40,20 +49,20 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		add(lblNewLabel);
 
 
-		JButton btnSi = new JButton(new ImageIcon("./images/Btn_AdminSi.png"));
+		JButton btnSi = new JButton(new ImageIcon("./images/BTN7_OK.png"));
 		btnSi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminMenu);	
 			}
 		});
-		btnSi.setBounds(41, 877, 250, 90);
+		btnSi.setBounds(39, 769, 262, 265);
 		btnSi.setContentAreaFilled(false);
 		btnSi.setBorderPainted(false);
 		btnSi.setOpaque(false);
 		btnSi.setFont(new Font("Tahoma", Font.BOLD, 40));
 		add(btnSi);
 
-		JButton btnNo = new JButton(new ImageIcon("./images/Btn_AdminNo.png"));
+		JButton btnNo = new JButton(new ImageIcon("./images/BTN7_NO.png"));
 		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminContadoresEnCero);	
@@ -63,7 +72,7 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		btnNo.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnNo.setContentAreaFilled(false);
 		btnNo.setBorderPainted(false);
-		btnNo.setBounds(1660, 877, 250, 90);
+		btnNo.setBounds(1648, 769, 262, 265);
 		add(btnNo);
 
 	}

@@ -15,7 +15,6 @@ import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.AccountType;
 import pentomino.common.BusinessEvent;
 import pentomino.common.DeviceEvent;
-import pentomino.common.JcmGlobalData;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
@@ -52,7 +51,7 @@ public class PanelDeposito extends ImagePanel{
 
 
 		JButton btnAceptar = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
-		btnAceptar.setBounds(546, 891, 782, 159);
+		btnAceptar.setBounds(560, 891, 782, 159);
 		btnAceptar.setContentAreaFilled(false);
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setOpaque(false);

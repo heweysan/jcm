@@ -1,8 +1,8 @@
 .                            .
 	      DEPOSITO
 		  
-FECHA:    18/06/2020     
-HORA:     14:18:36       
+FECHA:    23/06/2020     
+HORA:     14:27:21       
 
 MONTO:	  $0
 
@@ -14,7 +14,7 @@ PIEZAS    BILLETES      MONTO
 0           $500           $0
 0          $1000           $0
 
-CORTE:      51
-USUARIO:    02124
+CORTE:      53
+USUARIO:    
 
 .                            .
