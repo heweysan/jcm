@@ -1217,8 +1217,6 @@ public class protocol extends kermit {
 
 			EventListenerClass.fireMyEvent(new MyEvent("recyclerBills" + jcmId));
 
-			//RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, broadcastData);
-
 			break;
 
 			case (byte) 0x92:

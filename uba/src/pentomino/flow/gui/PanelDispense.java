@@ -46,7 +46,7 @@ public class PanelDispense extends ImagePanel {
 		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 55));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(667, 600, 622, 92); // 667, 600, 622, 92          667, 940, 622, 92
+		lblRetiraBilletesMontoDispensar.setBounds(667, 940, 622, 92); // 667, 600, 622, 92          667, 940, 622, 92
 		add(lblRetiraBilletesMontoDispensar);
 
 	}

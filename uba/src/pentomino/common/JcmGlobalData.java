@@ -74,6 +74,8 @@ public class JcmGlobalData {
 	 */
 	public static Map<String,String> jcm2cassetteDataValues = new HashMap<String,String>(); 
 	
+	
+	
 	public static String getKey(Integer jcm, String denom) {
 	   
 		if(jcm == 0) {

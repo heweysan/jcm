@@ -382,7 +382,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.auth.*",true, props, mensaje.getBytes());
-				//System.out.println("Sent     [" + mensaje + "]"); 
+				System.out.println("Sent     [" + mensaje + "]"); 
 
 
 				//Esperamos la respuesta
@@ -453,7 +453,7 @@ public class Transactions {
 				}
 				logger.info("returning ${JsonOutput.toJson(returnVO)}");
 
-				//System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
+				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
 
 				channel.basicCancel(ctag);
 				channel.close();

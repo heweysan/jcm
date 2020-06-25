@@ -36,8 +36,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 	
 	public JButton btnMenuRetiro;
 	public JButton btnMenuDeposito;
-	public static JLabel lblLoginUser = new JLabel(".");
-	public static JLabel lblLoginPassword = new JLabel(".");
+	public static JLabel lblAdminLoginUser = new JLabel(".");
+	public static JLabel lblAdminLoginPassword = new JLabel(".");
 	public static JLabel lblLoginOpcion = new JLabel(".");
 	public static JLabel lblLoginRow1 = new JLabel("");
 
@@ -60,18 +60,18 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 	public void ContentPanel() {
 
 
-		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
-		lblLoginUser.setForeground(Color.WHITE);
-		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginUser.setBounds(262, 707, 500, 80);
-		add(lblLoginUser);
+		lblAdminLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
+		lblAdminLoginUser.setForeground(Color.WHITE);
+		lblAdminLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAdminLoginUser.setBounds(262, 707, 500, 80);
+		add(lblAdminLoginUser);
 
 
-		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginPassword.setForeground(Color.WHITE);
-		lblLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
-		lblLoginPassword.setBounds(250, 650, 500, 80);
-		add(lblLoginPassword);
+		lblAdminLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAdminLoginPassword.setForeground(Color.WHITE);
+		lblAdminLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
+		lblAdminLoginPassword.setBounds(250, 650, 500, 80);
+		add(lblAdminLoginPassword);
 
 
 		lblLoginRow1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -108,8 +108,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 		case _Cancel:			       	
 			CurrentUser.cleanPinpadData();
-			lblLoginUser.setText("");
-			lblLoginPassword.setText("");			
+			lblAdminLoginUser.setText("");
+			lblAdminLoginPassword.setText("");			
 			CurrentUser.asteriscos = "";							
 			Flow.redirect(Flow.panelOperacionCancelada,4000, Flow.panelIdle);
 			break;
@@ -118,10 +118,10 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 			switch(CurrentUser.pinpadMode) {
 			case loginUser:					
 								
-				lblLoginUser.setVisible(false);
-				lblLoginPassword.setVisible(true);
-				lblLoginPassword.setText("");
-				this.setBackground("./images/SCR_P7Admin_Contrasena.png");
+				lblAdminLoginUser.setVisible(false);
+				lblAdminLoginPassword.setVisible(true);
+				lblAdminLoginPassword.setText("");
+				this.setBackground("./images/SCR_P7Admin_Contrasenga.png");
 				//lblLoginOpcion.setBounds(230, 760, 87, 87);   //Este es password 
 				CurrentUser.pinpadMode = PinpadMode.loginPassword;
 
@@ -170,8 +170,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN FAIL","","",""
 								,Config.GetDirective("FullAtmId", "Financial") ,"LOGIN FAIL",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 
-						lblLoginUser.setText("");
-						lblLoginPassword.setText("");
+						lblAdminLoginUser.setText("");
+						lblAdminLoginPassword.setText("");
 						CurrentUser.asteriscos = "";
 						CurrentUser.loginUser = "";
 						CurrentUser.loginPassword = "";
@@ -202,14 +202,14 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 				if (CurrentUser.loginUser.length() > 7)				
 					return;
 				CurrentUser.loginUser = CurrentUser.loginUser + digito.getDigit();
-				lblLoginUser.setText(CurrentUser.loginUser);			
+				lblAdminLoginUser.setText(CurrentUser.loginUser);			
 				break;
 			case loginPassword:
 				if (CurrentUser.loginPassword.length() > 7)
 					return;
 				CurrentUser.loginPassword += digito.getDigit();
 				CurrentUser.asteriscos += "*";
-				lblLoginPassword.setText(CurrentUser.asteriscos);
+				lblAdminLoginPassword.setText(CurrentUser.asteriscos);
 				break;	
 			default:
 				break;				
@@ -258,14 +258,14 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad PanelAdminLogin");
-		lblLoginUser.setVisible(true);
-		lblLoginPassword.setVisible(false);
+		lblAdminLoginUser.setVisible(true);
+		lblAdminLoginPassword.setVisible(false);
 		this.setBackground("./images/SCR_P7Admin_Usuario.png");
 		
-		lblLoginUser.setBounds(250, 650, 500, 80);
+		lblAdminLoginUser.setBounds(250, 650, 500, 80);
 		lblLoginOpcion.setBounds(230, 540, 87, 87); 
-		lblLoginUser.setText("");
-		lblLoginPassword.setText("");
+		lblAdminLoginUser.setText("");
+		lblAdminLoginPassword.setText("");
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
 		CurrentUser.cleanPinpadData();
 		
@@ -274,8 +274,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 	@Override
 	public void OnUnload() {
 		System.out.println("OnUnload PanelAdminLogin");
-		lblLoginUser.setVisible(true);
-		lblLoginPassword.setVisible(false);
+		lblAdminLoginUser.setVisible(true);
+		lblAdminLoginPassword.setVisible(false);
 		this.setBackground("./images/SCR_P7Admin_Usuario.png");
 		
 	}

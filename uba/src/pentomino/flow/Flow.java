@@ -239,7 +239,7 @@ public class Flow {
 		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.getContentPane().add(panelContainer);
-		mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
+		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
 		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
@@ -249,7 +249,7 @@ public class Flow {
 		panelLogin = new PanelLogin("./images/Scr7IdentificateDeposito.png","panelLogin",0,null);
 		panelToken = new PanelToken("./images/Scr7ConfirmaToken.png","panelToken",0,null);
 		panelTerminamos = new PanelTerminamos("./images/ScrTerminamos.png","panelTerminamos",5000,Flow.panelIdle);
-		panelDispense = new PanelDispense("./images/Scr7RetiroParcial.png","panelRetiroParcial",0,null);  //Scr7RetiroParcial  Scr7TomaBilletes
+		panelDispense = new PanelDispense("./images/Scr7TomaBilletes.png","panelRetiroParcial",0,null);  //Scr7RetiroParcial  Scr7TomaBilletes
 		panelError = new PanelError("./images/Scr7Placeholder.png","panelError",5000,Flow.panelIdle);		
 		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",5000,Flow.panelIdle);		
 		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
@@ -826,6 +826,13 @@ public class Flow {
 						screenTimer.cancel();
 					}
 				}, 500);
+			}
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}	
 	}

@@ -58,8 +58,8 @@ public class PanelAdminUsuarioInvalido  extends ImagePanel {
 		CurrentUser.loginUser = "";
 		CurrentUser.loginPassword = "";
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
-		PanelAdminLogin.lblLoginUser.setText("");
-		PanelAdminLogin.lblLoginPassword.setText("");
+		PanelAdminLogin.lblAdminLoginUser.setText("");
+		PanelAdminLogin.lblAdminLoginPassword.setText("");
 
 	}
 

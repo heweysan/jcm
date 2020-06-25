@@ -5,10 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 
+import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
+import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.DispenseStatus;
 import pentomino.flow.Flow;
+import pentomino.jcmagent.RaspiAgent;
 
 public class Afd {
 
@@ -254,4 +257,70 @@ public class Afd {
 
 		Flow.jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
 	}
+	
+	public static void BroadcastFullStatus() {
+				
+		String fullStatus = ""; 		//Cassette1-MXN-1133-1203%Cassette2-MXN-88-122%Cassette3-MXN-261-340%Cassette4-MXN-0-0
+		String cashUnitAmounts = "";  	//Cassette1-500;Cassette2-100;Cassette3-200;Cassette4-500
+		String cashUnitStatus = "";		//3-OK-0;4-OK-0;5-OK-0;6-EMPTY-0  id-STATUS-rejected
+		
+		String currency = "MXN";	
+		
+		for (int j = 1; j < 5; j++) { 
+			int originalValue  = Integer.parseInt(Config.GetPersistence("Cassette" + j + "Original","0"));
+			int dispensedValue = Integer.parseInt(Config.GetPersistence("Cassette" + j + "Dispensed","0"));
+			int actual = originalValue - dispensedValue;
+			String denom  = Config.GetPersistence("Cassette" + j + "Value","0");
+			
+			fullStatus+="Cassette" + j + "-" + currency + "-" + actual + "-" + originalValue + "%";
+			cashUnitAmounts += "Cassette" + j + "-" + denom + ";";
+			
+			
+			
+		}
+		
+		fullStatus = fullStatus.substring(0,fullStatus.length()-1);
+		cashUnitAmounts = cashUnitAmounts.substring(0,cashUnitAmounts.length()-1);
+		
+		System.out.println("fullStatus [" + fullStatus + "]");		
+		RaspiAgent.Broadcast(DeviceEvent.AFD_FullStatus, fullStatus);
+		
+		System.out.println("cashUnitAmounts [" + cashUnitAmounts + "]");
+		RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, cashUnitAmounts);
+		
+		
+		JcmGlobalData.jcm1cassetteDataValues.put("1", Config.GetPersistence("Cassette1Value", "0"));
+		JcmGlobalData.jcm1cassetteDataValues.put("2", Config.GetPersistence("Cassette2Value", "0"));
+
+		JcmGlobalData.jcm2cassetteDataValues.put("3", Config.GetPersistence("Cassette3Value", "0"));
+		JcmGlobalData.jcm2cassetteDataValues.put("4", Config.GetPersistence("Cassette4Value", "0"));
+		
+		JcmGlobalData.jcm1cassetteDataValues.get("1");
+		
+		if(JcmGlobalData.rec1bill1Available > 0)		
+			cashUnitStatus += "1-OK-0";
+		else
+			cashUnitStatus += "1-EMPTY-0";
+		
+		if(JcmGlobalData.rec1bill2Available > 0)		
+			cashUnitStatus += ";2-OK-0";
+		else
+			cashUnitStatus += ";2-EMPTY-0";
+		
+		if(JcmGlobalData.rec2bill1Available > 0)		
+			cashUnitStatus += ";3-OK-0";
+		else
+			cashUnitStatus += ";3-EMPTY-0";
+		
+		if(JcmGlobalData.rec2bill2Available > 0)		
+			cashUnitStatus += ";4-OK-0";
+		else
+			cashUnitStatus += ";4-EMPTY-0";
+		
+		System.out.println("cashUnitStatus [" + cashUnitStatus + "]");
+		RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitStatus, cashUnitStatus);
+		
+				
+	}	
+
 }

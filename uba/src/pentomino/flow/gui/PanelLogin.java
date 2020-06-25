@@ -53,7 +53,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginUser.setBounds(257, 625, 496, 87);
+		lblLoginUser.setBounds(257, 625, 496, 87);  //240, 530, 87, 87
 		add(lblLoginUser);
 		add(new DebugButtons().getPanel());
 		

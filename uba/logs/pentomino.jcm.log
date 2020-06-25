@@ -7016,3 +7016,113 @@
 2020-06-23 22:45:11,690|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
 2020-06-23 22:45:11,690|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
 2020-06-23 22:45:11,692|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:25:24,640|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:25:26,329|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:25:26,342|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 16:25:26,342|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 16:25:26,342|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:25:26,347|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:25:26,347|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:25:26,349|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:26:15,111|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:26:17,323|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:31:48,363|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:31:50,041|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:31:50,052|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 16:31:50,052|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 16:31:50,052|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:31:50,057|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:31:50,057|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:31:50,059|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:34:36,822|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:35:35,484|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:35:37,174|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:35:37,185|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 16:35:37,185|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 16:35:37,185|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:35:37,190|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:35:37,190|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:35:37,192|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:37:25,506|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:37:27,228|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:37:27,245|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 16:37:27,245|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 16:37:27,245|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:37:27,248|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:37:27,248|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:37:27,250|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:40:41,594|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:40:43,268|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:40:43,281|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 16:40:43,282|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 16:40:43,282|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:40:43,283|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:40:43,283|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:40:43,285|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:49:27,051|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 16:49:28,844|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 16:49:28,862|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 16:49:28,862|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 16:49:28,862|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:49:28,867|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 16:49:28,867|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 16:49:28,869|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 17:24:52,961|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 17:24:54,651|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 17:24:54,662|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 17:24:54,662|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 17:24:54,662|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 17:24:54,667|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 17:24:54,668|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 17:24:54,670|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 17:25:03,308|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-24 17:25:55,789|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 17:25:57,450|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 17:25:57,460|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 17:25:57,460|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 17:25:57,460|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 17:25:57,465|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 17:25:57,465|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 17:25:57,466|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 17:26:04,424|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-06-24 18:01:26,281|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 18:01:28,019|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 18:01:28,054|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 18:01:28,055|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 18:01:28,055|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:01:28,058|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:01:28,058|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:01:28,061|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:02:04,758|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 18:02:06,513|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 18:02:06,527|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 18:02:06,527|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 18:02:06,527|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:02:06,529|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:02:06,529|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:02:06,531|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:09:38,967|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 18:09:40,696|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 18:09:40,709|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 18:09:40,710|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 18:09:40,710|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:09:40,711|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:09:40,711|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:09:40,713|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:09:54,488|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 18:09:56,234|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 18:09:56,272|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 18:09:56,273|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 18:09:56,273|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:09:56,277|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:09:56,278|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:09:56,279|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:48:54,709|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-06-24 18:48:56,423|DEBUG|p.c.d.Tio|[Tio Thread]|Tio starting.... DEBUG
+2020-06-24 18:48:56,439|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-06-24 18:48:56,439|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-06-24 18:48:56,439|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:48:56,444|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:48:56,444|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - start
+2020-06-24 18:48:56,446|DEBUG|p.f.uart|[AWT-EventQueue-0]|openPort(String) - end
+2020-06-24 18:49:12,781|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
