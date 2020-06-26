@@ -467,6 +467,141 @@ public class Transactions {
 		return returnVO;
 	}
 
+	
+	public static CMUserVO ValidaUsuarioPassword(String idEmp, String password) {
+
+		System.out.println("\n--- ValidaUsuarioPassword ---".toUpperCase());
+
+		final String corrId = UUID.randomUUID().toString();
+
+		Map<String,Object> map = null;
+
+		String mensaje = "{\"data\":{\"numTarjeta\":\"" + idEmp + "\",\"password\":\"" + password + "\"}}";
+
+		CMUserVO returnVO = new CMUserVO();    		        		
+
+		try{
+
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+
+			if(rabbitConn == null) {
+				//NO SE PUDO CONECTAR O CREDENCIALES INCORRECTA, ALGO MALO PASO
+				returnVO.isValid = false;
+				returnVO.allowWithdrawals = false;
+				returnVO.depositInfo = new ArrayList<Object>();
+				returnVO.success = false;
+				returnVO.profileName = null;
+				returnVO.profileId = (int) 0L;
+				returnVO.message = "Error de conexion";
+				returnVO.exception = null;
+				returnVO.totalDeposit = 0;
+			}
+			else{
+				Channel channel = rabbitConn.createChannel();  
+
+				map = new HashMap<String,Object>(); 
+				map.put("operation-type","validate-username-password");         
+
+				String replyQueueName = channel.queueDeclare().getQueue();
+
+				AMQP.BasicProperties props = new AMQP.BasicProperties
+						.Builder()
+						.correlationId(corrId)
+						.replyTo(replyQueueName)
+						.headers(map)
+						.build();
+
+				channel.basicPublish("ex.cm.topic", "cm.auth.*",true, props, mensaje.getBytes());
+				System.out.println("Sent     [" + mensaje + "]"); 
+
+
+				//Esperamos la respuesta
+				//RESPUESTA ERRONEA  
+				//{"exception":"Password Erroneo"}
+				//RESPUESTA CORRECTA
+				//{"username":"007007","profileId":0,"profileName":"","authorities":[],"allowWithdrawals":true}
+				final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);	                      
+
+
+				String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+					if (delivery.getProperties().getCorrelationId().equals(corrId)) {
+						response.offer(new String(delivery.getBody(), "UTF-8"));
+					}
+				}, consumerTag -> {
+				});              	                      
+
+				String result = response.take();            
+
+				System.out.println("result [" + result + "]");
+
+				if(!result.isEmpty()) {
+					if(result != ""){
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
+						System.out.println("isValid " + (String) responseMap.get("isValid"));
+						
+						if(responseMap.containsKey("exception")){
+							returnVO.isValid = false;
+							returnVO.allowWithdrawals = false;
+							returnVO.depositInfo = new ArrayList<Object>();
+							returnVO.success = true;
+							returnVO.profileName = null;
+							returnVO.profileId = (int) 0L;
+							returnVO.message = (String) responseMap.get("exception");
+							ExceptionVO exception = new ExceptionVO();
+							exception.Message = (String) responseMap.get("exception");
+							exception.ClassName = Transactions.class.getName();
+							returnVO.exception = exception;
+							returnVO.totalDeposit = 0;
+						}else{
+							returnVO.isValid = true;
+							returnVO.depositInfo = new ArrayList<Object>();;
+							returnVO.success = true;
+							returnVO.allowWithdrawals = (Boolean) responseMap.get("allowWithdrawals");
+							returnVO.profileName = (String) responseMap.get("profileName");
+							returnVO.profileId = (int) Float.parseFloat(responseMap.get("profileId").toString());
+							returnVO.message = "Usuario no tiene depositos preparados.";
+							returnVO.exception = null;
+							returnVO.totalDeposit = 0;
+						}
+
+					}else{
+						returnVO.isValid = false;
+						returnVO.allowWithdrawals = false;
+						returnVO.depositInfo = new ArrayList<Object>();
+						returnVO.success = true;
+						returnVO.profileName = null;
+						returnVO.profileId = (int) 0L;
+						returnVO.message = "Usuario no existe.";
+						returnVO.exception = null;
+						returnVO.totalDeposit = 0;
+					}
+
+				}else {
+					returnVO.isValid = false;
+					returnVO.allowWithdrawals = false;
+					returnVO.depositInfo = new ArrayList<Object>();
+					returnVO.success = true;
+					returnVO.profileName = null;
+					returnVO.profileId =  (int) 0L;
+					returnVO.message = "Problemas de comunicación con servicios de usuarios";
+					returnVO.exception = null;
+					returnVO.totalDeposit = 0;
+				}
+				logger.info("returning ${JsonOutput.toJson(returnVO)}");
+
+				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
+
+				channel.basicCancel(ctag);
+				channel.close();
+
+			}
+		}catch(Exception e){
+			System.out.println("ValidaUsuario [EXCEPTION]");
+			e.printStackTrace();
+		}
+
+		return returnVO;
+	}
 
 	//Equivalente a /Deposito  PUT
 	public static String ConfirmaDeposito(DepositOpVO depositOpVO)  {

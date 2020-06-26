@@ -49,20 +49,20 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		add(lblNewLabel);
 
 
-		JButton btnSi = new JButton(new ImageIcon("./images/BTN7_OK.png"));
+		JButton btnSi = new JButton(new ImageIcon("./images/BTN_7p_Admin_Si.png"));
 		btnSi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminMenu);	
 			}
 		});
-		btnSi.setBounds(39, 769, 262, 265);
+		btnSi.setBounds(10, 899, 575, 151);
 		btnSi.setContentAreaFilled(false);
 		btnSi.setBorderPainted(false);
 		btnSi.setOpaque(false);
 		btnSi.setFont(new Font("Tahoma", Font.BOLD, 40));
 		add(btnSi);
 
-		JButton btnNo = new JButton(new ImageIcon("./images/BTN7_NO.png"));
+		JButton btnNo = new JButton(new ImageIcon("./images/BTN_7p_Admin_No.png"));
 		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminContadoresEnCero);	
@@ -72,7 +72,7 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		btnNo.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnNo.setContentAreaFilled(false);
 		btnNo.setBorderPainted(false);
-		btnNo.setBounds(1648, 769, 262, 265);
+		btnNo.setBounds(1335, 899, 575, 151);
 		add(btnNo);
 
 	}

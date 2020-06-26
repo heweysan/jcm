@@ -6,6 +6,7 @@ import java.util.Map;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
+import pentomino.flow.gui.PanelDeposito;
 import pentomino.jcmagent.RaspiAgent;
 
 public class protocol extends kermit {
@@ -357,6 +358,7 @@ public class protocol extends kermit {
 				System.out
 				.println(baitsToString("JCM[" + jcmId + "] processing ACCEPTING", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			EventListenerClass.fireMyEvent(new MyEvent("accepting" + jcmId));
 			break;
 		case SR_ESCROW: // 0x13 ESCROW
 			if (mostrar)
@@ -486,6 +488,11 @@ public class protocol extends kermit {
 				System.out.println("REJECTING Unknown error");
 				break;
 			}
+			
+			if(jcmId == 1)
+				PanelDeposito.bussy1 = false;
+			if(jcmId == 2)
+				PanelDeposito.bussy2 = false;
 
 			break;
 
@@ -1160,7 +1167,7 @@ public class protocol extends kermit {
 
 					EventListenerClass.fireMyEvent(new MyEvent("recyclerVersion" + jcmId));
 
-					RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version,
+					RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_SPVersion,
 							"jcm[" + jcmId + "] " + new String(recyclerVersion).trim());
 
 				}

@@ -33,6 +33,17 @@ public class PanelDeposito extends ImagePanel{
 	
 	public static JLabel lblJCMIzq = new JLabel();
 	public static JLabel lblJCMDer = new JLabel();
+	
+	/**
+	 * Se habilita cuando esta aceptadno un billete, para que no se pueda oprimmir aceptar en el proceso de validacion
+	 */
+	public static boolean bussy1 = false;
+	
+	/**
+	 * Se habilita cuando esta aceptadno un billete, para que no se pueda oprimmir aceptar en el proceso de validacion
+	 */
+	public static boolean bussy2 = false;
+	
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -83,6 +94,8 @@ public class PanelDeposito extends ImagePanel{
 
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(bussy1 || bussy2)
+					return;
 
 				String atmId = Config.GetDirective("AtmId", "");
 
@@ -102,8 +115,15 @@ public class PanelDeposito extends ImagePanel{
 						Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
 						return;
 					}
+					
+					
 
 
+					//Actualizamos contadores de deposito
+					int depositCounter = Integer.parseInt(Config.GetPersistence("TxCASHMANAGEMENTCounter","0"));
+					depositCounter++;
+					Config.SetPersistence("TxCASHMANAGEMENTCounter","" + depositCounter);
+					
 					//Terminamos el deposito
 					DepositOpVO depositOpVO = new DepositOpVO();
 
@@ -133,6 +153,9 @@ public class PanelDeposito extends ImagePanel{
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", CurrentUser.totalAmountInserted,0, "", CurrentUser.loginUser, "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
 					BEA.BusinessEvent(BusinessEvent.DepositEnd, true, false,"");
 
+					
+					
+					
 					if(!Ptr.printDeposit(depositOpVO)){
 						//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
 						Flow.redirect(Flow.panelNoTicket,5000,Flow.panelTerminamos);						
@@ -160,6 +183,8 @@ public class PanelDeposito extends ImagePanel{
 		CurrentUser.totalAmountInserted = 0;
 		CurrentUser.currentOperation = jcmOperation.Deposit;
 		
+		bussy1 = false;
+		bussy2 = false;
 		
 		lblMontoDepositado.setText("");
 		

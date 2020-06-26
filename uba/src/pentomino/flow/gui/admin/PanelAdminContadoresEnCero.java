@@ -137,27 +137,25 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 					PanelAdminDotarResultados.lblMensaje.setText("Se presentó un error al modificar los contadores");
 				}
 
-				Flow.redirect(Flow.panelAdminDotarResultados);
+				Flow.redirect(Flow.panelAdminDotarResultados,60000,Flow.panelAdminMenu);
 			}
 		});
-		btnGuardar.setOpaque(false);
-		btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 40));
+		btnGuardar.setOpaque(false);		
 		btnGuardar.setContentAreaFilled(false);
 		btnGuardar.setBorderPainted(false);
 		btnGuardar.setBounds(1107, 878, 778, 150);
 		add(btnGuardar);
 
-		JButton btnSalir = new JButton(new ImageIcon("./images/Btn_AdminCancelar.png"));
+		JButton btnSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Cancelar.png"));
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminDotarCancelar);
 			}
 		});
-		btnSalir.setOpaque(false);
-		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 40));
+		btnSalir.setOpaque(false);		
 		btnSalir.setContentAreaFilled(false);
 		btnSalir.setBorderPainted(false);
-		btnSalir.setBounds(29, 925, 250, 90);
+		btnSalir.setBounds(10, 899, 575, 151);
 		add(btnSalir);
 		
 		JLabel lblNewLabel_4 = new JLabel("Denominaci\u00F3n");

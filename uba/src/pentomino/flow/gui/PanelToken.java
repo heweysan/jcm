@@ -203,6 +203,12 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 											RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense);
 											RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 										}
+										
+										//Actualizamos contadores de retiro
+										int dispenseCounter = Integer.parseInt(Config.GetPersistence("TxRETIROCASHMANAGEMENTCounter","0"));
+										dispenseCounter++;
+										Config.SetPersistence("TxRETIROCASHMANAGEMENTCounter","" + dispenseCounter);
+										
 
 										if(!Ptr.printDispense(CurrentUser.WithdrawalDispense,CurrentUser.loginUser)){
 											//Si no pudo imprimir lo mandamos a la pantalla de no impresion.

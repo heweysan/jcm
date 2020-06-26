@@ -23,6 +23,7 @@ import pentomino.cashmanagement.CmQueue;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.common.AccountType;
+import pentomino.common.BusinessEvent;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.TransactionType;
@@ -57,6 +58,7 @@ import pentomino.flow.gui.admin.PanelAdminMenu;
 import pentomino.flow.gui.admin.PanelAdminResetDispositivos;
 import pentomino.flow.gui.admin.PanelAdminUsuarioInvalido;
 import pentomino.jcmagent.AgentsQueue;
+import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.DTAServer;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -205,6 +207,18 @@ public class Flow {
 		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[0].jcmMessage);
 		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
 
+		
+		RaspiAgent.WriteToJournal("INIT", 0, 0, "", "", "INICIO FLUJO V 0.0.1", AccountType.None, TransactionType.Administrative);
+		RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version, "0.0.0.1");
+		
+		
+		//BEA.BusinessEvent(BusinessEvent.SessionStart, false, true,"");
+		//BEA.BusinessEvent(BusinessEvent.DepositStart, true, true,"");
+		//BEA.BusinessEvent(BusinessEvent.DepositEnd, true, false,"");
+		//BEA.BusinessEvent(BusinessEvent.SessionEnd, true, false, "");
+		
+		
+		//Transactions.ValidaUsuarioPassword("007007","784512");
 		
 		if(!netIsAvailable()) {
 			redirect(panelErrorComunicate);
@@ -468,9 +482,11 @@ public class Flow {
 					PanelDebug.lblBilleteIngresado2.setText("$" + billType2);
 					break;					
 				case "clearbill1":
+					PanelDeposito.bussy1 = false;
 					PanelDebug.lblBilleteIngresado1.setText("");
 					break;
 				case "clearbill2":
+					PanelDeposito.bussy2 = false;
 					PanelDebug.lblBilleteIngresado2.setText("");
 					break;		
 				case "recyclerBills1":
@@ -602,6 +618,12 @@ public class Flow {
 					break;
 				case "dispenseERROR2":
 					PanelDispense.dispenseError();
+					break;
+				case "accepting1":
+					PanelDeposito.bussy1 = true;
+					break;
+				case "accepting2":
+					PanelDeposito.bussy2 = true;
 					break;
 
 				}

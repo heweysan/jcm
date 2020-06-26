@@ -28,6 +28,15 @@ import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.jcmagent.RaspiAgent;
 
+
+import jpos.JposException;
+import jpos.POSPrinter;
+import jpos.POSPrinterConst;
+
+import jpos.util.JposPropertiesConst;
+
+
+
 public class Ptr {
 
 	private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
@@ -40,6 +49,77 @@ public class Ptr {
 	public static void main(String[] args) {
 
 
+		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
+
+	     // instantiate a new jpos.POSPrinter object
+	     POSPrinter printer = new POSPrinter();
+		
+	     try
+	     {
+	        //Open Printer
+	        printer.open("CUSTOM TG2480H POS Printer USB Linux");
+	        printer.claim(1);
+	        printer.setDeviceEnabled(true);
+
+	        //Print a Text String
+	        printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
+
+	        //Close Printer
+	        printer.setDeviceEnabled(false);
+	        printer.release();
+	        printer.close();
+	     }
+	     catch(JposException e)
+	     {
+	         // display any errors that come up
+	         e.printStackTrace();
+	     }
+	     finally
+	     {
+	         // close the printer object
+	         try
+	         {
+	             printer.close();
+	         }
+	         catch (Exception e) {}
+	     }
+	     
+	     
+	     System.out.println("Ahora serial");
+	     
+	     printer = new POSPrinter();
+			
+	     try
+	     {
+	        //Open Printer
+	        printer.open("CUSTOM TG2480H POS Printer COM Linux");
+	        printer.claim(1);
+	        printer.setDeviceEnabled(true);
+
+	        //Print a Text String
+	        printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
+
+	        //Close Printer
+	        printer.setDeviceEnabled(false);
+	        printer.release();
+	        printer.close();
+	     }
+	     catch(JposException e)
+	     {
+	         // display any errors that come up
+	         e.printStackTrace();
+	     }
+	     finally
+	     {
+	         // close the printer object
+	         try
+	         {
+	             printer.close();
+	         }
+	         catch (Exception e) {}
+	     }
+		
+	     if(false) {
 		try { 
 
 			CupsClient cupsClient = new CupsClient("127.0.0.1", 631);
@@ -95,6 +175,7 @@ public class Ptr {
 				ignored.printStackTrace();
 
 		}
+	     }
 
 	}
 
@@ -121,8 +202,8 @@ public class Ptr {
 		printMap.put("<monto100>",String.format("%1$9s",currencyFormat.format(depositOpVO.b100 * 100)));
 		printMap.put("<monto200>",String.format("%1$9s",currencyFormat.format(depositOpVO.b200 * 200)));
 		printMap.put("<monto500>",String.format("%1$9s",currencyFormat.format(depositOpVO.b500 * 500)));
-		printMap.put("<referencia>","13579");
-		printMap.put("<operacion>","23");
+		printMap.put("<referencia>","-----");
+		printMap.put("<operacion>",Config.GetPersistence("TxCASHMANAGEMENTCounter","0"));
 		printMap.put("<usuario>",depositOpVO.userName);		
 
 		return print("deposito",printMap);
@@ -197,8 +278,8 @@ public class Ptr {
 		printMap.put("<fecha>",String.format("%1$-15s",dateFormat.format(date)));
 		printMap.put("<hora>",String.format("%1$-15s",timeFormat.format(date)));
 		printMap.put("<monto>",currencyFormat.format(montoRetiro));		
-		printMap.put("<referencia>","13579");
-		printMap.put("<operacion>","23");
+		printMap.put("<referencia>","-----");
+		printMap.put("<operacion>",Config.GetPersistence("TxRETIROCASHMANAGEMENTCounter","0"));
 		printMap.put("<usuario>",currentUser);		
 
 		return print("retiro",printMap);

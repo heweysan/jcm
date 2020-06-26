@@ -53,20 +53,20 @@ public class PanelAdminDotarResultados extends ImagePanel{
 		add(lblMensaje);
 
 
-		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/Btn_AdminImpContadores.png"));
+		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png"));
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Ptr.printContadores();
 			}
 		});
-		btnImprimirContadores.setBounds(41, 877, 250, 90);
+		btnImprimirContadores.setBounds(10, 899, 574, 151);
 		btnImprimirContadores.setContentAreaFilled(false);
 		btnImprimirContadores.setBorderPainted(false);
 		btnImprimirContadores.setOpaque(false);
 		btnImprimirContadores.setFont(new Font("Tahoma", Font.BOLD, 40));
 		add(btnImprimirContadores);
 
-		JButton btnRegresar = new JButton(new ImageIcon("./images/Btn_AdminRegresar.png"));
+		JButton btnRegresar = new JButton(new ImageIcon("./images/BTN_7p_Admin_Regresar.png"));
 		btnRegresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminMenu);	
@@ -76,7 +76,7 @@ public class PanelAdminDotarResultados extends ImagePanel{
 		btnRegresar.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnRegresar.setContentAreaFilled(false);
 		btnRegresar.setBorderPainted(false);
-		btnRegresar.setBounds(1660, 877, 250, 90);
+		btnRegresar.setBounds(1336, 877, 574, 151);
 		add(btnRegresar);
 
 	}
@@ -115,33 +115,9 @@ public class PanelAdminDotarResultados extends ImagePanel{
 		int resultAceptadosTotal = resultOrigTotal;
 		String resultAceptadosJson = resultOrigJson;
 
-		/*
-		String resultFinalJson = "{{'denominacion':'20', 'cantidad':'0'}},{{'denominacion':'50', 'cantidad':'0'}}";
-		resultFinalJson += "{{'denominacion':'100', 'cantidad':'0'}},{{'denominacion':'200', 'cantidad':'0'}}";
-		resultFinalJson += "{{'denominacion':'500', 'cantidad':'0'}},{{'denominacion':'1000', 'cantidad':'0'}}";
-
-		int resultFinalTotal = 0;
-		 */
-
-		//int total =  resultAceptadosTotal + resultOrigTotal;		
 
 		RaspiAgent.WriteToJournal("ADMIN", resultAceptadosTotal,0, "", CurrentUser.loginUser, "DOTAR CAPTURA CONTADORES - ANTES DE CERO[" + resultAceptados + "][][total=" + resultAceptadosTotal + "]", AccountType.None, TransactionType.Administrative);
 
-		/*
-	       string json =  String.Format("{{'type': 'Dotacion'
-                   , 'billetesAntes': [{0}]
-                   , 'billetesAntesTotal': '{1}'
-                   , 'billetesDespues':[{2}]
-                   , 'billetesDespuesTotal': '{3}'
-                   , 'billetesAceptados':[{4}]
-                   , 'billetesAceptadosTotal': '{5}'}}"
-                   , Client.Client.Hash.Get("resultOrigJson","")
-                   , Client.Client.Hash.Get("resultOrigTotal","")
-                   ,resultFinalJson
-                   ,resultFinalTotal
-                   ,Client.Client.Hash.Get("resultAceptadosJson","")
-                   , Client.Client.Hash.Get("resultAceptadosTotal",""));
-		 */
 
 		//Actualizamos los datos de BEA
 		String json = "{{'type': 'Dotacion' "

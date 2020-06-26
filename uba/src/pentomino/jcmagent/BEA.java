@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import pentomino.config.Config;
+
 public class BEA {
 
 	private static String SessionId = "";
@@ -36,9 +38,9 @@ public class BEA {
 			session = SessionId;
 
 		String data = "" + businessEvent.getBusinessEventName() + ";" + session + ";" + attributes;
-		
-		System.out.println("data [" + data + "]");
-				InvBroadcast(java.lang.System.currentTimeMillis(), data);
+
+		System.out.println("BusinessEvent data [" + data + "]");
+		InvBroadcast(java.lang.System.currentTimeMillis(), data);
 
 
 
@@ -62,8 +64,10 @@ public class BEA {
 		agentMsg.Timestamp = timestamp;
 		agentMsg.Values = values;
 		agentMsg.Id = java.util.UUID.randomUUID().toString();
+		agentMsg.AtmId = Config.GetDirective("AtmId", "");		
 
-		System.out.println(gson.toJson(agentMsg));
+
+		System.out.println("BEA MESSAGE [" + gson.toJson(agentMsg) + "]");
 
 		AgentsQueue.bq.add(agentMsg);
 

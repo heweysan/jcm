@@ -92,7 +92,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 		add(panelPinpad.getPanel());
 		
-		//BEA.BusinessEvent(BusinessEvent.SessionEnd, true, false, "");
+		
 		
 		
 	}
@@ -121,7 +121,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 				lblAdminLoginUser.setVisible(false);
 				lblAdminLoginPassword.setVisible(true);
 				lblAdminLoginPassword.setText("");
-				this.setBackground("./images/SCR_P7Admin_Contrasenga.png");
+				Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Contrasena.png");
+				
 				//lblLoginOpcion.setBounds(230, 760, 87, 87);   //Este es password 
 				CurrentUser.pinpadMode = PinpadMode.loginPassword;
 
@@ -260,7 +261,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 		System.out.println("OnLoad PanelAdminLogin");
 		lblAdminLoginUser.setVisible(true);
 		lblAdminLoginPassword.setVisible(false);
-		this.setBackground("./images/SCR_P7Admin_Usuario.png");
+		Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Usuario.png");
 		
 		lblAdminLoginUser.setBounds(250, 650, 500, 80);
 		lblLoginOpcion.setBounds(230, 540, 87, 87); 
@@ -276,7 +277,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 		System.out.println("OnUnload PanelAdminLogin");
 		lblAdminLoginUser.setVisible(true);
 		lblAdminLoginPassword.setVisible(false);
-		this.setBackground("./images/SCR_P7Admin_Usuario.png");
+		Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Usuario.png");
 		
 	}
 

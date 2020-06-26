@@ -1,8 +1,6 @@
 package pentomino.flow.gui.admin;
 
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,6 +11,7 @@ import pentomino.common.jcmOperation;
 import pentomino.flow.Flow;
 import pentomino.flow.protocol;
 import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImageButton;
 
 public class PanelAdminResetDispositivos  extends ImagePanel {
 
@@ -48,15 +47,17 @@ public class PanelAdminResetDispositivos  extends ImagePanel {
 			public void actionPerformed(ActionEvent e) {				
 				Flow.redirect(Flow.panelAdminEstatusDispositivos);	
 			}
-		});
-		btnRegresar.setBackground(Color.BLUE);
+		});		
 		btnRegresar.setOpaque(false);
 		btnRegresar.setContentAreaFilled(false);
 		btnRegresar.setBorderPainted(false);
 		btnRegresar.setBounds(1336, 863, 574, 171);
 		add(btnRegresar);
 
-		JButton btnResetIzq = new JButton("Reciclador Izq");
+	
+	
+	
+		JButton btnResetIzq = new ImageButton("./images/BTN_7p_Admin_JCM1.png");
 		btnResetIzq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				screenTimerCancel();
@@ -64,12 +65,11 @@ public class PanelAdminResetDispositivos  extends ImagePanel {
 				//Primero hacemos los get versions...
 				Flow.jcms[1].id003_format((byte)5, protocol.SSR_VERSION, Flow.jcms[1].jcmMessage,true); //SSR_VERSION 0x88
 			}
-		});
-		btnResetIzq.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnResetIzq.setBounds(10, 350, 565, 255);
+		});		
+		btnResetIzq.setBounds(10, 350, 572, 171);		
 		add(btnResetIzq);
 
-		JButton btnResetDer = new JButton("Reciclador Der");
+		JButton btnResetDer = new ImageButton("./images/BTN_7p_Admin_JCM2.png");
 		btnResetDer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				screenTimerCancel();
@@ -77,9 +77,8 @@ public class PanelAdminResetDispositivos  extends ImagePanel {
 				//Primero hacemos los get versions...				
 				Flow.jcms[0].id003_format((byte)5, protocol.SSR_VERSION, Flow.jcms[0].jcmMessage,true); //SSR_VERSION 0x88
 			}
-		});
-		btnResetDer.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnResetDer.setBounds(1345, 350, 565, 255);
+		});		
+		btnResetDer.setBounds(10, 704, 572, 171);		
 		add(btnResetDer);
 
 	}

@@ -48,6 +48,7 @@ public class PanelMenuSinFondo extends ImagePanel {
 			public void actionPerformed(ActionEvent e) {
 				CurrentUser.currentOperation = jcmOperation.Deposit;
 				Flow.panelLogin.setBackground("./images/Scr7IdentificateDeposito.png");
+				PanelLogin.lblLoginUser.setLocation(257, 625);
 				Flow.redirect(Flow.panelLogin);
 			}
 		});		
