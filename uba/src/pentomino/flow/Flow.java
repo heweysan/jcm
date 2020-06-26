@@ -23,7 +23,6 @@ import pentomino.cashmanagement.CmQueue;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.common.AccountType;
-import pentomino.common.BusinessEvent;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.TransactionType;
@@ -58,7 +57,6 @@ import pentomino.flow.gui.admin.PanelAdminMenu;
 import pentomino.flow.gui.admin.PanelAdminResetDispositivos;
 import pentomino.flow.gui.admin.PanelAdminUsuarioInvalido;
 import pentomino.jcmagent.AgentsQueue;
-import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.DTAServer;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -210,15 +208,7 @@ public class Flow {
 		
 		RaspiAgent.WriteToJournal("INIT", 0, 0, "", "", "INICIO FLUJO V 0.0.1", AccountType.None, TransactionType.Administrative);
 		RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version, "0.0.0.1");
-		
-		
-		//BEA.BusinessEvent(BusinessEvent.SessionStart, false, true,"");
-		//BEA.BusinessEvent(BusinessEvent.DepositStart, true, true,"");
-		//BEA.BusinessEvent(BusinessEvent.DepositEnd, true, false,"");
-		//BEA.BusinessEvent(BusinessEvent.SessionEnd, true, false, "");
-		
-		
-		//Transactions.ValidaUsuarioPassword("007007","784512");
+				
 		
 		if(!netIsAvailable()) {
 			redirect(panelErrorComunicate);
@@ -491,7 +481,7 @@ public class Flow {
 					break;		
 				case "recyclerBills1":
 
-					PanelDeposito.lblJCMDer.setText(jcms[0].recyclerDenom1 + " / " + jcms[0].recyclerDenom2);
+					PanelDeposito.lblJCMIzq.setText("$" + jcms[0].recyclerDenom1 + " / $" + jcms[0].recyclerDenom2);
 					
 					PanelDebug.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
 
@@ -511,7 +501,7 @@ public class Flow {
 					break;
 				case "recyclerBills2":
 
-					PanelDeposito.lblJCMIzq.setText(jcms[1].recyclerDenom1 + " / " + jcms[1].recyclerDenom2);
+					PanelDeposito.lblJCMDer.setText("$" + jcms[1].recyclerDenom1 + " / $" + jcms[1].recyclerDenom2);
 					
 					PanelDebug.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 

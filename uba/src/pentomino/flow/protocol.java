@@ -337,17 +337,12 @@ public class protocol extends kermit {
 			if (mostrar)
 				System.out.println(baitsToString("JCM[" + jcmId + "] processing ACK", jcmResponse, jcmResponse[1]));
 
-			if(currentOpertion == jcmOperation.CollectCass1) {
-				currentOpertion = jcmOperation.CollectCass2;
-				id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x1,jcmMessage);
-			}
-			else{
 				id003_format((byte) 5, STATUS_REQUEST, jcmMessage, true); // STATUS_REQUEST
-			}
+		
 			break;
 		case SR_IDLING: // 0x11 IDLING
 			if(currentOpertion == jcmOperation.Startup) {
-				//System.out.println("IDLING DE STARTUP");
+				System.out.println("IDLING DE STARTUP");
 				//Pedimos los conatadores y demas estatus, para no reinicar los jcms si es que estan arriba y bien.
 				id003_format((byte)5, protocol.SSR_VERSION, jcmMessage,true); //SSR_VERSION 0x88				
 			}			
@@ -554,21 +549,31 @@ public class protocol extends kermit {
 						EventListenerClass.fireMyEvent(new MyEvent("dispensedCass2" + jcmId));
 					}
 				}
-				/*
-				// Validamos si hay que dispensar mas o no
-				//EventListenerClass.fireMyEvent(new MyEvent("dispensedCass1" + jcmId));
-				if (billsToDispenseFromCassette2 > 0) {
-					cuantos2 = billsToDispenseFromCassette2;
-					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos2, (byte) 0x2,jcmMessage);
-					billsToDispenseFromCassette2 = 0;
-				} else {
-					currentOpertion = jcmOperation.None;
-					EventListenerClass.fireMyEvent(new MyEvent("dispensedCass2" + jcmId));
-					// Rehabilitamos el aceptador
-					jcmMessage[3] = 0x00;
-					id003_format((byte) 0x6, (byte) 0xC3, jcmMessage, false);
+				
+
+			}
+			
+			if(currentOpertion == jcmOperation.CollectCass1) {
+				if(jcmId == 1) {
+					if(JcmGlobalData.rec1bill2Available > 0) {
+						System.out.println("Bajando jcm" + jcmId + "  cassete 2");
+						currentOpertion = jcmOperation.CollectCass2;
+						id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x2,jcmMessage);
+					}
+					else {
+						System.out.println("Nada que bajar de jcm1 cassete 2");
+					}
 				}
-				*/
+				if(jcmId == 2) {
+					if(JcmGlobalData.rec2bill2Available > 0) {
+						System.out.println("Bajando jcm" + jcmId + "  cassete 2");
+						currentOpertion = jcmOperation.CollectCass2;
+						id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x2,jcmMessage);
+					}
+					else {
+						System.out.println("Nada que bajar de jcm2 cassete 2");
+					}
+				}
 			}
 			
 			break;
@@ -834,37 +839,12 @@ public class protocol extends kermit {
 			case Dispense:
 				System.out.println("SSRR_INHIBIT 0x83 Procesando Dispense...");				
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST				
-				readyForDispense = true;
-				/*
-				if (billsToDispenseFromCassette1 > 0) {
-					System.out.println("Dispensando de cassette 1...");
-					dispensingFromCassette = 1;
-					int cuantos = billsToDispenseFromCassette1;
-					id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos, (byte) 0x1,	jcmMessage);
-					billsToDispenseFromCassette1 = 0;
-				} else {
-					EventListenerClass.fireMyEvent(new MyEvent("dispensedCass1" + jcmId)); //El cassette 1  ya "dispenso"
-					if (billsToDispenseFromCassette2 > 0) {
-						System.out.println("Dispensando de cassette 2...");
-						dispensingFromCassette = 2;
-						int cuantos2 = billsToDispenseFromCassette2;
-						id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4a, (byte) cuantos2, (byte) 0x2,
-								jcmMessage);
-						billsToDispenseFromCassette2 = 0;
-					}
-					else {
-						EventListenerClass.fireMyEvent(new MyEvent("dispensedCass2" + jcmId));
-					}
-				}
-				*/
+				readyForDispense = true;				
 				break;
 			case Reset:
 				System.out.println("Procesando Reset");
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
-				break;
-			case CollectCass1:
-				id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,jcmMessage);
-				break;
+				break;			
 			default:
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				break;
@@ -924,6 +904,7 @@ public class protocol extends kermit {
 
 		case (byte) 0xF0: // ALGUN EXTENDED
 
+			System.out.println(baitsToString("JCM[" + jcmId + "] processing ALGUN EXTENDED ",jcmResponse, jcmResponse[1]));
 			switch (jcmResponse[4]) {
 			case (byte) 0x00: // UNCONNECTED Recycler Unit is not connected.
 				if (mostrar)

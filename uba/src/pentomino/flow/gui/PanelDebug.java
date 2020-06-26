@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
 import pentomino.flow.Flow;
 import pentomino.flow.protocol;
@@ -397,25 +398,60 @@ public class PanelDebug  extends ImagePanel {
 		btnCollect.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnCollect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				System.out.println("COLLECT");
+				
+				System.out.println("" + JcmGlobalData.rec1bill1Available + ";" + JcmGlobalData.rec1bill2Available + ";" + JcmGlobalData.rec2bill1Available + ";" + JcmGlobalData.rec2bill2Available );
+				
 				if(chckbxReciclador1.isSelected()) {
-					Flow.jcms[0].currentOpertion = jcmOperation.CollectCass1; 
-
-					// primero el inhibit
+					
+					// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
 					Flow.jcms[0].jcmMessage[3] = 0x01;
 					Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-					Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
-							Flow.jcms[0].jcmMessage);
+					
+					if(JcmGlobalData.rec1bill1Available > 0) {
+						System.out.println("Bajando jcm1 cassete 1");
+						Flow.jcms[0].currentOpertion = jcmOperation.CollectCass1;
+						Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x1,Flow.jcms[0].jcmMessage);	
+					}
+					else{
+						System.out.println("Nada que bajar de jcm1 cassete 1");
+						if(JcmGlobalData.rec1bill2Available > 0) {
+							System.out.println("Bajando jcm1 cassete 2");
+							Flow.jcms[0].currentOpertion = jcmOperation.CollectCass2;
+							Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x2,Flow.jcms[0].jcmMessage);
+						}
+						else {
+							System.out.println("Nada que bajar de jcm1 cassete 2");
+							Flow.jcms[0].currentOpertion = jcmOperation.None;
+						}
+						
+					}
 				}
-
+				
+				
 				if(chckbxReciclador2.isSelected()) {
-					Flow.jcms[1].currentOpertion = jcmOperation.CollectCass1;
-					// primero el inhibit
+					
+					// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
 					Flow.jcms[1].jcmMessage[3] = 0x01;
 					Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
-					Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x0,
-							Flow.jcms[1].jcmMessage);
-				}
+					
+					if(JcmGlobalData.rec2bill1Available > 0) {
+						System.out.println("Bajando jcm2 cassete 1");
+						Flow.jcms[1].currentOpertion = jcmOperation.CollectCass1;
+						Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x1,Flow.jcms[1].jcmMessage);
+					}
+					else{
+						System.out.println("Nada que bajar de jcm2 cassete 1");
+						if(JcmGlobalData.rec2bill2Available > 0) {
+							System.out.println("Bajando jcm2 cassete 2");
+							Flow.jcms[1].currentOpertion = jcmOperation.CollectCass2;
+							Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x2,Flow.jcms[1].jcmMessage);
+						}
+						else {
+							System.out.println("Nada que bajar de jcm2 cassete 2");
+						}						
+					}
+				}				
 
 			}
 		});

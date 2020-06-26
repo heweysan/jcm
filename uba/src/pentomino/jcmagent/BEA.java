@@ -2,9 +2,8 @@ package pentomino.jcmagent;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import com.google.gson.Gson;
 
@@ -27,21 +26,27 @@ public class BEA {
 			boolean newSession, String attributes) {
 		// inSession default = false;
 		// newSession default = false;
-		// attibutes defautl = "";
+		// attibutes default = "";
 
-		if (newSession)
-			GetNewSessionId();
-
+				
+		
 		String session = "";
+		
+		if (newSession){
+			GetNewSessionId();
+			session = SessionId;
+		}
+		
 
 		if (inSession)
 			session = SessionId;
 
 		String data = "" + businessEvent.getBusinessEventName() + ";" + session + ";" + attributes;
 
+		System.out.println("-------------  BEA INI -------------------");
 		System.out.println("BusinessEvent data [" + data + "]");
 		InvBroadcast(java.lang.System.currentTimeMillis(), data);
-
+		System.out.println("-------------  BEA FIN -------------------");
 
 
 	}
@@ -55,19 +60,34 @@ public class BEA {
 
 	public static void InvBroadcast(long timestamp, String data) {
 
-		List<String> values = Arrays.asList(data.split(";"));
+		String[] receivedValues = data.split(";");
 
+		ArrayList<String> listOfString = new ArrayList<String>();
+		
+		System.out.println("tma [" + receivedValues.length + "]");
+		
+		for(int i = 0; i < receivedValues.length; i++)
+			listOfString.add(receivedValues[i]);
+		
+		int faltantes = 4 - receivedValues.length;
+		
+		for(int i = 0; i < faltantes; i++)		
+			listOfString.add("");
+		
+		
+		
 		AgentMessage agentMsg = new AgentMessage();
 
 		agentMsg.Agent = "bea";
 		agentMsg.Command = "add";
 		agentMsg.Timestamp = timestamp;
-		agentMsg.Values = values;
+		agentMsg.Values = listOfString;
 		agentMsg.Id = java.util.UUID.randomUUID().toString();
 		agentMsg.AtmId = Config.GetDirective("AtmId", "");		
 
 
-		System.out.println("BEA MESSAGE [" + gson.toJson(agentMsg) + "]");
+		System.out.println("MESSAGE VALUES[" + listOfString + "]");
+		System.out.println("BEA MESSAGE JSON[" + gson.toJson(agentMsg) + "]");
 
 		AgentsQueue.bq.add(agentMsg);
 
