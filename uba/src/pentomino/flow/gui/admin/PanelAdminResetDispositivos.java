@@ -23,7 +23,7 @@ public class PanelAdminResetDispositivos  extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelAdminResetDispositivos(String img,String name, int _timeout, ImagePanel _redirect) {
+	public PanelAdminResetDispositivos(String img,String name, long _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);

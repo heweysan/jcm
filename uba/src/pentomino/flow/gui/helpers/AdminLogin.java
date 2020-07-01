@@ -1,4 +1,4 @@
-package pentomino.flow.gui.admin;
+package pentomino.flow.gui.helpers;
 
 public class AdminLogin {
 

@@ -107,6 +107,24 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 			break;
 		case _Ok:
 
+			
+			String atmId2 = Config.GetDirective("AtmId", "");						
+
+			CmWithdrawal cmWithdrawalVo2 = new CmWithdrawal();
+			cmWithdrawalVo2.atmId = atmId2;
+			cmWithdrawalVo2.operatorId = Integer.parseInt(CurrentUser.loginUser);
+			cmWithdrawalVo2.password = CurrentUser.loginPassword;
+			cmWithdrawalVo2.reference = CurrentUser.reference;
+			cmWithdrawalVo2.token = CurrentUser.tokenConfirmacion;
+			cmWithdrawalVo2.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+			cmWithdrawalVo2.amount = CurrentUser.WithdrawalRequested;//JcmGlobalData.montoDispensar;
+
+			if(!Transactions.ConfirmaRetiro(cmWithdrawalVo2)) {
+				System.out.println("Usuario sin permiso para dispensar!");
+				PanelError.lblPanelError.setText("Lo siento, no pude procesar tu petición");
+				Flow.redirect(Flow.panelError,7000,Flow.panelIdle);
+			}
+			
 			switch(CurrentUser.pinpadMode) {
 
 
@@ -186,7 +204,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 										if( CurrentUser.WithdrawalChange > 0) {
 											
 											RaspiAgent.Broadcast(DeviceEvent.AFD_PartialDispense, "" + CurrentUser.WithdrawalDispense);
-											RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal PartialDispenseOk requested [" + CurrentUser.WithdrawalRequested + "] dispensed " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
+											RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, CurrentUser.movementId,CurrentUser.loginUser, "Withdrawal PartialDispenseOk requested [" + CurrentUser.WithdrawalRequested + "] dispensed " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 											
 											CmReverse cmReverseVo = new CmReverse();
 											cmReverseVo.atmId = atmId; 
@@ -201,7 +219,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 										}
 										else {
 											RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense);
-											RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
+											RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, CurrentUser.movementId,CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 										}
 										
 										//Actualizamos contadores de retiro

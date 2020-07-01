@@ -16,7 +16,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.config.Config;
-import pentomino.flow.gui.admin.AdminLogin;
+import pentomino.flow.gui.helpers.AdminLogin;
 
 
 public class AccountClient {

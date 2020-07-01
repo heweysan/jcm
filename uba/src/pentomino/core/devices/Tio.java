@@ -22,81 +22,99 @@ import pentomino.flow.MyEvent;
 import pentomino.jcmagent.RaspiAgent;
 
 public class Tio implements Runnable{
+
+	
+	/**
+	 * Nos indica el estado de la boveda
+	 */
+	public static boolean safeOpen = false;
+	
+	/**
+	 * Nos indica el estado de la fascia
+	 */
+	public static boolean cabinetOpen = false;
 	
 	
+	/**
+	 * Nos indica el estado de la alarma
+	 */
+	public static boolean alarmOn = false;
+	
+
 	// create gpio controller
-    static GpioController gpio;
-    
- // provision gpio pin #02 as an input pin with its internal pull down resistor enabled
-    static GpioPinDigitalInput boveda;
-    static GpioPinDigitalInput fascia;
-    static GpioPinDigitalOutput electroIman;
-    static GpioPinDigitalOutput alarma;
-    
-    private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
-	
-    public static void main(String[] args) {
+	static GpioController gpio;
+
+	// provision gpio pin #02 as an input pin with its internal pull down resistor enabled
+	static GpioPinDigitalInput boveda;
+	static GpioPinDigitalInput fascia;
+	static GpioPinDigitalOutput electroIman;
+	static GpioPinDigitalOutput alarma;
+
+	private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
+
+	public static void main(String[] args) {
 		logger.debug("TIO MAIN");
-		
+
 		Tio miTio = new Tio();
-		
+
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();	
-		
+
 	}
-	
+
 	public Tio() {
-		
+
 		System.out.println("TIO constructor");				
-		
+
 	}
 
 	public boolean cierraBoveda() {
-		
-		 electroIman.low();
-	     System.out.println("--> Electroiman ON");
+		electroIman.low();
+		safeOpen = false;
+		System.out.println("--> Electroiman ON");		
 		return true;
 	}
-	
+
 	public boolean abreBoveda() {
-		
+
 		if(JcmGlobalData.isDebug) {
 			EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
 		}
 		else {
 			electroIman.high();
 		}
-	    System.out.println("--> Electroiman OFF");
+		safeOpen = true;
+		System.out.println("--> Electroiman OFF");
 		return true;
 	}
-	
-	
+
+
 	public boolean alarmOn() {
-		
-		 alarma.low();
-	     System.out.println("--> Alarma ON");
+		alarma.low();
+		alarmOn = true;
+		System.out.println("--> Alarma ON");
 		return true;
 	}
-	
+
 	public boolean alarmOff() {
-		
 		alarma.high();
-	    System.out.println("--> Alarma OFF");
+		alarmOn = false;
+		System.out.println("--> Alarma OFF");
 		return true;
 	}
 
 	@Override
 	public void run() {
-		
+
 		if(JcmGlobalData.isDebug) {
 			logger.debug("Tio starting.... DEBUG");
 			System.out.println("Tio starting.... DEBUG");   
 			return;
 		}
-		
+
 		logger.debug("Tio starting....");
 		System.out.println("Tio starting....");
-		
+
 		gpio = GpioFactory.getInstance();
 		try {
 			Thread.sleep(250);
@@ -104,7 +122,7 @@ public class Tio implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		if(gpio != null && gpio.isShutdown()) {
 			System.out.println("TIO GPIO IS SHUTDOWN!");
 			try {
@@ -118,9 +136,9 @@ public class Tio implements Runnable{
 		else {
 			System.out.println("TIO GPIO UP");
 		}
-		
+
 		GpioFactory.setDefaultProvider(new RaspiGpioProvider(RaspiPinNumberingScheme.BROADCOM_PIN_NUMBERING));
-		
+
 		boveda = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_26,PinPullResistance.PULL_UP);
 		try {
 			Thread.sleep(250);
@@ -128,114 +146,128 @@ public class Tio implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    fascia = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_19, PinPullResistance.PULL_UP);
-	    
-	    try {
+		fascia = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_19, PinPullResistance.PULL_UP);
+
+		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
-	    //El electroiman arranca encendido
-		 electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.LOW);
-		 try {
+
+		//El electroiman arranca encendido
+		electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.LOW);
+		try {
 			Thread.sleep(500);
-		 } catch (InterruptedException e2) {
+		} catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
-		 }
-		
-		 //La alarma inicia apagada
-		 alarma = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_21, "MyLED", PinState.HIGH);
-		    
-     
-       // set shutdown state for this input pin
-       boveda.setShutdownOptions(true);
-       fascia.setShutdownOptions(true);
-       
-       // set shutdown state for this pin
-       electroIman.setShutdownOptions(true, PinState.LOW,PinPullResistance.PULL_DOWN);
-       alarma.setShutdownOptions(true,PinState.LOW);
-       
-       
-       System.out.println("--> GPIO state should be: ON");
+		}
 
-       try {
+		//La alarma inicia apagada
+		alarma = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_21, "MyLED", PinState.HIGH);
+
+
+		// set shutdown state for this input pin
+		boveda.setShutdownOptions(true);
+		fascia.setShutdownOptions(true);
+
+		// set shutdown state for this pin
+		electroIman.setShutdownOptions(true, PinState.LOW,PinPullResistance.PULL_DOWN);
+		alarma.setShutdownOptions(true,PinState.LOW);
+
+
+		System.out.println("--> GPIO state should be: ON");
+
+		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-       
-       
-      
-       System.out.println("alarma Name[" + alarma.getState().getName() + "] value[" + alarma.getState().getValue() + "]");
-       
-       
-       //electroIman.low();       
-       System.out.println("electroIman Name[" + electroIman.getState().getName() + "] value[" + electroIman.getState().getValue() + "]");
-       
-      
-       
-       
-       
-       // create and register gpio pin listener
-       boveda.addListener(new GpioPinListenerDigital() {
-           @Override
-           public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-        	   if(event.getState().isHigh()) { 
-              		logger.info("BOVEDA ABIERTA");
-              		System.out.println("BOVEDA ABIERTA");              		
-              		RaspiAgent.Broadcast(DeviceEvent.AFD_SafeOpen,"");
-              		EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
-              	}           	
-              	else{
-              		logger.info("BOVEDA CERRADA");
-              		System.out.println("BOVEDA CERRADA");              		
-              		RaspiAgent.Broadcast(DeviceEvent.AFD_SafeClosed,"");
-              		EventListenerClass.fireMyEvent(new MyEvent("SafeClosed"));
-              	}           	
-           }
 
-       });       
-       
 
-       // create and register gpio pin listener
-       fascia.addListener(new GpioPinListenerDigital() {
-           @Override
-           public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-               // display pin state on console
-        	   System.out.println(" --> GPIO FASCIA PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
-        	   if(event.getState().isHigh()) { 
-           		logger.info("FASCIA ABIERTA");
-           		System.out.println("FASCIA ABIERTA");
-           		RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetOpen,"");
-           		EventListenerClass.fireMyEvent(new MyEvent("CabinetOpen"));
-           	}           	
-           	else{
-           		logger.info("FASCIA CERRADA");
-           		System.out.println("FASCIA CERRADA");
-           		RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetClosed,"");
-           		EventListenerClass.fireMyEvent(new MyEvent("CabinetClosed"));
-           	}           	
-            
-           }
-       });       
-      
-       while(true) {
-           try {
+
+		System.out.println("alarma Name[" + alarma.getState().getName() + "] value[" + alarma.getState().getValue() + "]");
+		      
+		System.out.println("electroIman Name[" + electroIman.getState().getName() + "] value[" + electroIman.getState().getValue() + "]");
+
+
+
+
+
+		/** 
+		 * SENSOR DE LA BOVEDA
+		 * Set de variable safeOpen a true/false
+		 * Dispara evento SafeOpen/SafeClosed
+		 * 
+		 * create and register gpio pin listener
+		 */
+		boveda.addListener(new GpioPinListenerDigital() {
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+				if(event.getState().isHigh()) { 
+					logger.info("BOVEDA ABIERTA");
+					System.out.println("BOVEDA ABIERTA");              		
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SafeOpen,"");
+					safeOpen = true;
+					EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
+				}           	
+				else{
+					logger.info("BOVEDA CERRADA");
+					System.out.println("BOVEDA CERRADA");              		
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SafeClosed,"");
+					safeOpen = false;					
+					EventListenerClass.fireMyEvent(new MyEvent("SafeClosed"));
+				}           	
+			}
+
+		});       
+
+
+		/** 
+		 * SENSOR DE LA FASCIA
+		 * Set de variable cabinetOpen a true/false
+		 * Dispara evento CabinetOpen/CabinetClosed
+		 * 
+		 * create and register gpio pin listener
+		 */
+		fascia.addListener(new GpioPinListenerDigital() {
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+				// display pin state on console
+				System.out.println(" --> GPIO FASCIA PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
+				if(event.getState().isHigh()) { 
+					logger.info("FASCIA ABIERTA");
+					System.out.println("FASCIA ABIERTA");
+					RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetOpen,"");
+					cabinetOpen = true;
+					EventListenerClass.fireMyEvent(new MyEvent("CabinetOpen"));
+				}           	
+				else{
+					logger.info("FASCIA CERRADA");
+					System.out.println("FASCIA CERRADA");
+					RaspiAgent.Broadcast(DeviceEvent.EPP_CabinetClosed,"");
+					cabinetOpen = false;
+					EventListenerClass.fireMyEvent(new MyEvent("CabinetClosed"));
+				}           	
+
+			}
+		});       
+
+		while(true) {
+			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-       } 
-	       // stop all GPIO activity/threads by shutting down the GPIO controller
-	       // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
-	       // gpio.shutdown();   <--- implement this method call if you wish to terminate the Pi4J GPIO controller
-      
-		
+		} 
+		// stop all GPIO activity/threads by shutting down the GPIO controller
+		// (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+		// gpio.shutdown();   <--- implement this method call if you wish to terminate the Pi4J GPIO controller
+
+
 	}
 
 }

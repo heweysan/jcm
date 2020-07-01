@@ -11,6 +11,7 @@ import pentomino.common.BusinessEvent;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.core.devices.Ptr;
+import pentomino.core.devices.Tio;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
@@ -78,11 +79,16 @@ public class PanelAdminMenu extends ImagePanel {
 
 		btnAdminMenuSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Salir.png"));
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				//BEA.BusinessEvent(BusinessEvent.SessionEnd, true, false, "");
+			public void actionPerformed(ActionEvent e) {		
 				BEA.BusinessEvent(BusinessEvent.AdministrativeOperatonEnded, true, false,"");
-				Flow.redirect(Flow.panelIdle);	
+				//Reviamos si la boveda esta abierta para notifcar.
+				if(Tio.safeOpen) {
+					
+				}
+				else {
+					Flow.adminTimer.cancel();
+					Flow.redirect(Flow.panelIdle);
+				}
 			}
 		});
 		btnAdminMenuSalir.setBackground(Color.BLUE);

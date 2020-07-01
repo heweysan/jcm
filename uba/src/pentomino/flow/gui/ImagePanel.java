@@ -20,7 +20,7 @@ public  abstract class ImagePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private Image img;
-	public int screenTimeOut = 15000;
+	public long screenTimeOut = 15000;
 	public ImagePanel panelRedirect = null;
 	//private String _name;
 	Timer screenTimer = new Timer();
@@ -28,7 +28,7 @@ public  abstract class ImagePanel extends JPanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ImagePanel(String img,String name, int _timeout, ImagePanel _redirect) {
+	public ImagePanel(String img,String name, long _timeout, ImagePanel _redirect) {
 		
 	
 		this.screenTimeOut = _timeout;

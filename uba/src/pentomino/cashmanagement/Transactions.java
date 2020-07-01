@@ -694,7 +694,7 @@ public class Transactions {
 						.build();
 
 				channel.basicPublish("ex.cm.topic", "cm.withdrawals.*",true, props, gson.toJson(requestMessage).getBytes());
-				//System.out.println("ConfirmaRetiro Sent [" + gson.toJson(requestMessage) + "]");
+				System.out.println("ConfirmaRetiro Sent [" + gson.toJson(requestMessage) + "]");
 
 				//Esperamos la respuesta
 
@@ -712,6 +712,7 @@ public class Transactions {
 
 				channel.basicCancel(ctag);
 
+				//ConfirmaRetiro result [{"message":"Éxito","success":true,"value":"733661"}]
 				System.out.println("ConfirmaRetiro result [" + result + "]");
 
 				if(!result.isEmpty()) {

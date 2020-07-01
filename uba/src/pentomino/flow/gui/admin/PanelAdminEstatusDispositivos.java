@@ -10,8 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import pentomino.common.jcmOperation;
-import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.ImagePanel;
 
@@ -54,15 +52,15 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		setBorder(null);
 		setLayout(null);
 
-		btnPruebaDeImpresion = new JButton(new ImageIcon("./images/Btn_AdminPruebaImpresion.png"));		
+		btnPruebaDeImpresion = new JButton(new ImageIcon("./images/BTN_7p_Admin_PruebaImpresion.png"));		
 		btnPruebaDeImpresion.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		btnPruebaDeImpresion.setOpaque(false);
 		btnPruebaDeImpresion.setContentAreaFilled(false);
 		btnPruebaDeImpresion.setBorderPainted(false);
-		btnPruebaDeImpresion.setBounds(1522, 23, 388, 132);
+		btnPruebaDeImpresion.setBounds(10, 850, 575, 171);
 		add(btnPruebaDeImpresion);
 
-		btnReiniciarDispositivos = new JButton(new ImageIcon("./images/Btn_AdminReiniciaDisp.png"));
+		btnReiniciarDispositivos = new JButton(new ImageIcon("./images/BTN_7p_Admin_Reiniciar.png"));
 		btnReiniciarDispositivos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminResetDispositivos);
@@ -71,20 +69,20 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		btnReiniciarDispositivos.setOpaque(false);
 		btnReiniciarDispositivos.setContentAreaFilled(false);
 		btnReiniciarDispositivos.setBorderPainted(false);
-		btnReiniciarDispositivos.setBounds(1532, 261, 388, 132);
+		btnReiniciarDispositivos.setBounds(1321, 206, 575, 151);
 		add(btnReiniciarDispositivos);
 
-		btnDetalleError = new JButton(new ImageIcon("./images/Btn_AdminDetalleErrores.png"));
+		btnDetalleError = new JButton(new ImageIcon("./images/BTN_7p_Admin_DetalleErrores.png"));
 		btnDetalleError.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelIdle);	
+			public void actionPerformed(ActionEvent e) {				
+				Flow.redirect(Flow.panelAdminDetalleError,10000,Flow.panelAdminEstatusDispositivos);	
 			}
 		});
 		btnDetalleError.setBackground(Color.BLUE);
 		btnDetalleError.setOpaque(false);
 		btnDetalleError.setContentAreaFilled(false);
 		btnDetalleError.setBorderPainted(false);
-		btnDetalleError.setBounds(1522, 571, 388, 132);
+		btnDetalleError.setBounds(691, 850, 575, 171);
 		add(btnDetalleError);
 
 		JButton btnRegresar = new JButton(new ImageIcon("./images/BTN_7p_Admin_Regresar.png"));
@@ -96,7 +94,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		btnRegresar.setOpaque(false);
 		btnRegresar.setContentAreaFilled(false);
 		btnRegresar.setBorderPainted(false);
-		btnRegresar.setBounds(1336, 879, 574, 171);
+		btnRegresar.setBounds(1305, 850, 574, 171);
 		add(btnRegresar);
 
 		JLabel lblJcm1 = new JLabel("JCM1");
@@ -123,48 +121,46 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		lblJcm2Status.setBounds(999, 485, 500, 46);
 		add(lblJcm2Status);
 
-		JLabel lblJcm1Texto1 = new JLabel("Denominaciones");
+		JLabel lblJcm1Texto1 = new JLabel("DENOM");
 		lblJcm1Texto1.setForeground(Color.WHITE);
 		lblJcm1Texto1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Texto1.setBounds(373, 586, 290, 46);
+		lblJcm1Texto1.setBounds(373, 586, 116, 46);
 		add(lblJcm1Texto1);
 
-		JLabel lblJcm2Texto1 = new JLabel("Denominaciones");
+		JLabel lblJcm2Texto1 = new JLabel("DENOM");
 		lblJcm2Texto1.setForeground(Color.WHITE);
 		lblJcm2Texto1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Texto1.setBounds(999, 586, 290, 46);
+		lblJcm2Texto1.setBounds(999, 586, 143, 46);
 		add(lblJcm2Texto1);
 
 		lblJcm1Denom1 = new JLabel("N/A");
 		lblJcm1Denom1.setForeground(Color.WHITE);
 		lblJcm1Denom1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Denom1.setBounds(373, 670, 150, 46);
+		lblJcm1Denom1.setBounds(550, 586, 150, 46);
 		add(lblJcm1Denom1);
 
 		lblJcm1Denom2 = new JLabel("N/A");
 		lblJcm1Denom2.setForeground(Color.WHITE);
 		lblJcm1Denom2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Denom2.setBounds(571, 670, 150, 46);
+		lblJcm1Denom2.setBounds(748, 586, 150, 46);
 		add(lblJcm1Denom2);
 
 		lblJcm2Denom1 = new JLabel("N/A");
 		lblJcm2Denom1.setForeground(Color.WHITE);
 		lblJcm2Denom1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Denom1.setBounds(1000, 670, 150, 46);
+		lblJcm2Denom1.setBounds(1217, 586, 150, 46);
 		add(lblJcm2Denom1);
 
 		lblJcm2Denom2 = new JLabel("N/A");
 		lblJcm2Denom2.setForeground(Color.WHITE);
 		lblJcm2Denom2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm2Denom2.setBounds(1198, 670, 150, 46);
+		lblJcm2Denom2.setBounds(1415, 586, 150, 46);
 		add(lblJcm2Denom2);
 
 		btnPruebaDeImpresion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-
-				CurrentUser.currentOperation = jcmOperation.Dotacion;
-				PanelAdminContadoresActuales.GetCurrentCounters();
-				Flow.redirect(Flow.panelAdminContadoresActuales,15000,Flow.panelAdminMenu);			
+				System.out.println("FERGFFD");
+				Flow.redirect(Flow.panelAdminPruebaImpresion);			
 			}
 		});
 

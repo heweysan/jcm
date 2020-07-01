@@ -14,7 +14,10 @@ import javax.swing.border.BevelBorder;
 
 import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
+import pentomino.core.devices.Tio;
+import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
+import pentomino.flow.MyEvent;
 import pentomino.flow.protocol;
 
 public class PanelDebug  extends ImagePanel {
@@ -653,17 +656,17 @@ public class PanelDebug  extends ImagePanel {
 		panel_comandos.add(btnCurrencyAssingRequest);
 		btnCurrencyAssingRequest.setBackground(Color.ORANGE);
 
-		JButton btnCierraBoveda = new JButton("CIERRA BOVEDA");
+		JButton btnCierraElectroiman = new JButton("CIERRA ELECTROIMAN");
 
-		btnCierraBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnCierraBoveda.setBounds(301, 632, 203, 48);
-		panel_comandos.add(btnCierraBoveda);
+		btnCierraElectroiman.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCierraElectroiman.setBounds(277, 632, 256, 48);
+		panel_comandos.add(btnCierraElectroiman);
 
-		JButton btnAbreBoveda = new JButton("ABRE BOVEDA");
+		JButton btnAbreElectroiman = new JButton("ABRE ELECTROIMAN");
 
-		btnAbreBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnAbreBoveda.setBounds(526, 630, 203, 48);
-		panel_comandos.add(btnAbreBoveda);
+		btnAbreElectroiman.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAbreElectroiman.setBounds(584, 630, 249, 48);
+		panel_comandos.add(btnAbreElectroiman);
 
 		JLabel lblNewLabel = new JLabel("Set denomination (debe estar DISABLE (INHIBIT))");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -792,7 +795,7 @@ public class PanelDebug  extends ImagePanel {
 			}
 		});
 		btnAlarmaOff.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnAlarmaOff.setBounds(882, 632, 203, 48);
+		btnAlarmaOff.setBounds(1412, 632, 203, 48);
 		panel_comandos.add(btnAlarmaOff);
 		
 		JButton btnAlarmaOn = new JButton("ALARMA ON");
@@ -802,7 +805,7 @@ public class PanelDebug  extends ImagePanel {
 			}
 		});
 		btnAlarmaOn.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnAlarmaOn.setBounds(1117, 632, 203, 48);
+		btnAlarmaOn.setBounds(1645, 632, 203, 48);
 		panel_comandos.add(btnAlarmaOn);
 		
 		JButton btnCurrentCountSetting_1 = new JButton("Current Count\u00A0Setting (E2h+Data)");
@@ -823,6 +826,28 @@ public class PanelDebug  extends ImagePanel {
 		btnCurrentCountSetting_1.setBackground(Color.GREEN);
 		btnCurrentCountSetting_1.setBounds(1561, 460, 289, 50);
 		panel_comandos.add(btnCurrentCountSetting_1);
+		
+		JButton btnCierraBoveda = new JButton("CIERRA BOVEDA");
+		btnCierraBoveda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Tio.safeOpen = false;
+				EventListenerClass.fireMyEvent(new MyEvent("SafeClosed"));				
+			}
+		});
+		btnCierraBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCierraBoveda.setBounds(875, 630, 256, 48);
+		panel_comandos.add(btnCierraBoveda);
+		
+		JButton btnAbreBoveda = new JButton("ABRE BOVEDA");
+		btnAbreBoveda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Tio.safeOpen = true;
+				EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
+			}
+		});
+		btnAbreBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAbreBoveda.setBounds(1150, 630, 249, 48);
+		panel_comandos.add(btnAbreBoveda);
 		
 		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
 		btnAdminLogin.addActionListener(new ActionListener() {
@@ -931,20 +956,16 @@ public class PanelDebug  extends ImagePanel {
 			}
 		});
 
-		btnCierraBoveda.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//* TODO: TIO
-				Flow.miTio.cierraBoveda();
-				//*/
+		btnCierraElectroiman.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				Flow.miTio.cierraBoveda();				
 			}
 		});
 
 
-		btnAbreBoveda.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//* TODO: TIO
-				Flow.miTio.abreBoveda();
-				//*/
+		btnAbreElectroiman.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {			
+				Flow.miTio.abreBoveda();				
 			}
 		});
 

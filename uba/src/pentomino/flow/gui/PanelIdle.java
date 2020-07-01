@@ -60,7 +60,7 @@ public class PanelIdle  extends ImagePanel {
 		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
 		btnAdminLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelAdminLogin);
+				Flow.redirect(Flow.panelAdminIniciando);
 			}
 		});
 		btnAdminLogin.setFont(new Font("Tahoma", Font.PLAIN, 30));

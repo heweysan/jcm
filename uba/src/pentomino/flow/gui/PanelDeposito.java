@@ -35,7 +35,7 @@ public class PanelDeposito extends ImagePanel{
 	public static JLabel lblJCMDer = new JLabel();
 	
 	/**
-	 * Se habilita cuando esta aceptadno un billete, para que no se pueda oprimmir aceptar en el proceso de validacion
+	 * Se habilita cuando esta aceptando un billete, para que no se pueda oprimmir aceptar en el proceso de validacion
 	 */
 	public static boolean bussy1 = false;
 	

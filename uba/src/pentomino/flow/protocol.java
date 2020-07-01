@@ -1166,9 +1166,13 @@ public class protocol extends kermit {
 							jcmResponse, jcmResponse[1]));
 
 			if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup) {
+				
+				System.out.println("CurrentOperation [" + currentOpertion + "]");
 				recyclerContadoresSet = false;
 				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
 						jcmMessage);
+				
+				id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 
 			} else {
 

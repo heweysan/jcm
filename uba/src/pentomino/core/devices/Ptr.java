@@ -1,6 +1,7 @@
 package pentomino.core.devices;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,6 +16,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Copies;
+import javax.print.event.PrintJobAdapter;
+import javax.print.event.PrintJobEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cups4j.CupsClient;
@@ -22,18 +36,15 @@ import org.cups4j.CupsPrinter;
 import org.cups4j.PrintJob;
 import org.cups4j.PrintRequestResult;
 
+import jpos.JposException;
+import jpos.POSPrinter;
+import jpos.POSPrinterConst;
+import jpos.util.JposPropertiesConst;
 import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.DeviceEvent;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.jcmagent.RaspiAgent;
-
-
-import jpos.JposException;
-import jpos.POSPrinter;
-import jpos.POSPrinterConst;
-
-import jpos.util.JposPropertiesConst;
 
 
 
@@ -48,80 +59,24 @@ public class Ptr {
 
 	public static void main(String[] args) {
 
-
-		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
-
-	     // instantiate a new jpos.POSPrinter object
-	     POSPrinter printer = new POSPrinter();
 		
-	     try
-	     {
-	        //Open Printer
-	        printer.open("CUSTOM TG2480H POS Printer USB Linux");
-	        printer.claim(1);
-	        printer.setDeviceEnabled(true);
+		printJposUsb();
+		/*
+		try {
+			System.out.println("INI");
+			printMethod1();
+			System.out.println("FIN");
+		} catch (PrintException | IOException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("Trono aca!");
+			e1.printStackTrace();
+		}
+		*/
+	}
 
-	        //Print a Text String
-	        printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
+	private static void printCups() {
 
-	        //Close Printer
-	        printer.setDeviceEnabled(false);
-	        printer.release();
-	        printer.close();
-	     }
-	     catch(JposException e)
-	     {
-	         // display any errors that come up
-	         e.printStackTrace();
-	     }
-	     finally
-	     {
-	         // close the printer object
-	         try
-	         {
-	             printer.close();
-	         }
-	         catch (Exception e) {}
-	     }
-	     
-	     
-	     System.out.println("Ahora serial");
-	     
-	     printer = new POSPrinter();
-			
-	     try
-	     {
-	        //Open Printer
-	        printer.open("CUSTOM TG2480H POS Printer COM Linux");
-	        printer.claim(1);
-	        printer.setDeviceEnabled(true);
-
-	        //Print a Text String
-	        printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
-
-	        //Close Printer
-	        printer.setDeviceEnabled(false);
-	        printer.release();
-	        printer.close();
-	     }
-	     catch(JposException e)
-	     {
-	         // display any errors that come up
-	         e.printStackTrace();
-	     }
-	     finally
-	     {
-	         // close the printer object
-	         try
-	         {
-	             printer.close();
-	         }
-	         catch (Exception e) {}
-	     }
-		
-	     if(false) {
 		try { 
-
 			CupsClient cupsClient = new CupsClient("127.0.0.1", 631);
 
 			URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
@@ -175,8 +130,104 @@ public class Ptr {
 				ignored.printStackTrace();
 
 		}
-	     }
+	}
 
+	private static void printJposUsb() {
+		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
+
+		// instantiate a new jpos.POSPrinter object
+		POSPrinter printer = new POSPrinter();
+
+		try
+		{
+			//Open Printer
+			printer.open("CUSTOM TG2480H POS Printer USB Linux");
+			printer.claim(1);
+			printer.setDeviceEnabled(true);
+
+			//Print a Text String
+			printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
+
+			//Close Printer
+			printer.setDeviceEnabled(false);
+			printer.release();
+			printer.close();
+		}
+		catch(JposException e)
+		{
+			// display any errors that come up
+			e.printStackTrace();
+		}
+		finally
+		{
+			// close the printer object
+			try
+			{
+				printer.close();
+			}
+			catch (Exception e) {}
+		}
+	}
+
+	private static void printJposSerial() {
+		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
+
+		// instantiate a new jpos.POSPrinter object
+		POSPrinter printer = new POSPrinter();
+
+		try
+		{
+			//Open Printer
+			printer.open("CUSTOM TG2480H POS Printer COM Linux");
+			printer.claim(1);
+			printer.setDeviceEnabled(true);
+
+			//Print a Text String
+			printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
+
+			//Close Printer
+			printer.setDeviceEnabled(false);
+			printer.release();
+			printer.close();
+		}
+		catch(JposException e)
+		{
+			// display any errors that come up
+			e.printStackTrace();
+		}
+		finally
+		{
+			// close the printer object
+			try
+			{
+				printer.close();
+			}
+			catch (Exception e) {}
+		}
+	}
+
+
+
+
+	private static void printMethod1() throws PrintException, IOException {
+		String defaultPrinter =	PrintServiceLookup.lookupDefaultPrintService().getName();
+		System.out.println("Default printer: " + defaultPrinter);
+		PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+
+		// prints the famous hello world! plus a form feed
+		InputStream is = new ByteArrayInputStream("hello world!\f".getBytes("UTF8"));
+
+		PrintRequestAttributeSet  pras = new HashPrintRequestAttributeSet();
+		pras.add(new Copies(1));
+
+		DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+		Doc doc = new SimpleDoc(is, flavor, null);
+		DocPrintJob job = service.createPrintJob();
+
+		PrintJobWatcher pjw = new PrintJobWatcher(job);
+		job.print(doc, pras);
+		pjw.waitForDone();
+		is.close();
 	}
 
 
@@ -225,23 +276,23 @@ public class Ptr {
 		int total200 = 0;
 		int total500 = 0;
 		int total1000 = 0;
-		
+
 		int b20 = Integer.parseInt(Config.GetPersistence("Accepted20", "0"));
 		int b50 = Integer.parseInt(Config.GetPersistence("Accepted50", "0"));
 		int b100 = Integer.parseInt(Config.GetPersistence("Accepted100", "0"));
 		int b200 = Integer.parseInt(Config.GetPersistence("Accepted200", "0"));
 		int b500 = Integer.parseInt(Config.GetPersistence("Accepted500", "0"));
 		int b1000 = Integer.parseInt(Config.GetPersistence("Accepted1000", "0"));
-		
+
 		total20 = 20 * b20;
 		total50 = 50 * b50;
 		total100 = 100 * b100;
 		total200 = 200 * b200;
 		total500 = 500 * b500;
 		total1000 = 1000 * b1000;
-		
+
 		total = total20 + total50 + total100 + total200 + total500 + total1000; 
-		
+
 		Map<String,String> printMap = new HashMap<String,String>();
 		printMap.put("<fecha>",String.format("%1$-15s",dateFormat.format(date)));
 		printMap.put("<hora>",String.format("%1$-15s",timeFormat.format(date)));
@@ -260,12 +311,11 @@ public class Ptr {
 		printMap.put("<monto1000>",String.format("%1$9s",currencyFormat.format(total1000)));
 		printMap.put("<usuario>",CurrentUser.loginUser);		
 		printMap.put("<corte>",Config.GetPersistence("CorteCount", "-1"));
-		
+
 		return print("contadores",printMap);
 
 	}
-	
-	
+
 	public static boolean printDispense(double montoRetiro, String currentUser) {
 
 		System.out.println("Prt.printDispense"); 
@@ -278,12 +328,30 @@ public class Ptr {
 		printMap.put("<fecha>",String.format("%1$-15s",dateFormat.format(date)));
 		printMap.put("<hora>",String.format("%1$-15s",timeFormat.format(date)));
 		printMap.put("<monto>",currencyFormat.format(montoRetiro));		
-		printMap.put("<referencia>","-----");
+		printMap.put("<referencia>",CurrentUser.movementId);
 		printMap.put("<operacion>",Config.GetPersistence("TxRETIROCASHMANAGEMENTCounter","0"));
 		printMap.put("<usuario>",currentUser);		
 
 		return print("retiro",printMap);
 
+	}
+
+	public static boolean printContadoresTest() {
+
+		System.out.println("Ptr.printContadoresTest"); 				
+		return print("contadores",new HashMap<String,String>());
+	}
+
+	public static boolean printDepositTest() {
+
+		System.out.println("Ptr.printDepositTest"); 
+		return print("deposito",new HashMap<String,String>());
+	}
+
+	public static boolean printDispenseTest() {
+
+		System.out.println("Prt.printDispenseTest");	
+		return print("retiro",new HashMap<String,String>());
 	}
 
 	public static boolean print(String form, Map<String,String> formData) {
@@ -355,6 +423,8 @@ public class Ptr {
 			CupsClient cupsClient = new CupsClient("127.0.0.1", 631);
 
 
+
+
 			URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
 			CupsPrinter cupsPrinter = cupsClient.getPrinter(printerURL);
 			for(String media : cupsPrinter.getMediaSupported())
@@ -394,4 +464,45 @@ public class Ptr {
 		return true;
 	}
 
+}
+
+class PrintJobWatcher {
+	boolean done = false;
+
+	PrintJobWatcher(DocPrintJob job) {
+		job.addPrintJobListener(new PrintJobAdapter() {
+			public void printJobCanceled(PrintJobEvent pje) {
+				System.out.println("...printJobCanceled");
+				allDone();
+			}
+			public void printJobCompleted(PrintJobEvent pje) {
+				System.out.println("...printJobCompleted");
+				allDone();
+			}
+			public void printJobFailed(PrintJobEvent pje) {
+				System.out.println("...printJobFailed");
+				allDone();
+			}
+			public void printJobNoMoreEvents(PrintJobEvent pje) {
+				System.out.println("...printJobNoMoreEvents");
+				allDone();
+			}
+			void allDone() {
+				synchronized (PrintJobWatcher.this) {
+					done = true;
+					System.out.println("Printing done ...");
+					PrintJobWatcher.this.notify();
+				}
+			}
+		});
+	}
+	public synchronized void waitForDone() {
+		try {
+			while (!done) {
+				wait();
+			}
+		} catch (InterruptedException e) {
+			System.out.println("waitForDone InterruptedException");
+		}
+	}
 }

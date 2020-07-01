@@ -19,6 +19,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.cashmanagement.Transactions;
+import pentomino.common.JcmGlobalData;
+import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.flow.Flow;
 import rabbitClient.Producer;
@@ -31,22 +33,21 @@ public class DTAServer {
 	private static final Logger logger = LogManager.getLogger(Transactions.class.getName());
 
 	public String ManageAgent(String function, EnvironmentVariables envVars) {
-		
+
 		System.out.println("DTAServer.ManageAgent");
 
 		switch (function.toUpperCase()) {
 		case "RESTARTATM":
 			boolean busy = false;
-            do {
-                try {
+			do {
+				try {
 					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				} catch (InterruptedException e) {					
 					e.printStackTrace();
 				}                
-                busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
-            } while (busy);
-            Flow.redirect(Flow.panelReinicio);
+				busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+			} while (busy);
+			Flow.redirect(Flow.panelReinicio);
 			return RestartAtm();
 
 		case "CLOSEFLOW":
@@ -126,11 +127,91 @@ public class DTAServer {
 			//TODO: REVISAR Config.SetPersistence("ForceOoS", true);
 			System.out.println("GOOFFLINE");
 			return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+
+		case "FLUSHJCM":
+			return FlushJcms();
+		case "OPENSAFE":
+			return OpenSafe();
+		case "OPENCABINET":
+			return OpenCabinet();
 		}
 
 		return "Pentomino-ReturnValue: NOK";
 	}
 
+	private String OpenSafe() {
+		System.out.println("OPENSAFE");
+		Flow.miTio.alarmOff();
+		Flow.miTio.abreBoveda();
+		Flow.timerBoveda();
+		Flow.isAdminTime = true;
+		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+	}
+	
+	
+	private String OpenCabinet() {
+		System.out.println("OPENCABINET");
+		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+	}
+	
+	
+	private String FlushJcms() {
+
+		System.out.println("FLUSHJCM");
+
+		System.out.println("" + JcmGlobalData.rec1bill1Available + ";" + JcmGlobalData.rec1bill2Available + ";" + JcmGlobalData.rec2bill1Available + ";" + JcmGlobalData.rec2bill2Available );
+
+		//JCM 1
+		// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
+		Flow.jcms[0].jcmMessage[3] = 0x01;
+		Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+
+		if(JcmGlobalData.rec1bill1Available > 0) {
+			System.out.println("Bajando jcm1 cassete 1");
+			Flow.jcms[0].currentOpertion = jcmOperation.CollectCass1;
+			Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x1,Flow.jcms[0].jcmMessage);	
+		}
+		else{
+			System.out.println("Nada que bajar de jcm1 cassete 1");
+			if(JcmGlobalData.rec1bill2Available > 0) {
+				System.out.println("Bajando jcm1 cassete 2");
+				Flow.jcms[0].currentOpertion = jcmOperation.CollectCass2;
+				Flow.jcms[0].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x2,Flow.jcms[0].jcmMessage);
+			}
+			else {
+				System.out.println("Nada que bajar de jcm1 cassete 2");
+				Flow.jcms[0].currentOpertion = jcmOperation.None;
+			}
+
+		}
+
+
+		//JCM 2
+		
+		// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
+		Flow.jcms[1].jcmMessage[3] = 0x01;
+		Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+
+		if(JcmGlobalData.rec2bill1Available > 0) {
+			System.out.println("Bajando jcm2 cassete 1");
+			Flow.jcms[1].currentOpertion = jcmOperation.CollectCass1;
+			Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x1,Flow.jcms[1].jcmMessage);
+		}
+		else{
+			System.out.println("Nada que bajar de jcm2 cassete 1");
+			if(JcmGlobalData.rec2bill2Available > 0) {
+				System.out.println("Bajando jcm2 cassete 2");
+				Flow.jcms[1].currentOpertion = jcmOperation.CollectCass2;
+				Flow.jcms[1].id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4b, (byte) 0x0, (byte) 0x2,Flow.jcms[1].jcmMessage);
+			}
+			else {
+				System.out.println("Nada que bajar de jcm2 cassete 2");
+			}						
+		}
+
+
+		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+	}
 
 	private String UploadFile(EnvironmentVariables envVars) {
 		// TODO Auto-generated method stub
@@ -173,7 +254,7 @@ public class DTAServer {
 
 		String file = parameters.get("SourceFile");
 		System.out.println("Solicitud de upload para [" + file + "]");
-		
+
 		String[] folders = {"./downloads","./crashes","./logs" }; //Constants.DownloadsDir, Constants.CrashDir, Constants.LogsDir
 		String foundFolder = "";
 
@@ -528,15 +609,15 @@ public class DTAServer {
 			e.printStackTrace();
 			return "{\"data\":{\"ReturnValue\":\"NOK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
 		}
-		
+
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
-	
-		
+
+
 	}
 
 
 	private String GetPulsarConfigKeys() {
-		
+
 		return Config.GetAllPulsarParams();
 	}
 

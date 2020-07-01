@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.swing.JFrame;
@@ -48,14 +49,17 @@ import pentomino.flow.gui.PanelTerminamos;
 import pentomino.flow.gui.PanelToken;
 import pentomino.flow.gui.admin.PanelAdminContadoresActuales;
 import pentomino.flow.gui.admin.PanelAdminContadoresEnCero;
+import pentomino.flow.gui.admin.PanelAdminDetalleError;
 import pentomino.flow.gui.admin.PanelAdminDotarCancelar;
 import pentomino.flow.gui.admin.PanelAdminDotarResultados;
 import pentomino.flow.gui.admin.PanelAdminError;
 import pentomino.flow.gui.admin.PanelAdminEstatusDispositivos;
 import pentomino.flow.gui.admin.PanelAdminLogin;
 import pentomino.flow.gui.admin.PanelAdminMenu;
+import pentomino.flow.gui.admin.PanelAdminPruebaImpresion;
 import pentomino.flow.gui.admin.PanelAdminResetDispositivos;
 import pentomino.flow.gui.admin.PanelAdminUsuarioInvalido;
+import pentomino.flow.gui.admin.PanelAdminIniciando;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.DTAServer;
 import pentomino.jcmagent.RaspiAgent;
@@ -93,6 +97,9 @@ public class Flow {
 	public static ImagePanel panelAdminEstatusDispositivos;
 	public static ImagePanel panelAdminUsuarioInvalido;
 	public static ImagePanel panelAdminResetDispositivos;
+	public static ImagePanel panelAdminIniciando;
+	public static ImagePanel panelAdminDetalleError;
+	public static ImagePanel panelAdminPruebaImpresion;
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
 
@@ -118,18 +125,24 @@ public class Flow {
 
 	public static int jcm1LastBillInsertedWorking = 0; 
 	public static int jcm2LastBillInsertedWorking = 0;
-
 	
+	public static Timer adminTimer = new Timer();
+	
+	/**
+	 * Variable que indica si se esta dentro del lapso de tiempo que peude estar abierta la boveda sin sonar la alarma.
+	 */
+	public static boolean isAdminTime = false;
 
 	public static void main(String[] args) {
-
+		
+		System.out.println("->" + TimeUnit.MINUTES.toMillis(10));
+		
 		logger.info("----- FLOW MAIN -----");
 
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 		System.out.println(System.getProperty("os.name") + " isDebug[" + JcmGlobalData.isDebug + "]");
 
-		System.out.println("netIsAvailable [" + netIsAvailable() + "]");
-		
+		System.out.println("netIsAvailable [" + netIsAvailable() + "]");		
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -156,6 +169,34 @@ public class Flow {
 		}
 		System.out.println("netIsAvailable false");
 		return false;
+	}
+	
+	/**
+	 * Activa un timer que dura n minutos, tiempo en el cual se puede abrir la boveda sin generar alarma.
+	 * Si despues del tiempo establecido no se ha cerrado la boveda se dispara la alarma.
+	 */
+	public static void timerBoveda() {
+		
+		System.out.println("Timer Boveda inciando.");
+		adminTimer = new Timer();
+		isAdminTime = true;		
+		
+		adminTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				
+				System.out.println("Timer Boveda termiando");
+				
+				//Si la boveda sigue abierta activamos la alarma
+				if(Tio.safeOpen)
+				{
+					System.out.println("Se acabo el tiempo y la boveda sigue abierta. Activamos la alarma");
+					miTio.alarmOn();
+					isAdminTime = false;
+				}
+				adminTimer.cancel();
+			}
+		}, TimeUnit.MINUTES.toMillis(10));
 	}
 
 	/**
@@ -272,7 +313,10 @@ public class Flow {
 		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
 		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/SCR_P7Admin_EstatusDispositivos.png","panelAdminEstatusDispositivos",0,null);
 		panelAdminUsuarioInvalido = new PanelAdminUsuarioInvalido("./images/SCR_P7Admin_UsuarioInvalido.png","panelAdminUsuarioInvalido",5000,Flow.panelAdminLogin);
-		panelAdminResetDispositivos = new PanelAdminResetDispositivos("./images/Scr7Placeholder.png","panelAdminResetDispositivos",5000,Flow.panelAdminEstatusDispositivos);
+		panelAdminResetDispositivos = new PanelAdminResetDispositivos("./images/Scr7Placeholder.png","panelAdminResetDispositivos",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminEstatusDispositivos);
+		panelAdminIniciando = new PanelAdminIniciando("./images/Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
+		panelAdminDetalleError = new PanelAdminDetalleError("./images/Scr7Placeholder.png","panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
+		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/Scr7Placeholder.png","panelAdminPruebaImpresion",0,null);
 		
 		
 		//Valores Iniciales
@@ -311,6 +355,12 @@ public class Flow {
 		panelContainer.add(panelAdminEstatusDispositivos,"panelAdminEstatusDispositivos");
 		panelContainer.add(panelAdminUsuarioInvalido,"panelAdminUsuarioInvalido");
 		panelContainer.add(panelAdminResetDispositivos,"panelAdminResetDispositivos");
+		panelContainer.add(panelAdminIniciando,"panelAdminIniciando");
+		panelContainer.add(panelAdminDetalleError,"panelAdminDetalleError");
+		panelContainer.add(panelAdminPruebaImpresion,"panelAdminPruebaImpresion");
+		
+		
+		
 		
 
 
@@ -569,7 +619,25 @@ public class Flow {
 					break;
 				case "SafeOpen":
 					System.out.println("Safe Open");
-					redirect(Flow.panelAdminLogin,15000,Flow.panelIdle);	
+					
+					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
+					if(isAdminTime) {
+						System.out.println("Boveda abierta autorizada");
+						miTio.alarmOff(); //redundante paranoico
+					}						
+					else {
+						System.out.println("Boveda abierta NO autorizada activando alarma");
+						miTio.alarmOn();
+					}
+					redirect(Flow.panelAdminLogin,15000,Flow.panelIdle);
+					break;
+				case "SafeClosed":
+					System.out.println("Safe Closed");
+					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
+					if(isAdminTime) {
+						System.out.println("Boveda cerrada autorizada, desactivamos timer.");						
+						adminTimer.cancel();
+					}
 					break;
 
 				case "moneyIn1":
@@ -847,6 +915,27 @@ public class Flow {
 				e.printStackTrace();
 			}
 		}	
+		
+		/*
+		System.out.println("JcmMonitor running");
+		
+		Timer screenTimerDispense = new Timer();
+
+		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {			
+				if(jcms[0].recyclerContadoresSet && jcms[1].recyclerContadoresSet){
+					screenTimerDispense.cancel();
+				}
+			}
+		}, 120000,120000); 
+		*/
+		
+		System.out.println("JcmMonitor bygon verde y plaquitas");
+		
+		
+		
+		
 	}
 
 }

@@ -15,26 +15,11 @@ public void run(){
 
 	screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
 		@Override
-		public void run() {
+		public void run() {			
 			Afd.BroadcastFullStatus();
 		}
-	}, 120000,120000);
+	}, 120000,120000); 
 	
-	
-	boolean enEspera = true;
-	
-	while(enEspera) {
-	
-		System.out.println("en espera");	
-		
-		
-		try {
-			Thread.sleep(600000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}	
 	
 	System.out.println("JcmMonitor bygon verde y plaquitas");
 	
