@@ -903,8 +903,7 @@ public class protocol extends kermit {
 			break;
 
 		case (byte) 0xF0: // ALGUN EXTENDED
-
-			System.out.println(baitsToString("JCM[" + jcmId + "] processing ALGUN EXTENDED ",jcmResponse, jcmResponse[1]));
+		
 			switch (jcmResponse[4]) {
 			case (byte) 0x00: // UNCONNECTED Recycler Unit is not connected.
 				if (mostrar)

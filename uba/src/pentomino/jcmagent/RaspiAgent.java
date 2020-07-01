@@ -12,7 +12,6 @@ public class RaspiAgent {
 
 	
 	/**
-	The Desciption of the method to explain what the method does
 	@param the parameters used by the method
 	@return the value returned by the method
 	@throws what kind of exception does this method throw
@@ -20,12 +19,30 @@ public class RaspiAgent {
 	public static void WriteToJournal(String evt, double amount, double available, String authId, String accountId, String extraData,AccountType acctType, TransactionType type) {
 		
 		String atmId = Config.GetDirective("AtmId", "");		
+		
+		System.out.println("wtj1 authId [" + authId + "]");
+		
 		WriteToJournal(evt, amount, 0, authId, "", accountId, "0", "MXN", "",  "",
-				atmId, extraData, acctType, type,"", "", 0, "");			
+				atmId, extraData, acctType, type,"", "", 0, authId);			
 	}
 	
+	
 	/**
-	The Desciption of the method to explain what the method does
+	@param the parameters used by the method
+	@return the value returned by the method
+	@throws what kind of exception does this method throw
+	*/
+	public static void WriteToJournal(String evt, double amount, double available, String authId, String accountId, String extraData,AccountType acctType, TransactionType type,String switchAuthId) {
+		
+		String atmId = Config.GetDirective("AtmId", "");		
+		
+		System.out.println("wtj1 authId [" + authId + "]");
+		
+		WriteToJournal(evt, amount, 0, authId, "", accountId, "0", "MXN", "",  "",
+				atmId, extraData, acctType, type,"", "", 0, switchAuthId);			
+	}
+	
+	/**	
 	@param the parameters used by the method
 	@return the value returned by the method
 	@throws what kind of exception does this method throw
@@ -59,6 +76,8 @@ public class RaspiAgent {
         //, arpc, acctType, type, aquirer, errorCode, flagCode, terminalCaps, posMode, cter, responseCode
         //, switchAtmId, switchAuthId, cardHash, cardCrypto
         
+        
+        System.out.println("wtj2 authId [" + authId + "]");
         
         values.add(evt);
         values.add(Double.toString(amount));
@@ -97,6 +116,7 @@ public class RaspiAgent {
 		agentMsg.Values = values;
 		agentMsg.Command = "add";
 		agentMsg.AtmId = switchAtmId;
+		
 		
 		
 		AgentsQueue.bq.add(agentMsg);			

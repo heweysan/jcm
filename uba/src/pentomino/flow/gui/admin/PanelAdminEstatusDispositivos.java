@@ -159,7 +159,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 
 		btnPruebaDeImpresion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-				System.out.println("FERGFFD");
+				
 				Flow.redirect(Flow.panelAdminPruebaImpresion);			
 			}
 		});

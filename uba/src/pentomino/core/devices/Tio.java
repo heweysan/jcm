@@ -53,8 +53,6 @@ public class Tio implements Runnable{
 	private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
 
 	public static void main(String[] args) {
-		logger.debug("TIO MAIN");
-
 		Tio miTio = new Tio();
 
 		Thread tioThread = new Thread(miTio, "Tio Thread");
@@ -106,14 +104,13 @@ public class Tio implements Runnable{
 	@Override
 	public void run() {
 
-		if(JcmGlobalData.isDebug) {
-			logger.debug("Tio starting.... DEBUG");
-			System.out.println("Tio starting.... DEBUG");   
+		logger.debug("Tio starting....");
+		System.out.println("Tio starting.... DEBUG"); 
+		
+		if(JcmGlobalData.isDebug) {			
 			return;
 		}
 
-		logger.debug("Tio starting....");
-		System.out.println("Tio starting....");
 
 		gpio = GpioFactory.getInstance();
 		try {

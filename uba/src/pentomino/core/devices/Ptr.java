@@ -58,23 +58,12 @@ public class Ptr {
 
 
 	public static void main(String[] args) {
-
 		
 		printJposUsb();
-		/*
-		try {
-			System.out.println("INI");
-			printMethod1();
-			System.out.println("FIN");
-		} catch (PrintException | IOException e1) {
-			// TODO Auto-generated catch block
-			System.out.println("Trono aca!");
-			e1.printStackTrace();
-		}
-		*/
+		
 	}
 
-	private static void printCups() {
+	public static void printCups() {
 
 		try { 
 			CupsClient cupsClient = new CupsClient("127.0.0.1", 631);
@@ -132,7 +121,7 @@ public class Ptr {
 		}
 	}
 
-	private static void printJposUsb() {
+	public static void printJposUsb() {
 		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
 
 		// instantiate a new jpos.POSPrinter object
@@ -169,7 +158,7 @@ public class Ptr {
 		}
 	}
 
-	private static void printJposSerial() {
+	public static void printJposSerial() {
 		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
 
 		// instantiate a new jpos.POSPrinter object
@@ -209,7 +198,7 @@ public class Ptr {
 
 
 
-	private static void printMethod1() throws PrintException, IOException {
+	public static void printMethod1() throws PrintException, IOException {
 		String defaultPrinter =	PrintServiceLookup.lookupDefaultPrintService().getName();
 		System.out.println("Default printer: " + defaultPrinter);
 		PrintService service = PrintServiceLookup.lookupDefaultPrintService();
@@ -253,7 +242,7 @@ public class Ptr {
 		printMap.put("<monto100>",String.format("%1$9s",currencyFormat.format(depositOpVO.b100 * 100)));
 		printMap.put("<monto200>",String.format("%1$9s",currencyFormat.format(depositOpVO.b200 * 200)));
 		printMap.put("<monto500>",String.format("%1$9s",currencyFormat.format(depositOpVO.b500 * 500)));
-		printMap.put("<referencia>","-----");
+		printMap.put("<referencia>",CurrentUser.movementId);
 		printMap.put("<operacion>",Config.GetPersistence("TxCASHMANAGEMENTCounter","0"));
 		printMap.put("<usuario>",depositOpVO.userName);		
 
@@ -361,8 +350,7 @@ public class Ptr {
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter("./Form/" + form + "out.txt");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+		} catch (IOException e1) {			
 			System.out.println("Ptr.print IOException");
 			e1.printStackTrace();
 			logger.error(e1);
@@ -379,7 +367,7 @@ public class Ptr {
 				}
 
 				fw.write(line + System.getProperty("line.separator"));
-				//System.out.println(line);
+				
 				line = reader.readLine();
 
 			}
@@ -427,14 +415,15 @@ public class Ptr {
 
 			URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
 			CupsPrinter cupsPrinter = cupsClient.getPrinter(printerURL);
+			
+			/*
 			for(String media : cupsPrinter.getMediaSupported())
 			{
 				System.out.println("MEDIA [" + media + "]");
 			}
-
+			*/
+			
 			PrintJob printJob = new PrintJob.Builder(textStream).build();
-
-
 
 
 			PrintRequestResult printRequestResult = cupsPrinter.print(printJob);

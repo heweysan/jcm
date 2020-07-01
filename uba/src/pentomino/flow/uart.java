@@ -197,10 +197,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
      }
 	
 	public void serialEvent(SerialPortEvent event){
-		if (logger.isDebugEnabled()) {
-			logger.debug("serialEvent(SerialPortEvent) - start"); //$NON-NLS-1$
-		}
-
+		
 			//System.out.println("serialEvent");
 	       switch(event.getEventType()) {
 	        case SerialPortEvent.BI:

@@ -208,13 +208,6 @@ public class Transactions {
 
 		System.out.println("\n--- InsertaPreDeposito ---".toUpperCase()); 
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("InsertaPreDeposito(Deposito) - start"); //$NON-NLS-1$
-		}	
-
-
-
-
 		String corrId = UUID.randomUUID().toString();
 
 		Map<String,Object> map = null;
@@ -308,18 +301,10 @@ public class Transactions {
 			}
 		}catch(Exception e){
 			System.out.println("InsertaPreDeposito");
-			e.printStackTrace();
+			e.printStackTrace();			
 		}
 
 
-
-
-
-
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("InsertaPreDeposito(Deposito) - end"); //$NON-NLS-1$
-		}
 		return returnVO;
 
 	}
@@ -327,13 +312,6 @@ public class Transactions {
 
 	//Equivalente a /Deposito DELETE
 	public boolean RechazaDeposito(Deposito deposito) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("RechazaDeposito(Deposito) - start"); //$NON-NLS-1$
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("RechazaDeposito(Deposito) - end"); //$NON-NLS-1$
-		}
 		return false;
 
 	}
@@ -614,6 +592,8 @@ public class Transactions {
 
 		GenericMessageVO requestMessage = new GenericMessageVO();
 		requestMessage.data = depositOpVO;
+		
+		String retData = "";
 
 		try{
 			Connection rabbitConn = RabbitMQConnection.getConnection();
@@ -646,7 +626,32 @@ public class Transactions {
 				}, consumerTag -> {
 				});
 
+				
+				String result = response.take();
+				System.out.println("ConfirmaDeposito result [" + result + "]");
+			
+				if(!result.isEmpty()) {
+					if(result != ""){
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
+						if(responseMap.containsKey("exception")){			
+							System.out.println("TENGO [" + responseMap.get("message") + "]");
+							retData = "";
+						}else{
+							if(responseMap.containsKey("success")) {								
+								CurrentUser.movementId = (String) responseMap.get("value");
+								 retData = CurrentUser.movementId;
+							}
+						}
 
+					}else{
+						retData = "";
+					}
+
+				}else {
+					retData = "";
+				}	
+			
+			
 				channel.basicCancel(ctag);
 
 				channel.close();
@@ -657,7 +662,7 @@ public class Transactions {
 			e.printStackTrace();
 		}
 
-		return "";            
+		return retData;            
 
 	}
 
