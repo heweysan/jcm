@@ -57,7 +57,35 @@ public class Ptr {
 	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws PrintException, IOException {
+		
+		/*
+		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+	    System.out.println("Number of print services: " + printServices.length);
+
+	    for (PrintService printer : printServices)
+	      System.out.println("Printer: " + printer.getName()); 
+	 
+	    PrintService myService = null;
+	    for (PrintService printService : printServices) {
+	      if (printService.getName().equals("CUSTOM_Engineering_TG2480-H")) {
+	        myService = printService;
+	        break;
+	      }
+	    }
+
+	    if (myService == null) {
+	      throw new IllegalStateException("Printer not found");
+	    }
+		
+	    FileInputStream fis = new FileInputStream("./NotasGlipder");
+	    Doc pdfDoc = new SimpleDoc(fis, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
+	    DocPrintJob printJob = myService.createPrintJob();
+	    printJob.print(pdfDoc, new HashPrintRequestAttributeSet());
+	    fis.close(); 
+	    */
+		
+		printDispense(500,"1324");
 		
 		printJposUsb();
 		
@@ -126,12 +154,60 @@ public class Ptr {
 
 		// instantiate a new jpos.POSPrinter object
 		POSPrinter printer = new POSPrinter();
-
+				
+		
+		System.out.println("COM CLAIOM 1");
 		try
 		{
 			//Open Printer
+			System.out.println("----- 1");
 			printer.open("CUSTOM TG2480H POS Printer USB Linux");
-			printer.claim(1);
+			System.out.println("----- 2");
+			printer.claim(11);
+			System.out.println("----- 3");
+			printer.setDeviceEnabled(true);
+			System.out.println("----- 4");
+			//Print a Text String
+			System.out.println("----- 5");
+			//printer.printImmediate(POSPrinterConst.PTR_S_RECEIPT, "PRINTER");
+			printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "Print Test");
+			
+			//Close Printer
+			System.out.println("----- 6");
+			printer.setDeviceEnabled(false);
+			System.out.println("----- 7");
+			printer.release();
+			System.out.println("----- 8");
+			printer.close();
+			System.out.println("----- 9");
+		}
+		catch(JposException e)
+		{
+			// display any errors that come up
+			e.printStackTrace();
+		}
+		finally
+		{
+			// close the printer object
+			try
+			{
+				printer.close();
+			}
+			catch (Exception e) {}
+		}
+	}
+
+	public static void printJposSerial() {
+		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
+
+		// instantiate a new jpos.POSPrinter object
+		POSPrinter printer = new POSPrinter();
+		System.out.println("SIN CLAIM");
+		try
+		{
+			//Open Printer
+			printer.open("CUSTOM TG2480H POS Printer COM Linux");
+			//printer.claim(1000);
 			printer.setDeviceEnabled(true);
 
 			//Print a Text String
@@ -156,19 +232,13 @@ public class Ptr {
 			}
 			catch (Exception e) {}
 		}
-	}
-
-	public static void printJposSerial() {
-		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
-
-		// instantiate a new jpos.POSPrinter object
-		POSPrinter printer = new POSPrinter();
-
+		
+		System.out.println("CON CLAIM");
 		try
 		{
 			//Open Printer
 			printer.open("CUSTOM TG2480H POS Printer COM Linux");
-			printer.claim(1);
+			printer.claim(1000);
 			printer.setDeviceEnabled(true);
 
 			//Print a Text String
@@ -415,25 +485,24 @@ public class Ptr {
 
 			URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
 			CupsPrinter cupsPrinter = cupsClient.getPrinter(printerURL);
-			
-			/*
-			for(String media : cupsPrinter.getMediaSupported())
-			{
-				System.out.println("MEDIA [" + media + "]");
-			}
-			*/
+		
 			
 			PrintJob printJob = new PrintJob.Builder(textStream).build();
 
 
+			
 			PrintRequestResult printRequestResult = cupsPrinter.print(printJob);
+			
+			System.out.println("getResultDescription " + printRequestResult.getResultDescription());
+			
+			
 			if(printRequestResult.isSuccessfulResult()) {
 				System.out.println("Impresion OK");
-				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, "");
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, printRequestResult.getResultDescription());
 			}
 			else {
 				System.out.println("Impresion FAIL");
-				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "");
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, printRequestResult.getResultDescription());
 				return false;
 			}
 

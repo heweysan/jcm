@@ -629,7 +629,7 @@ public class Flow {
 						System.out.println("Boveda abierta NO autorizada activando alarma");
 						miTio.alarmOn();
 					}
-					redirect(Flow.panelAdminLogin,15000,Flow.panelIdle);
+					redirect(Flow.panelAdminIniciando,3000,Flow.panelAdminLogin);
 					break;
 				case "SafeClosed":
 					System.out.println("Safe Closed");
