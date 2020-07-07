@@ -1,6 +1,7 @@
 package pentomino.flow.gui;
 
 import pentomino.config.Config;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelOperacionCancelada extends ImagePanel {
 
@@ -11,7 +12,7 @@ public class PanelOperacionCancelada extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelOperacionCancelada(String img,String name, int _timeout, ImagePanel _redirect) {
+	public PanelOperacionCancelada(String img,String name, long _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
@@ -31,13 +32,13 @@ public class PanelOperacionCancelada extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnUnload PanelOperacionCancelada");
+		//System.out.println("OnUnload PanelOperacionCancelada");
 		
 	}
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelOperacionCancelada");
+		//System.out.println("OnUnload PanelOperacionCancelada");
 		Config.SetPersistence("BoardStatus", "Available");
 		
 	}

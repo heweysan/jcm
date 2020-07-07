@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+import pentomino.flow.gui.helpers.ImagePanel;
+
 public class PanelReinicio extends ImagePanel {
 
 	public PanelReinicio(String img, String name, int _timeout, ImagePanel _redirect) {

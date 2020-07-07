@@ -8,6 +8,7 @@ import pentomino.common.TransactionType;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.RaspiAgent;
 
 public class PanelOos  extends ImagePanel {
@@ -62,7 +63,7 @@ public class PanelOos  extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelOos");
+		//System.out.println("OnUnload PanelOos");
 		
 	}
 	

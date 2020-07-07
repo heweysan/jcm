@@ -16,7 +16,7 @@ import pentomino.flow.CurrentUser;
 import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
 import pentomino.flow.MyEvent;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.BEA;
 
 public class PanelAdminMenu extends ImagePanel {
@@ -153,7 +153,7 @@ public class PanelAdminMenu extends ImagePanel {
 	@Override
 	public void OnUnload() {
 		// TODO Auto-generated method stub
-		System.out.println("OnUnload PanelAdminMenu");
+		//System.out.println("OnUnload PanelAdminMenu");
 	}
 
 

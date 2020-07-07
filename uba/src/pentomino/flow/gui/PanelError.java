@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import pentomino.config.Config;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelError extends ImagePanel {
 
@@ -52,7 +53,7 @@ public class PanelError extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelError");
+		//System.out.println("OnUnload PanelError");
 		Config.SetPersistence("BoardStatus", "Available");
 	}
 

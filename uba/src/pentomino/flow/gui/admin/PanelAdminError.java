@@ -8,7 +8,7 @@ import javax.swing.SwingConstants;
 
 import pentomino.common.PinpadMode;
 import pentomino.flow.CurrentUser;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelAdminError  extends ImagePanel {
 

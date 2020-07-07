@@ -1,5 +1,7 @@
 package pentomino.flow.gui;
 
+import pentomino.flow.gui.helpers.ImagePanel;
+
 public class PanelNoTicket extends ImagePanel {
 
 	/**
@@ -34,7 +36,7 @@ public class PanelNoTicket extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelNoTicket");
+		//System.out.println("OnUnload PanelNoTicket");
 		
 	}
 

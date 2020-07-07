@@ -1,13 +1,12 @@
 package pentomino.flow.gui;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
+import pentomino.common.NetUtils;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelErrorComunicate  extends ImagePanel {
 
@@ -43,34 +42,20 @@ public class PanelErrorComunicate  extends ImagePanel {
 		screenTimerNetwork.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {				
-				if(netIsAvailable()) {
+				if(NetUtils.netIsAvailable()) {
 					Flow.redirect(Flow.panelIdle);
 					screenTimerNetwork.cancel();
 				}
 			}
-		}, 1000,60000);
+		}, TimeUnit.MINUTES.toMillis(1),TimeUnit.MINUTES.toMillis(1));
 		
 	}
 
-private static boolean netIsAvailable() {    
-		
-	System.out.println("netIsAvailable");
-		try {			
-			Socket socket2 = new Socket();
-			socket2.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);		
-			socket2.close();
-			System.out.println("netIsAvailable true");
-			return true;
-		} catch (UnknownHostException e) {		
-		} catch (IOException e) {		
-		}
-		System.out.println("netIsAvailable false");
-		return false;
-	}
+
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelErrorComunicate");
+		//System.out.println("OnUnload PanelErrorComunicate");
 		
 	}
 }

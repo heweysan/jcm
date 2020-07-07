@@ -1,4 +1,4 @@
-package pentomino.flow.gui;
+package pentomino.flow.gui.helpers;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -102,7 +102,7 @@ public  abstract class ImagePanel extends JPanel {
 		repaint();
 	}
 	
-	public void screenTimerReset(int timeOut, ImagePanel redirect) {
+	public void screenTimerReset(long timeOut, ImagePanel redirect) {
 		
 		if(timeOut == 0 || redirect == null)
 			return;

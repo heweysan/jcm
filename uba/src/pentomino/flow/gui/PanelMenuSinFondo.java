@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.DebugButtons;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 
 public class PanelMenuSinFondo extends ImagePanel {
@@ -48,7 +50,7 @@ public class PanelMenuSinFondo extends ImagePanel {
 			public void actionPerformed(ActionEvent e) {
 				CurrentUser.currentOperation = jcmOperation.Deposit;
 				Flow.panelLogin.setBackground("./images/Scr7IdentificateDeposito.png");
-				PanelLogin.lblLoginUser.setLocation(257, 625);
+				PanelLogin.lblLoginUser.setLocation(257, 640);
 				Flow.redirect(Flow.panelLogin);
 			}
 		});		
@@ -64,7 +66,7 @@ public class PanelMenuSinFondo extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload [PanelDepositoSinFondo]");
+		//System.out.println("OnUnload [PanelDepositoSinFondo]");
 	}
 
 }

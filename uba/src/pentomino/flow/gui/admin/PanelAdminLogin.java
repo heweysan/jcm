@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,11 +18,11 @@ import pentomino.common.TransactionType;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
-import pentomino.flow.gui.PanelPinpad;
 import pentomino.flow.gui.PinKey;
 import pentomino.flow.gui.PinpadEvent;
 import pentomino.flow.gui.PinpadListener;
+import pentomino.flow.gui.helpers.ImagePanel;
+import pentomino.flow.gui.helpers.PanelPinpad;
 import pentomino.jcmagent.AccountClient;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
@@ -101,7 +102,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 		PinKey digito = event.key();
 	
-		screenTimerReset(10000,Flow.panelOperacionCancelada);
+		screenTimerReset(TimeUnit.SECONDS.toMillis(10),Flow.panelOperacionCancelada);
 
 		switch(digito)
 		{
@@ -111,7 +112,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 			lblAdminLoginUser.setText("");
 			lblAdminLoginPassword.setText("");			
 			CurrentUser.asteriscos = "";							
-			Flow.redirect(Flow.panelOperacionCancelada,4000, Flow.panelIdle);
+			Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);
 			break;
 		case _Ok:
 
@@ -121,9 +122,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 				lblAdminLoginUser.setVisible(false);
 				lblAdminLoginPassword.setVisible(true);
 				lblAdminLoginPassword.setText("");
-				Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Contrasena.png");
-				
-				//lblLoginOpcion.setBounds(230, 760, 87, 87);   //Este es password 
+				Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Contrasena.png");				
 				CurrentUser.pinpadMode = PinpadMode.loginPassword;
 
 				break;
@@ -258,7 +257,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelAdminLogin");
+		System.out.println("OnLoad [PanelAdminLogin]");
 		lblAdminLoginUser.setVisible(true);
 		lblAdminLoginPassword.setVisible(false);
 		Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Usuario.png");
@@ -274,7 +273,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelAdminLogin");
+		//System.out.println("OnUnload PanelAdminLogin");
 		lblAdminLoginUser.setVisible(true);
 		lblAdminLoginPassword.setVisible(false);
 		Flow.panelAdminLogin.setBackground("./images/SCR_P7Admin_Usuario.png");

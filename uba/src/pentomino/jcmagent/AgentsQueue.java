@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
@@ -12,6 +15,7 @@ import com.rabbitmq.client.Connection;
 
 import pentomino.common.CryptUtils;
 import pentomino.config.Config;
+import pentomino.flow.Flow;
 import rabbitClient.DtaListener;
 import rabbitClient.RabbitMQConnection;
 
@@ -24,11 +28,10 @@ public class AgentsQueue  implements Runnable{
 
 	private volatile boolean terminateRequested;
 
+	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
 
 
-	public AgentsQueue() {
-		System.out.println("AgentsQueue constructor.");
-
+	public AgentsQueue() {		
 	}
 
 
@@ -43,13 +46,11 @@ public class AgentsQueue  implements Runnable{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
-		System.out.println("AgentsQueue run");
+		System.out.println("AgentsQueue [running]");
+		logger.info("AgentsQueue [running]");
 
 		try {
-			while (!terminateRequested) {
-				//System.out.println("AgentsQueue Esperando...");
+			while (!terminateRequested) {				
 				SendCommandToRabbit(bq.take());		       
 			}
 		} catch (InterruptedException ex) {

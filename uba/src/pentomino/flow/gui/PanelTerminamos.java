@@ -2,6 +2,7 @@ package pentomino.flow.gui;
 
 import pentomino.config.Config;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelTerminamos extends ImagePanel {
 
@@ -36,7 +37,7 @@ public class PanelTerminamos extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload [PanelTerminamos]");
+		//System.out.println("OnUnload [PanelTerminamos]");
 		Config.SetPersistence("BoardStatus", "Available");
 
 	}

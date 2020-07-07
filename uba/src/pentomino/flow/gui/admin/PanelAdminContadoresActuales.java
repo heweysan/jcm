@@ -11,7 +11,8 @@ import javax.swing.JLabel;
 import pentomino.config.Config;
 import pentomino.core.devices.Ptr;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
+
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
@@ -217,13 +218,12 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		// TODO Auto-generated method stub
+		System.out.println("OnLoad PanelAdminContadoresActuales");
 
 	}
 
 	@Override
 	public void OnUnload() {
-		// TODO Auto-generated method stub
-
+		//System.out.println("OnUnload PanelAdminContadoresActuales");
 	}
 }

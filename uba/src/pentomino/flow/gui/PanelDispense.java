@@ -13,6 +13,7 @@ import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.RaspiAgent;
 
 public class PanelDispense extends ImagePanel {
@@ -153,7 +154,7 @@ public class PanelDispense extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelDispense");
+		//System.out.println("OnUnload PanelDispense");
 	}
 
 }

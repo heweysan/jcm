@@ -1,4 +1,4 @@
-package pentomino.flow.gui;
+package pentomino.flow.gui.helpers;
 
 import java.awt.Color;
 import java.awt.Font;

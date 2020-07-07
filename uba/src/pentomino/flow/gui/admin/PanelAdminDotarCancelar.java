@@ -11,7 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
+
 import java.awt.Color;
 
 public class PanelAdminDotarCancelar extends ImagePanel {

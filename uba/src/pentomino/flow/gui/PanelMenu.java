@@ -2,6 +2,7 @@ package pentomino.flow.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,6 +13,7 @@ import pentomino.common.PinpadMode;
 import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelMenu extends ImagePanel {
 
@@ -38,8 +40,6 @@ public class PanelMenu extends ImagePanel {
 	@Override
 	public void ContentPanel() {
 		
-
-		
 		btnMenuDeposito = new JButton(new ImageIcon("./images/BTN7Deposito.png"));
 		btnMenuDeposito.setOpaque(false);
 		btnMenuDeposito.setBounds(360, 502, 492, 498);
@@ -59,11 +59,11 @@ public class PanelMenu extends ImagePanel {
 			public void actionPerformed(ActionEvent e) {
 				Flow.panelMenu.screenTimerCancel();				
 				CurrentUser.cleanPinpadData(PinpadMode.loginUser);
-				PanelLogin.lblLoginUser.setLocation(257, 625);					
+				PanelLogin.lblLoginUser.setLocation(257, 640);					
 				CurrentUser.currentOperation = jcmOperation.Deposit;
 				PanelLogin.lblLoginOpcion.setBounds(240, 530, 87, 87);   //Este es login sin password
 				Flow.panelLogin.setBackground("./images/Scr7IdentificateDeposito.png");
-				Flow.redirect(Flow.panelLogin,7000,Flow.panelOperacionCancelada);				
+				Flow.redirect(Flow.panelLogin,TimeUnit.SECONDS.toMillis(10),Flow.panelOperacionCancelada);				
 			}
 		});
 		
@@ -79,7 +79,7 @@ public class PanelMenu extends ImagePanel {
 				PanelLogin.lblLoginOpcion.setBounds(230, 430, 87, 87);   //Este es login con password
 				
 				Flow.panelLogin.setBackground("./images/Scr7IngresaDatos.png");
-				Flow.redirect(Flow.panelLogin,7000,Flow.panelOperacionCancelada);
+				Flow.redirect(Flow.panelLogin,TimeUnit.SECONDS.toMillis(10),Flow.panelOperacionCancelada);
 								
 				CmMessageRequest request =  CmQueue.queueList.getFirst();				
 				CurrentUser.token = "" + request.token;
@@ -103,7 +103,7 @@ public class PanelMenu extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelMenu");
+		//System.out.println("OnUnload PanelMenu");
 	}
 	
 	

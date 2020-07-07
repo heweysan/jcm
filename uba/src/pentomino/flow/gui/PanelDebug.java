@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import pentomino.common.Billete;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
 import pentomino.core.devices.Tio;
@@ -19,6 +20,7 @@ import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
 import pentomino.flow.MyEvent;
 import pentomino.flow.protocol;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelDebug  extends ImagePanel {
 
@@ -27,7 +29,7 @@ public class PanelDebug  extends ImagePanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
+
 	public static JLabel lblBilleteIngresado1 = new JLabel("$0");
 	public static JLabel lblBilleteIngresado2 = new JLabel("$0");
 	public static JLabel lblContadores1 = new JLabel("rec1/0  rec2/0");
@@ -397,20 +399,20 @@ public class PanelDebug  extends ImagePanel {
 		panel_comandos.add(btnPayOut);
 
 		JButton btnCollect = new JButton("Collect (+4Bh+Data)");
-		btnCollect.setBackground(Color.ORANGE);
+		btnCollect.setBackground(Color.GREEN);
 		btnCollect.setFont(new Font("Dialog", Font.BOLD, 12));
 		btnCollect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("COLLECT");
-				
+
 				System.out.println("" + JcmGlobalData.rec1bill1Available + ";" + JcmGlobalData.rec1bill2Available + ";" + JcmGlobalData.rec2bill1Available + ";" + JcmGlobalData.rec2bill2Available );
-				
+
 				if(chckbxReciclador1.isSelected()) {
-					
+
 					// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
 					Flow.jcms[0].jcmMessage[3] = 0x01;
 					Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-					
+
 					if(JcmGlobalData.rec1bill1Available > 0) {
 						System.out.println("Bajando jcm1 cassete 1");
 						Flow.jcms[0].currentOpertion = jcmOperation.CollectCass1;
@@ -427,17 +429,17 @@ public class PanelDebug  extends ImagePanel {
 							System.out.println("Nada que bajar de jcm1 cassete 2");
 							Flow.jcms[0].currentOpertion = jcmOperation.None;
 						}
-						
+
 					}
 				}
-				
-				
+
+
 				if(chckbxReciclador2.isSelected()) {
-					
+
 					// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
 					Flow.jcms[1].jcmMessage[3] = 0x01;
 					Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
-					
+
 					if(JcmGlobalData.rec2bill1Available > 0) {
 						System.out.println("Bajando jcm2 cassete 1");
 						Flow.jcms[1].currentOpertion = jcmOperation.CollectCass1;
@@ -787,7 +789,7 @@ public class PanelDebug  extends ImagePanel {
 		panelJCM2.add(btnReiniciarJcm2);
 
 		add(panel_comandos);		
-		
+
 		JButton btnAlarmaOff = new JButton("ALARMA OFF");
 		btnAlarmaOff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -797,7 +799,7 @@ public class PanelDebug  extends ImagePanel {
 		btnAlarmaOff.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAlarmaOff.setBounds(1412, 632, 203, 48);
 		panel_comandos.add(btnAlarmaOff);
-		
+
 		JButton btnAlarmaOn = new JButton("ALARMA ON");
 		btnAlarmaOn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -807,7 +809,7 @@ public class PanelDebug  extends ImagePanel {
 		btnAlarmaOn.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAlarmaOn.setBounds(1645, 632, 203, 48);
 		panel_comandos.add(btnAlarmaOn);
-		
+
 		JButton btnCurrentCountSetting_1 = new JButton("Current Count\u00A0Setting (E2h+Data)");
 		btnCurrentCountSetting_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -826,7 +828,7 @@ public class PanelDebug  extends ImagePanel {
 		btnCurrentCountSetting_1.setBackground(Color.GREEN);
 		btnCurrentCountSetting_1.setBounds(1561, 460, 289, 50);
 		panel_comandos.add(btnCurrentCountSetting_1);
-		
+
 		JButton btnCierraBoveda = new JButton("CIERRA BOVEDA");
 		btnCierraBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -837,7 +839,7 @@ public class PanelDebug  extends ImagePanel {
 		btnCierraBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnCierraBoveda.setBounds(875, 630, 256, 48);
 		panel_comandos.add(btnCierraBoveda);
-		
+
 		JButton btnAbreBoveda = new JButton("ABRE BOVEDA");
 		btnAbreBoveda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -848,7 +850,7 @@ public class PanelDebug  extends ImagePanel {
 		btnAbreBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAbreBoveda.setBounds(1150, 630, 249, 48);
 		panel_comandos.add(btnAbreBoveda);
-		
+
 		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
 		btnAdminLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -858,7 +860,7 @@ public class PanelDebug  extends ImagePanel {
 		btnAdminLogin.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		btnAdminLogin.setBounds(1549, 26, 347, 122);
 		add(btnAdminLogin);
-		
+
 		JButton btnNewButton = new JButton("ADMIN MENU");
 		btnNewButton.setBounds(1549, 195, 347, 122);
 		add(btnNewButton);
@@ -875,21 +877,52 @@ public class PanelDebug  extends ImagePanel {
 		btnRecycleCurrencySetting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				//0xD0; DENOM; RESEVADO (0x0h); REC_BOX
+				/*
+				SYNC [FCh]
+				LNG [xxh]
+				EXT CMD [F0h] Extension Command
+				UNIT [20h] Unit type [20h]: RECYCLER
+				CMD [D0h] RECYCLE CURRENCY SETTING
+				
+				DATA1 [xxh] RECYCLE CURRENCY DATA
+				* Refer to Table DATAn [xxh] for Recycle denomination data format.
+				CRC Check Message integrity via CRC method (2bytes)
+				
+				RECYCLE CURRENCY DATA format
+				DATAn
+				[xxh] Recycle Denomination DATA1 (1byte)
+				[xxh] Recycle Denomination DATA2 (1byte) … Reserved
+				[xxh] Recycle Box No. n (1byte)
+				 n = The Number of Recycle boxes.
+				
+				0xD0; DENOM; RESEVADO (0x0h); REC_BOX
+				
+				 e.g., The data part of this command, when setting 10€ for Recycle Box No. 1 and
+				50€ for Recycle Box No. 2, would be as follows (when 10€ is assigned for bit
+				2 and 50€ is for bit 4)
+				04h + 00h + 01h + 10h + 00h + 02h
 
+				DENOMS: 
+						0x02:20 
+						0x04:50 
+						0x08:100 
+						0x10:200 
+						0x20:500;
+				 */				
+				
 				if(chckbxReciclador1.isSelected()) {				
-					Flow.jcms[0].jcmMessage[7] = 0x01;  //REC1
-					Flow.jcms[0].jcmMessage[8] = 0x08; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
+					Flow.jcms[0].jcmMessage[7] = 0x01; 
+					Flow.jcms[0].jcmMessage[8] = Billete.$20;  
 					Flow.jcms[0].jcmMessage[9] = 0x00;
-					Flow.jcms[0].jcmMessage[10] = 0x02;
-					Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x10, (byte) 0x0,Flow.jcms[0].jcmMessage);
+					Flow.jcms[0].jcmMessage[10] = 0x02;												  
+					Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, Billete.$50, (byte) 0x0,Flow.jcms[0].jcmMessage);
 				}
 				if(chckbxReciclador2.isSelected()) {
 					Flow.jcms[1].jcmMessage[7] = 0x01;  
-					Flow.jcms[1].jcmMessage[8] = 0x02; // 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
+					Flow.jcms[1].jcmMessage[8] = Billete.$100;
 					Flow.jcms[1].jcmMessage[9] = 0x00;
-					Flow.jcms[1].jcmMessage[10] = 0x02; //REC2
-					Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) 0x04, (byte) 0x0,Flow.jcms[1].jcmMessage);
+					Flow.jcms[1].jcmMessage[10] = 0x02;												  
+					Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, Billete.$200, (byte) 0x0,Flow.jcms[1].jcmMessage);
 				}
 			}
 		});
@@ -986,12 +1019,12 @@ public class PanelDebug  extends ImagePanel {
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad PanelDebug");
-		
+
 	}
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelDebug");
-		
+		//System.out.println("OnUnload PanelDebug");
+
 	}
 }

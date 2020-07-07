@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelAdminEstatusDispositivos extends ImagePanel{
 
@@ -193,7 +193,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelAdminEstatusDispositivos");
+		//System.out.println("OnUnload PanelAdminEstatusDispositivos");
 
 	}
 }

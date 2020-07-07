@@ -9,7 +9,7 @@ public class JcmMonitor extends Thread {
 
 public void run(){
 
-	System.out.println("JcmMonitor running");
+	System.out.println("JcmMonitor [running]");
 	
 	Timer screenTimerDispense = new Timer();
 
@@ -19,9 +19,6 @@ public void run(){
 			Afd.BroadcastFullStatus();
 		}
 	}, 120000,120000); 
-	
-	
-	System.out.println("JcmMonitor bygon verde y plaquitas");
 	
    } 
 

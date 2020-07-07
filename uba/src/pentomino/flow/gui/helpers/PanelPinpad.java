@@ -1,4 +1,4 @@
-package pentomino.flow.gui;
+package pentomino.flow.gui.helpers;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -11,6 +11,10 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import pentomino.flow.gui.PinKey;
+import pentomino.flow.gui.PinpadEvent;
+import pentomino.flow.gui.PinpadListener;
 
 public class PanelPinpad {
 	

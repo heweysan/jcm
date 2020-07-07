@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -23,6 +24,8 @@ import pentomino.core.devices.Afd;
 import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
+import pentomino.flow.gui.helpers.PanelPinpad;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -103,7 +106,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 		case _Cancel:				        	
 			CurrentUser.cleanPinpadData();
 			lblToken.setText("");										
-			Flow.redirect(Flow.panelOperacionCancelada,5000, Flow.panelIdle);
+			Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);
 			break;
 		case _Ok:
 
@@ -234,7 +237,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 
 					if( ++CurrentUser.tokenAttempts >= 2) {						
 						CurrentUser.cleanPinpadData();																				
-						Flow.redirect(Flow.panelOperacionCancelada, 5000, Flow.panelIdle);														
+						Flow.redirect(Flow.panelOperacionCancelada, TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);														
 					}
 					else {						
 						Flow.panelToken.setBackground("./images/Scr7TokenIncorrecto.png");
@@ -279,7 +282,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelToken");
+		//System.out.println("OnUnload PanelToken");
 
 	}
 

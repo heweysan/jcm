@@ -4,8 +4,8 @@ import javax.swing.JLabel;
 
 import pentomino.core.devices.Ptr;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
 import pentomino.flow.gui.helpers.ImageButton;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 import java.awt.Color;
 import javax.swing.SwingConstants;
@@ -162,7 +162,7 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelAdminPruebaImpresion");
+		//System.out.println("OnUnload PanelAdminPruebaImpresion");
 		lblContadores.setVisible(false);
 		lblRetiro.setVisible(false);
 		lblDeposito.setVisible(false);

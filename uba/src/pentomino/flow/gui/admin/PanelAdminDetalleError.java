@@ -3,8 +3,8 @@ package pentomino.flow.gui.admin;
 import javax.swing.JLabel;
 
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
 import pentomino.flow.gui.helpers.ImageButton;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 import java.awt.Color;
 import javax.swing.SwingConstants;

@@ -10,8 +10,8 @@ import javax.swing.JButton;
 import pentomino.common.jcmOperation;
 import pentomino.flow.Flow;
 import pentomino.flow.protocol;
-import pentomino.flow.gui.ImagePanel;
 import pentomino.flow.gui.helpers.ImageButton;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelAdminResetDispositivos  extends ImagePanel {
 

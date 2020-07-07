@@ -2,6 +2,7 @@ package pentomino.flow.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,6 +18,9 @@ import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.DebugButtons;
+import pentomino.flow.gui.helpers.ImagePanel;
+import pentomino.flow.gui.helpers.PanelPinpad;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -53,7 +57,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginUser.setForeground(Color.WHITE);
 		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginUser.setBounds(257, 625, 496, 87);  //240, 530, 87, 87
+		lblLoginUser.setBounds(257, 640, 496, 87);
 		add(lblLoginUser);
 		add(new DebugButtons().getPanel());
 		
@@ -110,7 +114,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 			lblLoginUser.setText("");
 			lblLoginPassword.setText("");			
 			CurrentUser.asteriscos = "";							
-			Flow.redirect(Flow.panelOperacionCancelada,5000, Flow.panelIdle);
+			Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);
 		break;
 		case _Ok:
 			
@@ -178,7 +182,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 								//Intentos superados
 								CurrentUser.loginUser = "";
 								CurrentUser.cleanPinpadData();
-								Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
+								Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);
 							}
 							else {
 										
@@ -244,7 +248,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
 
 							if(++CurrentUser.loginAttempts >= 2) {
-								Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);								
+								Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);								
 							}
 							else {	
 								lblLoginMensaje.setText("No tienes permisos para hacer retiros.");
@@ -313,7 +317,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 						CurrentUser.loginPassword = "";
 						CurrentUser.asteriscos = "";
 						if(++CurrentUser.loginAttempts >= 2) {
-							Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
+							Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);
 							
 						}else {
 
@@ -377,7 +381,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelLogin");
+		//System.out.println("OnUnload PanelLogin");
 		lblLoginUser.setText("");
 		lblLoginPassword.setText("");
 		lblLoginMensaje.setText("");

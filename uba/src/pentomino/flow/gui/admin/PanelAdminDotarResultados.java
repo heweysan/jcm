@@ -18,7 +18,7 @@ import pentomino.config.Config;
 import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 import java.awt.Color;

@@ -4,27 +4,26 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import pentomino.cashmanagement.CmQueue;
 import pentomino.common.AccountType;
 import pentomino.common.JcmGlobalData;
+import pentomino.common.NetUtils;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.DispenseStatus;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.RaspiAgent;
-
-import javax.swing.SwingConstants;
 
 public class PanelIdle  extends ImagePanel {
 
@@ -86,6 +85,7 @@ public class PanelIdle  extends ImagePanel {
 		btnIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 
+
 				//Checamos que tenga algo de dinero.
 				if(Flow.jcms[0].billCounters.Cass1Available == 0 && Flow.jcms[0].billCounters.Cass2Available == 0 && Flow.jcms[1].billCounters.Cass1Available == 0 && Flow.jcms[1].billCounters.Cass2Available == 0){
 					System.out.println("No hay dinero en los caseteros para dispensar");
@@ -98,17 +98,19 @@ public class PanelIdle  extends ImagePanel {
 					Flow.redirect(Flow.panelMenuSinFondo,5000,Flow.panelIdle);
 				}
 				else {
-
 					if(CmQueue.queueList.isEmpty()) {
 						Flow.panelMenu.setBackground("./images/Scr7SinRetiroAutorizado.png");
+						PanelMenu.btnMenuRetiro.setIcon(new ImageIcon("./images/BTN7RetiroOff.png"));
 						PanelMenu.btnMenuRetiro.setEnabled(false);
 					}else {
-						Flow.panelMenu.setBackground("./images/Scr7RetiroAutorizado.png");				
+						Flow.panelMenu.setBackground("./images/Scr7RetiroAutorizado.png");	
+						PanelMenu.btnMenuRetiro.setIcon(new ImageIcon("./images/BTN7Retiro.png"));			
 						PanelMenu.btnMenuRetiro.setEnabled(true);	
 					}
 
 					Flow.redirect(Flow.panelMenu,5000,Flow.panelIdle);
 				}
+				
 			}
 		});
 
@@ -153,31 +155,18 @@ public class PanelIdle  extends ImagePanel {
 		screenTimerNetwork.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {				
-				if(!netIsAvailable()) {
+				if(!NetUtils.netIsAvailable()) {
 					Flow.redirect(Flow.panelErrorComunicate);
 					screenTimerNetwork.cancel();
 				}
 			}
-		}, 1000,60000);
+		}, 1000,TimeUnit.MINUTES.toMillis(1));
 	}
 
-
-	private static boolean netIsAvailable() {    
-		System.out.println("netIsAvailable");
-		try {			
-			Socket socket2 = new Socket();
-			socket2.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);			
-			socket2.close();
-			return true;
-		} catch (UnknownHostException e) {		
-		} catch (IOException e) {		
-		}
-		return false;
-	}
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelIdle");
+		//System.out.println("OnUnload PanelIdle");
 		screenTimerDispense.cancel();
 		screenTimerNetwork.cancel();
 

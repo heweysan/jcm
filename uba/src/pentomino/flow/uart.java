@@ -119,11 +119,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	}
 	
 	public void openPort (String prt){
-		if (logger.isDebugEnabled()) {
-			logger.debug("openPort(String) - start"); //$NON-NLS-1$
-		}
-		
-		System.out.println("uart->openPort [" + prt + "]" );
+				
+		logger.debug("uart->openPort [" + prt + "]" );
 		portList =  CommPortIdentifier.getPortIdentifiers();
 		
 		while (portList.hasMoreElements()) {
@@ -143,7 +140,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     }
                     
                     try {
-                    	System.out.println("[" + id + "] getInputstream");
+                    	logger.debug("[" + id + "] getInputstream");
                         inputStream = serialPort.getInputStream();
                     } 
                     catch (IOException e) {
@@ -153,7 +150,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     }
                     
                     try {
-                    	System.out.println("[" + id + "] getOutputStream");
+                    	logger.debug("[" + id + "] getOutputStream");
                         outputStream = serialPort.getOutputStream();
                     } 
                     catch (IOException e) {
@@ -164,7 +161,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     
                     serialPort.notifyOnDataAvailable(true);
                     try {
-                    	System.out.println("[" + id + "] Setting Port Params");
+                    	logger.debug("[" + id + "] Setting Port Params");
                         serialPort.setSerialPortParams(baud/*uart.baud*//*9600*/,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
@@ -176,11 +173,10 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
                     }
                            
                     try {
-                    	System.out.println("[" + id + "] adding event listener");
+                    	logger.debug("[" + id + "] adding event listener");
             			serialPort.addEventListener(this);
             		} catch (TooManyListenersException e) {
 						logger.error("openPort(String)", e); //$NON-NLS-1$
-
             			e.printStackTrace();
             		}
                     
@@ -191,9 +187,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
             }
         }
 	  
-		if (logger.isDebugEnabled()) {
-			logger.debug("openPort(String) - end"); //$NON-NLS-1$
-		}
+		
      }
 	
 	public void serialEvent(SerialPortEvent event){

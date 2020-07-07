@@ -4,10 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -24,14 +20,14 @@ import pentomino.cashmanagement.CmQueue;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.common.AccountType;
+import pentomino.common.Billete;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
+import pentomino.common.NetUtils;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.core.devices.Tio;
-import pentomino.flow.gui.FlowLayout;
-import pentomino.flow.gui.ImagePanel;
 import pentomino.flow.gui.PanelDebug;
 import pentomino.flow.gui.PanelDeposito;
 import pentomino.flow.gui.PanelDispense;
@@ -45,6 +41,7 @@ import pentomino.flow.gui.PanelNoTicket;
 import pentomino.flow.gui.PanelOos;
 import pentomino.flow.gui.PanelOperacionCancelada;
 import pentomino.flow.gui.PanelReinicio;
+import pentomino.flow.gui.PanelSplash;
 import pentomino.flow.gui.PanelTerminamos;
 import pentomino.flow.gui.PanelToken;
 import pentomino.flow.gui.admin.PanelAdminContadoresActuales;
@@ -54,12 +51,14 @@ import pentomino.flow.gui.admin.PanelAdminDotarCancelar;
 import pentomino.flow.gui.admin.PanelAdminDotarResultados;
 import pentomino.flow.gui.admin.PanelAdminError;
 import pentomino.flow.gui.admin.PanelAdminEstatusDispositivos;
+import pentomino.flow.gui.admin.PanelAdminIniciando;
 import pentomino.flow.gui.admin.PanelAdminLogin;
 import pentomino.flow.gui.admin.PanelAdminMenu;
 import pentomino.flow.gui.admin.PanelAdminPruebaImpresion;
 import pentomino.flow.gui.admin.PanelAdminResetDispositivos;
 import pentomino.flow.gui.admin.PanelAdminUsuarioInvalido;
-import pentomino.flow.gui.admin.PanelAdminIniciando;
+import pentomino.flow.gui.helpers.FlowLayout;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.AgentsQueue;
 import pentomino.jcmagent.DTAServer;
 import pentomino.jcmagent.RaspiAgent;
@@ -69,6 +68,8 @@ public class Flow {
 	public static EventListenerClass c;
 
 	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
+
+	public static ImagePanel panelSplash;
 
 	public static ImagePanel panelTerminamos;
 	public static ImagePanel panelOperacionCancelada;
@@ -103,7 +104,7 @@ public class Flow {
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
 
-	private JFrame mainFrame;
+	private static JFrame mainFrame;
 
 	private static boolean recyclerBills1Set = false;
 	private static boolean recyclerBills2Set = false;
@@ -125,73 +126,54 @@ public class Flow {
 
 	public static int jcm1LastBillInsertedWorking = 0; 
 	public static int jcm2LastBillInsertedWorking = 0;
-	
+
 	public static Timer adminTimer = new Timer();
-	
+
 	/**
 	 * Variable que indica si se esta dentro del lapso de tiempo que peude estar abierta la boveda sin sonar la alarma.
 	 */
 	public static boolean isAdminTime = false;
 
 	public static void main(String[] args) {
-		
-		System.out.println("->" + TimeUnit.MINUTES.toMillis(10));
-		
+
+		//System.out.println("->" + TimeUnit.MINUTES.toMillis(10));
+
 		logger.info("----- FLOW MAIN -----");
 
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
-		System.out.println(System.getProperty("os.name") + " isDebug[" + JcmGlobalData.isDebug + "]");
 
-		System.out.println("netIsAvailable [" + netIsAvailable() + "]");		
+		initialize();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Flow window = new Flow();
-					window.mainFrame.setVisible(true);
+					//Flow window = new Flow();
+					new Flow();
+					//mainFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-	
-	private static boolean netIsAvailable() {    
-		System.out.println("netIsAvailable");
-		try {			
-			Socket socket2 = new Socket();
-			socket2.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);			
-			socket2.close();
-			System.out.println("netIsAvailable true");
-			return true;
-		} catch (UnknownHostException e) {		
-		} catch (IOException e) {		
-		}
-		System.out.println("netIsAvailable false");
-		return false;
-	}
-	
+
+
 	/**
 	 * Activa un timer que dura n minutos, tiempo en el cual se puede abrir la boveda sin generar alarma.
 	 * Si despues del tiempo establecido no se ha cerrado la boveda se dispara la alarma.
 	 */
 	public static void timerBoveda() {
-		
-		System.out.println("Timer Boveda inciando.");
+
+		logger.info("Timer Boveda inciando.");		
 		adminTimer = new Timer();
 		isAdminTime = true;		
-		
+
 		adminTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				
-				System.out.println("Timer Boveda termiando");
-				
-				//Si la boveda sigue abierta activamos la alarma
-				if(Tio.safeOpen)
-				{
-					System.out.println("Se acabo el tiempo y la boveda sigue abierta. Activamos la alarma");
-					miTio.alarmOn();
+				logger.info("Timer Boveda terminado.");				
+				if(Tio.safeOpen){
+					System.out.println("Se acabo el tiempo y la boveda sigue abierta.");
 					isAdminTime = false;
 				}
 				adminTimer.cancel();
@@ -207,6 +189,13 @@ public class Flow {
 	 */
 	public Flow() throws IOException, TimeoutException {
 
+		RaspiAgent.WriteToJournal("INIT", 0, 0, "", "", "INICIO FLUJO V 0.0.1", AccountType.None, TransactionType.Administrative);
+		RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version, "0.0.0.1");
+
+		JcmGlobalData.PreloadConfigVariables();
+
+		initializeJcms();		
+
 		JcmMonitor t2 = new JcmMonitor();
 		t2.start();
 
@@ -219,62 +208,63 @@ public class Flow {
 		dtaServer.SetupRabbitListener();		
 
 		Thread tioThread = new Thread(miTio, "Tio Thread");
-		tioThread.start();	
+		tioThread.start();
 
-		initializeJcms();
+		loadGuiElements();
 
-		GetCurrentCassettesConfig();
 
-		JcmGlobalData.atmId = Config.GetDirective("AtmId", "-----");
+		//Actualizamos los valores de reciclaje si es que no concuerdan con el config
+
+		Flow.jcms[0].jcmMessage[7] = 0x01; 
+		Flow.jcms[0].jcmMessage[8] = denomToByte(JcmGlobalData.rec1bill1Denom);  
+		Flow.jcms[0].jcmMessage[9] = 0x00;
+		Flow.jcms[0].jcmMessage[10] = 0x02;												  
+		Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, denomToByte(JcmGlobalData.rec1bill2Denom), (byte) 0x0,Flow.jcms[0].jcmMessage);
+
+		Flow.jcms[1].jcmMessage[7] = 0x01;  
+		Flow.jcms[1].jcmMessage[8] = denomToByte(JcmGlobalData.rec2bill1Denom);
+		Flow.jcms[1].jcmMessage[9] = 0x00;
+		Flow.jcms[1].jcmMessage[10] = 0x02;												  
+		Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, denomToByte(JcmGlobalData.rec2bill2Denom), (byte) 0x0,Flow.jcms[1].jcmMessage);
 
 		Config.SetPersistence("BoardStatus", "Available");
 
-		initialize();
-
-		//"Recycle Currency Req (+90h)";
-		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[0].jcmMessage);
-		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[1].jcmMessage);
-
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		//CURRENT COUNT REQUEST
-		jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[0].jcmMessage);
-		jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
-
-		
-		RaspiAgent.WriteToJournal("INIT", 0, 0, "", "", "INICIO FLUJO V 0.0.1", AccountType.None, TransactionType.Administrative);
-		RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Version, "0.0.0.1");
-				
-		
-		if(!netIsAvailable()) {
-			redirect(panelErrorComunicate);
-		}
-		else {
+		if(NetUtils.netIsAvailable()) {
 			redirect(panelIdle);			
 		}
-		
-		
+		else {
+			redirect(panelErrorComunicate);			
+		}
 	}
 
+	private byte denomToByte(int denom) {
+		switch(JcmGlobalData.rec1bill1Denom) {
+		case 20:
+			return Billete.$20;			
+		case 50:
+			return Billete.$50;			
+		case 100:
+			return Billete.$100;			
+		case 200:
+			return Billete.$200;			
+		case 500:
+			return Billete.$500;			
+		}
+
+		return Billete.$200;
+	}
+
+
 	/**
-	 * Initialize the contents of the frame.
+	 * Crea los objetos del gui y muestra la pantalla de splash en lo que se carga todo lo demas.
 	 */
-	private void initialize() {
+	private static void initialize() {
 
-		System.out.println("INITIALIZE...");
-
-		JcmGlobalData.setMaxRecyclableCash(Integer.parseInt(Config.GetDirective("maxRecyclableCash","0")));
-
-		System.out.println("maxRecyclableCash [" + JcmGlobalData.getMaxRecyclableCash() + "]");
+		logger.info("INITIALIZE...");	
 
 		panelContainer.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelContainer.setBackground(Color.LIGHT_GRAY);
+		panelContainer.setBackground(Color.BLUE);
 		panelContainer.setBounds(0, 0, 1920, 1080);
 
 		mainFrame = new JFrame("Frame Principal");
@@ -286,6 +276,26 @@ public class Flow {
 		mainFrame.getContentPane().add(panelContainer);
 		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
+		panelContainer.setLayout(cl);
+
+		panelSplash = new PanelSplash("./images/Scr7Placeholder.png","panelSplash",0,null);
+
+		panelContainer.add(panelSplash,"panelSplash");
+
+		Flow.cl.show(panelContainer, panelSplash);	
+		
+		mainFrame.setVisible(true);
+
+
+	}
+
+	/**
+	 * Carga todas las pantallas del Flujo
+	 */
+	private void loadGuiElements() {
+
+		logger.debug("loadGuiElements");
+
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
 		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
 		panelMenuSinFondo = new PanelMenuSinFondo("./images/Scr7HolaDepositamos.png","panelMenuSinFondo",0,null);
@@ -296,7 +306,7 @@ public class Flow {
 		panelTerminamos = new PanelTerminamos("./images/ScrTerminamos.png","panelTerminamos",5000,Flow.panelIdle);
 		panelDispense = new PanelDispense("./images/Scr7TomaBilletes.png","panelRetiroParcial",0,null);  //Scr7RetiroParcial  Scr7TomaBilletes
 		panelError = new PanelError("./images/Scr7Placeholder.png","panelError",5000,Flow.panelIdle);		
-		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",5000,Flow.panelIdle);		
+		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);		
 		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
 		panelReinicio  = new PanelReinicio("./images/Scr7Placeholder.png","panelReinicio",0,null);
 		panelOos = new PanelOos("./images/Scr7FueraDeServicio.png","panelOos",0,null);
@@ -317,13 +327,10 @@ public class Flow {
 		panelAdminIniciando = new PanelAdminIniciando("./images/Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminDetalleError = new PanelAdminDetalleError("./images/Scr7Placeholder.png","panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/Scr7Placeholder.png","panelAdminPruebaImpresion",0,null);
-		
-		
+
+
 		//Valores Iniciales
 		PanelIdle.lblAtmId.setText(JcmGlobalData.atmId);
-
-
-		panelContainer.setLayout(cl);		
 
 		panelContainer.add(panelIdle,"panelIdle");
 		panelContainer.add(panelMenu,"panelMenu");
@@ -340,9 +347,9 @@ public class Flow {
 		panelContainer.add(panelReinicio,"panelReinicio");
 		panelContainer.add(panelOos,"panelOos");		
 		panelContainer.add(panelErrorComunicate,"panelErrorComunicate");
-		
 
-		
+
+
 
 		//FLUJO ADMINISTRATIVO
 		panelContainer.add(panelAdminLogin,"panelAdminLogin");		
@@ -358,10 +365,10 @@ public class Flow {
 		panelContainer.add(panelAdminIniciando,"panelAdminIniciando");
 		panelContainer.add(panelAdminDetalleError,"panelAdminDetalleError");
 		panelContainer.add(panelAdminPruebaImpresion,"panelAdminPruebaImpresion");
-		
-		
-		
-		
+
+
+
+
 
 
 		String atmId = Config.GetDirective("AtmId", "");
@@ -493,12 +500,12 @@ public class Flow {
 						break;
 					}
 
-					
+
 					if(isRecyclable2) {
 						JcmGlobalData.totalCashInRecyclers += jcm2LastBillInserted;	
 						JcmGlobalData.totalCashInRecycler2 += jcm2LastBillInserted;  //Dinero que se puede dispensar
 					}
-					
+
 					CashInOpVO myObj2 = new CashInOpVO();
 					myObj2.atmId = atmId; 
 					myObj2.amount = (long) billType2;
@@ -514,7 +521,6 @@ public class Flow {
 					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted, "" + CurrentUser.totalAmountInserted);
 
 					UpdateCountersDeposit(1, Integer.toString(jcm2LastBillInserted),isRecyclable2);
-
 
 					CurrentUser.totalAmountInserted += billType2;					
 					System.out.println("$" + CurrentUser.totalAmountInserted);
@@ -532,7 +538,7 @@ public class Flow {
 				case "recyclerBills1":
 
 					PanelDeposito.lblJCMIzq.setText("$" + jcms[0].recyclerDenom1 + " / $" + jcms[0].recyclerDenom2);
-					
+
 					PanelDebug.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
 
 					PanelAdminEstatusDispositivos.lblJcm1Denom1.setText(jcms[0].recyclerDenom1);
@@ -552,7 +558,7 @@ public class Flow {
 				case "recyclerBills2":
 
 					PanelDeposito.lblJCMDer.setText("$" + jcms[1].recyclerDenom1 + " / $" + jcms[1].recyclerDenom2);
-					
+
 					PanelDebug.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 
 					PanelAdminEstatusDispositivos.lblJcm2Denom1.setText(jcms[1].recyclerDenom1);
@@ -619,7 +625,7 @@ public class Flow {
 					break;
 				case "SafeOpen":
 					System.out.println("Safe Open");
-					
+
 					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
 					if(isAdminTime) {
 						System.out.println("Boveda abierta autorizada");
@@ -645,18 +651,16 @@ public class Flow {
 					System.out.println("moneyIn1"); 
 					if(jcm1LastBillInserted != 0) {
 						jcm1LastBillInsertedWorking = jcm1LastBillInserted;
-						jcm1LastBillInserted = 0;
-						//UpdateCountersDeposit(0, Integer.toString(jcm1LastBillInsertedWorking));
+						jcm1LastBillInserted = 0;						
 					}
 
 					break;
 				case "moneyIn2":
-					//JCM 2
+					//JCM 2 moneyIn
 					System.out.println("moneyIn2");
 					if(jcm2LastBillInserted != 0) {
 						jcm2LastBillInsertedWorking = jcm2LastBillInserted;
-						jcm2LastBillInserted = 0;
-						//UpdateCountersDeposit(1, Integer.toString(jcm2LastBillInsertedWorking));
+						jcm2LastBillInserted = 0;					
 					}
 
 					break;
@@ -666,8 +670,7 @@ public class Flow {
 					Runtime runtime = Runtime.getRuntime();
 					try {
 						runtime.exec(command);
-					} catch (IOException ex) {
-						// TODO Auto-generated catch block
+					} catch (IOException ex) {						
 						ex.printStackTrace();
 					}					
 					break;
@@ -688,21 +691,13 @@ public class Flow {
 			}
 		});
 
-		//initializeJcms();
-
-
-		System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+		logger.info("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
 		jcms[0].jcmMessage[3] = 0x01;
 		jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
 
-		System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+		logger.info("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
 		jcms[1].jcmMessage[3] = 0x01;
 		jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
-
-		//cl.show(panelContainer, "panelIdle");
-
-		//cl.show(panelContainer, panelDeposito);
-
 	}
 
 
@@ -743,11 +738,9 @@ public class Flow {
 	 */
 	private void UpdateCountersDeposit(Integer jcm, String denom, boolean isRecyclable) {
 
-		System.out.println("UpdateCountersDeposit jcm [" + jcm + "] denom [" + denom + "]");
-
 		String cassette = JcmGlobalData.getKey(jcm, denom);
-		
-		System.out.println("cassete [" + cassette + "]");
+
+		System.out.println("UpdateCountersDeposit jcm [" + jcm + "] denom [" + denom + "] cassete [" + cassette + "]");
 
 		if(!isRecyclable) {
 			//No esta en las denomonaciones lo mandamos a accepted
@@ -789,45 +782,30 @@ public class Flow {
 		accepted++;
 
 		Config.SetPersistence("Accepted" + denom, Integer.toString(accepted));
-				
-	}
-
-	/**
-	 * Regresa la denominancion de los 4 cessetteros para saber cual hay que buscar al hacer el dispense o deposit.
-	 */
-	private void GetCurrentCassettesConfig() {	
-
-		JcmGlobalData.jcm1cassetteDataValues = new HashMap<String, String>();
-		JcmGlobalData.jcm2cassetteDataValues = new HashMap<String, String>();
-
-		JcmGlobalData.jcm1cassetteDataValues.put("1", Config.GetPersistence("Cassette1Value", "0"));
-		JcmGlobalData.jcm1cassetteDataValues.put("2", Config.GetPersistence("Cassette2Value", "0"));
-
-		JcmGlobalData.jcm2cassetteDataValues.put("3", Config.GetPersistence("Cassette3Value", "0"));
-		JcmGlobalData.jcm2cassetteDataValues.put("4", Config.GetPersistence("Cassette4Value", "0"));
 
 	}
-
 
 
 	private static void initializeJcms() {
 
 
+		logger.info("Inicializando JCMS");
+
 		//Identificamos los puertos disponibles
 		uart.portList = CommPortIdentifier.getPortIdentifiers();
 		int contador = 0;
 
-		System.out.println("COMM contador " + contador);
+		logger.info("Puertos COMM encontrados [" + contador  + "]");
 
 		while (uart.portList.hasMoreElements()) {
 
 			CommPortIdentifier commPort = (CommPortIdentifier) uart.portList.nextElement();
 
-			System.out.println("COMM " + commPort.getName());
+			logger.debug("COMM [" + commPort.getName() + "]");
 			//Checamos que sea un com{x} port
 			if (commPort.getName().toUpperCase().contains("COM")  || commPort.getName().toUpperCase().contains("TTYUSB") ) {
 
-				System.out.println("Puerto [" + commPort.getName().toUpperCase() + "]");
+				logger.debug("Puerto [" + commPort.getName().toUpperCase() + "]");
 
 				jcms[contador] = new uart(contador + 1);
 				jcms[contador].portId = commPort;
@@ -837,6 +815,7 @@ public class Flow {
 			}			
 		}
 
+		//Este es para debug en mauina local con loopback de puertos comm.
 		if(contador == 0 && JcmGlobalData.isDebug) {
 			jcms[0] = new uart(1);
 			jcms[0].portId = null;
@@ -856,6 +835,7 @@ public class Flow {
 		}
 		else {
 			//Inicializamos los UARTS
+			logger.debug("Inicializando UARTS");
 			for(int i = 0; i < contador; i++) {
 				jcms[i].currentOpertion = jcmOperation.Startup;
 				jcms[i].openPort(jcms[i].portId.getName().toString());
@@ -863,9 +843,9 @@ public class Flow {
 		}
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param target  - A que pantalla se va a ir
@@ -876,6 +856,11 @@ public class Flow {
 		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
 
+	
+	public static void redirect(ImagePanel target, long timeout, ImagePanel timeoutTarget) {
+		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
+	}
+	
 	public static void redirect(ImagePanel target) {
 		Flow.cl.show(panelContainer, target);	
 	}
@@ -907,35 +892,16 @@ public class Flow {
 					}
 				}, 500);
 			}
-			
+
 			try {
 				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			} catch (InterruptedException e) {				
 				e.printStackTrace();
 			}
-		}	
-		
-		/*
-		System.out.println("JcmMonitor running");
-		
-		Timer screenTimerDispense = new Timer();
+		}
 
-		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {			
-				if(jcms[0].recyclerContadoresSet && jcms[1].recyclerContadoresSet){
-					screenTimerDispense.cancel();
-				}
-			}
-		}, 120000,120000); 
-		*/
-		
 		System.out.println("JcmMonitor bygon verde y plaquitas");
-		
-		
-		
-		
+
 	}
 
 }

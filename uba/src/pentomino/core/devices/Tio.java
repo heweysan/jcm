@@ -104,9 +104,8 @@ public class Tio implements Runnable{
 	@Override
 	public void run() {
 
-		logger.debug("Tio starting....");
-		System.out.println("Tio starting.... DEBUG"); 
-		
+		logger.info("Tio [running]");
+				
 		if(JcmGlobalData.isDebug) {			
 			return;
 		}
@@ -115,8 +114,7 @@ public class Tio implements Runnable{
 		gpio = GpioFactory.getInstance();
 		try {
 			Thread.sleep(250);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) {			
 			e.printStackTrace();
 		}
 
@@ -125,13 +123,13 @@ public class Tio implements Runnable{
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			gpio = GpioFactory.getInstance();
 		}
 		else {
 			System.out.println("TIO GPIO UP");
+			logger.debug("TIO GPIO UP");
 		}
 
 		GpioFactory.setDefaultProvider(new RaspiGpioProvider(RaspiPinNumberingScheme.BROADCOM_PIN_NUMBERING));
@@ -140,15 +138,13 @@ public class Tio implements Runnable{
 		try {
 			Thread.sleep(250);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		fascia = gpio.provisionDigitalInputPin(RaspiBcmPin.GPIO_19, PinPullResistance.PULL_UP);
 
 		try {
 			Thread.sleep(500);
-		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e2) {			
 			e2.printStackTrace();
 		}
 
@@ -156,8 +152,7 @@ public class Tio implements Runnable{
 		electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.LOW);
 		try {
 			Thread.sleep(500);
-		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e2) {			
 			e2.printStackTrace();
 		}
 
@@ -178,8 +173,7 @@ public class Tio implements Runnable{
 
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e1) {			
 			e1.printStackTrace();
 		}
 
@@ -188,8 +182,6 @@ public class Tio implements Runnable{
 		System.out.println("alarma Name[" + alarma.getState().getName() + "] value[" + alarma.getState().getValue() + "]");
 		      
 		System.out.println("electroIman Name[" + electroIman.getState().getName() + "] value[" + electroIman.getState().getValue() + "]");
-
-
 
 
 
@@ -250,16 +242,15 @@ public class Tio implements Runnable{
 				}           	
 
 			}
-		});       
+		});     
 
 		while(true) {
 			try {
 				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			} catch (InterruptedException e) {				
 				e.printStackTrace();
 			}
-		} 
+		}
 		// stop all GPIO activity/threads by shutting down the GPIO controller
 		// (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
 		// gpio.shutdown();   <--- implement this method call if you wish to terminate the Pi4J GPIO controller

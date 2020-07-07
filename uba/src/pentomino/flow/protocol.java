@@ -312,7 +312,6 @@ public class protocol extends kermit {
 
 		byte operacion;
 
-
 		if(jcmResponse[2] == (byte) 0xF0) {  //Es extended command
 			operacion = jcmResponse[4];
 		}
@@ -350,8 +349,7 @@ public class protocol extends kermit {
 			break;
 		case SR_ACCEPTING: // 0x12 ACCEPTING
 			if (mostrar)
-				System.out
-				.println(baitsToString("JCM[" + jcmId + "] processing ACCEPTING", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] processing ACCEPTING", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			EventListenerClass.fireMyEvent(new MyEvent("accepting" + jcmId));
 			break;
@@ -1096,23 +1094,11 @@ public class protocol extends kermit {
 			System.out.println("totalCashInRecyclers [" + (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) + "]");
 
 			waitingForInitialize = false;
-			if (currentOpertion == jcmOperation.Reset) {
-
-				currentOpertion = jcmOperation.None;
-
-				System.out.println("RE INHIBIT (HABILITAMOS QUE ACEPTE BILLETES)");
-				jcmMessage[3] = 0x00;
-				id003_format((byte) 0x6, (byte) 0xC3, jcmMessage, false);
-
-			} else {
-				if (currentOpertion == jcmOperation.Startup) {
-					currentOpertion = jcmOperation.None;
-				}
-				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
-			}
-
+			currentOpertion = jcmOperation.None;
 			recyclerContadoresSet = true;
-
+			
+			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			
 			EventListenerClass.fireMyEvent(new MyEvent("recyclerContadores" + jcmId));
 
 			break;
@@ -1153,8 +1139,10 @@ public class protocol extends kermit {
 				}
 				else{
 					if (currentOpertion == jcmOperation.Reset) {
-
 						id003_format((byte) 5, (byte) 0x40, jcmMessage, true); // RESET
+					}
+					else {
+						id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 					}
 				} 
 
@@ -1168,10 +1156,11 @@ public class protocol extends kermit {
 				
 				System.out.println("CurrentOperation [" + currentOpertion + "]");
 				recyclerContadoresSet = false;
-				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
-						jcmMessage);
 				
-				id003_format((byte) 5, ACK, jcmMessage, true); // ACK
+				//SSR_E_CURRENT_COUNT request
+				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcmMessage);
+				
+				//TODO HEWEY WHY? id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 
 			} else {
 
@@ -1197,12 +1186,9 @@ public class protocol extends kermit {
 			if (jcmId == 1){
 				JcmGlobalData.rec1bill1Denom = denom1;
 				JcmGlobalData.rec1bill2Denom = denom2;
-
-				//broadcastData = "Cassette1-" + recyclerDenom1 + ";Cassette2-" + recyclerDenom2 + ";Cassette3-0;Cassette4-0";
 			}else {
 				JcmGlobalData.rec2bill1Denom = denom1;
 				JcmGlobalData.rec2bill2Denom = denom2;
-				//broadcastData = "Cassette1-0;Cassette2-0;Cassette3-" + recyclerDenom1 + ";Cassette4-"	+ recyclerDenom2;
 			}
 			System.out.println("Rec1[" + recyclerDenom1 + "] Rec2[" + recyclerDenom2 + "]");
 

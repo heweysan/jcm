@@ -1,6 +1,6 @@
 package pentomino.flow.gui.admin;
 
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelAdminIniciando extends ImagePanel {
 
@@ -28,13 +28,13 @@ public class PanelAdminIniciando extends ImagePanel {
 	@Override
 	public void OnLoad() {
 		
-			System.out.println("OnUnload PanelAdminIniciando");
+			//System.out.println("OnUnload PanelAdminIniciando");
 		
 	}
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelAdminIniciando");
+		//System.out.println("OnUnload PanelAdminIniciando");
 		
 	}
 

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +22,8 @@ import pentomino.config.Config;
 import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.DebugButtons;
+import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -78,18 +81,18 @@ public class PanelDeposito extends ImagePanel{
 
 		add(new DebugButtons().getPanel());	
 		
-		lblJCMIzq = new JLabel("- / -");
+		lblJCMIzq = new JLabel("$0 / $0");
 		lblJCMIzq.setHorizontalAlignment(SwingConstants.CENTER);
 		lblJCMIzq.setForeground(Color.WHITE);
 		lblJCMIzq.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJCMIzq.setBounds(401, 396, 264, 66);
+		lblJCMIzq.setBounds(369, 396, 360, 66);
 		add(lblJCMIzq);
 		
-		lblJCMDer = new JLabel("- / -");
+		lblJCMDer = new JLabel("$0 / $0");
 		lblJCMDer.setHorizontalAlignment(SwingConstants.CENTER);
 		lblJCMDer.setForeground(Color.WHITE);
 		lblJCMDer.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJCMDer.setBounds(915, 396, 264, 66);
+		lblJCMDer.setBounds(837, 396, 360, 66);
 		add(lblJCMDer);
 
 		btnAceptar.addActionListener(new ActionListener() {
@@ -112,7 +115,7 @@ public class PanelDeposito extends ImagePanel{
 					
 					System.out.println("totalAmountInserted [" + CurrentUser.totalAmountInserted + ")");
 					if(CurrentUser.totalAmountInserted == 0) {
-						Flow.redirect(Flow.panelOperacionCancelada,5000,Flow.panelIdle);
+						Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);
 						return;
 					}
 					
@@ -201,6 +204,6 @@ public class PanelDeposito extends ImagePanel{
 
 	@Override
 	public void OnUnload() {		
-		System.out.println("OnUnload [PanelDeposito]");
+		//System.out.println("OnUnload [PanelDeposito]");
 	}
 }

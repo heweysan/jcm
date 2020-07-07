@@ -11,7 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
+
 import java.awt.Color;
 import javax.swing.SwingConstants;
 

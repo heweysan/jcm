@@ -6,7 +6,7 @@ package pentomino.flow.gui.admin;
 import pentomino.common.PinpadMode;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.ImagePanel;
+import pentomino.flow.gui.helpers.ImagePanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,7 +71,7 @@ public class PanelAdminUsuarioInvalido  extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload PanelAdminUsuarioInvalido");
+		//System.out.println("OnUnload PanelAdminUsuarioInvalido");
 
 	}
 }

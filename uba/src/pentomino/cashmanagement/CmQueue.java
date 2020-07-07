@@ -10,11 +10,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import pentomino.cashmanagement.vo.CmMessageRequest;
+import pentomino.flow.Flow;
 import rabbitClient.CmListener;
 
 public class CmQueue implements Runnable{
 
+	private static final Logger logger = LogManager.getLogger(Flow.class.getName());
 
 	public static LinkedList<CmMessageRequest> queueList = new LinkedList<CmMessageRequest>();
 
@@ -25,7 +30,8 @@ public class CmQueue implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("CmQueue run");
+		logger.info("CmQueue [running]");
+		System.out.println("CmQueue [running]");
 
 		//Revisamos si hay retiros pendientes
 		GetPendingWithdrawals();
@@ -35,6 +41,7 @@ public class CmQueue implements Runnable{
 			myCmListener.SetupRabbitListener();				
 
 		} catch (Exception e) {
+			logger.error(e);
 			System.out.println("CmQueue.run EXCEPTION");
 			e.printStackTrace();
 		}

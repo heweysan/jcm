@@ -20,8 +20,6 @@ public class RaspiAgent {
 		
 		String atmId = Config.GetDirective("AtmId", "");		
 		
-		System.out.println("wtj1 authId [" + authId + "]");
-		
 		WriteToJournal(evt, amount, 0, authId, "", accountId, "0", "MXN", "",  "",
 				atmId, extraData, acctType, type,"", "", 0, authId);			
 	}
@@ -35,8 +33,6 @@ public class RaspiAgent {
 	public static void WriteToJournal(String evt, double amount, double available, String authId, String accountId, String extraData,AccountType acctType, TransactionType type,String switchAuthId) {
 		
 		String atmId = Config.GetDirective("AtmId", "");		
-		
-		System.out.println("wtj1 authId [" + authId + "]");
 		
 		WriteToJournal(evt, amount, 0, authId, "", accountId, "0", "MXN", "",  "",
 				atmId, extraData, acctType, type,"", "", 0, switchAuthId);			
@@ -75,10 +71,7 @@ public class RaspiAgent {
         //  evt, amount, available, authId, cardNumberMasked, accountId, extraData, surcharge, denomination, arqc
         //, arpc, acctType, type, aquirer, errorCode, flagCode, terminalCaps, posMode, cter, responseCode
         //, switchAtmId, switchAuthId, cardHash, cardCrypto
-        
-        
-        System.out.println("wtj2 authId [" + authId + "]");
-        
+                
         values.add(evt);
         values.add(Double.toString(amount));
         values.add(Double.toString(available));

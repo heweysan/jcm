@@ -112,5 +112,37 @@ public class JcmGlobalData {
 
 	public static void setMaxRecyclableCash(int maxRecyclableCash) {
 	}
+	
+	
+	/**
+	 * Precarga variables de Config que sabemos vamos a usar regularmente.
+	 * Cuando se actualiza una variable via manager se deben actualizar. TODO: Revisar que esto se haga
+	 */
+	public static void PreloadConfigVariables() {
+		
+		System.out.println("PreloadConfigVariables");
+		
+		atmId = Config.GetDirective("AtmId", "-----");
+		rec1bill1Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom1", "200"));
+		rec1bill2Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom2", "500"));
+		rec2bill1Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom1", "200"));
+		rec2bill2Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom2", "500"));
+		setMaxRecyclableCash(Integer.parseInt(Config.GetDirective("maxRecyclableCash","0")));
+		
+		jcm1cassetteDataValues = new HashMap<String, String>();
+		jcm2cassetteDataValues = new HashMap<String, String>();
+
+		jcm1cassetteDataValues.put("1", Config.GetPersistence("Cassette1Value", "0"));
+		jcm1cassetteDataValues.put("2", Config.GetPersistence("Cassette2Value", "0"));
+
+		jcm2cassetteDataValues.put("3", Config.GetPersistence("Cassette3Value", "0"));
+		jcm2cassetteDataValues.put("4", Config.GetPersistence("Cassette4Value", "0"));		
+		
+		System.out.println("rec1bill1Denom " + rec1bill1Denom);
+		System.out.println("rec1bill2Denom " + rec1bill2Denom);
+		System.out.println("rec2bill1Denom " + rec2bill1Denom);
+		System.out.println("rec2bill2Denom " + rec2bill2Denom);
+		
+	}
 
 }
