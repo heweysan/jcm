@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 import pentomino.common.AccountType;
 import pentomino.common.BusinessEvent;
@@ -21,13 +19,8 @@ import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
-import java.awt.Color;
 
 public class PanelAdminDotarResultados extends ImagePanel{
-
-	
-
-	public static JLabel lblMensaje = new JLabel("");
 	
 	private static final long serialVersionUID = 1L;
 
@@ -43,14 +36,6 @@ public class PanelAdminDotarResultados extends ImagePanel{
 
 	@Override
 	public void ContentPanel() {
-		lblMensaje.setForeground(Color.WHITE);
-		
-		
-
-		lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMensaje.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblMensaje.setBounds(10, 435, 1900, 84);
-		add(lblMensaje);
 
 
 		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png"));
@@ -59,7 +44,7 @@ public class PanelAdminDotarResultados extends ImagePanel{
 				Ptr.printContadores();
 			}
 		});
-		btnImprimirContadores.setBounds(10, 899, 574, 151);
+		btnImprimirContadores.setBounds(50, 880, 574, 151);
 		btnImprimirContadores.setContentAreaFilled(false);
 		btnImprimirContadores.setBorderPainted(false);
 		btnImprimirContadores.setOpaque(false);
@@ -76,7 +61,7 @@ public class PanelAdminDotarResultados extends ImagePanel{
 		btnRegresar.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnRegresar.setContentAreaFilled(false);
 		btnRegresar.setBorderPainted(false);
-		btnRegresar.setBounds(1336, 877, 574, 151);
+		btnRegresar.setBounds(1305, 880, 574, 151);
 		add(btnRegresar);
 
 	}

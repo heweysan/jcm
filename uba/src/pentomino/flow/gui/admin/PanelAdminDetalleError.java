@@ -49,7 +49,7 @@ public class PanelAdminDetalleError extends ImagePanel {
 				Flow.redirect(Flow.panelAdminEstatusDispositivos);
 			}
 		});
-		btnRegresar.setLocation(1323, 850);
+		btnRegresar.setLocation(1305, 880);
 		btnRegresar.setSize(574, 171);
 		add(btnRegresar);
 	}

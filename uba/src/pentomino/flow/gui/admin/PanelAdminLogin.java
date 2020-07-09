@@ -111,7 +111,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 			CurrentUser.cleanPinpadData();
 			lblAdminLoginUser.setText("");
 			lblAdminLoginPassword.setText("");			
-			CurrentUser.asteriscos = "";							
+			CurrentUser.loginPasswordMasked = "";							
 			Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);
 			break;
 		case _Ok:
@@ -172,7 +172,7 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 						lblAdminLoginUser.setText("");
 						lblAdminLoginPassword.setText("");
-						CurrentUser.asteriscos = "";
+						CurrentUser.loginPasswordMasked = "";
 						CurrentUser.loginUser = "";
 						CurrentUser.loginPassword = "";
 						CurrentUser.pinpadMode = PinpadMode.loginUser;
@@ -208,8 +208,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 				if (CurrentUser.loginPassword.length() > 7)
 					return;
 				CurrentUser.loginPassword += digito.getDigit();
-				CurrentUser.asteriscos += "*";
-				lblAdminLoginPassword.setText(CurrentUser.asteriscos);
+				CurrentUser.loginPasswordMasked += "*";
+				lblAdminLoginPassword.setText(CurrentUser.loginPasswordMasked);
 				break;	
 			default:
 				break;				

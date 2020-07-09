@@ -42,7 +42,7 @@ public class PanelMenu extends ImagePanel {
 		
 		btnMenuDeposito = new JButton(new ImageIcon("./images/BTN7Deposito.png"));
 		btnMenuDeposito.setOpaque(false);
-		btnMenuDeposito.setBounds(360, 502, 492, 498);
+		btnMenuDeposito.setBounds(450, 500, 492, 498);
 		btnMenuDeposito.setOpaque(false);
 		btnMenuDeposito.setContentAreaFilled(false);
 		btnMenuDeposito.setBorderPainted(false);
@@ -52,7 +52,7 @@ public class PanelMenu extends ImagePanel {
 		btnMenuRetiro.setOpaque(false);
 		btnMenuRetiro.setContentAreaFilled(false);
 		btnMenuRetiro.setBorderPainted(false);
-		btnMenuRetiro.setBounds(989, 502, 492, 498);
+		btnMenuRetiro.setBounds(985, 500, 492, 498);
 		add(btnMenuRetiro);
 			
 		btnMenuDeposito.addActionListener(new ActionListener() {
@@ -73,8 +73,8 @@ public class PanelMenu extends ImagePanel {
 				Flow.panelMenu.screenTimerCancel();			
 				
 				CurrentUser.cleanPinpadData(PinpadMode.loginUser);			
-				CurrentUser.asteriscos = "";				
-				PanelLogin.lblLoginUser.setLocation(257, 525);				
+				CurrentUser.loginPasswordMasked = "";				
+				PanelLogin.lblLoginUser.setLocation(257, 540);				
 				CurrentUser.currentOperation = jcmOperation.Dispense;
 				PanelLogin.lblLoginOpcion.setBounds(230, 430, 87, 87);   //Este es login con password
 				

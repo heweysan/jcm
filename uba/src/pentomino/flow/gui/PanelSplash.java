@@ -1,10 +1,6 @@
 package pentomino.flow.gui;
 
 import pentomino.flow.gui.helpers.ImagePanel;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.SwingConstants;
 
 public class PanelSplash  extends ImagePanel {
 
@@ -28,12 +24,6 @@ public class PanelSplash  extends ImagePanel {
 
 	@Override
 	public void ContentPanel() {
-		JLabel lblInicializando = new JLabel("Inicializando....");
-		lblInicializando.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInicializando.setForeground(Color.WHITE);
-		lblInicializando.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblInicializando.setBounds(0, 391, 1920, 175);
-		add(lblInicializando);
 		
 	}
 

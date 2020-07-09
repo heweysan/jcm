@@ -57,7 +57,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		btnPruebaDeImpresion.setOpaque(false);
 		btnPruebaDeImpresion.setContentAreaFilled(false);
 		btnPruebaDeImpresion.setBorderPainted(false);
-		btnPruebaDeImpresion.setBounds(10, 850, 575, 171);
+		btnPruebaDeImpresion.setBounds(52, 880, 575, 171);
 		add(btnPruebaDeImpresion);
 
 		btnReiniciarDispositivos = new JButton(new ImageIcon("./images/BTN_7p_Admin_Reiniciar.png"));
@@ -82,7 +82,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		btnDetalleError.setOpaque(false);
 		btnDetalleError.setContentAreaFilled(false);
 		btnDetalleError.setBorderPainted(false);
-		btnDetalleError.setBounds(691, 850, 575, 171);
+		btnDetalleError.setBounds(680, 880, 575, 171);
 		add(btnDetalleError);
 
 		JButton btnRegresar = new JButton(new ImageIcon("./images/BTN_7p_Admin_Regresar.png"));
@@ -94,7 +94,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		btnRegresar.setOpaque(false);
 		btnRegresar.setContentAreaFilled(false);
 		btnRegresar.setBorderPainted(false);
-		btnRegresar.setBounds(1305, 850, 574, 171);
+		btnRegresar.setBounds(1305, 880, 574, 171);
 		add(btnRegresar);
 
 		JLabel lblJcm1 = new JLabel("JCM1");
@@ -136,13 +136,13 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		lblJcm1Denom1 = new JLabel("N/A");
 		lblJcm1Denom1.setForeground(Color.WHITE);
 		lblJcm1Denom1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Denom1.setBounds(550, 586, 150, 46);
+		lblJcm1Denom1.setBounds(610, 586, 150, 46);
 		add(lblJcm1Denom1);
 
 		lblJcm1Denom2 = new JLabel("N/A");
 		lblJcm1Denom2.setForeground(Color.WHITE);
 		lblJcm1Denom2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblJcm1Denom2.setBounds(748, 586, 150, 46);
+		lblJcm1Denom2.setBounds(808, 586, 150, 46);
 		add(lblJcm1Denom2);
 
 		lblJcm2Denom1 = new JLabel("N/A");

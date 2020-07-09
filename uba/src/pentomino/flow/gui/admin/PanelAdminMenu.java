@@ -52,7 +52,7 @@ public class PanelAdminMenu extends ImagePanel {
 
 		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png"));
 		btnAdminMenuImpresionContadores.setOpaque(false);
-		btnAdminMenuImpresionContadores.setBounds(31, 680, 574, 171);
+		btnAdminMenuImpresionContadores.setBounds(205, 680, 574, 171);
 		btnAdminMenuImpresionContadores.setOpaque(false);
 		btnAdminMenuImpresionContadores.setContentAreaFilled(false);
 		btnAdminMenuImpresionContadores.setBorderPainted(false);
@@ -62,7 +62,7 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuCorte.setOpaque(false);
 		btnAdminMenuCorte.setContentAreaFilled(false);
 		btnAdminMenuCorte.setBorderPainted(false);
-		btnAdminMenuCorte.setBounds(31, 450, 574, 171);
+		btnAdminMenuCorte.setBounds(205, 475, 574, 171);
 		add(btnAdminMenuCorte);
 
 		btnAdminMenuEstatusDispositivos = new JButton(new ImageIcon("./images/BTN_7p_Admin_EstatusDispositivos.png"));
@@ -74,7 +74,7 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuEstatusDispositivos.setOpaque(false);
 		btnAdminMenuEstatusDispositivos.setContentAreaFilled(false);
 		btnAdminMenuEstatusDispositivos.setBorderPainted(false);
-		btnAdminMenuEstatusDispositivos.setBounds(1299, 680, 574, 171);
+		btnAdminMenuEstatusDispositivos.setBounds(1140, 680, 574, 171);
 		add(btnAdminMenuEstatusDispositivos);
 
 		btnAdminMenuSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Salir.png"));
@@ -91,40 +91,40 @@ public class PanelAdminMenu extends ImagePanel {
 				}
 			}
 		});
-		btnAdminMenuSalir.setBackground(Color.BLUE);
-		btnAdminMenuSalir.setOpaque(false);
-		btnAdminMenuSalir.setContentAreaFilled(false);
-		btnAdminMenuSalir.setBorderPainted(false);
-		btnAdminMenuSalir.setBounds(1299, 900, 574, 171);
-		add(btnAdminMenuSalir);
-
-		JButton btnAdminMenuReiniciar = new JButton(new ImageIcon("./images/BTN_7p_Admin_ReiniciarAtm.png"));
-		btnAdminMenuReiniciar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Reiniciando CAJERITO BUTTON");
-				boolean busy = false;
+		
+				JButton btnAdminMenuReiniciarAtm = new JButton(new ImageIcon("./images/BTN_7p_Admin_ReiniciarAtm.png"));
+				btnAdminMenuReiniciarAtm.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Reiniciando CAJERITO BUTTON");
+						boolean busy = false;
 	            do {
 	                try {	                	
-						Thread.sleep(2000);
-					} catch (InterruptedException ie) {
-						// TODO Auto-generated catch block
-						ie.printStackTrace();
-					}                
+								Thread.sleep(2000);
+							} catch (InterruptedException ie) {
+								// TODO Auto-generated catch block
+								ie.printStackTrace();
+							}                
 	                busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
 	                System.out.println("BUSY [" + busy +"]");
 	            } while (busy);
 	            System.out.println("");
 	            Flow.redirect(Flow.panelReinicio);
-							
-				
-				EventListenerClass.fireMyEvent(new MyEvent("reboot"));
-			}
-		});
-		btnAdminMenuReiniciar.setOpaque(false);
-		btnAdminMenuReiniciar.setContentAreaFilled(false);
-		btnAdminMenuReiniciar.setBorderPainted(false);
-		btnAdminMenuReiniciar.setBounds(1299, 450, 574, 171);
-		add(btnAdminMenuReiniciar);
+									
+						
+						EventListenerClass.fireMyEvent(new MyEvent("reboot"));
+					}
+				});
+				btnAdminMenuReiniciarAtm.setOpaque(false);
+				btnAdminMenuReiniciarAtm.setContentAreaFilled(false);
+				btnAdminMenuReiniciarAtm.setBorderPainted(false);
+				btnAdminMenuReiniciarAtm.setBounds(1140, 475, 574, 171);
+				add(btnAdminMenuReiniciarAtm);
+		btnAdminMenuSalir.setBackground(Color.BLUE);
+		btnAdminMenuSalir.setOpaque(false);
+		btnAdminMenuSalir.setContentAreaFilled(false);
+		btnAdminMenuSalir.setBorderPainted(false);
+		btnAdminMenuSalir.setBounds(1140, 880, 574, 171);
+		add(btnAdminMenuSalir);
 
 		btnAdminMenuImpresionContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

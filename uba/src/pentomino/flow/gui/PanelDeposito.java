@@ -65,7 +65,7 @@ public class PanelDeposito extends ImagePanel{
 
 
 		JButton btnAceptar = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
-		btnAceptar.setBounds(560, 891, 782, 159);
+		btnAceptar.setBounds(570, 860, 782, 159);
 		btnAceptar.setContentAreaFilled(false);
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setOpaque(false);
@@ -73,9 +73,9 @@ public class PanelDeposito extends ImagePanel{
 		add(btnAceptar);
 
 		lblMontoDepositado.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMontoDepositado.setBounds(10, 721, 1900, 130);
+		lblMontoDepositado.setBounds(10, 740, 1900, 110);
 		lblMontoDepositado.setForeground(Color.WHITE);
-		lblMontoDepositado.setFont(new Font("Tahoma", Font.BOLD, 50));
+		lblMontoDepositado.setFont(new Font("Tahoma", Font.BOLD, 54));
 
 		add(lblMontoDepositado);
 
@@ -189,13 +189,12 @@ public class PanelDeposito extends ImagePanel{
 		bussy1 = false;
 		bussy2 = false;
 		
-		lblMontoDepositado.setText("");
+		lblMontoDepositado.setText("$0");
 		
-		System.out.println("RE INHIBIT JCM1");
+		System.out.println("RE INHIBIT JCM1 / JCM2");
 		Flow.jcms[0].jcmMessage[3] = 0x00;
-		Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+		Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);		
 		
-		System.out.println("RE INHIBIT JCM2");
 		Flow.jcms[1].jcmMessage[3] = 0x00;
 		Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
 		

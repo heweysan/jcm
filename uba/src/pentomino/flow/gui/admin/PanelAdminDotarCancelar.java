@@ -7,13 +7,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
-
-import java.awt.Color;
 
 public class PanelAdminDotarCancelar extends ImagePanel {
 
@@ -42,28 +38,21 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		setBorder(null);
 		setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("\u00BFEsta seguro que desea cancelar los cambios?");
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblNewLabel.setBounds(10, 406, 1900, 84);
-		add(lblNewLabel);
 
-
-		JButton btnSi = new JButton(new ImageIcon("./images/BTN_7p_Admin_Si.png"));
+		JButton btnSi = new JButton(new ImageIcon("./images/BTN7_OK.png"));
 		btnSi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminMenu);	
 			}
 		});
-		btnSi.setBounds(10, 899, 575, 151);
+		btnSi.setBounds(50, 810, 262, 219);
 		btnSi.setContentAreaFilled(false);
 		btnSi.setBorderPainted(false);
 		btnSi.setOpaque(false);
 		btnSi.setFont(new Font("Tahoma", Font.BOLD, 40));
 		add(btnSi);
 
-		JButton btnNo = new JButton(new ImageIcon("./images/BTN_7p_Admin_No.png"));
+		JButton btnNo = new JButton(new ImageIcon("./images/BTN7_NO.png"));
 		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminContadoresEnCero);	
@@ -73,7 +62,7 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		btnNo.setFont(new Font("Tahoma", Font.BOLD, 40));
 		btnNo.setContentAreaFilled(false);
 		btnNo.setBorderPainted(false);
-		btnNo.setBounds(1335, 899, 575, 151);
+		btnNo.setBounds(1610, 810, 262, 219);
 		add(btnNo);
 
 	}

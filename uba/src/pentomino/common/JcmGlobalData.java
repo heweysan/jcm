@@ -123,10 +123,10 @@ public class JcmGlobalData {
 		System.out.println("PreloadConfigVariables");
 		
 		atmId = Config.GetDirective("AtmId", "-----");
-		rec1bill1Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom1", "200"));
-		rec1bill2Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom2", "500"));
-		rec2bill1Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom1", "200"));
-		rec2bill2Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom2", "500"));
+		rec1bill1Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom1", "20"));
+		rec1bill2Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom2", "50"));
+		rec2bill1Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom1", "100"));
+		rec2bill2Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom2", "200"));
 		setMaxRecyclableCash(Integer.parseInt(Config.GetDirective("maxRecyclableCash","0")));
 		
 		jcm1cassetteDataValues = new HashMap<String, String>();

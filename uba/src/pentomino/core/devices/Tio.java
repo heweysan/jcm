@@ -62,27 +62,28 @@ public class Tio implements Runnable{
 
 	public Tio() {
 
-		System.out.println("TIO constructor");				
+		System.out.println("TIO [running]");				
 
 	}
 
-	public boolean cierraBoveda() {
-		electroIman.low();
-		safeOpen = false;
-		System.out.println("--> Electroiman ON");		
-		return true;
-	}
-
-	public boolean abreBoveda() {
-
+	public boolean abreElectroiman() {
 		if(JcmGlobalData.isDebug) {
 			EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
 		}
 		else {
-			electroIman.high();
+			electroIman.low();
 		}
 		safeOpen = true;
-		System.out.println("--> Electroiman OFF");
+		System.out.println("--> Electroiman OFF");		
+		return true;
+	}
+
+	public boolean cierraElectroiman() {
+	
+		electroIman.high();
+	
+		safeOpen = false;
+		System.out.println("--> Electroiman ON");
 		return true;
 	}
 
@@ -149,7 +150,7 @@ public class Tio implements Runnable{
 		}
 
 		//El electroiman arranca encendido
-		electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.LOW);
+		electroIman = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_20, "ElectroIman", PinState.HIGH);
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e2) {			
@@ -165,7 +166,7 @@ public class Tio implements Runnable{
 		fascia.setShutdownOptions(true);
 
 		// set shutdown state for this pin
-		electroIman.setShutdownOptions(true, PinState.LOW,PinPullResistance.PULL_DOWN);
+		electroIman.setShutdownOptions(true, PinState.LOW,PinPullResistance.PULL_UP);
 		alarma.setShutdownOptions(true,PinState.LOW);
 
 

@@ -658,17 +658,17 @@ public class PanelDebug  extends ImagePanel {
 		panel_comandos.add(btnCurrencyAssingRequest);
 		btnCurrencyAssingRequest.setBackground(Color.ORANGE);
 
-		JButton btnCierraElectroiman = new JButton("CIERRA ELECTROIMAN");
-
-		btnCierraElectroiman.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnCierraElectroiman.setBounds(277, 632, 256, 48);
-		panel_comandos.add(btnCierraElectroiman);
-
 		JButton btnAbreElectroiman = new JButton("ABRE ELECTROIMAN");
 
 		btnAbreElectroiman.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnAbreElectroiman.setBounds(584, 630, 249, 48);
+		btnAbreElectroiman.setBounds(277, 632, 256, 48);
 		panel_comandos.add(btnAbreElectroiman);
+
+		JButton btnCierraElectroiman = new JButton("CIERRA ELECTROIMAN");
+
+		btnCierraElectroiman.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCierraElectroiman.setBounds(584, 630, 249, 48);
+		panel_comandos.add(btnCierraElectroiman);
 
 		JLabel lblNewLabel = new JLabel("Set denomination (debe estar DISABLE (INHIBIT))");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -912,17 +912,17 @@ public class PanelDebug  extends ImagePanel {
 				
 				if(chckbxReciclador1.isSelected()) {				
 					Flow.jcms[0].jcmMessage[7] = 0x01; 
-					Flow.jcms[0].jcmMessage[8] = Billete.$20;  
+					Flow.jcms[0].jcmMessage[8] = Billete.$50;  
 					Flow.jcms[0].jcmMessage[9] = 0x00;
 					Flow.jcms[0].jcmMessage[10] = 0x02;												  
 					Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, Billete.$50, (byte) 0x0,Flow.jcms[0].jcmMessage);
 				}
 				if(chckbxReciclador2.isSelected()) {
 					Flow.jcms[1].jcmMessage[7] = 0x01;  
-					Flow.jcms[1].jcmMessage[8] = Billete.$100;
+					Flow.jcms[1].jcmMessage[8] = Billete.$50;
 					Flow.jcms[1].jcmMessage[9] = 0x00;
 					Flow.jcms[1].jcmMessage[10] = 0x02;												  
-					Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, Billete.$200, (byte) 0x0,Flow.jcms[1].jcmMessage);
+					Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, Billete.$50, (byte) 0x0,Flow.jcms[1].jcmMessage);
 				}
 			}
 		});
@@ -989,16 +989,16 @@ public class PanelDebug  extends ImagePanel {
 			}
 		});
 
-		btnCierraElectroiman.addActionListener(new ActionListener() {
+		btnAbreElectroiman.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-				Flow.miTio.cierraBoveda();				
+				Flow.miTio.abreElectroiman();				
 			}
 		});
 
 
-		btnAbreElectroiman.addActionListener(new ActionListener() {
+		btnCierraElectroiman.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-				Flow.miTio.abreBoveda();				
+				Flow.miTio.cierraElectroiman();				
 			}
 		});
 

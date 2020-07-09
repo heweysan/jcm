@@ -85,7 +85,7 @@ public class Ptr {
 	    fis.close(); 
 	    */
 		
-		printDispense(500,"1324");
+		//printDispense(500,"1324");
 		
 		printJposUsb();
 		
@@ -152,18 +152,19 @@ public class Ptr {
 	public static void printJposUsb() {
 		System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "jpos.xml");     
 
+		
 		// instantiate a new jpos.POSPrinter object
 		POSPrinter printer = new POSPrinter();
-				
 		
-		System.out.println("COM CLAIOM 1");
+				
+		System.out.println("COM CLAIM 1");
 		try
 		{
 			//Open Printer
 			System.out.println("----- 1");
 			printer.open("CUSTOM TG2480H POS Printer USB Linux");
 			System.out.println("----- 2");
-			printer.claim(11);
+			printer.claim(1);
 			System.out.println("----- 3");
 			printer.setDeviceEnabled(true);
 			System.out.println("----- 4");

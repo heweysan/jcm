@@ -50,7 +50,7 @@ public class PanelAdminUsuarioInvalido  extends ImagePanel {
 		btnReintentar.setOpaque(false);
 		btnReintentar.setContentAreaFilled(false);
 		btnReintentar.setBorderPainted(false);
-		btnReintentar.setBounds(592, 899, 779, 151);
+		btnReintentar.setBounds(570, 860, 779, 151);
 		add(btnReintentar);
 
 

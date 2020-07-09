@@ -209,49 +209,80 @@ public class Flow {
 
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();
+		
+		logger.info("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+		jcms[0].jcmMessage[3] = 0x01;
+		jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+
+		logger.info("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+		jcms[1].jcmMessage[3] = 0x01;
+		jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
 
 		loadGuiElements();
 
 
 		//Actualizamos los valores de reciclaje si es que no concuerdan con el config
+		System.out.println("Seteando valores de cassetteros");
+		
+		JcmGlobalData.rec1bill1Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom1", "20"));
+		JcmGlobalData.rec1bill2Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom2", "50"));
+		JcmGlobalData.rec2bill1Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom1", "100"));
+		JcmGlobalData.rec2bill2Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom2", "200"));
 
+		Config.SetPersistence("Cassette1Value", Integer.toString(JcmGlobalData.rec1bill1Denom));
+		Config.SetPersistence("Cassette2Value", Integer.toString(JcmGlobalData.rec1bill2Denom));
+		Config.SetPersistence("Cassette3Value", Integer.toString(JcmGlobalData.rec2bill1Denom));
+		Config.SetPersistence("Cassette4Value", Integer.toString(JcmGlobalData.rec2bill2Denom));
+		
+		
 		Flow.jcms[0].jcmMessage[7] = 0x01; 
-		Flow.jcms[0].jcmMessage[8] = denomToByte(JcmGlobalData.rec1bill1Denom);  
+		Flow.jcms[0].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec1bill2Denom);  
 		Flow.jcms[0].jcmMessage[9] = 0x00;
 		Flow.jcms[0].jcmMessage[10] = 0x02;												  
-		Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, denomToByte(JcmGlobalData.rec1bill2Denom), (byte) 0x0,Flow.jcms[0].jcmMessage);
-
+		Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte)  denomToByte(JcmGlobalData.rec1bill1Denom), (byte) 0x0,Flow.jcms[0].jcmMessage);
+						
+		
 		Flow.jcms[1].jcmMessage[7] = 0x01;  
-		Flow.jcms[1].jcmMessage[8] = denomToByte(JcmGlobalData.rec2bill1Denom);
+		Flow.jcms[1].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec2bill2Denom);
 		Flow.jcms[1].jcmMessage[9] = 0x00;
 		Flow.jcms[1].jcmMessage[10] = 0x02;												  
-		Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, denomToByte(JcmGlobalData.rec2bill2Denom), (byte) 0x0,Flow.jcms[1].jcmMessage);
+		Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) denomToByte(JcmGlobalData.rec2bill1Denom), (byte) 0x0,Flow.jcms[1].jcmMessage);
 
+		
+		
 		Config.SetPersistence("BoardStatus", "Available");
-
+		
+		
 		if(NetUtils.netIsAvailable()) {
 			redirect(panelIdle);			
 		}
 		else {
 			redirect(panelErrorComunicate);			
 		}
+		
 	}
 
 	private byte denomToByte(int denom) {
-		switch(JcmGlobalData.rec1bill1Denom) {
+		
+		switch(denom) {
 		case 20:
+			System.out.println("demon [" + denom + "]");
 			return Billete.$20;			
 		case 50:
+			System.out.println("demon [" + denom + "]");
 			return Billete.$50;			
 		case 100:
+			System.out.println("demon [" + denom + "]");
 			return Billete.$100;			
 		case 200:
+			System.out.println("demon [" + denom + "]");
 			return Billete.$200;			
 		case 500:
+			System.out.println("demon [" + denom + "]");
 			return Billete.$500;			
 		}
-
-		return Billete.$200;
+		
+		return Billete.$500;
 	}
 
 
@@ -260,7 +291,8 @@ public class Flow {
 	 */
 	private static void initialize() {
 
-		logger.info("INITIALIZE...");	
+		logger.info("INITIALIZE...");
+		
 
 		panelContainer.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -274,11 +306,11 @@ public class Flow {
 		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.getContentPane().add(panelContainer);
-		//mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
+		mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 		panelContainer.setLayout(cl);
 
-		panelSplash = new PanelSplash("./images/Scr7Placeholder.png","panelSplash",0,null);
+		panelSplash = new PanelSplash("./images/SCR_P7Admin_Espera.png","panelSplash",0,null);
 
 		panelContainer.add(panelSplash,"panelSplash");
 
@@ -295,6 +327,8 @@ public class Flow {
 	private void loadGuiElements() {
 
 		logger.debug("loadGuiElements");
+		
+		
 
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
 		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
@@ -303,7 +337,7 @@ public class Flow {
 		panelDebug = new PanelDebug("./images/Scr7Placeholder.png","panelDebug",0,null);
 		panelLogin = new PanelLogin("./images/Scr7IdentificateDeposito.png","panelLogin",0,null);
 		panelToken = new PanelToken("./images/Scr7ConfirmaToken.png","panelToken",0,null);
-		panelTerminamos = new PanelTerminamos("./images/ScrTerminamos.png","panelTerminamos",5000,Flow.panelIdle);
+		panelTerminamos = new PanelTerminamos("./images/Scr7Terminamos.png","panelTerminamos",5000,Flow.panelIdle);
 		panelDispense = new PanelDispense("./images/Scr7TomaBilletes.png","panelRetiroParcial",0,null);  //Scr7RetiroParcial  Scr7TomaBilletes
 		panelError = new PanelError("./images/Scr7Placeholder.png","panelError",5000,Flow.panelIdle);		
 		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);		
@@ -318,15 +352,15 @@ public class Flow {
 		panelAdminMenu = new PanelAdminMenu("./images/SCR_P7Admin_MenuAdmin.png","panelAdminMenu",25000,Flow.panelTerminamos);
 		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
 		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
-		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/Scr7Placeholder.png","panelAdminDotarCancelar",0,null);
-		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/Scr7Placeholder.png","panelAdminDotarResultados",0,null);
+		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/SCR_P7Admin_ValidarCancelacion.png","panelAdminDotarCancelar",0,null);
+		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/SCR_P7Admin_OkRegistro.png","panelAdminDotarResultados",0,null);
 		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
 		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/SCR_P7Admin_EstatusDispositivos.png","panelAdminEstatusDispositivos",0,null);
 		panelAdminUsuarioInvalido = new PanelAdminUsuarioInvalido("./images/SCR_P7Admin_UsuarioInvalido.png","panelAdminUsuarioInvalido",5000,Flow.panelAdminLogin);
 		panelAdminResetDispositivos = new PanelAdminResetDispositivos("./images/Scr7Placeholder.png","panelAdminResetDispositivos",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminEstatusDispositivos);
-		panelAdminIniciando = new PanelAdminIniciando("./images/Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
+		panelAdminIniciando = new PanelAdminIniciando("./images/SCR_P7Admin_Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminDetalleError = new PanelAdminDetalleError("./images/Scr7Placeholder.png","panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
-		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/Scr7Placeholder.png","panelAdminPruebaImpresion",0,null);
+		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/SCR_P7Admin_PruebaImpresion.png","panelAdminPruebaImpresion",0,null);
 
 
 		//Valores Iniciales
@@ -541,8 +575,8 @@ public class Flow {
 
 					PanelDebug.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
 
-					PanelAdminEstatusDispositivos.lblJcm1Denom1.setText(jcms[0].recyclerDenom1);
-					PanelAdminEstatusDispositivos.lblJcm1Denom2.setText(jcms[0].recyclerDenom2);
+					PanelAdminEstatusDispositivos.lblJcm1Denom1.setText("$" + jcms[0].recyclerDenom1);
+					PanelAdminEstatusDispositivos.lblJcm1Denom2.setText("$" + jcms[0].recyclerDenom2);
 
 					recyclerBills1Set = true;					
 					if(recyclerBills2Set) {
@@ -561,8 +595,8 @@ public class Flow {
 
 					PanelDebug.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 
-					PanelAdminEstatusDispositivos.lblJcm2Denom1.setText(jcms[1].recyclerDenom1);
-					PanelAdminEstatusDispositivos.lblJcm2Denom2.setText(jcms[1].recyclerDenom2);
+					PanelAdminEstatusDispositivos.lblJcm2Denom1.setText("$" + jcms[1].recyclerDenom1);
+					PanelAdminEstatusDispositivos.lblJcm2Denom2.setText("$" + jcms[1].recyclerDenom2);
 
 					recyclerBills2Set = true;
 					if(recyclerBills1Set) {				
@@ -686,18 +720,24 @@ public class Flow {
 				case "accepting2":
 					PanelDeposito.bussy2 = true;
 					break;
+				case "collected11":
+					UpdateCountersCollect(0,Integer.toString(JcmGlobalData.rec1bill1Denom));
+					break;
+				case "collected21":
+					UpdateCountersCollect(0,Integer.toString(JcmGlobalData.rec1bill2Denom));
+					break;
+				case "collected12":
+					UpdateCountersCollect(1,Integer.toString(JcmGlobalData.rec2bill1Denom));
+					break;
+				case "collected22":
+					UpdateCountersCollect(1,Integer.toString(JcmGlobalData.rec2bill2Denom));
+					break;
 
 				}
 			}
 		});
 
-		logger.info("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
-		jcms[0].jcmMessage[3] = 0x01;
-		jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-
-		logger.info("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
-		jcms[1].jcmMessage[3] = 0x01;
-		jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+		
 	}
 
 
@@ -724,6 +764,24 @@ public class Flow {
 		Config.SetPersistence("Cassette" + cassette + "Total", Integer.toString(totalValue));			
 	}
 
+	
+	private void UpdateCountersCollect(Integer jcm, String denom) {
+
+		System.out.println("UpdateCountersCollect jcm[" + jcm + "] denom [" + denom + "]" );
+		String cassette = JcmGlobalData.getKey(jcm, denom);
+
+		
+		int totalValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Total", "0"));
+		int rejectedValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Rejected", "0"));
+			
+		totalValue--;		
+		rejectedValue++;
+		
+		Config.SetPersistence("Cassette" + cassette + "Total", Integer.toString(totalValue));
+		Config.SetPersistence("Cassette" + cassette + "Rejected", Integer.toString(rejectedValue));
+		
+		UpdateCountersAcepted(denom);
+	}
 
 
 
@@ -815,7 +873,7 @@ public class Flow {
 			}			
 		}
 
-		//Este es para debug en mauina local con loopback de puertos comm.
+		//Este es para debug en maquina local con loopback de puertos comm.
 		if(contador == 0 && JcmGlobalData.isDebug) {
 			jcms[0] = new uart(1);
 			jcms[0].portId = null;

@@ -44,14 +44,7 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);
-		setLayout(null);	
-
-		JLabel lblMensaje = new JLabel("Ve tomando los tiques");
-		lblMensaje.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMensaje.setForeground(Color.WHITE);
-		lblMensaje.setBounds(584, 185, 734, 92);
-		add(lblMensaje);
+		setLayout(null);
 
 		ImageButton btnRegresar = new ImageButton("./images/BTN_7p_Admin_Regresar.png");
 		btnRegresar.addActionListener(new ActionListener() {
@@ -59,22 +52,15 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 				Flow.redirect(Flow.panelAdminEstatusDispositivos);
 			}
 		});
-		btnRegresar.setLocation(1323, 850);
+		btnRegresar.setLocation(675, 880);
 		btnRegresar.setSize(574, 171);
 		add(btnRegresar);
-
-		JLabel lblTitulo = new JLabel("Prueba de impresi\u00F3n.");
-		lblTitulo.setForeground(Color.WHITE);
-		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblTitulo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblTitulo.setBounds(1312, 23, 598, 80);
-		add(lblTitulo);
 		
 		
 		lblContadores.setHorizontalAlignment(SwingConstants.LEFT);
 		lblContadores.setForeground(Color.WHITE);
 		lblContadores.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblContadores.setBounds(584, 362, 500, 92);
+		lblContadores.setBounds(586, 456, 500, 92);
 		//lblContadores.setVisible(false);
 		add(lblContadores);
 		
@@ -82,7 +68,7 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 		lblRetiro.setHorizontalAlignment(SwingConstants.LEFT);
 		lblRetiro.setForeground(Color.WHITE);
 		lblRetiro.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblRetiro.setBounds(584, 532, 510, 92);
+		lblRetiro.setBounds(586, 578, 510, 92);
 		//lblRetiro.setVisible(false);
 		add(lblRetiro);
 		
@@ -90,7 +76,7 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 		lblDeposito.setHorizontalAlignment(SwingConstants.LEFT);
 		lblDeposito.setForeground(Color.WHITE);
 		lblDeposito.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblDeposito.setBounds(584, 696, 500, 92);
+		lblDeposito.setBounds(586, 696, 500, 92);
 		//lblDeposito.setVisible(false);
 		add(lblDeposito);
 		
@@ -98,21 +84,21 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 		lblContadoresResult.setHorizontalAlignment(SwingConstants.LEFT);
 		lblContadoresResult.setForeground(Color.WHITE);
 		lblContadoresResult.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblContadoresResult.setBounds(1119, 362, 653, 92);
+		lblContadoresResult.setBounds(1117, 443, 653, 92);
 		add(lblContadoresResult);
 		
 		
 		lblRetiroResult.setHorizontalAlignment(SwingConstants.LEFT);
 		lblRetiroResult.setForeground(Color.WHITE);
 		lblRetiroResult.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblRetiroResult.setBounds(1119, 532, 653, 92);
+		lblRetiroResult.setBounds(1117, 578, 653, 92);
 		add(lblRetiroResult);
 		
 		
 		lblDepositoResult.setHorizontalAlignment(SwingConstants.LEFT);
 		lblDepositoResult.setForeground(Color.WHITE);
 		lblDepositoResult.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblDepositoResult.setBounds(1119, 696, 653, 92);
+		lblDepositoResult.setBounds(1117, 708, 653, 92);
 		add(lblDepositoResult);
 		
 

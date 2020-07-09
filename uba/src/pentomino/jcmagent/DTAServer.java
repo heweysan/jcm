@@ -142,7 +142,7 @@ public class DTAServer {
 	private String OpenSafe() {
 		System.out.println("OPENSAFE");
 		Flow.miTio.alarmOff();
-		Flow.miTio.abreBoveda();
+		Flow.miTio.abreElectroiman();
 		Flow.timerBoveda();
 		Flow.isAdminTime = true;
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";

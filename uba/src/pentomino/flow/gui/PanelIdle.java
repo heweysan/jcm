@@ -86,6 +86,9 @@ public class PanelIdle  extends ImagePanel {
 			public void actionPerformed(ActionEvent e) {				
 
 
+				
+				
+				
 				//Checamos que tenga algo de dinero.
 				if(Flow.jcms[0].billCounters.Cass1Available == 0 && Flow.jcms[0].billCounters.Cass2Available == 0 && Flow.jcms[1].billCounters.Cass1Available == 0 && Flow.jcms[1].billCounters.Cass2Available == 0){
 					System.out.println("No hay dinero en los caseteros para dispensar");
@@ -110,6 +113,7 @@ public class PanelIdle  extends ImagePanel {
 
 					Flow.redirect(Flow.panelMenu,5000,Flow.panelIdle);
 				}
+				
 				
 			}
 		});

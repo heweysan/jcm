@@ -25,7 +25,7 @@ public class PanelDispense extends ImagePanel {
 
 	public static Timer screenTimerDispense = new Timer();
 
-	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel(".");
+	public static JLabel lblRetiraBilletesMontoDispensar = new JLabel("$0");
 	
 	public static boolean dispenseError = false;
 
@@ -44,11 +44,18 @@ public class PanelDispense extends ImagePanel {
 
 	@Override
 	public void ContentPanel() {
-		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.BOLD, 55));
+		lblRetiraBilletesMontoDispensar.setHorizontalAlignment(SwingConstants.LEFT);
+		lblRetiraBilletesMontoDispensar.setFont(new Font("Tahoma", Font.PLAIN, 55));
 		lblRetiraBilletesMontoDispensar.setForeground(Color.WHITE);
-		lblRetiraBilletesMontoDispensar.setBounds(667, 940, 622, 92); // 667, 600, 622, 92          667, 940, 622, 92
+		lblRetiraBilletesMontoDispensar.setBounds(1200, 939, 695, 83); // 667, 600, 622, 92          667, 940, 622, 92
 		add(lblRetiraBilletesMontoDispensar);
+		
+		JLabel lblRetiroParcialMonto = new JLabel("$12,500");
+		lblRetiroParcialMonto.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRetiroParcialMonto.setFont(new Font("Tahoma", Font.BOLD, 99));
+		lblRetiroParcialMonto.setForeground(new Color(255, 255, 255));
+		lblRetiroParcialMonto.setBounds(10, 569, 1900, 241);
+		add(lblRetiroParcialMonto);
 
 	}
 
@@ -156,5 +163,4 @@ public class PanelDispense extends ImagePanel {
 	public void OnUnload() {
 		//System.out.println("OnUnload PanelDispense");
 	}
-
 }

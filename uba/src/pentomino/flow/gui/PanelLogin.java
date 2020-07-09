@@ -65,7 +65,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginPassword.setForeground(Color.WHITE);
 		lblLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
-		lblLoginPassword.setBounds(257, 793, 496, 87);
+		lblLoginPassword.setBounds(257, 800, 496, 87);
 		add(lblLoginPassword);
 
 		add(new DebugButtons().getPanel());
@@ -109,11 +109,12 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
         
 		case _Cancel:
 		
-			System.out.println("Es cancel Papawh");        	
+			System.out.println("PanelLogin cancel");        	
 			CurrentUser.cleanPinpadData();
 			lblLoginUser.setText("");
 			lblLoginPassword.setText("");			
-			CurrentUser.asteriscos = "";							
+			CurrentUser.loginUserMasked = "";	
+			CurrentUser.loginPasswordMasked = "";							
 			Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);
 		break;
 		case _Ok:
@@ -193,7 +194,8 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 								CurrentUser.loginPassword = "";
 								lblLoginUser.setText("");
 								lblLoginPassword.setText("");
-								CurrentUser.asteriscos = "";
+								CurrentUser.loginPasswordMasked = "";
+								CurrentUser.loginUserMasked = "";
 								CurrentUser.pinpadMode = PinpadMode.loginUser;
 								Flow.panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
 							}
@@ -244,7 +246,8 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 							CurrentUser.loginPassword = "";
 							lblLoginUser.setText("");
 							lblLoginPassword.setText("");
-							CurrentUser.asteriscos = "";
+							CurrentUser.loginPasswordMasked = "";
+							CurrentUser.loginUserMasked = "";
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
 
 							if(++CurrentUser.loginAttempts >= 2) {
@@ -262,7 +265,8 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 						lblLoginPassword.setText("");
 						CurrentUser.loginUser = "";
 						CurrentUser.loginPassword = "";
-						CurrentUser.asteriscos = "";
+						CurrentUser.loginUserMasked = "";
+						CurrentUser.loginPasswordMasked = "";
 						CurrentUser.pinpadMode = PinpadMode.loginUser;							
 						Flow.panelLogin.setBackground("./images/Scr7DatosIncorrectos.png");
 						break;
@@ -292,7 +296,8 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 							lblLoginPassword.setText("");
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
-							CurrentUser.asteriscos = "";
+							CurrentUser.loginUserMasked = "";
+							CurrentUser.loginPasswordMasked = "";
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
 							CurrentUser.loginAttempts++;							
 							this.setBackground("./images/Scr7DatosIncorrectos.png");							
@@ -302,7 +307,8 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 							lblLoginPassword.setText("");
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
-							CurrentUser.asteriscos = "";
+							CurrentUser.loginUserMasked = "";
+							CurrentUser.loginPasswordMasked = "";
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
 							this.setBackground("./images/Scr7DatosIncorrectos.png");							
 							break;
@@ -315,7 +321,8 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 						lblLoginPassword.setText("");
 						CurrentUser.loginUser = "";
 						CurrentUser.loginPassword = "";
-						CurrentUser.asteriscos = "";
+						CurrentUser.loginUserMasked = "";
+						CurrentUser.loginPasswordMasked = "";
 						if(++CurrentUser.loginAttempts >= 2) {
 							Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);
 							
@@ -346,15 +353,16 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 		case loginUser:
 			if (CurrentUser.loginUser.length() > 7)				
 				return;
-			CurrentUser.loginUser = CurrentUser.loginUser + digito.getDigit();
-			lblLoginUser.setText(CurrentUser.loginUser);			
+			CurrentUser.loginUser += digito.getDigit();
+			CurrentUser.loginUserMasked += "*";
+			lblLoginUser.setText(CurrentUser.loginUserMasked);			
 			break;
 		case loginPassword:
 			if (CurrentUser.loginPassword.length() > 7)
 				return;
 			CurrentUser.loginPassword += digito.getDigit();
-			CurrentUser.asteriscos += "*";
-			lblLoginPassword.setText(CurrentUser.asteriscos);
+			CurrentUser.loginPasswordMasked += "*";
+			lblLoginPassword.setText(CurrentUser.loginPasswordMasked);
 			break;	
 		default:
 			break;				
@@ -367,11 +375,12 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelLogin");
+		System.out.println("OnLoad [PanelLogin]");
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
 		CurrentUser.loginUser = "";
+		CurrentUser.loginUserMasked = "";
 		CurrentUser.loginPassword = "";
-		CurrentUser.asteriscos = "";
+		CurrentUser.loginPasswordMasked = "";
 		CurrentUser.loginAttempts = 0;
 		lblLoginUser.setText("");
 		lblLoginPassword.setText("");

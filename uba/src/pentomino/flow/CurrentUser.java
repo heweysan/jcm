@@ -13,14 +13,21 @@ import pentomino.common.jcmOperation;
 public class CurrentUser {
 
 	public static String 			atmId ="";
+	
 	public static String 			loginUser = "";
+	public static String 			loginUserMasked = "";
+	
 	public static String 			loginPassword = "";
+	public static String 			loginPasswordMasked = "";
+	
 	public static String 			tokenConfirmacion = "";
+	public static String 			tokenConfirmacionMasked = "";
+
 	public static String 			reference = "";
 	public static int 				loginAttempts = 0;
 	public static int 				tokenAttempts = 0;
 	public static PinpadMode 		pinpadMode = PinpadMode.None;
-	public static String 			asteriscos = "";
+	
 	public static String 			token = "";
 	public static jcmOperation 		currentOperation = jcmOperation.None;
 	public static DispenseStatus 	dispenseStatus = DispenseStatus.None; 
@@ -66,7 +73,7 @@ public class CurrentUser {
 		loginAttempts = 0;
 		tokenAttempts = 0;
 		tokenConfirmacion = "";
-		asteriscos = "";
+		loginPasswordMasked = "";
 	}
 
 

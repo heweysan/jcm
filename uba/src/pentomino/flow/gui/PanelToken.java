@@ -40,8 +40,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 
 
 	public static JLabel lblToken = new JLabel(".");
-	public static JLabel lblTokenConfirmacion = new JLabel(".");
-	public static JLabel lblTokenMensaje = new JLabel(".");
+	public static JLabel lblTokenConfirmacion = new JLabel(".");	
 	public static JLabel lblTokenMontoRetiro = new JLabel(".");
 
 	/**
@@ -59,13 +58,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 	@Override
 	public void ContentPanel() {
 
-
-
-		lblTokenConfirmacion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTokenConfirmacion.setForeground(Color.WHITE);
-		lblTokenConfirmacion.setFont(new Font("Tahoma", Font.BOLD, 50));
-		lblTokenConfirmacion.setBounds(190, 773, 583, 66);
-		add(lblTokenConfirmacion);
+		
 
 
 		lblToken.setForeground(Color.WHITE);
@@ -73,6 +66,12 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 		lblToken.setFont(new Font("Tahoma", Font.BOLD, 50));
 		lblToken.setBounds(190, 594, 583, 66);
 		add(lblToken);
+		
+		lblTokenConfirmacion.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTokenConfirmacion.setForeground(Color.WHITE);
+		lblTokenConfirmacion.setFont(new Font("Tahoma", Font.BOLD, 50));
+		lblTokenConfirmacion.setBounds(190, 790, 583, 66);
+		add(lblTokenConfirmacion);
 
 
 		lblTokenMontoRetiro.setForeground(Color.WHITE);
@@ -81,19 +80,10 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 		lblTokenMontoRetiro.setBounds(190, 321, 583, 136);
 		add(lblTokenMontoRetiro);
 
-
-		lblTokenMensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTokenMensaje.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTokenMensaje.setForeground(Color.WHITE);
-		lblTokenMensaje.setBounds(22, 93, 957, 75);
-		add(lblTokenMensaje);
-
 		PanelPinpad panelPinpad = new PanelPinpad();
 		panelPinpad.addPinKeyListener(this);
 
 		add(panelPinpad.getPanel());
-
-
 	}
 
 	public void pinKeyReceived(PinpadEvent event) {
@@ -156,7 +146,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 							switch(CurrentUser.dispenseStatus) {
 							case Complete:
 								Flow.panelDispense.setBackground("./images/Scr7TomaBilletes.png");
-								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(667, 940, 622, 92);
+								PanelDispense.lblRetiraBilletesMontoDispensar.setBounds(1200, 939, 695, 83);
 								PanelDispense.lblRetiraBilletesMontoDispensar.setText("$" + CurrentUser.WithdrawalDispense);									
 								break;
 							case Partial:
@@ -179,9 +169,6 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 									//Esperamos que ya se dispensara de todos los jcms.
 									if(JcmGlobalData.jcm1cass1Dispensed && JcmGlobalData.jcm1cass2Dispensed && JcmGlobalData.jcm2cass1Dispensed && JcmGlobalData.jcm2cass2Dispensed) {
 										screenTimerDispense.cancel();
-
-										//RaspiAgent.Broadcast(DeviceEvent.AFD_DispenseOk, "" + CurrentUser.WithdrawalDispense);
-										//RaspiAgent.WriteToJournal("FinancialTransacction", CurrentUser.WithdrawalDispense,0, "",CurrentUser.loginUser, "Withdrawal DispenseOk " + JcmGlobalData.denominateInfoToString(), AccountType.Other, TransactionType.Withdrawal);
 
 										//Actualizamos los contadores internos del JCM
 										Afd.UpdateCurrentCountRequest();
@@ -232,9 +219,10 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 				}
 				else {
 
-					CurrentUser.tokenConfirmacion = "";						
-					lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
-
+					CurrentUser.tokenConfirmacion = "";	
+					CurrentUser.tokenConfirmacionMasked = "";
+					lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacionMasked);
+					
 					if( ++CurrentUser.tokenAttempts >= 2) {						
 						CurrentUser.cleanPinpadData();																				
 						Flow.redirect(Flow.panelOperacionCancelada, TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);														
@@ -261,8 +249,9 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 			case retiroToken:
 				if (CurrentUser.tokenConfirmacion.length() > 16)
 					return;
-				CurrentUser.tokenConfirmacion += digito.getDigit();			
-				lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacion);
+				CurrentUser.tokenConfirmacion += digito.getDigit();	
+				CurrentUser.tokenConfirmacionMasked += "*";
+				lblTokenConfirmacion.setText(CurrentUser.tokenConfirmacionMasked);
 				break;
 			default:
 				break;				
@@ -274,7 +263,9 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelToken");
+		System.out.println("OnLoad [PanelToken]");
+		CurrentUser.tokenConfirmacionMasked = "";
+		lblTokenConfirmacion.setText("");
 		CurrentUser.pinpadMode = PinpadMode.retiroToken;
 
 
@@ -283,6 +274,9 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 	@Override
 	public void OnUnload() {
 		//System.out.println("OnUnload PanelToken");
+		CurrentUser.tokenConfirmacionMasked = "";
+		lblTokenConfirmacion.setText("");
+		CurrentUser.pinpadMode = PinpadMode.retiroToken;
 
 	}
 

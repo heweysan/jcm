@@ -619,6 +619,12 @@ public class protocol extends kermit {
 			if ((byte)jcmMessage[3] == 0x02)
 				System.out.println("Stacking RecycleBox 2");
 
+			if(currentOpertion == jcmOperation.CollectCass1) {
+				EventListenerClass.fireMyEvent(new MyEvent("collected1" + jcmId)); //Mandando a "rechazos" denom 1
+			}
+			if(currentOpertion == jcmOperation.CollectCass2) {
+				EventListenerClass.fireMyEvent(new MyEvent("collected2" + jcmId)); //Mandando a "rechazos" denom 2
+			}
 			break;
 
 		case SR_PAY_VALID: // 0x23 PAY VALID
@@ -903,6 +909,15 @@ public class protocol extends kermit {
 		case (byte) 0xF0: // ALGUN EXTENDED
 		
 			switch (jcmResponse[4]) {
+			case (byte) 0xD0: // UNCONNECTED Recycler Unit is not connected.
+				if (mostrar)
+					System.out.println(baitsToString("JCM[" + jcmId + "] processing SCR_E_RECYCLE_CURRENCY",jcmResponse, jcmResponse[1]));
+					byte bill1 = jcmResponse[5];
+					byte bill2 = jcmResponse[8];
+					System.out.println("JCM[" + jcmId + "] " + hexToDenom(bill1) + " - " + hexToDenom(bill2));
+			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			
+			break;
 			case (byte) 0x00: // UNCONNECTED Recycler Unit is not connected.
 				if (mostrar)
 					System.out.println(baitsToString("JCM[" + jcmId + "] processing UNCONNECTED",jcmResponse, jcmResponse[1]));
