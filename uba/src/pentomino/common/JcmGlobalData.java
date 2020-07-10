@@ -54,6 +54,14 @@ public class JcmGlobalData {
 	public static boolean jcm2cass2Dispensed = false;	
 	
 	
+	/*
+	 * Varaibels para saber si ya termino de hacer el flush de billetes
+	 */
+	public static boolean jcm1cass1Flushed = false;
+	public static boolean jcm1cass2Flushed = false;
+	public static boolean jcm2cass1Flushed = false;
+	public static boolean jcm2cass2Flushed = false;
+	
 	public static SortedMap<Integer,Integer> availableBillsForRecycling = new TreeMap<Integer, Integer>(Collections.reverseOrder());
 	
 	public static SortedMap<Integer,Integer> denominateInfo = new TreeMap<Integer, Integer>(Collections.reverseOrder());

@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import pentomino.flow.Flow;
@@ -39,7 +38,8 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		setLayout(null);
 
 
-		JButton btnSi = new JButton(new ImageIcon("./images/BTN7_OK.png"));
+		//TODO: AQUI JButton btnSi = new JButton(new ImageIcon("./images/BTN7_OK.png"));
+		JButton btnSi = new JButton(Flow.botonOk);
 		btnSi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminMenu);	
@@ -52,7 +52,7 @@ public class PanelAdminDotarCancelar extends ImagePanel {
 		btnSi.setFont(new Font("Tahoma", Font.BOLD, 40));
 		add(btnSi);
 
-		JButton btnNo = new JButton(new ImageIcon("./images/BTN7_NO.png"));
+		JButton btnNo = new JButton(Flow.botonNo);
 		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminContadoresEnCero);	

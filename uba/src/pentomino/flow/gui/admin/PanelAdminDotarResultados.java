@@ -38,7 +38,7 @@ public class PanelAdminDotarResultados extends ImagePanel{
 	public void ContentPanel() {
 
 
-		JButton btnImprimirContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png"));
+		JButton btnImprimirContadores = new JButton(Flow.botonAdminImprimirContadores);
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Ptr.printContadores();

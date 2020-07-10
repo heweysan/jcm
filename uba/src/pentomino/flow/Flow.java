@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,7 +24,6 @@ import pentomino.common.AccountType;
 import pentomino.common.Billete;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
-import pentomino.common.NetUtils;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
@@ -101,6 +101,16 @@ public class Flow {
 	public static ImagePanel panelAdminIniciando;
 	public static ImagePanel panelAdminDetalleError;
 	public static ImagePanel panelAdminPruebaImpresion;
+	
+	public static ImageIcon botonOk = new ImageIcon("./images/BTN7_OK.png");
+	public static ImageIcon botonNo = new ImageIcon("./images/BTN7_NO.png");
+	public static ImageIcon botonAceptar = new ImageIcon("./images/BTN7Aceptar.png");
+	public static ImageIcon botonAdminCancelar = new ImageIcon("./images/BTN_7p_Admin_Cancelar.png");
+	public static ImageIcon botonAdminImprimir = new ImageIcon("./images/BTN_7p_Admin_Imprimir.png");
+	public static ImageIcon botonAdminImprimirContadores = new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png");	
+	public static ImageIcon botonAdminSalir = new ImageIcon("./images/BTN_7p_Admin_Salir.png");	
+	public static ImageIcon bgPlaceHolder = new ImageIcon("./images/Scr7Placeholder.png");
+	
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
 
@@ -128,11 +138,14 @@ public class Flow {
 	public static int jcm2LastBillInsertedWorking = 0;
 
 	public static Timer adminTimer = new Timer();
+	public static Timer fasciaTimer = new Timer();
 
 	/**
 	 * Variable que indica si se esta dentro del lapso de tiempo que peude estar abierta la boveda sin sonar la alarma.
 	 */
 	public static boolean isAdminTime = false;
+	public static boolean isFasciaTime = false;
+	
 
 	public static void main(String[] args) {
 
@@ -172,15 +185,38 @@ public class Flow {
 			@Override
 			public void run() {
 				logger.info("Timer Boveda terminado.");				
-				if(Tio.safeOpen){
-					System.out.println("Se acabo el tiempo y la boveda sigue abierta.");
-					isAdminTime = false;
-				}
+				System.out.println("Timer Boveda terminado.");
+				isAdminTime = false;				
 				adminTimer.cancel();
 			}
 		}, TimeUnit.MINUTES.toMillis(10));
 	}
 
+	/**
+	 * Activa un timer que dura n minutos, tiempo en el cual se puede abrir la fascia sin generar alarma.
+	 * Si despues del tiempo establecido no se ha cerrado la fascia se dispara la alarma.
+	 */
+	public static void timerFascia() {
+
+		logger.info("Timer Fascia inciando.");		
+		fasciaTimer = new Timer();
+		isFasciaTime = true;		
+
+		fasciaTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				logger.info("Timer Fascia terminado.");
+				System.out.println("Timer Fascia terminado.");
+				isFasciaTime = false;
+				fasciaTimer.cancel();
+			}
+		}, TimeUnit.MINUTES.toMillis(10));
+	}	
+	
+	
+	
+	
+	
 	/**
 	 * FLOW
 	 * 
@@ -209,7 +245,7 @@ public class Flow {
 
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();
-		
+
 		logger.info("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
 		jcms[0].jcmMessage[3] = 0x01;
 		jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
@@ -223,7 +259,7 @@ public class Flow {
 
 		//Actualizamos los valores de reciclaje si es que no concuerdan con el config
 		System.out.println("Seteando valores de cassetteros");
-		
+
 		JcmGlobalData.rec1bill1Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom1", "20"));
 		JcmGlobalData.rec1bill2Denom = Integer.parseInt(Config.GetDirective("Jcm1Denom2", "50"));
 		JcmGlobalData.rec2bill1Denom = Integer.parseInt(Config.GetDirective("Jcm2Denom1", "100"));
@@ -233,37 +269,50 @@ public class Flow {
 		Config.SetPersistence("Cassette2Value", Integer.toString(JcmGlobalData.rec1bill2Denom));
 		Config.SetPersistence("Cassette3Value", Integer.toString(JcmGlobalData.rec2bill1Denom));
 		Config.SetPersistence("Cassette4Value", Integer.toString(JcmGlobalData.rec2bill2Denom));
+
 		
+		CurrentUser.currentOperation = jcmOperation.PreIdle;
 		
 		Flow.jcms[0].jcmMessage[7] = 0x01; 
 		Flow.jcms[0].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec1bill2Denom);  
 		Flow.jcms[0].jcmMessage[9] = 0x00;
 		Flow.jcms[0].jcmMessage[10] = 0x02;												  
 		Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte)  denomToByte(JcmGlobalData.rec1bill1Denom), (byte) 0x0,Flow.jcms[0].jcmMessage);
-						
-		
+
+
 		Flow.jcms[1].jcmMessage[7] = 0x01;  
 		Flow.jcms[1].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec2bill2Denom);
 		Flow.jcms[1].jcmMessage[9] = 0x00;
 		Flow.jcms[1].jcmMessage[10] = 0x02;												  
 		Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) denomToByte(JcmGlobalData.rec2bill1Denom), (byte) 0x0,Flow.jcms[1].jcmMessage);
 
-		
-		
+		/*
+		//Revisamos las denimincaciones y cantidad de dinero que tiene la cajita
+		Flow.jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[0].jcmMessage);
+		Flow.jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[1].jcmMessage);
+
+		//Revisamos las denimincaciones y cantidad de dinero que tiene la cajita
+		Flow.jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[0].jcmMessage);
+		Flow.jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,Flow.jcms[1].jcmMessage);
+		*/
+
 		Config.SetPersistence("BoardStatus", "Available");
+
+		redirect(panelAdminEstatusDispositivos);
 		
-		
+		/*
 		if(NetUtils.netIsAvailable()) {
 			redirect(panelIdle);			
 		}
 		else {
 			redirect(panelErrorComunicate);			
 		}
-		
+		*/
+
 	}
 
 	private byte denomToByte(int denom) {
-		
+
 		switch(denom) {
 		case 20:
 			System.out.println("demon [" + denom + "]");
@@ -281,7 +330,7 @@ public class Flow {
 			System.out.println("demon [" + denom + "]");
 			return Billete.$500;			
 		}
-		
+
 		return Billete.$500;
 	}
 
@@ -292,7 +341,7 @@ public class Flow {
 	private static void initialize() {
 
 		logger.info("INITIALIZE...");
-		
+
 
 		panelContainer.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -315,7 +364,7 @@ public class Flow {
 		panelContainer.add(panelSplash,"panelSplash");
 
 		Flow.cl.show(panelContainer, panelSplash);	
-		
+
 		mainFrame.setVisible(true);
 
 
@@ -327,22 +376,24 @@ public class Flow {
 	private void loadGuiElements() {
 
 		logger.debug("loadGuiElements");
+
 		
 		
+
 
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
 		panelMenu = new PanelMenu("./images/Scr7SinRetiroAutorizado.png","panelMenu",0,null);
 		panelMenuSinFondo = new PanelMenuSinFondo("./images/Scr7HolaDepositamos.png","panelMenuSinFondo",0,null);
 		panelDeposito = new PanelDeposito("./images/Scr7DepositoIndicadores.png","panelDeposito",0,null);			
-		panelDebug = new PanelDebug("./images/Scr7Placeholder.png","panelDebug",0,null);
+		panelDebug = new PanelDebug(bgPlaceHolder,"panelDebug",0,null);
 		panelLogin = new PanelLogin("./images/Scr7IdentificateDeposito.png","panelLogin",0,null);
 		panelToken = new PanelToken("./images/Scr7ConfirmaToken.png","panelToken",0,null);
 		panelTerminamos = new PanelTerminamos("./images/Scr7Terminamos.png","panelTerminamos",5000,Flow.panelIdle);
 		panelDispense = new PanelDispense("./images/Scr7TomaBilletes.png","panelRetiroParcial",0,null);  //Scr7RetiroParcial  Scr7TomaBilletes
-		panelError = new PanelError("./images/Scr7Placeholder.png","panelError",5000,Flow.panelIdle);		
+		panelError = new PanelError(bgPlaceHolder,"panelError",5000,Flow.panelIdle);		
 		panelOperacionCancelada = new PanelOperacionCancelada("./images/Scr7OperacionCancelada.png","panelOperacionCancelada",TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);		
 		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
-		panelReinicio  = new PanelReinicio("./images/Scr7Placeholder.png","panelReinicio",0,null);
+		panelReinicio  = new PanelReinicio(bgPlaceHolder,"panelReinicio",0,null);
 		panelOos = new PanelOos("./images/Scr7FueraDeServicio.png","panelOos",0,null);
 		panelErrorComunicate = new PanelErrorComunicate("./images/Scr7Error.png","panelErrorComunicate",0,null);
 
@@ -354,12 +405,12 @@ public class Flow {
 		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
 		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/SCR_P7Admin_ValidarCancelacion.png","panelAdminDotarCancelar",0,null);
 		panelAdminDotarResultados = new PanelAdminDotarResultados("./images/SCR_P7Admin_OkRegistro.png","panelAdminDotarResultados",0,null);
-		panelAdminError = new PanelAdminError("./images/Scr7Placeholder.png","panelAdminError",0,null);
+		panelAdminError = new PanelAdminError(bgPlaceHolder,"panelAdminError",0,null);
 		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/SCR_P7Admin_EstatusDispositivos.png","panelAdminEstatusDispositivos",0,null);
 		panelAdminUsuarioInvalido = new PanelAdminUsuarioInvalido("./images/SCR_P7Admin_UsuarioInvalido.png","panelAdminUsuarioInvalido",5000,Flow.panelAdminLogin);
-		panelAdminResetDispositivos = new PanelAdminResetDispositivos("./images/Scr7Placeholder.png","panelAdminResetDispositivos",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminEstatusDispositivos);
+		panelAdminResetDispositivos = new PanelAdminResetDispositivos(bgPlaceHolder,"panelAdminResetDispositivos",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminEstatusDispositivos);
 		panelAdminIniciando = new PanelAdminIniciando("./images/SCR_P7Admin_Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
-		panelAdminDetalleError = new PanelAdminDetalleError("./images/Scr7Placeholder.png","panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
+		panelAdminDetalleError = new PanelAdminDetalleError(bgPlaceHolder,"panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/SCR_P7Admin_PruebaImpresion.png","panelAdminPruebaImpresion",0,null);
 
 
@@ -382,9 +433,6 @@ public class Flow {
 		panelContainer.add(panelOos,"panelOos");		
 		panelContainer.add(panelErrorComunicate,"panelErrorComunicate");
 
-
-
-
 		//FLUJO ADMINISTRATIVO
 		panelContainer.add(panelAdminLogin,"panelAdminLogin");		
 		panelContainer.add(panelAdminMenu,"panelAdminMenu");
@@ -399,11 +447,6 @@ public class Flow {
 		panelContainer.add(panelAdminIniciando,"panelAdminIniciando");
 		panelContainer.add(panelAdminDetalleError,"panelAdminDetalleError");
 		panelContainer.add(panelAdminPruebaImpresion,"panelAdminPruebaImpresion");
-
-
-
-
-
 
 		String atmId = Config.GetDirective("AtmId", "");
 
@@ -575,9 +618,8 @@ public class Flow {
 
 					PanelDebug.lblRecycler1.setText(jcms[0].recyclerDenom1 + " " + jcms[0].recyclerDenom2);
 
-					PanelAdminEstatusDispositivos.lblJcm1Denom1.setText("$" + jcms[0].recyclerDenom1);
-					PanelAdminEstatusDispositivos.lblJcm1Denom2.setText("$" + jcms[0].recyclerDenom2);
-
+					PanelAdminEstatusDispositivos.lblJcm1Denom.setText("$" + jcms[0].recyclerDenom1 + ", " + "$" + jcms[0].recyclerDenom2);
+					
 					recyclerBills1Set = true;					
 					if(recyclerBills2Set) {
 
@@ -595,8 +637,7 @@ public class Flow {
 
 					PanelDebug.lblRecycler2.setText(jcms[1].recyclerDenom1 + " " + jcms[1].recyclerDenom2);
 
-					PanelAdminEstatusDispositivos.lblJcm2Denom1.setText("$" + jcms[1].recyclerDenom1);
-					PanelAdminEstatusDispositivos.lblJcm2Denom2.setText("$" + jcms[1].recyclerDenom2);
+					PanelAdminEstatusDispositivos.lblJcm2Denom.setText("$" + jcms[1].recyclerDenom1 + ", " + "$" + jcms[1].recyclerDenom2);					
 
 					recyclerBills2Set = true;
 					if(recyclerBills1Set) {				
@@ -655,7 +696,8 @@ public class Flow {
 					RaspiAgent.Broadcast(DeviceEvent.AFD_MediaTaken, "JCM[2]");
 					break;
 				case "widthdrawalRequest":
-					System.out.println("Hay mensaje de retiro papawh");
+					RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "New widthdrawal request arrvied.");
+					System.out.println("Hay mensaje de retiro.");
 					break;
 				case "SafeOpen":
 					System.out.println("Safe Open");
@@ -664,19 +706,45 @@ public class Flow {
 					if(isAdminTime) {
 						System.out.println("Boveda abierta autorizada");
 						miTio.alarmOff(); //redundante paranoico
+						redirect(Flow.panelAdminIniciando,3000,Flow.panelAdminLogin);
 					}						
 					else {
 						System.out.println("Boveda abierta NO autorizada activando alarma");
 						miTio.alarmOn();
 					}
-					redirect(Flow.panelAdminIniciando,3000,Flow.panelAdminLogin);
+					
 					break;
 				case "SafeClosed":
 					System.out.println("Safe Closed");
 					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
 					if(isAdminTime) {
-						System.out.println("Boveda cerrada autorizada, desactivamos timer.");						
+						System.out.println("Boveda cerrada autorizada, desactivamos timer.");
+						isAdminTime = false;
 						adminTimer.cancel();
+					}
+					break;
+					
+				case "CabinetOpen":
+					System.out.println("Cabinet Open");
+
+					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
+					if(isAdminTime) {
+						System.out.println("Fascia abierta autorizada");
+						miTio.alarmOff(); //redundante paranoico						
+					}						
+					else {
+						System.out.println("Fascia abierta NO autorizada activando alarma");
+						miTio.alarmOn();
+					}
+					
+					break;
+				case "CabinetClosed":
+					System.out.println("Cabinet Closed");
+					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
+					if(isFasciaTime) {
+						System.out.println("Fascia cerrada autorizada, desactivamos timer.");	
+						isFasciaTime = false;
+						fasciaTimer.cancel();
 					}
 					break;
 
@@ -737,7 +805,7 @@ public class Flow {
 			}
 		});
 
-		
+
 	}
 
 
@@ -764,21 +832,44 @@ public class Flow {
 		Config.SetPersistence("Cassette" + cassette + "Total", Integer.toString(totalValue));			
 	}
 
-	
+
 	private void UpdateCountersCollect(Integer jcm, String denom) {
 
 		System.out.println("UpdateCountersCollect jcm[" + jcm + "] denom [" + denom + "]" );
 		String cassette = JcmGlobalData.getKey(jcm, denom);
 
-		
+
 		int totalValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Total", "0"));
 		int rejectedValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Rejected", "0"));
-			
+	
 		totalValue--;		
 		rejectedValue++;
-		
+
 		Config.SetPersistence("Cassette" + cassette + "Total", Integer.toString(totalValue));
 		Config.SetPersistence("Cassette" + cassette + "Rejected", Integer.toString(rejectedValue));
+
+		switch(cassette) {
+		case "1":
+			Flow.jcms[jcm].billCounters.Cass1Available = Flow.jcms[0].billCounters.Cass1Available - 1;
+			if(Flow.jcms[jcm].billCounters.Cass1Available < 0)
+				Flow.jcms[jcm].billCounters.Cass1Available = 0;
+			break;
+		case "2":
+			Flow.jcms[jcm].billCounters.Cass2Available = Flow.jcms[0].billCounters.Cass2Available - 1;
+			if(Flow.jcms[jcm].billCounters.Cass2Available < 0)
+				Flow.jcms[jcm].billCounters.Cass2Available = 0;
+			break;
+		case "3":
+			Flow.jcms[jcm].billCounters.Cass1Available = Flow.jcms[0].billCounters.Cass1Available - 1;
+			if(Flow.jcms[jcm].billCounters.Cass1Available < 0)
+				Flow.jcms[jcm].billCounters.Cass1Available = 0;
+			break;
+		case "4":
+			Flow.jcms[jcm].billCounters.Cass2Available = Flow.jcms[0].billCounters.Cass2Available - 1;
+			if(Flow.jcms[jcm].billCounters.Cass2Available < 0)
+				Flow.jcms[jcm].billCounters.Cass2Available = 0;
+			break;
+		}
 		
 		UpdateCountersAcepted(denom);
 	}
@@ -914,11 +1005,11 @@ public class Flow {
 		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
 
-	
+
 	public static void redirect(ImagePanel target, long timeout, ImagePanel timeoutTarget) {
 		Flow.cl.show(panelContainer, target,timeout,timeoutTarget);	
 	}
-	
+
 	public static void redirect(ImagePanel target) {
 		Flow.cl.show(panelContainer, target);	
 	}
@@ -957,8 +1048,6 @@ public class Flow {
 				e.printStackTrace();
 			}
 		}
-
-		System.out.println("JcmMonitor bygon verde y plaquitas");
 
 	}
 

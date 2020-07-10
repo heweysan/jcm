@@ -122,7 +122,7 @@ public class PanelIdle  extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelIdle");
+		System.out.println("OnLoad [PanelIdle]");
 
 		System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
 		Flow.jcms[0].jcmMessage[3] = 0x01;
@@ -151,7 +151,10 @@ public class PanelIdle  extends ImagePanel {
 					RaspiAgent.WriteToJournal("Financial",0,0, "",CurrentUser.loginUser, "Entrando a ForceOoS[true]", AccountType.None, TransactionType.Administrative);
 					Flow.redirect(Flow.panelOos);
 					screenTimerDispense.cancel();
+					return;
 				}  
+				
+				
 			}
 		}, 1000,60000);
 

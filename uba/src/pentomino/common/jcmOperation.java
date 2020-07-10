@@ -10,5 +10,6 @@ public enum jcmOperation {
     CollectCass1,
     CollectCass2,
     Dotacion,
-    DispenseFail
+    DispenseFail,
+    PreIdle
 }

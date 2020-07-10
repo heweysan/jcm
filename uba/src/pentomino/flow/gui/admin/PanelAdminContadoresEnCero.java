@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -128,7 +127,8 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 		lbl1000.setBounds(1279, 898, 100, 30);
 		add(lbl1000);
 
-		JButton btnGuardar = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
+		//TODO: AQUI
+		JButton btnGuardar = new JButton(Flow.botonAceptar);
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -150,7 +150,7 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 		btnGuardar.setBounds(1107, 880, 778, 150);
 		add(btnGuardar);
 
-		JButton btnSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Cancelar.png"));
+		JButton btnSalir = new JButton(Flow.botonAdminCancelar);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminDotarCancelar);
@@ -171,7 +171,7 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		// TODO Auto-generated method stub
+		System.out.println("OnLoad [PanelAdminContadoresEnCero]");
 
 	}
 

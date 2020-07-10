@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import pentomino.flow.Flow;
 import pentomino.flow.gui.PinKey;
 import pentomino.flow.gui.PinpadEvent;
 import pentomino.flow.gui.PinpadListener;
@@ -122,7 +123,8 @@ public class PanelPinpad {
 		btnPinPad0.setBorderPainted(false);
 		contentPanel.add(btnPinPad0);
 
-		JButton btnPinPadCancel = new JButton(new ImageIcon("./images/BTN7_NO.png"));
+		//TODO: AQUI JButton btnPinPadCancel = new JButton(new ImageIcon("./images/BTN7_NO.png"));
+		JButton btnPinPadCancel = new JButton(Flow.botonNo);
 		btnPinPadCancel.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnPinPadCancel.setBackground(Color.RED);
 		btnPinPadCancel.setBounds(50, 812, 259, 220);
@@ -131,7 +133,8 @@ public class PanelPinpad {
 		btnPinPadCancel.setBorderPainted(false);
 		contentPanel.add(btnPinPadCancel);
 
-		JButton btnPinPadConfirmar = new JButton(new ImageIcon("./images/BTN7_OK.png"));		
+		//TODO: HEWEY AQUI JButton btnPinPadConfirmar = new JButton(new ImageIcon("./images/BTN7_OK.png"));
+		JButton btnPinPadConfirmar = new JButton(Flow.botonOk);
 		btnPinPadConfirmar.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnPinPadConfirmar.setBackground(Color.GREEN);
 		btnPinPadConfirmar.setBounds(664, 812, 272, 220);

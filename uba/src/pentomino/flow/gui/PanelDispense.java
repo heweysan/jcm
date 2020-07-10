@@ -50,7 +50,7 @@ public class PanelDispense extends ImagePanel {
 		lblRetiraBilletesMontoDispensar.setBounds(1200, 939, 695, 83); // 667, 600, 622, 92          667, 940, 622, 92
 		add(lblRetiraBilletesMontoDispensar);
 		
-		JLabel lblRetiroParcialMonto = new JLabel("$12,500");
+		JLabel lblRetiroParcialMonto = new JLabel("");
 		lblRetiroParcialMonto.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRetiroParcialMonto.setFont(new Font("Tahoma", Font.BOLD, 99));
 		lblRetiroParcialMonto.setForeground(new Color(255, 255, 255));
@@ -153,7 +153,7 @@ public class PanelDispense extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelDispense");
+		System.out.println("OnLoad [PanelDispense]");
 		
 		
 

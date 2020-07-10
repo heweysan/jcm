@@ -50,7 +50,7 @@ public class PanelAdminMenu extends ImagePanel {
 	public void ContentPanel() {
 
 
-		btnAdminMenuImpresionContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png"));
+		btnAdminMenuImpresionContadores = new JButton(Flow.botonAdminImprimirContadores);
 		btnAdminMenuImpresionContadores.setOpaque(false);
 		btnAdminMenuImpresionContadores.setBounds(205, 680, 574, 171);
 		btnAdminMenuImpresionContadores.setOpaque(false);
@@ -77,7 +77,7 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuEstatusDispositivos.setBounds(1140, 680, 574, 171);
 		add(btnAdminMenuEstatusDispositivos);
 
-		btnAdminMenuSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Salir.png"));
+		btnAdminMenuSalir = new JButton(Flow.botonAdminSalir);
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 				BEA.BusinessEvent(BusinessEvent.AdministrativeOperatonEnded, true, false,"");

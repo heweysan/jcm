@@ -1393,3 +1393,417 @@
 2020-07-08 20:33:21,622|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
 2020-07-08 20:33:21,622|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
 2020-07-08 20:33:21,622|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 16:43:59,292|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 16:43:59,295|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 16:44:00,730|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 16:44:00,751|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 16:44:00,753|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 16:44:00,753|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 16:44:00,753|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 16:44:00,756|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 16:44:00,760|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 16:44:00,760|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 16:44:02,389|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 16:44:02,389|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 16:44:02,390|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 16:44:02,389|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 17:45:40,011|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 17:45:40,014|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 17:45:41,308|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 17:45:41,320|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 17:45:41,321|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 17:45:41,321|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 17:45:41,321|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 17:45:41,323|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 17:45:41,327|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 17:45:41,327|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 17:45:42,047|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 17:45:42,048|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 17:45:42,048|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 17:45:42,048|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 17:46:12,526|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\contadoresout.txt (El sistema no puede encontrar la ruta especificada)
+2020-07-09 23:34:39,207|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 23:34:39,213|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 23:34:40,523|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 23:34:40,533|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 23:34:40,534|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 23:34:40,534|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 23:34:40,535|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 23:34:40,537|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 23:34:40,539|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 23:34:40,539|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 23:34:42,136|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:34:42,136|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:34:42,137|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 23:34:42,136|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 23:34:52,335|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-09 23:37:10,363|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 23:37:10,369|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 23:37:11,682|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 23:37:11,692|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 23:37:11,693|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 23:37:11,694|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 23:37:11,694|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 23:37:11,696|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 23:37:11,698|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 23:37:11,698|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 23:37:12,685|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:37:12,685|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:37:12,685|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 23:37:12,685|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 23:37:18,761|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-09 23:37:21,910|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-09 23:38:30,151|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 23:38:30,154|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 23:38:31,407|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 23:38:31,417|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 23:38:31,418|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 23:38:31,418|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 23:38:31,418|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 23:38:31,420|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 23:38:31,422|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 23:38:31,422|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 23:38:32,098|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:38:32,098|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:38:32,098|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 23:38:32,098|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 23:40:31,856|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 23:40:31,859|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 23:40:33,118|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 23:40:33,129|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 23:40:33,130|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 23:40:33,130|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 23:40:33,130|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 23:40:33,132|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 23:40:33,135|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 23:40:33,135|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 23:40:34,346|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:40:34,346|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:40:34,346|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 23:40:34,346|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 23:55:45,370|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 23:55:45,374|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 23:55:46,654|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 23:55:46,663|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 23:55:46,664|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 23:55:46,665|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 23:55:46,665|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 23:55:46,666|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 23:55:46,669|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 23:55:46,669|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 23:55:47,335|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:55:47,335|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:55:47,336|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 23:55:47,335|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-09 23:56:11,816|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-09 23:56:11,819|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-09 23:56:13,099|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-09 23:56:13,111|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-09 23:56:13,112|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-09 23:56:13,112|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-09 23:56:13,112|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-09 23:56:13,114|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-09 23:56:13,117|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-09 23:56:13,117|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-09 23:56:13,800|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:56:13,801|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-09 23:56:13,801|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-09 23:56:13,801|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:04:35,870|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:04:35,873|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:04:37,127|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:04:37,137|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:04:37,138|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:04:37,138|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:04:37,138|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:04:37,140|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:04:37,142|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:04:37,143|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:04:37,803|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:04:37,804|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:04:37,804|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:04:37,804|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:04:59,974|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:04:59,977|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:05:01,255|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:05:01,266|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:05:01,267|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:05:01,267|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:05:01,267|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:05:01,269|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:05:01,271|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:05:01,271|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:05:01,957|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:05:01,957|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:05:01,957|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:05:01,957|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:06:48,595|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:06:48,598|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:06:49,893|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:06:49,904|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:06:49,906|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:06:49,906|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:06:49,906|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:06:49,908|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:06:49,910|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:06:49,910|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:06:50,602|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:06:50,602|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:06:50,602|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:06:50,602|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:11:56,469|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:11:56,472|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:11:57,751|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:11:57,761|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:11:57,762|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:11:57,762|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:11:57,762|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:11:57,764|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:11:57,766|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:11:57,766|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:11:58,430|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:11:58,430|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:11:58,431|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:11:58,430|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:12:57,305|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:12:57,309|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:12:58,630|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:12:58,639|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:12:58,640|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:12:58,640|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:12:58,640|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:12:58,641|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:12:58,644|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:12:58,644|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:12:59,332|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:12:59,333|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:12:59,333|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:12:59,333|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:13:54,514|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:13:54,517|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:13:55,786|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:13:55,796|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:13:55,797|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:13:55,797|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:13:55,798|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:13:55,799|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:13:55,802|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:13:55,802|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:13:56,496|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:13:56,496|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:13:56,496|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:13:56,496|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:14:52,302|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:14:52,305|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:14:53,598|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:14:53,608|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:14:53,609|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:14:53,609|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:14:53,610|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:14:53,611|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:14:53,614|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:14:53,614|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:14:54,308|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:14:54,308|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:14:54,309|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:14:54,308|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:18:18,231|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:18:18,234|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:18:19,514|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:18:19,523|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:18:19,524|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:18:19,525|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:18:19,525|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:18:19,526|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:18:19,529|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:18:19,529|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:18:20,214|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:18:20,215|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:18:20,215|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:18:20,215|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:18:39,664|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:18:39,667|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:18:40,930|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:18:40,941|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:18:40,942|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:18:40,942|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:18:40,942|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:18:40,944|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:18:40,947|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:18:40,947|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:18:41,665|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:18:41,666|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:18:41,666|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:18:41,666|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:20:21,959|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:20:21,963|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:20:23,231|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:20:23,242|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:20:23,243|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:20:23,243|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:20:23,243|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:20:23,245|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:20:23,247|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:20:23,248|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:20:23,923|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:20:23,924|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:20:23,924|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:20:23,924|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:20:46,329|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:20:46,331|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:20:47,611|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:20:47,621|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:20:47,622|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:20:47,622|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:20:47,622|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:20:47,625|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:20:47,627|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:20:47,627|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:20:48,284|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:20:48,285|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:20:48,285|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:20:48,285|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:21:06,618|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:21:06,622|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:21:07,899|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:21:07,909|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:21:07,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:21:07,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:21:07,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:21:07,913|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:21:07,916|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:21:07,916|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:21:08,628|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:21:08,629|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:21:08,629|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:21:08,629|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:21:35,544|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:21:35,547|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:21:36,885|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:21:36,895|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:21:36,896|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:21:36,896|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:21:36,896|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:21:36,898|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:21:36,901|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:21:36,901|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:21:37,609|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:21:37,728|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:21:37,609|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:21:37,728|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:26:53,104|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:26:53,107|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:26:54,370|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:26:54,380|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:26:54,381|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:26:54,381|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:26:54,381|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:26:54,383|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:26:54,385|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:26:54,386|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:26:55,164|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:26:55,164|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:26:55,164|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:26:55,164|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:34:42,765|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:34:42,768|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:34:44,034|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:34:44,045|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:34:44,046|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:34:44,046|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:34:44,046|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:34:44,048|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:34:44,050|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:34:44,050|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:34:44,748|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:34:44,748|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:34:44,748|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:34:44,748|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:36:39,627|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:36:39,630|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:36:40,900|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:36:40,909|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:36:40,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:36:40,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:36:40,911|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:36:40,912|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:36:40,915|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:36:40,915|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:36:41,646|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:36:41,647|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:36:41,647|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:36:41,647|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:42:16,573|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:42:16,576|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:42:17,864|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:42:17,874|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:42:17,876|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:42:17,876|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:42:17,876|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:42:17,878|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:42:17,881|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:42:17,880|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:42:18,570|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:42:18,570|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:42:18,570|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:42:18,570|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:42:48,834|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:42:48,837|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:42:50,094|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:42:50,104|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:42:50,106|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:42:50,106|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:42:50,106|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:42:50,108|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:42:50,110|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:42:50,110|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:42:50,760|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:42:50,760|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:42:50,760|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:42:50,760|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:48:23,896|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:48:23,900|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:48:25,180|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:48:25,190|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:48:25,192|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:48:25,192|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:48:25,192|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:48:25,194|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:48:25,196|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:48:25,196|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:48:25,870|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:48:25,870|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:48:25,870|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:48:25,870|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:51:01,106|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 00:51:01,110|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 00:51:02,400|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 00:51:02,411|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 00:51:02,412|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 00:51:02,412|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 00:51:02,412|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 00:51:02,414|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 00:51:02,417|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 00:51:02,417|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 00:51:03,136|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:51:03,136|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 00:51:03,136|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 00:51:03,136|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-10 00:51:24,674|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\contadoresout.txt (El sistema no puede encontrar la ruta especificada)
+2020-07-10 00:51:24,676|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\depositoout.txt (El sistema no puede encontrar la ruta especificada)
+2020-07-10 00:51:24,677|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\retiroout.txt (El sistema no puede encontrar la ruta especificada)
+2020-07-10 00:51:38,442|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\contadoresout.txt (El sistema no puede encontrar la ruta especificada)
+2020-07-10 01:39:56,301|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-10 01:39:56,304|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-10 01:39:57,566|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-10 01:39:57,577|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-10 01:39:57,578|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-10 01:39:57,578|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-10 01:39:57,578|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-10 01:39:57,580|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-10 01:39:57,582|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-10 01:39:57,582|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-10 01:39:58,263|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 01:39:58,263|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-10 01:39:58,263|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-10 01:39:58,263|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]

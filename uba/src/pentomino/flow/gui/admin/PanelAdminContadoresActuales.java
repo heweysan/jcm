@@ -53,14 +53,14 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 
 
 
-		btnImprimirContadores = new JButton(new ImageIcon("./images/BTN_7p_Admin_Imprimir.png"));
+		btnImprimirContadores = new JButton(Flow.botonAdminImprimir);
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Ptr.printContadores();
 			}
 		});
 
-		JButton btnSalir = new JButton(new ImageIcon("./images/BTN_7p_Admin_Salir.png"));
+		JButton btnSalir = new JButton(Flow.botonAdminSalir);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Flow.redirect(Flow.panelAdminMenu);
@@ -177,39 +177,18 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 
 	public static void GetCurrentCounters() {
 
-		/*
-		int total20;
-		int total50;
-		int total100;
-		int total200;
-		int total500;
-		int total1000;
-
-		total20 = 20 * Integer.parseInt(Config.GetPersistence("Accepted20", ""));;
-		total50 = 50 * Integer.parseInt(Config.GetPersistence("Accepted50", ""));;
-		total100 = 100 * Integer.parseInt(Config.GetPersistence("Accepted100", ""));;
-		total200 = 200 * Integer.parseInt(Config.GetPersistence("Accepted200", ""));;
-		total500 = 500 * Integer.parseInt(Config.GetPersistence("Accepted500", ""));;
-		total1000 = 1000 * Integer.parseInt(Config.GetPersistence("Accepted1000", ""));;
-
-		int total = total20 + total50 + total100 + total200 + total500 + total1000;
-
-		*/
 		lbl20.setText(Config.GetPersistence("Accepted20", ""));
 		lbl50.setText(Config.GetPersistence("Accepted50", ""));
 		lbl100.setText(Config.GetPersistence("Accepted100", ""));
 		lbl200.setText(Config.GetPersistence("Accepted200", ""));
 		lbl500.setText(Config.GetPersistence("Accepted500", ""));
 		lbl1000.setText(Config.GetPersistence("Accepted1000", ""));
-
-
-
 	}
 
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelAdminContadoresActuales");
+		System.out.println("OnLoad [PanelAdminContadoresActuales]");
 
 	}
 

@@ -1,5 +1,6 @@
 package pentomino.flow.gui.admin;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import pentomino.flow.Flow;
@@ -17,8 +18,8 @@ public class PanelAdminDetalleError extends ImagePanel {
 	
 	public static JLabel lblDetalleError = new JLabel("");
 	
-	public PanelAdminDetalleError(String img, String name, long _timeout, ImagePanel _redirect) {
-		super(img, name, _timeout, _redirect);
+	public PanelAdminDetalleError(ImageIcon bgPlaceHolder, String name, long _timeout, ImagePanel _redirect) {
+		super(bgPlaceHolder, name, _timeout, _redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);

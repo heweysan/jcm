@@ -42,12 +42,8 @@ public class BEA {
 			session = SessionId;
 
 		String data = "" + businessEvent.getBusinessEventName() + ";" + session + ";" + attributes;
-
-		System.out.println("-------------  BEA INI -------------------");
-		System.out.println("BusinessEvent data [" + data + "]");
+		
 		InvBroadcast(java.lang.System.currentTimeMillis(), data);
-		System.out.println("-------------  BEA FIN -------------------");
-
 
 	}
 

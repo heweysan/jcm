@@ -81,6 +81,58 @@ public  abstract class ImagePanel extends JPanel {
 		
 		
 	}
+	
+	public ImagePanel(ImageIcon img,String name, long _timeout, ImagePanel _redirect) {
+		
+		
+		this.screenTimeOut = _timeout;
+		this.panelRedirect = _redirect;
+
+		add(new DebugButtons().getPanel());
+		
+		ContentPanel();
+		
+		addComponentListener(new ComponentAdapter() {
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				
+				OnLoad();
+				if(screenTimeOut == 0 || panelRedirect == null)
+					return;
+				
+				//System.out.println("componentShown [" + name + "]");
+				screenTimer = new Timer();
+				screenTimer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						//System.out.println("Redireccionado [" + name + "] -> [" + panelRedirect.getName() + "]");
+						screenTimer.cancel();						
+						Flow.redirect(panelRedirect);					
+					}
+				}, screenTimeOut);	
+				
+			}
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				OnUnload();
+				//System.out.println("componentHidden [" + name + "]");
+				screenTimer.cancel();
+				
+			}
+		});
+		
+		
+		this.img = img.getImage();
+		this.setName(name);
+		//_name = name;
+		Dimension size = new Dimension(this.img.getWidth(null), this.img.getHeight(null));
+		setPreferredSize(size);
+		setMinimumSize(size);
+		setMaximumSize(size);
+		setSize(size);
+		setLayout(null);
+	}
 
 	
 	public abstract void ContentPanel();

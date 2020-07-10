@@ -3,6 +3,7 @@ package pentomino.flow.gui.admin;
 
 import java.awt.Font;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -21,8 +22,8 @@ public class PanelAdminError  extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelAdminError(String img,String name, int _timeout, ImagePanel _redirect) {
-		super(img,name,_timeout,_redirect);
+	public PanelAdminError(ImageIcon bgPlaceHolder,String name, int _timeout, ImagePanel _redirect) {
+		super(bgPlaceHolder,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);

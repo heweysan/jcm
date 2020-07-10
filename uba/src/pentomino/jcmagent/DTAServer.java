@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +22,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.cashmanagement.Transactions;
+import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
@@ -151,15 +155,34 @@ public class DTAServer {
 	
 	private String OpenCabinet() {
 		System.out.println("OPENCABINET");
+		Flow.miTio.alarmOff();
+		Flow.timerFascia();
+		Flow.isAdminTime = true;
+		
+		
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
 	}
 	
 	
+	String mensaje;
 	private String FlushJcms() {
 
-		System.out.println("FLUSHJCM");
-
-		System.out.println("" + JcmGlobalData.rec1bill1Available + ";" + JcmGlobalData.rec1bill2Available + ";" + JcmGlobalData.rec2bill1Available + ";" + JcmGlobalData.rec2bill2Available );
+		mensaje = JcmGlobalData.rec1bill1Denom + "x" + JcmGlobalData.rec1bill1Available	+ ";" 
+				+ JcmGlobalData.rec1bill2Denom + "x" + JcmGlobalData.rec1bill2Available + ";" 
+				+ JcmGlobalData.rec2bill1Denom + "x" + JcmGlobalData.rec2bill1Available + ";" 
+				+ JcmGlobalData.rec2bill2Denom + "x" + JcmGlobalData.rec2bill2Available;
+		
+		System.out.println("FLUSHJCM " + mensaje );
+		logger.info("FLUSHJCM " + mensaje );
+		
+		
+		JcmGlobalData.jcm1cass1Flushed = false;
+		JcmGlobalData.jcm1cass2Flushed = false;
+		JcmGlobalData.jcm2cass1Flushed = false;
+		JcmGlobalData.jcm2cass2Flushed = false;
+		
+				
+		RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushing " + mensaje);
 
 		//JCM 1
 		// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
@@ -173,6 +196,7 @@ public class DTAServer {
 		}
 		else{
 			System.out.println("Nada que bajar de jcm1 cassete 1");
+			JcmGlobalData.jcm1cass1Flushed = true;
 			if(JcmGlobalData.rec1bill2Available > 0) {
 				System.out.println("Bajando jcm1 cassete 2");
 				Flow.jcms[0].currentOpertion = jcmOperation.CollectCass2;
@@ -180,9 +204,9 @@ public class DTAServer {
 			}
 			else {
 				System.out.println("Nada que bajar de jcm1 cassete 2");
+				JcmGlobalData.jcm1cass2Flushed = true;
 				Flow.jcms[0].currentOpertion = jcmOperation.None;
 			}
-
 		}
 
 
@@ -199,6 +223,7 @@ public class DTAServer {
 		}
 		else{
 			System.out.println("Nada que bajar de jcm2 cassete 1");
+			JcmGlobalData.jcm2cass1Flushed = true;
 			if(JcmGlobalData.rec2bill2Available > 0) {
 				System.out.println("Bajando jcm2 cassete 2");
 				Flow.jcms[1].currentOpertion = jcmOperation.CollectCass2;
@@ -206,15 +231,29 @@ public class DTAServer {
 			}
 			else {
 				System.out.println("Nada que bajar de jcm2 cassete 2");
+				JcmGlobalData.jcm2cass2Flushed = true;
 			}						
 		}
+		
+		Timer flushTimer = new Timer();
 
-
+		flushTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {			
+				if(JcmGlobalData.jcm1cass1Flushed && JcmGlobalData.jcm1cass2Flushed && JcmGlobalData.jcm2cass1Flushed && JcmGlobalData.jcm2cass2Flushed) {
+					RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushed " + mensaje );
+					flushTimer.cancel();
+					return;
+				}
+			}
+		}, TimeUnit.SECONDS.toMillis(5),TimeUnit.SECONDS.toMillis(5)); 
+		
+		
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
 	}
 
 	private String UploadFile(EnvironmentVariables envVars) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("UploadFile");
 
 		String[] array;

@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -64,7 +63,8 @@ public class PanelDeposito extends ImagePanel{
 	public void ContentPanel() {
 
 
-		JButton btnAceptar = new JButton(new ImageIcon("./images/BTN7Aceptar.png"));
+		//TODO: AQUI
+		JButton btnAceptar = new JButton(Flow.botonAceptar);
 		btnAceptar.setBounds(570, 860, 782, 159);
 		btnAceptar.setContentAreaFilled(false);
 		btnAceptar.setBorderPainted(false);

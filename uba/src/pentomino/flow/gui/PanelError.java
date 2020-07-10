@@ -3,6 +3,7 @@ package pentomino.flow.gui;
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -24,8 +25,8 @@ public class PanelError extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelError(String img,String name, int _timeout, ImagePanel _redirect) {
-		super(img,name,_timeout,_redirect);
+	public PanelError(ImageIcon bgPlaceHolder,String name, int _timeout, ImagePanel _redirect) {
+		super(bgPlaceHolder,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);
@@ -46,7 +47,7 @@ public class PanelError extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelError");
+		System.out.println("OnLoad [PanelError]");
 		
 
 	}

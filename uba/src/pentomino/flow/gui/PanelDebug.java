@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -40,8 +41,8 @@ public class PanelDebug  extends ImagePanel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelDebug(String img,String name, int _timeout, ImagePanel _redirect) {
-		super(img,name,_timeout,_redirect);
+	public PanelDebug(ImageIcon bgPlaceHolder,String name, int _timeout, ImagePanel _redirect) {
+		super(bgPlaceHolder,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
 		setBorder(null);
@@ -1018,7 +1019,7 @@ public class PanelDebug  extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelDebug");
+		System.out.println("OnLoad [PanelDebug]");
 
 	}
 

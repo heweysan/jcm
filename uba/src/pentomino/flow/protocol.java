@@ -553,6 +553,9 @@ public class protocol extends kermit {
 			
 			if(currentOpertion == jcmOperation.CollectCass1) {
 				if(jcmId == 1) {
+					
+					JcmGlobalData.jcm1cass1Flushed = true;
+					
 					if(JcmGlobalData.rec1bill2Available > 0) {
 						System.out.println("Bajando jcm" + jcmId + "  cassete 2");
 						currentOpertion = jcmOperation.CollectCass2;
@@ -560,9 +563,13 @@ public class protocol extends kermit {
 					}
 					else {
 						System.out.println("Nada que bajar de jcm1 cassete 2");
+						JcmGlobalData.jcm1cass2Flushed = true;
 					}
 				}
 				if(jcmId == 2) {
+					
+					JcmGlobalData.jcm2cass1Flushed = true;
+					
 					if(JcmGlobalData.rec2bill2Available > 0) {
 						System.out.println("Bajando jcm" + jcmId + "  cassete 2");
 						currentOpertion = jcmOperation.CollectCass2;
@@ -570,6 +577,7 @@ public class protocol extends kermit {
 					}
 					else {
 						System.out.println("Nada que bajar de jcm2 cassete 2");
+						JcmGlobalData.jcm2cass2Flushed = true;
 					}
 				}
 			}
@@ -915,7 +923,11 @@ public class protocol extends kermit {
 					byte bill1 = jcmResponse[5];
 					byte bill2 = jcmResponse[8];
 					System.out.println("JCM[" + jcmId + "] " + hexToDenom(bill1) + " - " + hexToDenom(bill2));
-			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+					
+					if(CurrentUser.currentOperation == jcmOperation.PreIdle)
+						id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, jcmMessage);
+					else
+						id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			
 			break;
 			case (byte) 0x00: // UNCONNECTED Recycler Unit is not connected.
@@ -1137,8 +1149,7 @@ public class protocol extends kermit {
 						if(currentOpertion == jcmOperation.Startup) {
 							System.out.println("STARTUP...");
 							//Pedimos los conatadores y demas estatus, para no reinicar los jcms si es que estan arriba y bien.
-							id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0,
-									jcmMessage);			
+							id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0,jcmMessage);			
 						}
 						else {
 							processingOperation = false;
@@ -1167,7 +1178,7 @@ public class protocol extends kermit {
 					System.out.println(baitsToString("JCM[" + jcmId + "] processing RECYCLE CURRENCY REQUEST",
 							jcmResponse, jcmResponse[1]));
 
-			if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup) {
+			if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup || currentOpertion == jcmOperation.PreIdle) {
 				
 				System.out.println("CurrentOperation [" + currentOpertion + "]");
 				recyclerContadoresSet = false;
