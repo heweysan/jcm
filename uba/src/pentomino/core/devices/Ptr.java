@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -48,10 +51,16 @@ import pentomino.jcmagent.RaspiAgent;
 
 
 
+
 public class Ptr {
 
+	
+	
 	private static final Logger logger = LogManager.getLogger(Ptr.class.getName());
 
+	private static final String FIFO = "jcmprinter";
+	
+	
 	static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
 	static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
@@ -86,6 +95,63 @@ public class Ptr {
 	    */
 		
 		//printDispense(500,"1324");
+		
+		System.out.println("JAVA SIDE!!");
+
+		//BufferedReader in = null;
+
+		boolean existe = false;
+		String line;
+		try {
+
+			Process p = Runtime.getRuntime().exec(new String[] {"sh", "-c", "ps -a | grep ReadStatus"});
+			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			while ((line = input.readLine()) != null)
+			{
+				System.out.println(line);
+				if(line.contains("ReadStatus")) {
+					existe = true;
+					break;
+				}
+				
+			}
+		} catch (Exception err) {
+			System.out.println(err);
+		} 
+
+		if(existe)
+			System.out.println("Ya existe el proceso");
+		else {
+			System.out.println("No existe el proceso hay que levantarlo");
+			String command = "./ReadStatus";
+			Runtime runtime = Runtime.getRuntime();
+			try {
+				runtime.exec(command);
+			} catch (IOException ex) {						
+				ex.printStackTrace();
+			}
+		}
+
+
+		Timer screenTimerDispense = new Timer();
+
+		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {			
+				try{	     		         
+
+					BufferedReader in = new BufferedReader(new FileReader(FIFO));
+
+					while(in.ready()){
+						System.out.println(in.readLine());
+					}					
+					in.close();
+				}catch(IOException ex){
+					System.err.println("IO Exception at buffered read!!");					
+				}
+			}
+		}, 1000,1000); 
+		
 		
 		printJposUsb();
 		

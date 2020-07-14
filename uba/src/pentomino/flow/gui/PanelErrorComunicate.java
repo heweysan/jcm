@@ -7,6 +7,10 @@ import java.util.concurrent.TimeUnit;
 import pentomino.common.NetUtils;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PanelErrorComunicate  extends ImagePanel {
 
@@ -26,6 +30,16 @@ public class PanelErrorComunicate  extends ImagePanel {
 		setOpaque(false);
 		setBorder(null);
 		setLayout(null);
+		
+		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
+		btnAdminLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Flow.redirect(Flow.panelAdminIniciando);
+			}
+		});
+		btnAdminLogin.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		btnAdminLogin.setBounds(50, 880, 347, 122);
+		add(btnAdminLogin);
 	}	
 
 

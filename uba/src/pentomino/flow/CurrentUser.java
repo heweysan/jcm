@@ -70,8 +70,8 @@ public class CurrentUser {
 	public static void cleanPinpadData() {
 		loginUser = "";
 		loginPassword = "";
-		loginAttempts = 0;
-		tokenAttempts = 0;
+		//loginAttempts = 0;
+		//tokenAttempts = 0;
 		tokenConfirmacion = "";
 		loginPasswordMasked = "";
 	}

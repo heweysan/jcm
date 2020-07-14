@@ -29,6 +29,12 @@ public class Tio implements Runnable{
 	 */
 	public static boolean safeOpen = false;
 	
+
+	/**
+	 * Nos indica el estado del vastago
+	 */
+	public static boolean boltOpen = false;
+
 	/**
 	 * Nos indica el estado de la fascia
 	 */
@@ -61,42 +67,49 @@ public class Tio implements Runnable{
 	}
 
 	public Tio() {
-
-		System.out.println("TIO [running]");				
-
+		System.out.println("TIO [running]");
 	}
 
 	public boolean abreElectroiman() {
-		if(JcmGlobalData.isDebug) {
-			EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
-		}
-		else {
+		
+		System.out.println("--> Electroiman ON");
+		
+		if(!JcmGlobalData.isDebug) 
 			electroIman.low();
-		}
-		safeOpen = true;
-		System.out.println("--> Electroiman OFF");		
+			
+		boltOpen = true;
+				
 		return true;
 	}
 
 	public boolean cierraElectroiman() {
 	
-		electroIman.high();
+		System.out.println("--> Electroiman OFF");
+		
+		if(!JcmGlobalData.isDebug)
+			electroIman.high();
 	
-		safeOpen = false;
-		System.out.println("--> Electroiman ON");
+		boltOpen = false;
+		
 		return true;
 	}
 
 
 	public boolean alarmOn() {
-		alarma.low();
-		alarmOn = true;
 		System.out.println("--> Alarma ON");
+		
+		if(!JcmGlobalData.isDebug)
+			alarma.low();
+		
+		alarmOn = true;
+		
 		return true;
 	}
 
 	public boolean alarmOff() {
-		alarma.high();
+		if(!JcmGlobalData.isDebug)
+			alarma.high();
+		
 		alarmOn = false;
 		System.out.println("--> Alarma OFF");
 		return true;
@@ -199,7 +212,7 @@ public class Tio implements Runnable{
 				if(event.getState().isHigh()) { 
 					logger.info("BOVEDA ABIERTA");
 					System.out.println("BOVEDA ABIERTA");              		
-					RaspiAgent.Broadcast(DeviceEvent.AFD_SafeOpen,"");
+					RaspiAgent.Broadcast(DeviceEvent.AFD_SafeOpen,"");					
 					safeOpen = true;
 					EventListenerClass.fireMyEvent(new MyEvent("SafeOpen"));
 				}           	

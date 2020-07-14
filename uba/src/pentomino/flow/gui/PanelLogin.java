@@ -129,8 +129,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 					if(CurrentUser.loginUser.length() <= 0) {
 						return;
 					}
-
-					System.out.println("Validando usuario....");
+					
 					//Validamos el usuario
 					CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
 					System.out.println("loginUser success[" +  user.success +"] success [" + user.isValid + "]");

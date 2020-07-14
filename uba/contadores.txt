@@ -18,3 +18,8 @@ CORTE:      <corte>
 USUARIO:    <usuario>
 
 .                            .
+if(JcmGlobalData.maxRecyclableCash == 0 || (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) > JcmGlobalData.maxRecyclableCash) {
+
+
+
+rpacc20k   liverpool

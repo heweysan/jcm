@@ -138,6 +138,10 @@ public class DTAServer {
 			return OpenSafe();
 		case "OPENCABINET":
 			return OpenCabinet();
+		case "TURNOFFALARM":
+			return TurnOffAlarm();
+			
+			
 		}
 
 		return "Pentomino-ReturnValue: NOK";
@@ -162,6 +166,16 @@ public class DTAServer {
 		
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
 	}
+	
+	private String TurnOffAlarm() {
+		System.out.println("TURNOFFALARM");
+		Flow.miTio.alarmOff();
+		
+		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+	}
+	
+	
+	
 	
 	
 	String mensaje;

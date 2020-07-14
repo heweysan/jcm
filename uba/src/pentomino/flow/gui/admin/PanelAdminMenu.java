@@ -22,7 +22,7 @@ import pentomino.jcmagent.BEA;
 public class PanelAdminMenu extends ImagePanel {
 
 
-	
+
 	/**
 	 * 
 	 */
@@ -83,7 +83,7 @@ public class PanelAdminMenu extends ImagePanel {
 				BEA.BusinessEvent(BusinessEvent.AdministrativeOperatonEnded, true, false,"");
 				//Reviamos si la boveda esta abierta para notifcar.
 				if(Tio.safeOpen) {
-					
+
 				}
 				else {
 					Flow.adminTimer.cancel();
@@ -91,34 +91,34 @@ public class PanelAdminMenu extends ImagePanel {
 				}
 			}
 		});
-		
-				JButton btnAdminMenuReiniciarAtm = new JButton(new ImageIcon("./images/BTN_7p_Admin_ReiniciarAtm.png"));
-				btnAdminMenuReiniciarAtm.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("Reiniciando CAJERITO BUTTON");
-						boolean busy = false;
-	            do {
-	                try {	                	
-								Thread.sleep(2000);
-							} catch (InterruptedException ie) {
-								// TODO Auto-generated catch block
-								ie.printStackTrace();
-							}                
-	                busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
-	                System.out.println("BUSY [" + busy +"]");
-	            } while (busy);
-	            System.out.println("");
-	            Flow.redirect(Flow.panelReinicio);
-									
-						
-						EventListenerClass.fireMyEvent(new MyEvent("reboot"));
-					}
-				});
-				btnAdminMenuReiniciarAtm.setOpaque(false);
-				btnAdminMenuReiniciarAtm.setContentAreaFilled(false);
-				btnAdminMenuReiniciarAtm.setBorderPainted(false);
-				btnAdminMenuReiniciarAtm.setBounds(1140, 475, 574, 171);
-				add(btnAdminMenuReiniciarAtm);
+
+		JButton btnAdminMenuReiniciarAtm = new JButton(new ImageIcon("./images/BTN_7p_Admin_ReiniciarAtm.png"));
+		btnAdminMenuReiniciarAtm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Reiniciando CAJERITO BUTTON");
+				boolean busy = false;
+				do {
+					try {	                	
+						Thread.sleep(2000);
+					} catch (InterruptedException ie) {
+						// TODO Auto-generated catch block
+						ie.printStackTrace();
+					}                
+					busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+					System.out.println("BUSY [" + busy +"]");
+				} while (busy);
+				System.out.println("");
+				Flow.redirect(Flow.panelReinicio);
+
+
+				EventListenerClass.fireMyEvent(new MyEvent("reboot"));
+			}
+		});
+		btnAdminMenuReiniciarAtm.setOpaque(false);
+		btnAdminMenuReiniciarAtm.setContentAreaFilled(false);
+		btnAdminMenuReiniciarAtm.setBorderPainted(false);
+		btnAdminMenuReiniciarAtm.setBounds(1140, 475, 574, 171);
+		add(btnAdminMenuReiniciarAtm);
 		btnAdminMenuSalir.setBackground(Color.BLUE);
 		btnAdminMenuSalir.setOpaque(false);
 		btnAdminMenuSalir.setContentAreaFilled(false);
@@ -144,15 +144,12 @@ public class PanelAdminMenu extends ImagePanel {
 
 
 	@Override
-	public void OnLoad() {
-		// TODO Auto-generated method stub
-		System.out.println("OnLoad PanelAdminMenu");
-
+	public void OnLoad() {		
+		System.out.println("OnLoad [PanelAdminMenu]");
 	}
 
 	@Override
 	public void OnUnload() {
-		// TODO Auto-generated method stub
 		//System.out.println("OnUnload PanelAdminMenu");
 	}
 

@@ -82,8 +82,8 @@ public class BEA {
 		agentMsg.AtmId = Config.GetDirective("AtmId", "");		
 
 
-		System.out.println("MESSAGE VALUES[" + listOfString + "]");
-		System.out.println("BEA MESSAGE JSON[" + gson.toJson(agentMsg) + "]");
+		//System.out.println("MESSAGE VALUES[" + listOfString + "]");
+		//System.out.println("BEA MESSAGE JSON[" + gson.toJson(agentMsg) + "]");
 
 		AgentsQueue.bq.add(agentMsg);
 

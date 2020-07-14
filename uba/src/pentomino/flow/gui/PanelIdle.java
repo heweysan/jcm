@@ -22,6 +22,7 @@ import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.DispenseStatus;
 import pentomino.flow.Flow;
+import pentomino.flow.gui.helpers.ImageButton;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -56,19 +57,19 @@ public class PanelIdle  extends ImagePanel {
 	@Override
 	public void ContentPanel() {
 
-		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
+		JButton btnAdminLogin = new ImageButton("./images/BTN7_ADMIN.png");
 		btnAdminLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JcmGlobalData.isAdmin = true;
+				CurrentUser.loginAttempts = 0;
 				Flow.redirect(Flow.panelAdminIniciando);
 			}
 		});
 		btnAdminLogin.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		btnAdminLogin.setBounds(1550, 11, 347, 122);
+		btnAdminLogin.setBounds(1710, 45, 162, 162);
 		add(btnAdminLogin);
 		lblAtmId.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblAtmId.setHorizontalAlignment(SwingConstants.RIGHT);
-
-
 
 		lblAtmId.setForeground(Color.WHITE);
 		lblAtmId.setBounds(1452, 950, 407, 47);
@@ -83,17 +84,14 @@ public class PanelIdle  extends ImagePanel {
 		add(btnIdle);
 
 		btnIdle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
+			public void actionPerformed(ActionEvent e) {						
 
 
-				
-				
-				
 				//Checamos que tenga algo de dinero.
 				if(Flow.jcms[0].billCounters.Cass1Available == 0 && Flow.jcms[0].billCounters.Cass2Available == 0 && Flow.jcms[1].billCounters.Cass1Available == 0 && Flow.jcms[1].billCounters.Cass2Available == 0){
 					System.out.println("No hay dinero en los caseteros para dispensar");
 					CurrentUser.dispenseStatus = DispenseStatus.NoMoney;
-					Flow.redirect(Flow.panelMenuSinFondo,5000,Flow.panelIdle);	
+					Flow.redirect(Flow.panelMenuSinFondo,5000,Flow.panelIdle);					
 					return;
 				}
 
@@ -113,8 +111,8 @@ public class PanelIdle  extends ImagePanel {
 
 					Flow.redirect(Flow.panelMenu,5000,Flow.panelIdle);
 				}
-				
-				
+
+
 			}
 		});
 
@@ -124,11 +122,12 @@ public class PanelIdle  extends ImagePanel {
 	public void OnLoad() {
 		System.out.println("OnLoad [PanelIdle]");
 
-		System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+		JcmGlobalData.isAdmin = false;
+
+		System.out.println("JCM1/JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
 		Flow.jcms[0].jcmMessage[3] = 0x01;
 		Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-
-		System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+		
 		Flow.jcms[1].jcmMessage[3] = 0x01;
 		Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
 
@@ -152,9 +151,7 @@ public class PanelIdle  extends ImagePanel {
 					Flow.redirect(Flow.panelOos);
 					screenTimerDispense.cancel();
 					return;
-				}  
-				
-				
+				}
 			}
 		}, 1000,60000);
 
@@ -163,17 +160,21 @@ public class PanelIdle  extends ImagePanel {
 			@Override
 			public void run() {				
 				if(!NetUtils.netIsAvailable()) {
-					Flow.redirect(Flow.panelErrorComunicate);
-					screenTimerNetwork.cancel();
+					if(!JcmGlobalData.isAdmin) {
+						System.out.println("PanelIdle panelErrorComunicate");
+						Flow.redirect(Flow.panelErrorComunicate);
+						screenTimerNetwork.cancel();
+					}
 				}
-			}
+			}		
+
 		}, 1000,TimeUnit.MINUTES.toMillis(1));
 	}
 
 
 	@Override
 	public void OnUnload() {
-		//System.out.println("OnUnload PanelIdle");
+		System.out.println("OnUnload [PanelIdle]");
 		screenTimerDispense.cancel();
 		screenTimerNetwork.cancel();
 

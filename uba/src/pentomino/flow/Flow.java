@@ -24,6 +24,7 @@ import pentomino.common.AccountType;
 import pentomino.common.Billete;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
+import pentomino.common.NetUtils;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
@@ -53,6 +54,7 @@ import pentomino.flow.gui.admin.PanelAdminError;
 import pentomino.flow.gui.admin.PanelAdminEstatusDispositivos;
 import pentomino.flow.gui.admin.PanelAdminIniciando;
 import pentomino.flow.gui.admin.PanelAdminLogin;
+import pentomino.flow.gui.admin.PanelAdminLoginTienda;
 import pentomino.flow.gui.admin.PanelAdminMenu;
 import pentomino.flow.gui.admin.PanelAdminPruebaImpresion;
 import pentomino.flow.gui.admin.PanelAdminResetDispositivos;
@@ -100,7 +102,9 @@ public class Flow {
 	public static ImagePanel panelAdminResetDispositivos;
 	public static ImagePanel panelAdminIniciando;
 	public static ImagePanel panelAdminDetalleError;
-	public static ImagePanel panelAdminPruebaImpresion;
+	public static ImagePanel panelAdminPruebaImpresion;	
+	public static ImagePanel panelAdminLoginTienda;
+	
 	
 	public static ImageIcon botonOk = new ImageIcon("./images/BTN7_OK.png");
 	public static ImageIcon botonNo = new ImageIcon("./images/BTN7_NO.png");
@@ -110,6 +114,10 @@ public class Flow {
 	public static ImageIcon botonAdminImprimirContadores = new ImageIcon("./images/BTN_7p_Admin_imprimir contadores.png");	
 	public static ImageIcon botonAdminSalir = new ImageIcon("./images/BTN_7p_Admin_Salir.png");	
 	public static ImageIcon bgPlaceHolder = new ImageIcon("./images/Scr7Placeholder.png");
+	public static ImageIcon botonAdmin = new ImageIcon("./images/BTN7_ADMIN.png");
+	
+	public static ImageIcon bgAdminUsuario = new ImageIcon("./images/SCR_P7Admin_Usuario.png");
+	public static ImageIcon bgAdminPassword = new ImageIcon("./images/SCR_P7Admin_Contrasena.png");
 	
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
@@ -159,10 +167,8 @@ public class Flow {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					//Flow window = new Flow();
-					new Flow();
-					//mainFrame.setVisible(true);
+				try {					
+					new Flow();					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -173,23 +179,26 @@ public class Flow {
 
 	/**
 	 * Activa un timer que dura n minutos, tiempo en el cual se puede abrir la boveda sin generar alarma.
-	 * Si despues del tiempo establecido no se ha cerrado la boveda se dispara la alarma.
+	 * 
 	 */
 	public static void timerBoveda() {
 
-		logger.info("Timer Boveda inciando.");		
+		logger.info("Timer Boveda inciando.");
+		System.out.println("Timer Boveda inciando.");
 		adminTimer = new Timer();
 		isAdminTime = true;		
+		
+		Flow.miTio.abreElectroiman();
 
 		adminTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				logger.info("Timer Boveda terminado.");				
+				logger.info("Timer Boveda terminado.");	
 				System.out.println("Timer Boveda terminado.");
 				isAdminTime = false;				
 				adminTimer.cancel();
 			}
-		}, TimeUnit.MINUTES.toMillis(10));
+		}, TimeUnit.MINUTES.toMillis(1)); //10 original
 	}
 
 	/**
@@ -298,16 +307,13 @@ public class Flow {
 
 		Config.SetPersistence("BoardStatus", "Available");
 
-		redirect(panelAdminEstatusDispositivos);
-		
-		/*
+
 		if(NetUtils.netIsAvailable()) {
 			redirect(panelIdle);			
 		}
 		else {
 			redirect(panelErrorComunicate);			
 		}
-		*/
 
 	}
 
@@ -355,7 +361,9 @@ public class Flow {
 		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.getContentPane().add(panelContainer);
-		mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
+		
+		if(!JcmGlobalData.isDebug)
+			mainFrame.setUndecorated(true);  //Con esto ya no tiene frame de ventanita
 
 		panelContainer.setLayout(cl);
 
@@ -399,8 +407,8 @@ public class Flow {
 
 		//FLUJO ADMINISTRATIVO
 
-		panelAdminLogin = new PanelAdminLogin("./images/SCR_P7Admin_Usuario.png","panelAdminLogin",25000,Flow.panelTerminamos); 
-		panelAdminMenu = new PanelAdminMenu("./images/SCR_P7Admin_MenuAdmin.png","panelAdminMenu",25000,Flow.panelTerminamos);
+		panelAdminLogin = new PanelAdminLogin(bgAdminUsuario,"panelAdminLogin",25000,Flow.panelTerminamos); 
+		panelAdminMenu = new PanelAdminMenu("./images/SCR_P7Admin_MenuAdmin.png","panelAdminMenu",0,null);
 		panelAdminContadoresActuales = new PanelAdminContadoresActuales("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresActuales",10000,Flow.panelTerminamos);
 		panelAdminContadoresEnCero = new PanelAdminContadoresEnCero("./images/SCR_P7Admin_ContadoresActuales.png","panelAdminContadoresEnCero",10000,Flow.panelTerminamos);
 		panelAdminDotarCancelar = new PanelAdminDotarCancelar("./images/SCR_P7Admin_ValidarCancelacion.png","panelAdminDotarCancelar",0,null);
@@ -409,11 +417,11 @@ public class Flow {
 		panelAdminEstatusDispositivos = new PanelAdminEstatusDispositivos("./images/SCR_P7Admin_EstatusDispositivos.png","panelAdminEstatusDispositivos",0,null);
 		panelAdminUsuarioInvalido = new PanelAdminUsuarioInvalido("./images/SCR_P7Admin_UsuarioInvalido.png","panelAdminUsuarioInvalido",5000,Flow.panelAdminLogin);
 		panelAdminResetDispositivos = new PanelAdminResetDispositivos(bgPlaceHolder,"panelAdminResetDispositivos",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminEstatusDispositivos);
-		panelAdminIniciando = new PanelAdminIniciando("./images/SCR_P7Admin_Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminDetalleError = new PanelAdminDetalleError(bgPlaceHolder,"panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/SCR_P7Admin_PruebaImpresion.png","panelAdminPruebaImpresion",0,null);
-
-
+		panelAdminLoginTienda = new PanelAdminLoginTienda(bgAdminUsuario,"panelAdminLoginTienda",0,null);
+		panelAdminIniciando = new PanelAdminIniciando("./images/SCR_P7Admin_Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(3),Flow.panelAdminLoginTienda);
+		
 		//Valores Iniciales
 		PanelIdle.lblAtmId.setText(JcmGlobalData.atmId);
 
@@ -447,6 +455,7 @@ public class Flow {
 		panelContainer.add(panelAdminIniciando,"panelAdminIniciando");
 		panelContainer.add(panelAdminDetalleError,"panelAdminDetalleError");
 		panelContainer.add(panelAdminPruebaImpresion,"panelAdminPruebaImpresion");
+		panelContainer.add(panelAdminLoginTienda,"panelAdminLoginTienda");
 
 		String atmId = Config.GetDirective("AtmId", "");
 
@@ -706,7 +715,10 @@ public class Flow {
 					if(isAdminTime) {
 						System.out.println("Boveda abierta autorizada");
 						miTio.alarmOff(); //redundante paranoico
-						redirect(Flow.panelAdminIniciando,3000,Flow.panelAdminLogin);
+						adminTimer.cancel();
+						//Bajamos el perno
+						Flow.miTio.cierraElectroiman();
+						//redirect(Flow.panelAdminIniciando,3000,Flow.panelAdminLogin);
 					}						
 					else {
 						System.out.println("Boveda abierta NO autorizada activando alarma");

@@ -11,5 +11,7 @@ public enum jcmOperation {
     CollectCass2,
     Dotacion,
     DispenseFail,
-    PreIdle
+    PreIdle,
+    StoreLogin,
+    AdminLogin
 }

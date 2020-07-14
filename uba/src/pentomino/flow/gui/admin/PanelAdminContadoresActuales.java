@@ -41,7 +41,6 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 	static JLabel lbl100 = new JLabel("0");
 	static JLabel lbl200 = new JLabel("0");
 	static JLabel lbl500 = new JLabel("0");
-	static JLabel lbl1000 = new JLabel("0");
 
 	@Override
 	public void ContentPanel() {
@@ -93,81 +92,73 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 		add(btnImprimirContadores);
 
 		JLabel lblNewLabel = new JLabel("$20");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel.setBounds(539, 498, 98, 30);
+		lblNewLabel.setBounds(459, 511, 335, 30);
 		add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("$50");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_1.setBounds(539, 578, 98, 30);
+		lblNewLabel_1.setBounds(459, 581, 335, 30);
 		add(lblNewLabel_1);
 
 		JLabel lblNewLabel_2 = new JLabel("$100");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_2.setBounds(539, 658, 98, 30);
+		lblNewLabel_2.setBounds(459, 659, 335, 30);
 		add(lblNewLabel_2);
 
 		JLabel lblNewLabel_2_1 = new JLabel("$200");
+		lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2_1.setForeground(Color.WHITE);
 		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_2_1.setBounds(539, 738, 98, 30);
+		lblNewLabel_2_1.setBounds(459, 729, 335, 30);
 		add(lblNewLabel_2_1);
 
 		JLabel lblNewLabel_2_2 = new JLabel("$500");
+		lblNewLabel_2_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2_2.setForeground(Color.WHITE);
 		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_2_2.setBounds(539, 818, 98, 30);
+		lblNewLabel_2_2.setBounds(459, 799, 335, 30);
 		add(lblNewLabel_2_2);
-
-		JLabel lblNewLabel_2_3 = new JLabel("$1000");
-		lblNewLabel_2_3.setForeground(Color.WHITE);
-		lblNewLabel_2_3.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_2_3.setBounds(539, 898, 98, 30);
-		add(lblNewLabel_2_3);
 		lbl20.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl20.setForeground(Color.WHITE);
 
 
 		lbl20.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lbl20.setBounds(1279, 498, 100, 30);
+		lbl20.setBounds(1279, 511, 160, 30);
 		add(lbl20);
 		lbl50.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl50.setForeground(Color.WHITE);
 
 		lbl50.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lbl50.setBounds(1279, 578, 100, 30);
+		lbl50.setBounds(1279, 581, 160, 30);
 		add(lbl50);
 		lbl100.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl100.setForeground(Color.WHITE);
 
 
 		lbl100.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lbl100.setBounds(1279, 658, 100, 30);
+		lbl100.setBounds(1279, 659, 160, 30);
 		add(lbl100);
 		lbl200.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl200.setForeground(Color.WHITE);
 
 
 		lbl200.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lbl200.setBounds(1279, 738, 100, 30);
+		lbl200.setBounds(1279, 729, 160, 30);
 		add(lbl200);
 		lbl500.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl500.setForeground(Color.WHITE);
 
 
 		lbl500.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lbl500.setBounds(1279, 818, 100, 30);
+		lbl500.setBounds(1279, 799, 160, 30);
 		add(lbl500);
-		lbl1000.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl1000.setForeground(Color.WHITE);
-
-
-		lbl1000.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lbl1000.setBounds(1279, 898, 100, 30);
-		add(lbl1000);
 
 
 
@@ -182,7 +173,6 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 		lbl100.setText(Config.GetPersistence("Accepted100", ""));
 		lbl200.setText(Config.GetPersistence("Accepted200", ""));
 		lbl500.setText(Config.GetPersistence("Accepted500", ""));
-		lbl1000.setText(Config.GetPersistence("Accepted1000", ""));
 	}
 
 

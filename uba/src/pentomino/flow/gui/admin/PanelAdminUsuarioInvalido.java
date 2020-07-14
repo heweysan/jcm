@@ -4,6 +4,7 @@ package pentomino.flow.gui.admin;
 
 
 import pentomino.common.PinpadMode;
+import pentomino.common.jcmOperation;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
@@ -44,7 +45,10 @@ public class PanelAdminUsuarioInvalido  extends ImagePanel {
 		JButton btnReintentar = new JButton(new ImageIcon("./images/BTN_7p_Admin_Intentar de Nuevo.png"));
 		btnReintentar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Flow.redirect(Flow.panelAdminLogin);
+				if(CurrentUser.currentOperation == jcmOperation.StoreLogin)
+					Flow.redirect(Flow.panelAdminLoginTienda);
+				else
+					Flow.redirect(Flow.panelAdminLogin);
 			}
 		});
 		btnReintentar.setOpaque(false);
@@ -65,7 +69,7 @@ public class PanelAdminUsuarioInvalido  extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad PanelAdminUsuarioInvalido");
+		System.out.println("OnLoad [PanelAdminUsuarioInvalido]");
 
 	}
 

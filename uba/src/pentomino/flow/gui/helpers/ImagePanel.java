@@ -153,6 +153,16 @@ public  abstract class ImagePanel extends JPanel {
 		this.img = new ImageIcon(imagePath).getImage();
 		repaint();
 	}
+
+	
+	// Metodo donde le pasaremos la dirección de la imagen a cargar.
+	public void setBackground(ImageIcon imageIcon) {
+
+		// Construimos la imagen y se la asignamos al atributo background.
+		this.setOpaque(false);
+		this.img = imageIcon.getImage();
+		repaint();
+	}
 	
 	public void screenTimerReset(long timeOut, ImagePanel redirect) {
 		

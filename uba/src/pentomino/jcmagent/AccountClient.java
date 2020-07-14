@@ -41,13 +41,13 @@ public class AccountClient {
 		
 		SendAndReceive("adminAccess", gson.toJson(myLogin));
 		
-		System.out.println("LoginAdminAccess returnMessage [" + returnMessage + "]");
+		//System.out.println("LoginAdminAccess returnMessage [" + returnMessage + "]");
 		return returnMessage;
 	}
 
 	private boolean SendAndReceive(String operation, String message) {
 
-		System.out.println("AccountClient SendAndReceive");
+		//System.out.println("AccountClient SendAndReceive");
 
 		String atmId = Config.GetDirective("AtmId", "");
 		String hostname = Config.GetPulsarParam("AccountsHost",""); 
@@ -70,7 +70,7 @@ public class AccountClient {
 	
 	private static boolean GetConnection(String hostName, int port, String username, String password, String virtualHost, String queue) {
 		
-		System.out.println("GetConnection");
+		//System.out.println("GetConnection");
 		
 		if(conn != null && conn.isOpen()) {		
 			System.out.println("OPEN!");
@@ -130,7 +130,7 @@ public class AccountClient {
 
 		correlationId = UUID.randomUUID().toString();
 
-		System.out.println("ConfigureConnection basicConsume");
+		
 
 		DeliverCallback deliverCallback = (consumerTag, message) -> {
 			String body = new String(message.getBody(), "UTF-8");
@@ -139,10 +139,9 @@ public class AccountClient {
 
 
 			if(correlationId.equalsIgnoreCase(message.getProperties().getCorrelationId())) {
-				System.out.println("SI LLEGO CARNALIN [" + body + "]");
 				channel.basicAck( message.getEnvelope().getDeliveryTag(), false);							
 				returnMessage = body;
-				System.out.println("ConfigureConnectionOrig returnMessage [" + returnMessage + "]");				
+				//System.out.println("ConfigureConnectionOrig returnMessage [" + returnMessage + "]");				
 				conn.close();
 				loginLatch.countDown();				
 			}
@@ -170,14 +169,14 @@ public class AccountClient {
 
 
 		try {
-			System.out.println("ConfigureConnection basicPublish [" + requestMessage + "]");
+			//System.out.println("ConfigureConnection basicPublish [" + requestMessage + "]");
 			String AccountsExchange = Config.GetPulsarParam("AccountsExchange","");
-			System.out.println("AccountsExchange [" + AccountsExchange + "]");
+			//System.out.println("AccountsExchange [" + AccountsExchange + "]");
 			channel.basicPublish(AccountsExchange,routingKey,true, props, requestMessage.getBytes());
 			
 			try {
 				if (loginLatch.await (15L, TimeUnit.SECONDS)) {
-					System.out.println("SALIENDO COOL");					
+					//System.out.println("SALIENDO COOL");					
 				}
 				else
 				{
