@@ -2673,3 +2673,149 @@
 2020-07-14 00:16:27,251|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\contadoresout.txt (El sistema no puede encontrar la ruta especificada)
 2020-07-14 00:16:27,253|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\depositoout.txt (El sistema no puede encontrar la ruta especificada)
 2020-07-14 00:16:27,254|ERROR|p.c.d.Ptr|[AWT-EventQueue-0]|java.io.FileNotFoundException: .\Form\retiroout.txt (El sistema no puede encontrar la ruta especificada)
+2020-07-14 10:51:36,476|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 10:51:36,525|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 10:51:38,070|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 10:51:38,088|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 10:51:38,092|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 10:51:38,092|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 10:51:38,093|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 10:51:38,094|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 10:51:38,098|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 10:51:38,098|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 10:51:43,154|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:51:43,154|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:51:43,154|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:51:43,155|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 10:51:43,155|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 10:51:43,155|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 10:51:43,155|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 10:51:49,313|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:51:51,010|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-07-14 10:52:57,556|WARN |p.c.NetUtils|[Timer-37]|netIsAvailable false
+2020-07-14 10:53:43,153|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:53:48,155|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:53:53,157|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-07-14 10:53:57,557|WARN |p.c.NetUtils|[Timer-37]|netIsAvailable false
+2020-07-14 10:57:19,356|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 10:57:19,360|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 10:57:20,757|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 10:57:20,766|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 10:57:20,767|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 10:57:20,767|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 10:57:20,768|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 10:57:20,769|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 10:57:20,772|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 10:57:20,772|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 10:57:21,406|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 10:57:21,406|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 10:57:21,406|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 10:57:21,406|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 10:57:34,468|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 11:03:47,899|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 11:03:47,902|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 11:03:49,167|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 11:03:49,178|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 11:03:49,180|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 11:03:49,180|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 11:03:49,180|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 11:03:49,182|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 11:03:49,185|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 11:03:49,185|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 11:03:50,360|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:03:50,361|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:03:50,361|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 11:03:50,361|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 11:06:41,099|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 11:06:41,103|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 11:06:42,346|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 11:06:42,356|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 11:06:42,357|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 11:06:42,357|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 11:06:42,357|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 11:06:42,359|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 11:06:42,362|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 11:06:42,362|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 11:06:42,589|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:06:42,589|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:06:42,589|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 11:06:42,589|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 11:08:50,285|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 11:08:50,288|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 11:08:51,559|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 11:08:51,570|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 11:08:51,571|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 11:08:51,572|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 11:08:51,572|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 11:08:51,574|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 11:08:51,577|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 11:08:51,577|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 11:08:51,810|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:08:51,810|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:08:51,810|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 11:08:51,810|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 11:09:02,688|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 11:15:04,404|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 11:15:04,407|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 11:15:05,655|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 11:15:05,666|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 11:15:05,667|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 11:15:05,667|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 11:15:05,667|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 11:15:05,669|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 11:15:05,671|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 11:15:05,671|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 11:15:05,898|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:15:05,898|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 11:15:05,898|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 11:15:05,898|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 12:09:05,571|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 12:09:59,087|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 12:09:59,090|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 12:10:00,338|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 12:10:00,343|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 12:10:00,344|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 12:10:00,345|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 12:10:00,345|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 12:10:00,345|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 12:10:00,346|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 12:10:00,346|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 12:10:00,537|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 12:10:00,538|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 12:10:00,538|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 12:10:00,538|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 12:10:08,535|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 12:10:11,811|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 12:52:20,808|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 12:52:20,812|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 12:52:22,115|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 12:52:22,126|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 12:52:22,128|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 12:52:22,128|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 12:52:22,128|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 12:52:22,130|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 12:52:22,134|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 12:52:22,134|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 12:52:23,311|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 12:52:23,311|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 12:52:23,311|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 12:52:23,311|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 12:52:57,929|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 12:53:43,583|INFO |p.j.DTAServer|[pool-2-thread-5]|FLUSHJCM 20x0;50x0;100x0;200x0
+2020-07-14 12:55:14,490|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-07-14 12:55:14,494|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-07-14 12:55:15,793|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-07-14 12:55:15,804|INFO |p.f.Flow|[AWT-EventQueue-0]|Puertos COMM encontrados [0]
+2020-07-14 12:55:15,806|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-07-14 12:55:15,806|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-07-14 12:55:15,806|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-07-14 12:55:15,808|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-07-14 12:55:15,811|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-07-14 12:55:15,811|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-07-14 12:55:16,047|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM1 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 12:55:16,047|INFO |p.f.Flow|[AWT-EventQueue-0]|JCM2 INHIBIT DESHABILITAMOS ACEPTADOR
+2020-07-14 12:55:16,047|INFO |p.c.d.Tio|[Tio Thread]|Tio [running]
+2020-07-14 12:55:16,047|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-07-14 12:55:34,335|INFO |p.j.DTAServer|[pool-2-thread-5]|FLUSHJCM 20x0;50x0;100x0;200x0
+2020-07-14 12:55:45,446|INFO |p.c.Transactions|[AWT-EventQueue-0]|returning ${JsonOutput.toJson(returnVO)}
+2020-07-14 12:56:26,713|INFO |p.j.DTAServer|[pool-2-thread-6]|FLUSHJCM 20x0;50x0;100x0;200x0

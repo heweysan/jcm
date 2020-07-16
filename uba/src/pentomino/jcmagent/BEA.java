@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 import pentomino.config.Config;
 
@@ -13,7 +13,7 @@ public class BEA {
 
 	private static String SessionId = "";
 
-	private static Gson gson = new Gson();
+	//private static Gson gson = new Gson();
 
 	/**
 	 * 

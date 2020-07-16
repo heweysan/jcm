@@ -26,6 +26,9 @@ import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.flow.gui.helpers.PanelPinpad;
+import pentomino.flow.gui.helpers.PinKey;
+import pentomino.flow.gui.helpers.PinpadEvent;
+import pentomino.flow.gui.helpers.PinpadListener;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -57,9 +60,6 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void ContentPanel() {
-
-		
-
 
 		lblToken.setForeground(Color.WHITE);
 		lblToken.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,7 +125,7 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 						cmWithdrawalVo.reference = CurrentUser.reference;
 						cmWithdrawalVo.token = CurrentUser.tokenConfirmacion;
 						cmWithdrawalVo.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
-						cmWithdrawalVo.amount = CurrentUser.WithdrawalRequested;//JcmGlobalData.montoDispensar;
+						cmWithdrawalVo.amount = CurrentUser.WithdrawalRequested;
 
 						if(!Transactions.ConfirmaRetiro(cmWithdrawalVo)) {
 							System.out.println("Usuario sin permiso para dispensar!");
@@ -137,11 +137,11 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 							//Se comprobo que si se puede intentar el dispensado de esa cantidad.
 							//Preparamos el retiro.
 							CurrentUser.pinpadMode = PinpadMode.None;
-							Config.SetPersistence("BoardStatus", "Busy");
+							
 							BEA.BusinessEvent(BusinessEvent.SessionStart, false, true,"");
 							//Quitamos el retiro del queue
-							CmQueue.queueList.removeFirst();
-							CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
+							//CmQueue.queueList.removeFirst();
+							//CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
 
 							switch(CurrentUser.dispenseStatus) {
 							case Complete:
@@ -170,6 +170,10 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 									if(JcmGlobalData.jcm1cass1Dispensed && JcmGlobalData.jcm1cass2Dispensed && JcmGlobalData.jcm2cass1Dispensed && JcmGlobalData.jcm2cass2Dispensed) {
 										screenTimerDispense.cancel();
 
+										//Quitamos el retiro del queue
+										CmQueue.queueList.removeFirst();
+										CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
+										
 										//Actualizamos los contadores internos del JCM
 										Afd.UpdateCurrentCountRequest();
 

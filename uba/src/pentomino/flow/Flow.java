@@ -188,6 +188,7 @@ public class Flow {
 		adminTimer = new Timer();
 		isAdminTime = true;		
 		
+		Flow.miTio.alarmOff();
 		Flow.miTio.abreElectroiman();
 
 		adminTimer.schedule(new TimerTask() {
@@ -198,7 +199,7 @@ public class Flow {
 				isAdminTime = false;				
 				adminTimer.cancel();
 			}
-		}, TimeUnit.MINUTES.toMillis(1)); //10 original
+		}, TimeUnit.MINUTES.toMillis(10)); //10 original
 	}
 
 	/**
@@ -244,6 +245,8 @@ public class Flow {
 		JcmMonitor t2 = new JcmMonitor();
 		t2.start();
 
+		
+		
 		Thread agentsQueueThread = new Thread(agentsQueue, "agentsQueueThread");
 		agentsQueueThread.start();
 
@@ -321,19 +324,19 @@ public class Flow {
 
 		switch(denom) {
 		case 20:
-			System.out.println("demon [" + denom + "]");
+			//System.out.println("demon [" + denom + "]");
 			return Billete.$20;			
 		case 50:
-			System.out.println("demon [" + denom + "]");
+			//System.out.println("demon [" + denom + "]");
 			return Billete.$50;			
 		case 100:
-			System.out.println("demon [" + denom + "]");
+			//System.out.println("demon [" + denom + "]");
 			return Billete.$100;			
 		case 200:
-			System.out.println("demon [" + denom + "]");
+			//System.out.println("demon [" + denom + "]");
 			return Billete.$200;			
 		case 500:
-			System.out.println("demon [" + denom + "]");
+			//System.out.println("demon [" + denom + "]");
 			return Billete.$500;			
 		}
 
@@ -384,9 +387,6 @@ public class Flow {
 	private void loadGuiElements() {
 
 		logger.debug("loadGuiElements");
-
-		
-		
 
 
 		panelIdle = new PanelIdle("./images/Scr7Inicio.png","panelIdle",0,null);
@@ -718,7 +718,7 @@ public class Flow {
 						adminTimer.cancel();
 						//Bajamos el perno
 						Flow.miTio.cierraElectroiman();
-						//redirect(Flow.panelAdminIniciando,3000,Flow.panelAdminLogin);
+						//redirect(Flow.panelAdminIniciando);
 					}						
 					else {
 						System.out.println("Boveda abierta NO autorizada activando alarma");
@@ -729,8 +729,7 @@ public class Flow {
 				case "SafeClosed":
 					System.out.println("Safe Closed");
 					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
-					if(isAdminTime) {
-						System.out.println("Boveda cerrada autorizada, desactivamos timer.");
+					if(isAdminTime) {						
 						isAdminTime = false;
 						adminTimer.cancel();
 					}
@@ -739,6 +738,7 @@ public class Flow {
 				case "CabinetOpen":
 					System.out.println("Cabinet Open");
 
+					/*
 					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
 					if(isAdminTime) {
 						System.out.println("Fascia abierta autorizada");
@@ -746,9 +746,9 @@ public class Flow {
 					}						
 					else {
 						System.out.println("Fascia abierta NO autorizada activando alarma");
-						miTio.alarmOn();
+						//miTio.alarmOn();
 					}
-					
+					*/
 					break;
 				case "CabinetClosed":
 					System.out.println("Cabinet Closed");

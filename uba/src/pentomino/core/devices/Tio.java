@@ -72,7 +72,7 @@ public class Tio implements Runnable{
 
 	public boolean abreElectroiman() {
 		
-		System.out.println("--> Electroiman ON");
+		System.out.println("--> Perno UP");
 		
 		if(!JcmGlobalData.isDebug) 
 			electroIman.low();
@@ -84,7 +84,7 @@ public class Tio implements Runnable{
 
 	public boolean cierraElectroiman() {
 	
-		System.out.println("--> Electroiman OFF");
+		System.out.println("--> Perno DOWN");
 		
 		if(!JcmGlobalData.isDebug)
 			electroIman.high();

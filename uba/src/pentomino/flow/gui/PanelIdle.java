@@ -17,6 +17,7 @@ import pentomino.cashmanagement.CmQueue;
 import pentomino.common.AccountType;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.NetUtils;
+import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
@@ -61,7 +62,9 @@ public class PanelIdle  extends ImagePanel {
 		btnAdminLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JcmGlobalData.isAdmin = true;
+				CurrentUser.pinpadMode = PinpadMode.loginUser;
 				CurrentUser.loginAttempts = 0;
+				
 				Flow.redirect(Flow.panelAdminIniciando);
 			}
 		});

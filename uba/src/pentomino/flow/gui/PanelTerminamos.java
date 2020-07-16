@@ -31,6 +31,7 @@ public class PanelTerminamos extends ImagePanel {
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad [PanelTerminamos]");
+		Config.SetPersistence("BoardStatus", "Available");
 		screenTimerReset(5000,Flow.panelIdle);
 
 	}

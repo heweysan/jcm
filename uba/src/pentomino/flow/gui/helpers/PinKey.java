@@ -1,4 +1,4 @@
-package pentomino.flow.gui;
+package pentomino.flow.gui.helpers;
 
 public enum PinKey {
 	_1("1"),

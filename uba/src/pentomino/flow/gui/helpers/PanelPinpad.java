@@ -13,9 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import pentomino.flow.Flow;
-import pentomino.flow.gui.PinKey;
-import pentomino.flow.gui.PinpadEvent;
-import pentomino.flow.gui.PinpadListener;
 
 public class PanelPinpad {
 	

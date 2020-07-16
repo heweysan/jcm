@@ -25,6 +25,16 @@ public class JcmGlobalData {
 	
 	public static String atmId = "";
 	
+	/**
+	 * Esta variable tiene el estatus de la impresora, si es false es que esta offline, sin papel, en error.
+	 * Es decir no puede imprimir =)
+	 */
+	public static boolean printerReady = true;
+	
+	/**
+	 * El ultimo estaus conocido de la imrpesora. Para poner en device status
+	 */
+	public static String printerStatus = "";
 	
 	/*
 	 * Las denominaciones para dispensar de cadad cajita 

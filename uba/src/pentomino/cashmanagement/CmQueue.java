@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.logging.log4j.LogManager;
@@ -51,9 +52,9 @@ public class CmQueue implements Runnable{
 		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println("Tick..." + queueList.size());
+				System.out.println("Pending Widthrawals [" + queueList.size() + "]");
 			}
-		}, 10000,60000);
+		}, TimeUnit.SECONDS.toMillis(10),TimeUnit.MINUTES.toMillis(1));
 
 	}
 

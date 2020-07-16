@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import pentomino.common.JcmGlobalData;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
 import javax.swing.SwingConstants;
@@ -80,6 +81,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		btnDetalleError = new JButton(new ImageIcon("./images/BTN_7p_Admin_DetalleErrores.png"));
 		btnDetalleError.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
+				
 				Flow.redirect(Flow.panelAdminDetalleError,10000,Flow.panelAdminEstatusDispositivos);	
 			}
 		});
@@ -149,7 +151,7 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		lblImpresora.setBounds(465, 780, 470, 46);
 		add(lblImpresora);
 		
-		lblImpresoraStatus = new JLabel("Paper Out");
+		lblImpresoraStatus = new JLabel("");
 		lblImpresoraStatus.setHorizontalAlignment(SwingConstants.LEFT);
 		lblImpresoraStatus.setForeground(Color.WHITE);
 		lblImpresoraStatus.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -206,9 +208,14 @@ public class PanelAdminEstatusDispositivos extends ImagePanel{
 		lblJcm1Denom.setText("$" + Flow.jcms[0].recyclerDenom1 + ", " + "$" + Flow.jcms[0].recyclerDenom2);
 				
 		lblJcm2Denom.setText("$" + Flow.jcms[1].recyclerDenom1 + ", " + "$" + Flow.jcms[1].recyclerDenom2);
-		
-		
-
+				
+		System.out.println("printerReady [" + JcmGlobalData.printerReady + "]");
+		if(JcmGlobalData.printerReady) {
+			lblImpresoraStatus.setText(JcmGlobalData.printerStatus);
+		}
+		else {
+			lblImpresoraStatus.setText("ERROR");
+		}
 	}
 
 	@Override

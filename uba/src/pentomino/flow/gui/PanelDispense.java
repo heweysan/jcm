@@ -161,6 +161,6 @@ public class PanelDispense extends ImagePanel {
 
 	@Override
 	public void OnUnload() {
-		//System.out.println("OnUnload PanelDispense");
+		System.out.println("OnUnload [PanelDispense]");
 	}
 }

@@ -22,8 +22,9 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
 
 import pentomino.cashmanagement.Transactions;
-import pentomino.common.DeviceEvent;
+import pentomino.common.AccountType;
 import pentomino.common.JcmGlobalData;
+import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.flow.Flow;
@@ -50,6 +51,7 @@ public class DTAServer {
 					e.printStackTrace();
 				}                
 				busy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+				System.out.println("RESTARTATM Busy[" + busy + "]");
 			} while (busy);
 			Flow.redirect(Flow.panelReinicio);
 			return RestartAtm();
@@ -127,12 +129,23 @@ public class DTAServer {
 		case "GETCONFIGKEYS":
 			return GetConfigDirectivesKeys();
 
-		case "GOOFFLINE":
-			//TODO: REVISAR Config.SetPersistence("ForceOoS", true);
+		case "GOOFFLINE":			 
+			Config.SetPersistence("ForceOoS", "true");
 			System.out.println("GOOFFLINE");
 			return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
-
 		case "FLUSHJCM":
+			
+			boolean busyflush = false;
+			do {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {					
+					e.printStackTrace();
+				}                
+				busyflush = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+				System.out.println("FLUSHJCM Busy[" + busyflush + "]");
+			} while (busyflush);
+						
 			return FlushJcms();
 		case "OPENSAFE":
 			return OpenSafe();
@@ -149,8 +162,18 @@ public class DTAServer {
 
 	private String OpenSafe() {
 		System.out.println("OPENSAFE");
-		Flow.miTio.alarmOff();
-		Flow.miTio.abreElectroiman();
+		
+		boolean isBusy = false;
+		do {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {					
+				e.printStackTrace();
+			}                
+			isBusy = Config.GetPersistence("BoardStatus", "Busy").equalsIgnoreCase("Busy");
+			System.out.println("OPENSAFE Busy[" + isBusy + "]");
+		} while (isBusy);
+		
 		Flow.timerBoveda();
 		Flow.isAdminTime = true;
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
@@ -195,8 +218,8 @@ public class DTAServer {
 		JcmGlobalData.jcm2cass1Flushed = false;
 		JcmGlobalData.jcm2cass2Flushed = false;
 		
-				
-		RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushing " + mensaje);
+		RaspiAgent.WriteToJournal("ADMIN",0,0, "", "MANAGER", "FLUSHJCM Flushing " + mensaje, AccountType.None, TransactionType.Administrative);		
+		//RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushing " + mensaje);
 
 		//JCM 1
 		// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
@@ -255,7 +278,8 @@ public class DTAServer {
 			@Override
 			public void run() {			
 				if(JcmGlobalData.jcm1cass1Flushed && JcmGlobalData.jcm1cass2Flushed && JcmGlobalData.jcm2cass1Flushed && JcmGlobalData.jcm2cass2Flushed) {
-					RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushed " + mensaje );
+					//RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushed " + mensaje );
+					RaspiAgent.WriteToJournal("ADMIN",0,0, "", "MANAGER", "FLUSHJCM Flushed " + mensaje, AccountType.None, TransactionType.Administrative);
 					flushTimer.cancel();
 					return;
 				}
@@ -714,12 +738,7 @@ public class DTAServer {
 		BasicProperties props = null;
 		Channel channel;
 		try {
-			/*
-			  var exchange = Config.GetDirective("BusinessCommandTopic", "command.atm.topic");
-	            var topicQueue = Config.GetDirective("BusinessCommandTopicQueue", "dta.command." + atmId);
-	            var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" };
-			 */
-
+			
 			Connection connection = RabbitMQConnection.getConnection();
 			if(connection == null) {
 				//TODO: HEWEY AQUI
@@ -734,8 +753,6 @@ public class DTAServer {
 			props = props.builder().headers(map).build();
 
 			channel.queueDeclare(topicQueue, true, false, false, new HashMap<String,Object>());
-
-			/* var routingKeys = new[] { "command.dta." + atmId, "*.dta.broadcast" }; */
 			channel.queueBind(topicQueue, exchange, "command.dta." + atmId);
 			channel.queueBind(topicQueue, exchange, "*.dta.broadcast");
 
@@ -763,11 +780,7 @@ public class DTAServer {
 					comando = envVars.getData().Command;
 				}
 
-				System.out.println("Command [" + comando + "]");
-
-				contains = dan.contains(comando);
-
-				System.out.println("contains [" + contains + "]");
+				contains = dan.contains(comando);				
 
 				String response = "";
 
@@ -795,9 +808,6 @@ public class DTAServer {
 					//[DTAServer] Received '{"data":{"Command":"SETPULSARCONFIG","Date":"Fri Jun 05 14:49:47 CDT 2020","Parameter":"TransacType¬DEBUG","Extra":""}}'
 					SimpleRabbitEnvironmentVariablesContainer responseMap = gson.fromJson(body, SimpleRabbitEnvironmentVariablesContainer.class);
 					EnvironmentVariables envVar = responseMap.getData().Convert();
-					System.out.println("[DTAServer] consumerTag '" + consumerTag + "'");	         
-					System.out.println("[DTAServer] replyToQueue '" + replyToQueue + "'");	
-					System.out.println("[DTAServer] data '" + comando + "'");  
 
 					response = ManageAgent(comando, envVar);
 

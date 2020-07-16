@@ -21,6 +21,9 @@ import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.DebugButtons;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.flow.gui.helpers.PanelPinpad;
+import pentomino.flow.gui.helpers.PinKey;
+import pentomino.flow.gui.helpers.PinpadEvent;
+import pentomino.flow.gui.helpers.PinpadListener;
 import pentomino.jcmagent.BEA;
 import pentomino.jcmagent.RaspiAgent;
 
@@ -375,6 +378,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad [PanelLogin]");
+		Config.SetPersistence("BoardStatus", "Busy");
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
 		CurrentUser.loginUser = "";
 		CurrentUser.loginUserMasked = "";

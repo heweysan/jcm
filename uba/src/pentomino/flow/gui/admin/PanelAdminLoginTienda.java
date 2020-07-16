@@ -2,9 +2,6 @@ package pentomino.flow.gui.admin;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
@@ -12,53 +9,37 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import pentomino.cashmanagement.Transactions;
+import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.common.AccountType;
-import pentomino.common.BusinessEvent;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
-import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
-import pentomino.flow.gui.PinKey;
-import pentomino.flow.gui.PinpadEvent;
-import pentomino.flow.gui.PinpadListener;
+import pentomino.flow.gui.helpers.DebugButtons;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.flow.gui.helpers.PanelPinpad;
-import pentomino.jcmagent.AccountClient;
-import pentomino.jcmagent.BEA;
+import pentomino.flow.gui.helpers.PinKey;
+import pentomino.flow.gui.helpers.PinpadEvent;
+import pentomino.flow.gui.helpers.PinpadListener;
 import pentomino.jcmagent.RaspiAgent;
-
 
 public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
 	public JButton btnMenuRetiro;
 	public JButton btnMenuDeposito;
-	public static JLabel lblAdminLoginUser = new JLabel(".");
-	public static JLabel lblAdminLoginPassword = new JLabel(".");
-	public static JLabel lblLoginOpcion = new JLabel(".");
-	public static JLabel lblLoginRow1 = new JLabel("");
+	public final static JLabel lblLoginUser = new JLabel("");
+	public final static JLabel lblLoginPassword = new JLabel("");
+	public final static JLabel lblLoginOpcion = new JLabel(".");
+	public final static JLabel lblLoginMensaje = new JLabel("");
 
-	private static String dailyPass = "";
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PanelAdminLoginTienda(String img, String name, long _timeout, ImagePanel _redirect) {
-		super(img,name,_timeout,_redirect);
-		setBounds(0, 0, 1920, 1080);
-		setOpaque(false);
-		setBorder(null);
-		setLayout(null);	
-	}
-	
-	
-	public PanelAdminLoginTienda(ImageIcon img,String name, int _timeout, ImagePanel _redirect) {
+	public PanelAdminLoginTienda(String img,String name, int _timeout, ImagePanel _redirect) {
 		super(img,name,_timeout,_redirect);
 		setBounds(0, 0, 1920, 1080);
 		setOpaque(false);
@@ -67,67 +48,78 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 	}	
 
 
-	
+	public PanelAdminLoginTienda(ImageIcon img,String name, int _timeout, ImagePanel _redirect) {
+		super(img,name,_timeout,_redirect);
+		setBounds(0, 0, 1920, 1080);
+		setOpaque(false);
+		setBorder(null);
+		setLayout(null);	
+	}	
+
 	@Override
 	public void ContentPanel() {
 
 
-		lblAdminLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
-		lblAdminLoginUser.setForeground(Color.WHITE);
-		lblAdminLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdminLoginUser.setBounds(262, 707, 500, 80);
-		add(lblAdminLoginUser);
+		lblLoginUser.setFont(new Font("Tahoma", Font.BOLD, 88));
+		lblLoginUser.setForeground(Color.WHITE);
+		lblLoginUser.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLoginUser.setBounds(257, 640, 496, 87);
+		add(lblLoginUser);
+		add(new DebugButtons().getPanel());
 
 
-		lblAdminLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdminLoginPassword.setForeground(Color.WHITE);
-		lblAdminLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
-		lblAdminLoginPassword.setBounds(250, 650, 500, 80);
-		add(lblAdminLoginPassword);
+		lblLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLoginPassword.setForeground(Color.WHITE);
+		lblLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 90));
+		lblLoginPassword.setBounds(257, 800, 496, 87);
+		add(lblLoginPassword);
+
+		add(new DebugButtons().getPanel());
+		lblLoginMensaje.setBackground(Color.LIGHT_GRAY);
 
 
-		lblLoginRow1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginRow1.setForeground(Color.WHITE);
-		lblLoginRow1.setFont(new Font("Tahoma", Font.BOLD, 50));
-		lblLoginRow1.setBounds(10, 193, 918, 70);
-		add(lblLoginRow1);
+		lblLoginMensaje.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLoginMensaje.setForeground(Color.WHITE);
+		lblLoginMensaje.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblLoginMensaje.setBounds(10, 300, 947, 70);
+		add(lblLoginMensaje);
 
 		lblLoginOpcion.setFont(new Font("Tahoma", Font.BOLD, 88));
 		lblLoginOpcion.setForeground(Color.WHITE);
 		lblLoginOpcion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLoginOpcion.setBounds(230, 570, 87, 87);   //Este es login sin password
+		lblLoginOpcion.setBounds(230, 520, 87, 87);   //Este es login sin password
 		add(lblLoginOpcion);
+		add(new DebugButtons().getPanel());
 
 
 		PanelPinpad panelPinpad = new PanelPinpad();
 		panelPinpad.addPinKeyListener(this);
 
 		add(panelPinpad.getPanel());
-		
-		JLabel lblNewLabel = new JLabel(".");
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 33));
-		lblNewLabel.setBounds(80, 129, 48, 36);
-		add(lblNewLabel);
-		
-		
-		
-		
+
+
+
 	}
+
+
+
 
 	public void pinKeyReceived(PinpadEvent event) {
 
-		PinKey digito = event.key();
-	
+		PinKey digito = event.key();		
+
 		screenTimerReset(TimeUnit.SECONDS.toMillis(10),Flow.panelOperacionCancelada);
 
 		switch(digito)
 		{
 
-		case _Cancel:			       	
+		case _Cancel:
+
+			System.out.println("PanelLogin cancel");        	
 			CurrentUser.cleanPinpadData();
-			lblAdminLoginUser.setText("");
-			lblAdminLoginPassword.setText("");			
+			lblLoginUser.setText("");
+			lblLoginPassword.setText("");			
+			CurrentUser.loginUserMasked = "";	
 			CurrentUser.loginPasswordMasked = "";							
 			Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3), Flow.panelIdle);
 			break;
@@ -135,91 +127,76 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 
 			switch(CurrentUser.pinpadMode) {
 			case loginUser:					
-								
-				lblAdminLoginUser.setVisible(false);
-				lblAdminLoginPassword.setVisible(true);
-				lblAdminLoginPassword.setText("");
-				Flow.panelAdminLoginTienda.setBackground(Flow.bgAdminPassword);				
-				CurrentUser.pinpadMode = PinpadMode.loginPassword;
+				System.out.println("loginUser");
 
-				break;
-			case loginPassword:				
-				//No ha ingresado su user o pwd
-				if(CurrentUser.loginUser.length() <= 0 || CurrentUser.loginPassword.length() <= 0) {						
-					CurrentUser.pinpadMode = PinpadMode.loginUser;						
+
+				System.out.println("admin loginUser tienda");
+				//No ha ingresado su user
+				if(CurrentUser.loginUser.length() <= 0) {
 					return;
 				}
-				
-				CurrentUser.loginAttempts++;
 
-				//System.out.println("Validando usuario tienda [" + CurrentUser.loginUser + "] [" + CurrentUser.loginPassword + "]");
 				//Validamos el usuario
-				if(CurrentUser.loginUser.equalsIgnoreCase("0000")) {
-					System.out.println("Nos vamos por dailyPassword usuario tienda");
-					
-					CalculateDailyPass();
+				CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
+				System.out.println("loginUser success[" +  user.success +"] success [" + user.isValid + "]");
 
-					if(CurrentUser.loginPassword.equalsIgnoreCase(dailyPass)) {
 
-						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN STORE FALLBACK OK","","",""
-								,Config.GetDirective("FullAtmId", "Financial") ,"LOGIN FALLBACK OK",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+				if(user.success && user.isValid) {
+					System.out.println("loginUser deposit success y isvalid");
+					//Si es deposito ya lo dejamos pasar
+					CurrentUser.pinpadMode = PinpadMode.None;											
 
-						BEA.BusinessEvent(BusinessEvent.AdministrativeOperationStarted, true, true, "");
-						Flow.redirect(Flow.panelAdminMenu,5000, Flow.panelIdle);
-					}
-					else {
-						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN STORE FALLBACK Fail","","",""
-								,Config.GetDirective("FullAtmId", "Financial") ,"Usuario inválido",AccountType.None, TransactionType.ControlMessage, "","",0,"");
-						
-						if(CurrentUser.loginAttempts >= 2) {
-							CurrentUser.loginAttempts = 0;
-							Flow.redirect(Flow.panelOperacionCancelada,3000,Flow.panelIdle);
-						}
-						else {												
-							PanelAdminError.lblSubMensaje.setText("Usuario inválido");
-							Flow.redirect(Flow.panelAdminUsuarioInvalido,5000, Flow.panelIdle);
-						}
-					}
+
+					RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
+							,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid TRUE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+
+					Config.SetPersistence("BoardStatus", "Busy");
+
+
+					Flow.redirect(Flow.panelAdminLogin);
+
+
 				}
-				else{				
-					
-					//Cualquier resultado falso es cadena vacia.
-					AccountClient myA = new AccountClient();
-					String adminMenuOptions = myA.LoginAdminAccess(CurrentUser.loginUser, CurrentUser.loginPassword);
-					
-					System.out.println("PanelAdminLoginTienda adminMenuOptions [" + adminMenuOptions + "]");
-					
-					if (adminMenuOptions.equalsIgnoreCase("0")) {						
-						
-						RaspiAgent.WriteToJournal("ADMIN", 0,0, "", "", CurrentUser.loginUser, "LOGIN STORE FAIL","","",""
-								,Config.GetDirective("FullAtmId", "Financial") ,"LOGIN STORE FAIL",AccountType.None, TransactionType.ControlMessage, "","",0,"");
-						
-						if(CurrentUser.loginAttempts >= 2) {
-							CurrentUser.loginAttempts = 0;
-							Flow.redirect(Flow.panelOperacionCancelada,3000,Flow.panelIdle);
+				else {						
+					if(!user.success) {
+						System.out.println("loginUser deposit success NO");
+						//Si es deposito ya lo dejamos pasar
+						CurrentUser.pinpadMode = PinpadMode.None;
+						RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
+								,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE (Se deja pasar)",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+
+						CurrentUser.totalAmountInserted = 0;
+						Flow.redirect(Flow.panelDeposito);
+						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
+					}
+					else {	
+						if(++CurrentUser.loginAttempts >= 2) {
+							//Intentos superados
+							CurrentUser.loginUser = "";
+							CurrentUser.cleanPinpadData();
+							Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelOperacionCancelada);
 						}
 						else {
-																			
-							lblAdminLoginUser.setText("");
-							lblAdminLoginPassword.setText("");
-							CurrentUser.loginPasswordMasked = "";
+
+							RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
+									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
+							lblLoginUser.setText("");
+							lblLoginPassword.setText("");
+							CurrentUser.loginPasswordMasked = "";
+							CurrentUser.loginUserMasked = "";
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
-							
-							PanelAdminError.lblSubMensaje.setText("Usuario inválido.");
-							Flow.redirect(Flow.panelAdminUsuarioInvalido,5000, Flow.panelIdle);
+							Flow.panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
 						}
-						
+						return;
 					}
-					else {						
-						Flow.timerBoveda();
-						CurrentUser.currentOperation = jcmOperation.AdminLogin;
-						Flow.redirect(Flow.panelAdminLogin);
-					}
-
 				}
-				break;
+
+
+				break;			
+
 			default:
 				break;
 
@@ -234,16 +211,10 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 			case loginUser:
 				if (CurrentUser.loginUser.length() > 7)				
 					return;
-				CurrentUser.loginUser = CurrentUser.loginUser + digito.getDigit();
-				lblAdminLoginUser.setText(CurrentUser.loginUser);			
-				break;
-			case loginPassword:
-				if (CurrentUser.loginPassword.length() > 7)
-					return;
-				CurrentUser.loginPassword += digito.getDigit();
-				CurrentUser.loginPasswordMasked += "*";
-				lblAdminLoginPassword.setText(CurrentUser.loginPasswordMasked);
-				break;	
+				CurrentUser.loginUser += digito.getDigit();
+				CurrentUser.loginUserMasked += "*";
+				lblLoginUser.setText(CurrentUser.loginUserMasked);			
+				break;		
 			default:
 				break;				
 			}	
@@ -252,65 +223,30 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 
 	}
 
-	
-	private static void CalculateDailyPass() {
-		
-		dailyPass = "";
-
-		DateFormat dateFormat = new SimpleDateFormat("MMddyyyy");
-		Date hoy = new Date();
-		String MMddyyyy = dateFormat.format(hoy);
-		System.out.println(MMddyyyy);
-
-		int M = Integer.parseInt(MMddyyyy.charAt(0) + "");
-		int m = Integer.parseInt(MMddyyyy.charAt(1) + "");
-		int D = Integer.parseInt(MMddyyyy.charAt(2) + "");
-		int d = Integer.parseInt(MMddyyyy.charAt(3) + "");
-		int y1 = Integer.parseInt(MMddyyyy.charAt(4) + "");
-		int y2 = Integer.parseInt(MMddyyyy.charAt(5) + "");
-		int y3 = Integer.parseInt(MMddyyyy.charAt(6) + "");
-		int y4 = Integer.parseInt(MMddyyyy.charAt(7) + "");
-
-
-		if (d % 2 == 0) {
-			m = (m + y4) % 10;
-			D = (D + y3) % 10;
-			M = (M + y2) % 10;
-			d = (d + y1) % 10;
-			dailyPass = String.format("%s%s%s%s", m, D, M, d);
-		} else {
-			D = (D + y1) % 10;
-			m = (m + y2) % 10;
-			d = (d + y3) % 10;
-			M = (M + y4) % 10;
-			dailyPass = String.format("%s%s%s%s", D, m, d, M);
-		}
-	}
-
 
 	@Override
 	public void OnLoad() {
-		System.out.println("OnLoad [PanelAdminLoginTienda]");
-		lblAdminLoginUser.setVisible(true);
-		lblAdminLoginPassword.setVisible(false);
-		Flow.panelAdminLoginTienda.setBackground(Flow.bgAdminUsuario);
-		
-		lblAdminLoginUser.setBounds(250, 650, 500, 80);
-		lblLoginOpcion.setBounds(230, 540, 87, 87); 
-		lblAdminLoginUser.setText("");
-		lblAdminLoginPassword.setText("");
+		System.out.println("OnLoad [PanelLogin]");
 		CurrentUser.pinpadMode = PinpadMode.loginUser;
-		CurrentUser.cleanPinpadData();
-		CurrentUser.currentOperation = jcmOperation.StoreLogin;
-		
+		CurrentUser.loginUser = "";
+		CurrentUser.loginUserMasked = "";
+		CurrentUser.loginPassword = "";
+		CurrentUser.loginPasswordMasked = "";
+		CurrentUser.loginAttempts = 0;
+		lblLoginUser.setText("");
+		lblLoginPassword.setText("");
+		lblLoginMensaje.setText("");
+
 	}
 
 	@Override
 	public void OnUnload() {
-		System.out.println("OnUnload [PanelAdminLoginTienda]");
-		lblAdminLoginUser.setVisible(true);
-		lblAdminLoginPassword.setVisible(false);
-		Flow.panelAdminLoginTienda.setBackground(Flow.bgAdminUsuario);
-		
+		System.out.println("OnUnload [PanelLogin]");
+		lblLoginUser.setText("");
+		lblLoginPassword.setText("");
+		lblLoginMensaje.setText("");
 	}
 }
+
+
+

@@ -93,7 +93,7 @@ public class CryptUtils {
 		
 		private static void generateKey() {
 		    try {
-		    	System.out.println("Generetaing key");
+		    	//System.out.println("Generetaing key");
 		    	
 		    	 key = new SecretKeySpec(keyValue, ALGORITHM);
 		    	

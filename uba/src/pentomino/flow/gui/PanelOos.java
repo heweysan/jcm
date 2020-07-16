@@ -10,6 +10,7 @@ import pentomino.flow.CurrentUser;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.RaspiAgent;
+import pentomino.flow.gui.helpers.ImageButton;
 
 public class PanelOos  extends ImagePanel {
 
@@ -30,6 +31,10 @@ public class PanelOos  extends ImagePanel {
 		setOpaque(false);
 		setBorder(null);
 		setLayout(null);
+		
+		ImageButton btnAdminLogin = new ImageButton("./images/BTN7_ADMIN.png");
+		btnAdminLogin.setBounds(1710, 45, 162, 162);
+		add(btnAdminLogin);
 	}	
 
 
@@ -43,7 +48,7 @@ public class PanelOos  extends ImagePanel {
 	@Override
 	public void OnLoad() {
 		System.out.println("OnLoad PanelOos");
-		
+		Config.SetPersistence("BoardStatus", "Available");
 		Timer screenTimerDispense = new Timer();
 
 		screenTimerDispense.scheduleAtFixedRate(new TimerTask() {
@@ -66,5 +71,4 @@ public class PanelOos  extends ImagePanel {
 		//System.out.println("OnUnload PanelOos");
 		
 	}
-	
 }
