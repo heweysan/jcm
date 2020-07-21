@@ -32,14 +32,14 @@ public class PanelOperacionCancelada extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		//System.out.println("OnUnload PanelOperacionCancelada");
+		System.out.println("OnUnload [PanelOperacionCancelada]");
 		Config.SetPersistence("BoardStatus", "Available");
 		
 	}
 
 	@Override
 	public void OnUnload() {
-		//System.out.println("OnUnload PanelOperacionCancelada");
+		System.out.println("OnUnload [PanelOperacionCancelada]");
 		
 		
 	}

@@ -18,6 +18,8 @@ public class JcmGlobalData {
 	public static boolean isAdmin = false;
 	
 	
+	public static boolean netIsAvailable = true;
+	
 	public static int totalCashInRecycler1 = 0;
 	public static int totalCashInRecycler2 = 0;
 	

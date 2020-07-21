@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -123,7 +124,7 @@ public class PanelDispense extends ImagePanel {
 					screenTimerDispense.cancel();
 				}            	
 			}
-		}, 1000,1000);
+		}, TimeUnit.SECONDS.toMillis(1),TimeUnit.SECONDS.toMillis(1));
 	}
 	
 	

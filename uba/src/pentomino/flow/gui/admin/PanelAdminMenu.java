@@ -81,14 +81,17 @@ public class PanelAdminMenu extends ImagePanel {
 		btnAdminMenuSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
 				BEA.BusinessEvent(BusinessEvent.AdministrativeOperatonEnded, true, false,"");
-				//Reviamos si la boveda esta abierta para notifcar.
+								
+				//TODO: HEWEY Revisamos si la boveda esta abierta para notifcar.
 				if(Tio.safeOpen) {
-
+					System.out.println("Boveda abierta... se debe cerrar.");
 				}
 				else {
-					Flow.adminTimer.cancel();
-					Flow.redirect(Flow.panelIdle);
+					
 				}
+				
+				Flow.adminTimer.cancel();	
+				Flow.redirect(Flow.panelIdle);
 			}
 		});
 

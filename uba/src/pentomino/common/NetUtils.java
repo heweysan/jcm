@@ -19,12 +19,14 @@ public class NetUtils {
 			Socket socket = new Socket();
 			socket.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);			
 			socket.close();			
+			JcmGlobalData.netIsAvailable = true;
 			return true;
 		} catch (UnknownHostException e) {		
 		} catch (IOException e) {		
 		}
 		logger.warn("netIsAvailable false");
 		System.out.println("netIsAvailable false");
+		JcmGlobalData.netIsAvailable = false;
 		return false;
 	}
 	

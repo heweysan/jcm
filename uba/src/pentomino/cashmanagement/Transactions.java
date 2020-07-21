@@ -334,7 +334,7 @@ public class Transactions {
 
 			if(rabbitConn == null) {
 				//NO SE PUDO CONECTAR O CREDENCIALES INCORRECTA, ALGO MALO PASO
-				returnVO.isValid = false;
+				returnVO.isValid = true;
 				returnVO.allowWithdrawals = false;
 				returnVO.depositInfo = new ArrayList<Object>();
 				returnVO.success = false;

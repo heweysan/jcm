@@ -37,6 +37,8 @@ public class DTAServer {
 
 	private static final Logger logger = LogManager.getLogger(Transactions.class.getName());
 
+	private static boolean flushing = false;
+	
 	public String ManageAgent(String function, EnvironmentVariables envVars) {
 
 		System.out.println("DTAServer.ManageAgent");
@@ -133,7 +135,12 @@ public class DTAServer {
 			Config.SetPersistence("ForceOoS", "true");
 			System.out.println("GOOFFLINE");
 			return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+		
 		case "FLUSHJCM":
+			
+			if(flushing) {
+				return "{\"data\":{\"ReturnValue\":\"NOK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+			}
 			
 			boolean busyflush = false;
 			do {
@@ -202,25 +209,36 @@ public class DTAServer {
 	
 	
 	String mensaje;
+	int montoBajado = 0;
+	
 	private String FlushJcms() {
+		
+		flushing = true;
+		
+		Flow.redirect(Flow.panelSplash);
+				
+		//Mandamos a fuera de linea en lo que esta cosa baja los billetes....
 
 		mensaje = JcmGlobalData.rec1bill1Denom + "x" + JcmGlobalData.rec1bill1Available	+ ";" 
 				+ JcmGlobalData.rec1bill2Denom + "x" + JcmGlobalData.rec1bill2Available + ";" 
 				+ JcmGlobalData.rec2bill1Denom + "x" + JcmGlobalData.rec2bill1Available + ";" 
 				+ JcmGlobalData.rec2bill2Denom + "x" + JcmGlobalData.rec2bill2Available;
+	
+		montoBajado = (JcmGlobalData.rec1bill1Denom * JcmGlobalData.rec1bill1Available)
+				+ (JcmGlobalData.rec1bill2Denom * JcmGlobalData.rec1bill2Available) 
+				+ (JcmGlobalData.rec2bill1Denom * JcmGlobalData.rec2bill1Available) 
+				+ (JcmGlobalData.rec2bill2Denom * JcmGlobalData.rec2bill2Available);
 		
-		System.out.println("FLUSHJCM " + mensaje );
-		logger.info("FLUSHJCM " + mensaje );
-		
+		System.out.println("FLUSHJCM [" + montoBajado + "] " +  mensaje );
+		logger.info("FLUSHJCM [" + montoBajado + "] " +  mensaje );		
 		
 		JcmGlobalData.jcm1cass1Flushed = false;
 		JcmGlobalData.jcm1cass2Flushed = false;
 		JcmGlobalData.jcm2cass1Flushed = false;
 		JcmGlobalData.jcm2cass2Flushed = false;
 		
-		RaspiAgent.WriteToJournal("ADMIN",0,0, "", "MANAGER", "FLUSHJCM Flushing " + mensaje, AccountType.None, TransactionType.Administrative);		
-		//RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushing " + mensaje);
-
+		RaspiAgent.WriteToJournal("ADMIN",montoBajado ,0, "", "MANAGER", "FLUSHJCM Flushing " + mensaje, AccountType.None, TransactionType.Administrative);		
+		
 		//JCM 1
 		// primero el inhibit (que siempre debe estar deshabilitado pero por si acaso)
 		Flow.jcms[0].jcmMessage[3] = 0x01;
@@ -277,14 +295,45 @@ public class DTAServer {
 		flushTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {			
+				
+				System.out.println("WAITING FLUSH ... " + JcmGlobalData.jcm1cass1Flushed  + " " +  JcmGlobalData.jcm1cass2Flushed  + " " +  JcmGlobalData.jcm2cass1Flushed  + " " +  JcmGlobalData.jcm2cass2Flushed);
+				
 				if(JcmGlobalData.jcm1cass1Flushed && JcmGlobalData.jcm1cass2Flushed && JcmGlobalData.jcm2cass1Flushed && JcmGlobalData.jcm2cass2Flushed) {
-					//RaspiAgent.Broadcast(DeviceEvent.DEVICEBUS_Information, "FLUSHJCM Flushed " + mensaje );
-					RaspiAgent.WriteToJournal("ADMIN",0,0, "", "MANAGER", "FLUSHJCM Flushed " + mensaje, AccountType.None, TransactionType.Administrative);
+					
+					System.out.println("FINISHED FLUSHING...");
+					
+					Flow.jcms[0].currentOpertion = jcmOperation.None;
+					Flow.jcms[1].currentOpertion = jcmOperation.None;
+					
+					//Seteamos los caseteros a 0.
+					System.out.println("Seteamos los caseteros a 0");					
+					for(int i = 1; i < 5; i++) {
+						Config.SetPersistence("Cassette" + i + "Original", "0");
+						Config.SetPersistence("Cassette" + i + "Dispensed", "0");
+						Config.SetPersistence("Cassette" + i + "Rejected", "0");
+						Config.SetPersistence("Cassette" + i + "Total", "0");
+					}
+					
+					RaspiAgent.WriteToJournal("ADMIN",montoBajado, 0, "", "MANAGER", "FLUSHJCM Flushed " + mensaje, AccountType.None, TransactionType.Administrative);
+										
+					//Tomamos de nuevo los valores de los casseetteesss de reciclado
+					
+					Flow.jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
+							Flow.jcms[0].jcmMessage);
+				
+					Flow.jcms[1].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,
+							Flow.jcms[1].jcmMessage);
+					
+					Flow.panelIdle.setBackground("./images/Scr7SinEfectivo.png");
+					Flow.redirect(Flow.panelIdle);
+					
+					flushing = false;
+					
 					flushTimer.cancel();
 					return;
 				}
 			}
-		}, TimeUnit.SECONDS.toMillis(5),TimeUnit.SECONDS.toMillis(5)); 
+		}, TimeUnit.SECONDS.toMillis(5),TimeUnit.SECONDS.toMillis(10)); 		
 		
 		
 		return "{\"data\":{\"ReturnValue\":\"OK\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";

@@ -127,60 +127,51 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 
 			switch(CurrentUser.pinpadMode) {
 			case loginUser:					
-				System.out.println("loginUser");
-
-
+				
 				System.out.println("admin loginUser tienda");
 				//No ha ingresado su user
 				if(CurrentUser.loginUser.length() <= 0) {
 					return;
 				}
+				
+				lblLoginOpcion.setBounds(230, 675, 87, 87);   //Este es password 
+				CurrentUser.pinpadMode = PinpadMode.loginPassword;
+				
+				break;			
 
+			case loginPassword:
+
+				System.out.println("loginPassword Tienda");
+				//No ha ingresado su user o pwd
+				if(CurrentUser.loginUser.length() <= 0 || CurrentUser.loginPassword.length() <= 0) {						
+					CurrentUser.pinpadMode = PinpadMode.loginUser;						
+					return;
+				}
+
+				System.out.println("Validando usuario admin Tienda....");
 				//Validamos el usuario
-				CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
-				System.out.println("loginUser success[" +  user.success +"] success [" + user.isValid + "]");
+				CMUserVO user = Transactions.ValidaUsuarioPassword(CurrentUser.loginUser,CurrentUser.loginPassword);
 
+				System.out.println("loginPassword success[" +  user.success +"] success [" + user.isValid + "]");
 
 				if(user.success && user.isValid) {
-					System.out.println("loginUser deposit success y isvalid");
-					//Si es deposito ya lo dejamos pasar
-					CurrentUser.pinpadMode = PinpadMode.None;											
-
-
-					RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
-							,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid TRUE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
-
-					Config.SetPersistence("BoardStatus", "Busy");
-
-
-					Flow.redirect(Flow.panelAdminLogin);
-
-
-				}
-				else {						
-					if(!user.success) {
-						System.out.println("loginUser deposit success NO");
-						//Si es deposito ya lo dejamos pasar
-						CurrentUser.pinpadMode = PinpadMode.None;
-						RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
-								,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE (Se deja pasar)",AccountType.None, TransactionType.ControlMessage, "","",0,"");
-
-						CurrentUser.totalAmountInserted = 0;
-						Flow.redirect(Flow.panelDeposito);
-						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
-					}
-					else {	
-						if(++CurrentUser.loginAttempts >= 2) {
-							//Intentos superados
-							CurrentUser.loginUser = "";
-							CurrentUser.cleanPinpadData();
-							Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelOperacionCancelada);
+					System.out.println("loginPassword success y isvalid");
+					
+						//Si puede retirar lo dejamos pasar
+					//TODO: RITCHIE: Aqui en lugar de allowWithdrawals es el allow de entrr a modo admin
+						if(user.allowWithdrawals) {
+							//El unico que dejamos pasar para dispensado
+							System.out.println("loginPassword success y isvalid y dispense y allowsWithdrawals");
+							RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
+									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO TIENDA ADMIN IsValid TRUE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+							CurrentUser.pinpadMode = PinpadMode.loginUser;
+							
+							Flow.redirect(Flow.panelAdminLogin);
 						}
 						else {
-
+							System.out.println("loginPassword success y isvalid y dispense y NO allowsWithdrawals");
 							RaspiAgent.WriteToJournal("ADMIN", 0, 0, "", "", CurrentUser.loginUser, "","","",""
-									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
-
+									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO TIENDA ADMIN IsValid FALSE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 							CurrentUser.loginUser = "";
 							CurrentUser.loginPassword = "";
 							lblLoginUser.setText("");
@@ -188,15 +179,63 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 							CurrentUser.loginPasswordMasked = "";
 							CurrentUser.loginUserMasked = "";
 							CurrentUser.pinpadMode = PinpadMode.loginUser;
-							Flow.panelLogin.setBackground("./images/Scr7UsuarioIncorrecto.png");
+
+							if(++CurrentUser.loginAttempts >= 2) {
+								Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);								
+							}
+							else {	
+								
+								Flow.panelAdminLoginTienda.setBackground("./images/Scr7DatosIncorrectos.png");								
+							}
+						}
+						break;
+					
+				}
+				else {						
+					if(!user.success) {
+						System.out.println("loginPassword success NO");
+
+													
+							
+							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
+									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid EXCEPTION",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+							lblLoginUser.setText("");
+							lblLoginPassword.setText("");
+							CurrentUser.loginUser = "";
+							CurrentUser.loginPassword = "";
+							CurrentUser.loginUserMasked = "";
+							CurrentUser.loginPasswordMasked = "";
+							CurrentUser.pinpadMode = PinpadMode.loginUser;
+							CurrentUser.loginAttempts++;				
+							lblLoginOpcion.setBounds(230, 430, 87, 87); 
+							this.setBackground("./images/Scr7DatosIncorrectos.png");							
+											
+					}
+					else {
+
+						System.out.println("loginPassword success isValid NO");
+						lblLoginUser.setText("");
+						lblLoginPassword.setText("");
+						CurrentUser.loginUser = "";
+						CurrentUser.loginPassword = "";
+						CurrentUser.loginUserMasked = "";
+						CurrentUser.loginPasswordMasked = "";
+						if(++CurrentUser.loginAttempts >= 2) {
+							Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);
+							
+						}else {
+							lblLoginOpcion.setBounds(230, 430, 87, 87); 
+							CurrentUser.pinpadMode = PinpadMode.loginUser;		
+							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
+									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE",AccountType.None, TransactionType.ControlMessage, "","",0,"");
+							Flow.panelAdminLoginTienda.setBackground("./images/Scr7DatosIncorrectos.png");
 						}
 						return;
 					}
 				}
 
-
-				break;			
-
+				break;
+				
 			default:
 				break;
 
@@ -214,7 +253,14 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 				CurrentUser.loginUser += digito.getDigit();
 				CurrentUser.loginUserMasked += "*";
 				lblLoginUser.setText(CurrentUser.loginUserMasked);			
-				break;		
+				break;
+			case loginPassword:
+				if (CurrentUser.loginPassword.length() > 7)
+					return;
+				CurrentUser.loginPassword += digito.getDigit();
+				CurrentUser.loginPasswordMasked += "*";
+				lblLoginPassword.setText(CurrentUser.loginPasswordMasked);
+				break;	
 			default:
 				break;				
 			}	
@@ -235,7 +281,9 @@ public class PanelAdminLoginTienda extends ImagePanel implements PinpadListener 
 		CurrentUser.loginAttempts = 0;
 		lblLoginUser.setText("");
 		lblLoginPassword.setText("");
-		lblLoginMensaje.setText("");
+		lblLoginMensaje.setText("");		
+		lblLoginUser.setLocation(257, 540);				
+		lblLoginOpcion.setBounds(230, 430, 87, 87); 
 
 	}
 

@@ -15,6 +15,7 @@ import pentomino.cashmanagement.vo.DepositOpVO;
 import pentomino.common.AccountType;
 import pentomino.common.BusinessEvent;
 import pentomino.common.DeviceEvent;
+import pentomino.common.JcmGlobalData;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
@@ -148,7 +149,9 @@ public class PanelDeposito extends ImagePanel{
 					System.out.println("billetes " + billetes);
 					System.out.println("billetesNotesValidated " + billetesNotesValidated);
 					
-					Transactions.ConfirmaDeposito(depositOpVO);
+					//TODO: HEWEY, Cuando no hay red que se hace?
+					if(JcmGlobalData.netIsAvailable)
+						Transactions.ConfirmaDeposito(depositOpVO);
 
 					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted,"" + CurrentUser.totalAmountInserted);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, billetesNotesValidated);

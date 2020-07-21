@@ -13,5 +13,6 @@ public enum jcmOperation {
     DispenseFail,
     PreIdle,
     StoreLogin,
-    AdminLogin
+    AdminLogin,
+    PowerUp
 }

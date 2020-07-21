@@ -118,6 +118,7 @@ public class Flow {
 	
 	public static ImageIcon bgAdminUsuario = new ImageIcon("./images/SCR_P7Admin_Usuario.png");
 	public static ImageIcon bgAdminPassword = new ImageIcon("./images/SCR_P7Admin_Contrasena.png");
+	public static ImageIcon bgAdminLoginTienda  = new ImageIcon("./images/Scr7IngresaDatos.png");
 	
 
 	public static JcmContadores depositBillsCounter = new JcmContadores();	
@@ -196,6 +197,7 @@ public class Flow {
 			public void run() {
 				logger.info("Timer Boveda terminado.");	
 				System.out.println("Timer Boveda terminado.");
+				Flow.miTio.cierraElectroiman();
 				isAdminTime = false;				
 				adminTimer.cancel();
 			}
@@ -310,13 +312,16 @@ public class Flow {
 
 		Config.SetPersistence("BoardStatus", "Available");
 
-
+		
+	
+		//*
 		if(NetUtils.netIsAvailable()) {
 			redirect(panelIdle);			
 		}
 		else {
 			redirect(panelErrorComunicate);			
 		}
+		//*/
 
 	}
 
@@ -403,7 +408,7 @@ public class Flow {
 		panelNoTicket = new PanelNoTicket("./images/Scr7NoTicket.png","panelNoTicket",0,Flow.panelTerminamos);
 		panelReinicio  = new PanelReinicio(bgPlaceHolder,"panelReinicio",0,null);
 		panelOos = new PanelOos("./images/Scr7FueraDeServicio.png","panelOos",0,null);
-		panelErrorComunicate = new PanelErrorComunicate("./images/Scr7Error.png","panelErrorComunicate",0,null);
+		panelErrorComunicate = new PanelErrorComunicate("./images/Scr7SinConexion.png","panelErrorComunicate",0,null);
 
 		//FLUJO ADMINISTRATIVO
 
@@ -419,7 +424,7 @@ public class Flow {
 		panelAdminResetDispositivos = new PanelAdminResetDispositivos(bgPlaceHolder,"panelAdminResetDispositivos",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminEstatusDispositivos);
 		panelAdminDetalleError = new PanelAdminDetalleError(bgPlaceHolder,"panelAdminDetalleError",TimeUnit.SECONDS.toMillis(5),Flow.panelAdminLogin);
 		panelAdminPruebaImpresion = new PanelAdminPruebaImpresion("./images/SCR_P7Admin_PruebaImpresion.png","panelAdminPruebaImpresion",0,null);
-		panelAdminLoginTienda = new PanelAdminLoginTienda(bgAdminUsuario,"panelAdminLoginTienda",0,null);
+		panelAdminLoginTienda = new PanelAdminLoginTienda(bgAdminLoginTienda,"panelAdminLoginTienda",0,null);
 		panelAdminIniciando = new PanelAdminIniciando("./images/SCR_P7Admin_Iniciando.png","panelAdminIniciando",TimeUnit.SECONDS.toMillis(3),Flow.panelAdminLoginTienda);
 		
 		//Valores Iniciales
@@ -530,7 +535,9 @@ public class Flow {
 
 					CurrentUser.totalAmountInserted += billType;					
 
-					Transactions.InsertaCashInOp(myObj);
+					//TODO: HEWEY, Cuando no hay red que se hace?
+					if(JcmGlobalData.netIsAvailable)						
+						Transactions.InsertaCashInOp(myObj);
 
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType,0, "",CurrentUser.loginUser, "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType);
@@ -599,7 +606,9 @@ public class Flow {
 					myObj2.operatorId = Integer.parseInt(CurrentUser.loginUser);
 					myObj2.notesDetails = "1x" + billType2;
 
-					Transactions.InsertaCashInOp(myObj2);
+					//TODO: HEWEY, Cuando no hay red que se hace?
+					if(JcmGlobalData.netIsAvailable)
+						Transactions.InsertaCashInOp(myObj2);
 
 					RaspiAgent.WriteToJournal("CASH MANAGEMENT", (double)billType2,0, "",CurrentUser.loginUser, "PROCESADEPOSITO PreDeposito", AccountType.Administrative, TransactionType.ControlMessage);
 					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, "1x" + billType2);
@@ -728,7 +737,10 @@ public class Flow {
 					break;
 				case "SafeClosed":
 					System.out.println("Safe Closed");
-					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
+					
+					//Bajamos el perno
+					Flow.miTio.cierraElectroiman();
+					
 					if(isAdminTime) {						
 						isAdminTime = false;
 						adminTimer.cancel();
@@ -812,7 +824,30 @@ public class Flow {
 				case "collected22":
 					UpdateCountersCollect(1,Integer.toString(JcmGlobalData.rec2bill2Denom));
 					break;
-
+				case "flushing":
+					System.out.println("Flushing, mandamos a fuera de linea un momento....");
+					
+					break;
+				case "flushed":
+					System.out.println("Flushed, regresamos a modo operacion");
+					
+					break;
+				case "noteError11":
+					System.out.println("Error en dispenado jcm1 denom1");
+					UpdateCountersCollect(0,Integer.toString(JcmGlobalData.rec1bill1Denom));
+					break;
+				case "noteError12":
+					System.out.println("Error en dispenado jcm1 denom2");
+					UpdateCountersCollect(0,Integer.toString(JcmGlobalData.rec1bill2Denom));
+					break;
+				case "noteError21":
+					System.out.println("Error en dispenado jcm2 denom1");
+					UpdateCountersCollect(1,Integer.toString(JcmGlobalData.rec2bill1Denom));
+					break;
+				case "noteError22":
+					System.out.println("Error en dispenado jcm2 denom2");
+					UpdateCountersCollect(1,Integer.toString(JcmGlobalData.rec2bill2Denom));
+					break;	
 				}
 			}
 		});
@@ -852,13 +887,13 @@ public class Flow {
 
 
 		int totalValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Total", "0"));
-		int rejectedValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Rejected", "0"));
+		int originalValue = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Original", "0"));
 	
 		totalValue--;		
-		rejectedValue++;
+		originalValue--;
 
 		Config.SetPersistence("Cassette" + cassette + "Total", Integer.toString(totalValue));
-		Config.SetPersistence("Cassette" + cassette + "Rejected", Integer.toString(rejectedValue));
+		Config.SetPersistence("Cassette" + cassette + "Original", Integer.toString(originalValue));
 
 		switch(cassette) {
 		case "1":

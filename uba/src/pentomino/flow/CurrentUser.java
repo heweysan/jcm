@@ -35,7 +35,7 @@ public class CurrentUser {
 	public static String			BoardStatus = "Available";
 	
 	/**
-	 * De cuanto es el retiro, no necesariamente lo que se va  apoder dispensar
+	 * De cuanto es el retiro, no necesariamente lo que se va a poder dispensar
 	 */
 	public static double 	 		WithdrawalRequested = 0;
 	/**

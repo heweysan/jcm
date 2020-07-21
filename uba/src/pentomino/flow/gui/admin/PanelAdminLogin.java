@@ -161,7 +161,9 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 								,Config.GetDirective("FullAtmId", "Financial") ,"LOGIN FALLBACK OK",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 
 						BEA.BusinessEvent(BusinessEvent.AdministrativeOperationStarted, true, true, "");
-						Flow.redirect(Flow.panelAdminMenu,5000, Flow.panelIdle);
+						Flow.timerBoveda();
+						Flow.isAdminTime = true;
+						Flow.redirect(Flow.panelAdminMenu);
 					}
 					else {
 
@@ -210,6 +212,8 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 					}
 					else {
 						BEA.BusinessEvent(BusinessEvent.AdministrativeOperationStarted, true, true, "");
+						Flow.timerBoveda();
+						Flow.isAdminTime = true;
 						Flow.redirect(Flow.panelAdminMenu);
 					}
 
@@ -303,7 +307,9 @@ public class PanelAdminLogin extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnUnload() {
-		//System.out.println("OnUnload PanelAdminLogin");
+		System.out.println("OnUnload [PanelAdminLogin]");
+		lblAdminLoginUser.setText("");
+		lblAdminLoginPassword.setText("");
 		lblAdminLoginUser.setVisible(true);
 		lblAdminLoginPassword.setVisible(false);
 		Flow.panelAdminLogin.setBackground(Flow.bgAdminUsuario);

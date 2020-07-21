@@ -12,6 +12,7 @@ import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CMUserVO;
 import pentomino.common.AccountType;
 import pentomino.common.BusinessEvent;
+import pentomino.common.JcmGlobalData;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
@@ -93,9 +94,6 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 		panelPinpad.addPinKeyListener(this);
 		
 		add(panelPinpad.getPanel());
-		
-		
-		
 	}
 	
 	
@@ -126,6 +124,9 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 			case loginUser:					
 				System.out.println("loginUser");
 				
+				screenTimerReset(15000,Flow.panelOperacionCancelada);
+				
+				
 				if(CurrentUser.currentOperation == jcmOperation.Deposit) {
 					System.out.println("loginUser deposit");
 					//No ha ingresado su user
@@ -135,7 +136,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 					
 					//Validamos el usuario
 					CMUserVO user = Transactions.ValidaUsuario(CurrentUser.loginUser);
-					System.out.println("loginUser success[" +  user.success +"] success [" + user.isValid + "]");
+					System.out.println("loginUser success[" +  user.success +"] isValid [" + user.isValid + "]");
 
 
 					if(user.success && user.isValid) {
@@ -162,7 +163,9 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 						BEA.BusinessEvent(BusinessEvent.SessionStart, false, true,"");
 						BEA.BusinessEvent(BusinessEvent.DepositStart, true, true,"");
 						
-						Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
+						//TODO: HEWEY, Cuando no hay red que se hace?
+						if(JcmGlobalData.netIsAvailable)
+							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
 						
 						Flow.redirect(Flow.panelDeposito);
 						
@@ -170,15 +173,19 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 					}
 					else {						
 						if(!user.success) {
-							System.out.println("loginUser deposit success NO");
+							System.out.println("loginUser deposit success[NO] Se deja depositar [SI]");
 							//Si es deposito ya lo dejamos pasar
 							CurrentUser.pinpadMode = PinpadMode.None;
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
 									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid FALSE (Se deja depositar)",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 							
 							CurrentUser.totalAmountInserted = 0;
+							
+							//TODO: HEWEY, Cuando no hay red que se hace?
+							if(JcmGlobalData.netIsAvailable)
+								Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
+							
 							Flow.redirect(Flow.panelDeposito);
-							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
 						}
 						else {	
 							if(++CurrentUser.loginAttempts >= 2) {
@@ -287,8 +294,13 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 							RaspiAgent.WriteToJournal("CASH MANAGEMENT", 0, 0, "", "", CurrentUser.loginUser, "","","",""
 									,Config.GetDirective("FullAtmId", "Financial") ,"VALIDAUSUARIO IsValid EXCEPTION",AccountType.None, TransactionType.ControlMessage, "","",0,"");
 							CurrentUser.totalAmountInserted = 0;
+							
+							
+							//TODO: HEWEY, Cuando no hay red que se hace?
+							if(JcmGlobalData.netIsAvailable)
+								Transactions.BorraCashInOPs(Config.GetDirective("AtmId", ""));
+							
 							Flow.redirect(Flow.panelDeposito);
-							Transactions.BorraCashInOPs(Config.GetDirective("AtmId", "")); 
 							break;
 						case Dispense:								
 							System.out.println("Validando usuario.... 7");
@@ -393,7 +405,7 @@ public class PanelLogin extends ImagePanel implements PinpadListener {
 
 	@Override
 	public void OnUnload() {
-		//System.out.println("OnUnload PanelLogin");
+		System.out.println("OnUnload PanelLogin");
 		lblLoginUser.setText("");
 		lblLoginPassword.setText("");
 		lblLoginMensaje.setText("");

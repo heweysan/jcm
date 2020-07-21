@@ -4,6 +4,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import pentomino.common.AccountType;
+import pentomino.common.JcmGlobalData;
+import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
 import pentomino.config.Config;
 import pentomino.flow.CurrentUser;
@@ -11,6 +13,8 @@ import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.RaspiAgent;
 import pentomino.flow.gui.helpers.ImageButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PanelOos  extends ImagePanel {
 
@@ -33,6 +37,15 @@ public class PanelOos  extends ImagePanel {
 		setLayout(null);
 		
 		ImageButton btnAdminLogin = new ImageButton("./images/BTN7_ADMIN.png");
+		btnAdminLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JcmGlobalData.isAdmin = true;
+				CurrentUser.pinpadMode = PinpadMode.loginUser;
+				CurrentUser.loginAttempts = 0;
+				
+				Flow.redirect(Flow.panelAdminIniciando);
+			}
+		});
 		btnAdminLogin.setBounds(1710, 45, 162, 162);
 		add(btnAdminLogin);
 	}	

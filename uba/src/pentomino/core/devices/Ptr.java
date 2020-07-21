@@ -71,8 +71,12 @@ private static boolean printing = false;
 	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 	
 	public static void initializeCupsClient() {
+		
+		if(JcmGlobalData.isDebug)
+			return;
+		
 		try {
-			System.out.println("Inicialiando CUPS client");
+			System.out.println("Inicializando CUPS client");
 			cupsClient = new CupsClient("127.0.0.1", 631);
 			URL printerURL = new URL("http://127.0.0.1:631/printers/CUSTOM_Engineering_TG2480-H");
 			cupsPrinter = cupsClient.getPrinter(printerURL);
@@ -88,8 +92,11 @@ private static boolean printing = false;
 	
 	public static void BroadcastFullStatus() {
 
-		System.out.println("PTR BroadcastFullStatus");
+		//System.out.println("PTR BroadcastFullStatus");
 	
+		if(JcmGlobalData.isDebug)
+			return;
+		
 		//Si esta imprimiendo no hacemos el check de status
 		if(printing)
 			return;
@@ -146,8 +153,7 @@ private static boolean printing = false;
 							RaspiAgent.Broadcast(DeviceEvent.PTR_Status, "ERROR");	
 							RaspiAgent.Broadcast(DeviceEvent.PTR_DetailStatus, arrOfStr[1].toString());
 							JcmGlobalData.printerStatus = arrOfStr[1].toString();
-							JcmGlobalData.printerReady = false;
-							System.out.println("printerReady 1 [" + JcmGlobalData.printerReady + "]");
+							JcmGlobalData.printerReady = false;							
 						}
 						else {
 							RaspiAgent.Broadcast(DeviceEvent.PTR_Status, "OK");
@@ -157,8 +163,7 @@ private static boolean printing = false;
 								if(arrOfStr[1].toString().equalsIgnoreCase("No paper")) {		
 									System.out.println("NO PAPER");
 									JcmGlobalData.printerReady = false;
-									JcmGlobalData.printerStatus = " SIN PAPEL";
-									System.out.println("printerReady 3 [" + JcmGlobalData.printerReady + "]");
+									JcmGlobalData.printerStatus = " SIN PAPEL";									
 									RaspiAgent.Broadcast(DeviceEvent.PTR_PaperThreshold, "PAPER OUT");
 								}
 								if(arrOfStr[1].toString().equalsIgnoreCase("Near paper end")) {
@@ -167,13 +172,17 @@ private static boolean printing = false;
 									RaspiAgent.Broadcast(DeviceEvent.PTR_PaperThreshold, "PAPER LOW");
 								}
 							}
+							if(arrOfStr[0].toString().equalsIgnoreCase("OFFLINE")) {
+								System.out.println("OFFLINE");
+								JcmGlobalData.printerStatus += " FUERA DE LINEA";
+								JcmGlobalData.printerReady = false;								
+							}
 							if(arrOfStr[0].toString().equalsIgnoreCase("STATUS")) {								
 								RaspiAgent.Broadcast(DeviceEvent.PTR_DetailStatus,  arrOfStr[1]);
 							}
 						}
-
 					}					
-					System.out.println("printerReady 4 [" + JcmGlobalData.printerReady + "]");
+					//System.out.println("printerReady [" + JcmGlobalData.printerReady + "]");
 					in.close();
 					screenTimerDispense.cancel();
 				}catch(IOException ex){
@@ -584,7 +593,7 @@ private static boolean printing = false;
 	
 	public static boolean print(String form, Map<String,String> formData) {
 
-		System.out.println("printerReady [" + JcmGlobalData.printerReady + "]");
+		//System.out.println("printerReady [" + JcmGlobalData.printerReady + "]");
 		
 		if(!JcmGlobalData.printerReady) {
 			System.out.println("La impresora no esta bien, ni intentamos imprimir.");

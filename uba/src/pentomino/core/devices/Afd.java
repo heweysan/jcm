@@ -282,10 +282,10 @@ public class Afd {
 		fullStatus = fullStatus.substring(0,fullStatus.length()-1);
 		cashUnitAmounts = cashUnitAmounts.substring(0,cashUnitAmounts.length()-1);
 		
-		System.out.println("fullStatus [" + fullStatus + "]");		
+		//System.out.println("fullStatus [" + fullStatus + "]");		
 		RaspiAgent.Broadcast(DeviceEvent.AFD_FullStatus, fullStatus);
 		
-		System.out.println("cashUnitAmounts [" + cashUnitAmounts + "]");
+		//System.out.println("cashUnitAmounts [" + cashUnitAmounts + "]");
 		RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitAmounts, cashUnitAmounts);
 		
 		
@@ -317,7 +317,7 @@ public class Afd {
 		else
 			cashUnitStatus += ";4-EMPTY-0";
 		
-		System.out.println("cashUnitStatus [" + cashUnitStatus + "]");
+		//System.out.println("cashUnitStatus [" + cashUnitStatus + "]");
 		RaspiAgent.Broadcast(DeviceEvent.AFD_CashUnitStatus, cashUnitStatus);
 		
 				
