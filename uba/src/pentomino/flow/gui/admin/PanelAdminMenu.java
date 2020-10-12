@@ -131,7 +131,8 @@ public class PanelAdminMenu extends ImagePanel {
 
 		btnAdminMenuImpresionContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ptr.printContadores();				
+				//Ptr.printContadores();
+				Ptr.ptrContadores();
 			}
 		});
 

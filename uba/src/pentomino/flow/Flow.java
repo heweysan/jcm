@@ -28,6 +28,7 @@ import pentomino.common.NetUtils;
 import pentomino.common.TransactionType;
 import pentomino.common.jcmOperation;
 import pentomino.config.Config;
+import pentomino.core.devices.Afd;
 import pentomino.core.devices.Tio;
 import pentomino.flow.gui.PanelDebug;
 import pentomino.flow.gui.PanelDeposito;
@@ -149,12 +150,15 @@ public class Flow {
 	public static Timer adminTimer = new Timer();
 	public static Timer fasciaTimer = new Timer();
 
+	public static int jcmCounter = 0;
+	
 	/**
 	 * Variable que indica si se esta dentro del lapso de tiempo que peude estar abierta la boveda sin sonar la alarma.
 	 */
 	public static boolean isAdminTime = false;
 	public static boolean isFasciaTime = false;
 	
+	public static boolean jcmExist = false;
 
 	public static void main(String[] args) {
 
@@ -242,11 +246,12 @@ public class Flow {
 
 		JcmGlobalData.PreloadConfigVariables();
 
+		
 		initializeJcms();		
-
-		JcmMonitor t2 = new JcmMonitor();
-		t2.start();
-
+		if(jcmExist) {
+			JcmMonitor t2 = new JcmMonitor();
+			t2.start();
+		}
 		
 		
 		Thread agentsQueueThread = new Thread(agentsQueue, "agentsQueueThread");
@@ -259,15 +264,24 @@ public class Flow {
 
 		Thread tioThread = new Thread(miTio, "Tio Thread");
 		tioThread.start();
-
-		logger.info("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
-		jcms[0].jcmMessage[3] = 0x01;
-		jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
-
-		logger.info("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
-		jcms[1].jcmMessage[3] = 0x01;
-		jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
-
+		
+		System.out.println("jcmCounter " + jcmCounter);
+		
+		if(jcmExist) {
+			
+			for(int i = 0; i < jcmCounter; i++) {
+			
+			logger.info("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+			jcms[i].jcmMessage[3] = 0x01;
+			jcms[i].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[i].jcmMessage, false);
+	
+			}
+			/*if(jcms[1] != null) {
+				logger.info("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+				jcms[1].jcmMessage[3] = 0x01;
+				jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+			}*/
+		}
 		loadGuiElements();
 
 
@@ -287,19 +301,24 @@ public class Flow {
 		
 		CurrentUser.currentOperation = jcmOperation.PreIdle;
 		
-		Flow.jcms[0].jcmMessage[7] = 0x01; 
-		Flow.jcms[0].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec1bill2Denom);  
-		Flow.jcms[0].jcmMessage[9] = 0x00;
-		Flow.jcms[0].jcmMessage[10] = 0x02;												  
-		Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte)  denomToByte(JcmGlobalData.rec1bill1Denom), (byte) 0x0,Flow.jcms[0].jcmMessage);
-
-
-		Flow.jcms[1].jcmMessage[7] = 0x01;  
-		Flow.jcms[1].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec2bill2Denom);
-		Flow.jcms[1].jcmMessage[9] = 0x00;
-		Flow.jcms[1].jcmMessage[10] = 0x02;												  
-		Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) denomToByte(JcmGlobalData.rec2bill1Denom), (byte) 0x0,Flow.jcms[1].jcmMessage);
-
+		if(jcmExist) {
+			
+			
+			
+			Flow.jcms[0].jcmMessage[7] = 0x01; 
+			Flow.jcms[0].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec1bill2Denom);  
+			Flow.jcms[0].jcmMessage[9] = 0x00;
+			Flow.jcms[0].jcmMessage[10] = 0x02;												  
+			Flow.jcms[0].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte)  denomToByte(JcmGlobalData.rec1bill1Denom), (byte) 0x0,Flow.jcms[0].jcmMessage);
+			
+			
+				Flow.jcms[1].jcmMessage[7] = 0x01;  
+				Flow.jcms[1].jcmMessage[8] =  (byte) denomToByte(JcmGlobalData.rec2bill2Denom);
+				Flow.jcms[1].jcmMessage[9] = 0x00;
+				Flow.jcms[1].jcmMessage[10] = 0x02;												  
+				Flow.jcms[1].id003_format_ext((byte) 0x0D, (byte) 0xf0, (byte) 0x20, (byte) 0xD0, (byte) denomToByte(JcmGlobalData.rec2bill1Denom), (byte) 0x0,Flow.jcms[1].jcmMessage);
+			
+		}
 		/*
 		//Revisamos las denimincaciones y cantidad de dinero que tiene la cajita
 		Flow.jcms[0].id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0, Flow.jcms[0].jcmMessage);
@@ -720,13 +739,16 @@ public class Flow {
 				case "SafeOpen":
 					System.out.println("Safe Open");
 
+					//Soltamos el perno, con esto ya se puede cerrar solita.
+					Flow.miTio.cierraElectroiman();
+					
 					//Si se abre la boveda y esta en tiempo admin mandamos a adminlogin
 					if(isAdminTime) {
 						System.out.println("Boveda abierta autorizada");
 						miTio.alarmOff(); //redundante paranoico
 						adminTimer.cancel();
-						//Bajamos el perno
-						Flow.miTio.cierraElectroiman();
+						//Soltamos el perno, con esto ya se peude cerrar solita.
+						//Flow.miTio.cierraElectroiman();
 						//redirect(Flow.panelAdminIniciando);
 					}						
 					else {
@@ -738,8 +760,8 @@ public class Flow {
 				case "SafeClosed":
 					System.out.println("Safe Closed");
 					
-					//Bajamos el perno
-					Flow.miTio.cierraElectroiman();
+					//Bajamos el perno. Con el nuevo modelo es redundante ya que la boveda se cierra "sola"
+					//Flow.miTio.cierraElectroiman();
 					
 					if(isAdminTime) {						
 						isAdminTime = false;
@@ -848,6 +870,33 @@ public class Flow {
 					System.out.println("Error en dispenado jcm2 denom2");
 					UpdateCountersCollect(1,Integer.toString(JcmGlobalData.rec2bill2Denom));
 					break;	
+				case "dispenseEmpty11":
+					jcms[0].jcmMessage[7] = 0x01;  //REC1
+					jcms[0].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, jcms[0].jcmMessage);
+					MetodoRitchie("1");					
+					
+					break;
+				case "dispenseEmpty12":
+					Flow.jcms[0].jcmMessage[7] = 0x02;  //REC1
+					Flow.jcms[0].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, Flow.jcms[0].jcmMessage);
+					MetodoRitchie("2");
+					
+					break;
+				case "dispenseEmpty21":
+					jcms[1].jcmMessage[7] = 0x01;  //REC1
+					jcms[1].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, jcms[1].jcmMessage);
+					MetodoRitchie("3");
+					
+					break;
+				case "dispenseEmpty22":
+					jcms[1].jcmMessage[7] = 0x02;  //REC1
+					jcms[1].id003_format_ext((byte) 0x0A, (byte) 0xf0, (byte) 0x20, (byte) 0xE2, (byte) 0x00, (byte) 0x0, jcms[1].jcmMessage);
+					MetodoRitchie("4");
+					
+					break;	
+					
+					
+					
 				}
 			}
 		});
@@ -855,6 +904,29 @@ public class Flow {
 
 	}
 
+	
+	private void MetodoRitchie(String cassette) {
+		int total = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Total", "0"));
+		int original = Integer.parseInt(Config.GetPersistence("Cassette" + cassette + "Original", "0"));
+		
+		int accepted = Integer.parseInt(Config.GetPersistence("Accepted" + Config.GetPersistence("Cassette" + cassette + "Value", "0"), "0"));
+		accepted+=total;
+		Config.SetPersistence("Accepted" + Config.GetPersistence("Cassette" + cassette + "Value", "0"), Integer.toString(accepted));				
+	
+		int origNew = original -  total;
+		Config.SetPersistence("Cassette" + cassette + "Original", Integer.toString(origNew));
+		Config.SetPersistence("Cassette" + cassette + "Total", "0");
+		
+		jcms[0].currentOpertion = jcmOperation.None;
+		jcms[1].currentOpertion = jcmOperation.None;
+		
+		//Ponemos en 0 el contdore con error el interno del JCM
+	
+		
+		
+		Afd.UpdateCurrentCountRequest();
+	}
+	
 
 	/**
 	 * 
@@ -984,14 +1056,16 @@ public class Flow {
 
 	private static void initializeJcms() {
 
-
+        
+		
 		logger.info("Inicializando JCMS");
 
+				
 		//Identificamos los puertos disponibles
 		uart.portList = CommPortIdentifier.getPortIdentifiers();
-		int contador = 0;
+		
 
-		logger.info("Puertos COMM encontrados [" + contador  + "]");
+		//logger.info("Puertos COMM encontrados [" + contador  + "]");
 
 		while (uart.portList.hasMoreElements()) {
 
@@ -1002,17 +1076,17 @@ public class Flow {
 			if (commPort.getName().toUpperCase().contains("COM")  || commPort.getName().toUpperCase().contains("TTYUSB") ) {
 
 				logger.debug("Puerto [" + commPort.getName().toUpperCase() + "]");
-
-				jcms[contador] = new uart(contador + 1);
-				jcms[contador].portId = commPort;
-				jcms[contador].baud = 9600;
-				jcms[contador].id = contador + 1;
-				contador++;
+				jcmExist = true;
+				jcms[jcmCounter] = new uart(jcmCounter + 1);
+				jcms[jcmCounter].portId = commPort;
+				jcms[jcmCounter].baud = 9600;
+				jcms[jcmCounter].id = jcmCounter + 1;
+				jcmCounter++;
 			}			
 		}
-
+		
 		//Este es para debug en maquina local con loopback de puertos comm.
-		if(contador == 0 && JcmGlobalData.isDebug) {
+		if(jcmCounter == 0 && JcmGlobalData.isDebug) {
 			jcms[0] = new uart(1);
 			jcms[0].portId = null;
 			jcms[0].baud = 9600;
@@ -1030,9 +1104,12 @@ public class Flow {
 			jcms[1].openPort("COM4");
 		}
 		else {
+			if(!jcmExist)
+			   return;
+			
 			//Inicializamos los UARTS
 			logger.debug("Inicializando UARTS");
-			for(int i = 0; i < contador; i++) {
+			for(int i = 0; i < jcmCounter; i++) {
 				jcms[i].currentOpertion = jcmOperation.Startup;
 				jcms[i].openPort(jcms[i].portId.getName().toString());
 			}

@@ -15,10 +15,6 @@ import pentomino.jcmagent.RaspiAgent;
 
 public class Afd {
 
-	public static void main(String[] args) {
-
-
-	}
 
 	private static boolean dispenseMixFound = false;
 

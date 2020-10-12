@@ -12,6 +12,9 @@ public class JcmGlobalData {
 	
 	public static boolean isDebug = false;
 	
+	
+	
+	
 	/**
 	 * Indica si esta inciando modo adminsitrativo para no redireccioanr si hay algun error de red
 	 */
@@ -127,10 +130,6 @@ public class JcmGlobalData {
 		return "[20x" + denominateInfo.getOrDefault(20, 0) + "|50x"  + denominateInfo.getOrDefault(50, 0) + "|100x"  + denominateInfo.getOrDefault(100, 0) + "|200x"  + denominateInfo.getOrDefault(200, 0) + "|500x"  + denominateInfo.getOrDefault(500, 0) + "|1000x"  + denominateInfo.getOrDefault(1000, 0) + "]";
 	}
 	
-	
-	public static void main(String[] args) {
-			
-	}
 
 	public static int getMaxRecyclableCash() {
 		return Integer.parseInt(Config.GetDirective("maxRecyclableCash","0"));

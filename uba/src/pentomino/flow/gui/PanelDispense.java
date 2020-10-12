@@ -136,7 +136,7 @@ public class PanelDispense extends ImagePanel {
 		System.out.println("Dispensado parcial [" + JcmGlobalData.partialAmountDispensed + "]");
 		
 		if(JcmGlobalData.partialAmountDispensed == 0) {
-			//DO NOTHING
+			//TODO: RITCHIE REVISAR DE HACER EL REVERSO COMPLETO ?????
 		}
 		else {
 			//Si dispenso algo tenemos que sumar lo que no dispenso al reverso para mandarlo.

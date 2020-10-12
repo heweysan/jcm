@@ -21,10 +21,6 @@ public class CryptUtils {
 	
 	private static Cipher chipher;
 	
-	public static void main(String[] args) {
-		
-	}	
-	
 	public static void SaveEntry(AgentMessage payload) {
 		
 		byte[] encryptedData = encryptString(gson.toJson(payload));

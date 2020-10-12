@@ -19,6 +19,7 @@ import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.PinpadMode;
 import pentomino.common.TransactionType;
+import pentomino.common.jcmOperation;
 import pentomino.config.Config;
 import pentomino.core.devices.Afd;
 import pentomino.core.devices.Ptr;
@@ -175,7 +176,13 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 										CmQueue.ClosePendingWithdrawal(cmWithdrawalVo.reference);
 										
 										//Actualizamos los contadores internos del JCM
-										Afd.UpdateCurrentCountRequest();
+										if(Flow.jcms[0].currentOpertion == jcmOperation.DispenseFail || Flow.jcms[1].currentOpertion == jcmOperation.DispenseFail)
+										{
+											//TODO: RITCHIE  NO HACER NADA
+										}
+										else {
+											Afd.UpdateCurrentCountRequest();
+										}
 
 										System.out.println("CAMBIO [" + CurrentUser.WithdrawalChange + "]");
 										if( CurrentUser.WithdrawalChange > 0) {

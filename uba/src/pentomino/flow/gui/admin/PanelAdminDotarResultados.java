@@ -41,7 +41,8 @@ public class PanelAdminDotarResultados extends ImagePanel{
 		JButton btnImprimirContadores = new JButton(Flow.botonAdminImprimirContadores);
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ptr.printContadores();
+				//Ptr.printContadores();
+				Ptr.ptrContadores();
 			}
 		});
 		btnImprimirContadores.setBounds(50, 880, 574, 151);

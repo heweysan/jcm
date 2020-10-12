@@ -53,10 +53,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	}
 	
 	public void run() {
-		if (logger.isDebugEnabled()) {
-			logger.debug("run() - start"); //$NON-NLS-1$
-		}
-	
+			
 		while(true){
 			try {
 				serialTx(jcmMessage); 
@@ -190,9 +187,8 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 		
      }
 	
-	public void serialEvent(SerialPortEvent event){
-		
-			//System.out.println("serialEvent");
+	public void serialEvent(SerialPortEvent event){		
+			
 	       switch(event.getEventType()) {
 	        case SerialPortEvent.BI:
 	        case SerialPortEvent.OE:
@@ -249,13 +245,10 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 
 	            } catch (IOException e) {
 					logger.error("serialEvent(SerialPortEvent)", e); //$NON-NLS-1$
-					System.out.println(e);}
+					System.out.println(e);
+				}
 	            break;
-	        }
-
-			if (logger.isDebugEnabled()) {
-				logger.debug("serialEvent(SerialPortEvent) - end"); //$NON-NLS-1$
-			}
+	        }			
 		}
 
 	public void reiniciar() {

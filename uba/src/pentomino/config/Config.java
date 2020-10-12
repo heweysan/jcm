@@ -24,10 +24,6 @@ public class Config {
 
 	private static Connection sqlLiteConn = null;
 
-	public static void main(String[] args) {
-
-
-	}	
 
 	private static void connect() { 
 
@@ -145,7 +141,7 @@ public class Config {
 			}		
 		}catch(Exception ge) {
 			if(ge.getMessage() != null)
-				System.out.println("Config.GetDirective GENERAL EXCEPTION [" +  ge.getMessage() + "]");
+				System.out.println("[CONFIG] Config.GetDirective GENERAL EXCEPTION [" +  ge.getMessage() + "]");
 			else{
 				ge.printStackTrace();
 			}

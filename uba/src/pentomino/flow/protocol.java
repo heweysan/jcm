@@ -595,6 +595,11 @@ public class protocol extends kermit {
 			}
 			
 			
+			if (currentOpertion == jcmOperation.DispenseFail) {
+				System.out.println("Reinicializo y estaba en dispense failed.....");
+				EventListenerClass.fireMyEvent(new MyEvent("dispenseEmpty" + jcmId + "" + dispensingFromCassette));
+			}
+			
 			
 			break;
 
@@ -971,16 +976,24 @@ public class protocol extends kermit {
 			break;
 
 			case (byte) 0x11: // EMPTY
-				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing EMPTY",jcmResponse, jcmResponse[1]));
-			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
-			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
-			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
-			RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "Online");
-			if (jcmId == 1)
-				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-EMPTY-0;2-EMPTY-0;3-NA-0;4-NA-0");
-			else
+				if (mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing EMPTY",jcmResponse, jcmResponse[1]));
+			
+			//TODO: RITCHIE REVISAR EL PROCESO EMPTY COMO QUE SEA EN UNA SOLA LLAMADA.
+			if(currentOpertion == jcmOperation.DispenseFail) {
+				//Esto significa que falta por lo menos uno, o se lo robaron o se fue "rechazado doble" o algo....
+				System.out.println("Se quedo sin dinero dispensando.... wtf");
+								
+				
+			}else {			
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
+				RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
+				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "Online");
+				if (jcmId == 1)
+					RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-EMPTY-0;2-EMPTY-0;3-NA-0;4-NA-0");
+				else
 				RaspiAgent.Broadcast(DeviceEvent.DEP_CashUnitStatus, "1-NA-0;2-NA-0;3-EMPTY-0;4-EMPTY-0");
+			}
 			break;
 
 			case (byte) 0x12: // FULL

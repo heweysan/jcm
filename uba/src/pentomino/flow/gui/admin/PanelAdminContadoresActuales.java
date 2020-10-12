@@ -55,7 +55,8 @@ public class PanelAdminContadoresActuales extends ImagePanel {
 		btnImprimirContadores = new JButton(Flow.botonAdminImprimir);
 		btnImprimirContadores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ptr.printContadores();
+				//Ptr.printContadores();
+				Ptr.ptrContadores();
 			}
 		});
 

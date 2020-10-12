@@ -54,6 +54,7 @@ public class AgentsQueue  implements Runnable{
 				SendCommandToRabbit(bq.take());		       
 			}
 		} catch (InterruptedException ex) {
+			System.out.println("[AgentsQueue] Exception " + ex.getMessage());
 			Thread.currentThread().interrupt();
 		}
 
