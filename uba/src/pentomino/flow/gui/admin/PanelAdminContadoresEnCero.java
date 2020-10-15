@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import pentomino.core.devices.Ptr;
 import pentomino.flow.Flow;
 import pentomino.flow.gui.helpers.ImagePanel;
 import javax.swing.SwingConstants;
@@ -119,14 +120,16 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 		add(lbl500);
 
 		//TODO: AQUI
-		JButton btnGuardar = new JButton(Flow.botonAceptar);
-		btnGuardar.addActionListener(new ActionListener() {
+		JButton btnAceptar = new JButton(Flow.botonAceptar);
+		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				
+				Ptr.ptrContadores();
 				boolean res = PanelAdminDotarResultados.actualizaContadoresCeros();
 
 				if(res) {
-					System.out.println("La operación se registró con éxito");					
+					System.out.println("La operación se registró con éxito");
+					Ptr.ptrContadores();
 				}
 				else {
 					System.out.println("Se presentó un error al modificar los contadores");					
@@ -135,11 +138,11 @@ public class PanelAdminContadoresEnCero extends ImagePanel {
 				Flow.redirect(Flow.panelAdminDotarResultados,60000,Flow.panelAdminMenu);
 			}
 		});
-		btnGuardar.setOpaque(false);		
-		btnGuardar.setContentAreaFilled(false);
-		btnGuardar.setBorderPainted(false);
-		btnGuardar.setBounds(1107, 880, 778, 150);
-		add(btnGuardar);
+		btnAceptar.setOpaque(false);		
+		btnAceptar.setContentAreaFilled(false);
+		btnAceptar.setBorderPainted(false);
+		btnAceptar.setBounds(1107, 880, 778, 150);
+		add(btnAceptar);
 
 		JButton btnSalir = new JButton(Flow.botonAdminCancelar);
 		btnSalir.addActionListener(new ActionListener() {

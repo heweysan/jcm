@@ -330,11 +330,11 @@ public class protocol extends kermit {
 
 		case INVALID_COMMAND: // 0x4b Invalid Command
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing INVALID COMMAND", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- INVALID COMMAND", jcmResponse, jcmResponse[1]));
 			break;
 		case ACK: // 0x50 ACK
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing ACK", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- ACK", jcmResponse, jcmResponse[1]));
 
 				id003_format((byte) 5, STATUS_REQUEST, jcmMessage, true); // STATUS_REQUEST
 		
@@ -349,13 +349,14 @@ public class protocol extends kermit {
 			break;
 		case SR_ACCEPTING: // 0x12 ACCEPTING
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing ACCEPTING", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- ACCEPTING", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			PanelDeposito.depositTimer.restart();
 			EventListenerClass.fireMyEvent(new MyEvent("accepting" + jcmId));
 			break;
 		case SR_ESCROW: // 0x13 ESCROW
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing ESCROW", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- ESCROW", jcmResponse, jcmResponse[1]));
 
 			//AQUI YA SABEMOS DE QUE DENOMINACION ES
 
@@ -423,7 +424,7 @@ public class protocol extends kermit {
 			break;
 		case SR_STACKING: // 0x14 STACKING +DATA
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing STACKING [" + currentInsertedBill + "]", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- STACKING [" + currentInsertedBill + "]", jcmResponse, jcmResponse[1]));
 
 			// Revisamos el status del stacking
 			if (jcmResponse[3] == 0x00)
@@ -440,15 +441,16 @@ public class protocol extends kermit {
 			//Es el trigger para que el controller autorice la transaccion	
 
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing VEND_VALID [" + currentInsertedBill + "]", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- VEND_VALID [" + currentInsertedBill + "]", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK			
 
+			PanelDeposito.depositTimer.restart();
 			EventListenerClass.fireMyEvent(new MyEvent("bill" + jcmId));			
 
 			break;
 		case SR_STACKED: // 0x16 STACKED +DATA
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing STACKED", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- STACKED", jcmResponse, jcmResponse[1]));
 			// Actualizacion de contadores de reciclaje
 			recyclerContadoresSet = false;
 
@@ -465,7 +467,7 @@ public class protocol extends kermit {
 		case SR_REJECTING: // 0x17 REJECTING
 			if (mostrar)
 				System.out
-				.println(baitsToString("JCM[" + jcmId + "] <----- processing REJECTING", jcmResponse, jcmResponse[1]));
+				.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- REJECTING", jcmResponse, jcmResponse[1]));
 
 			switch (jcmResponse[3]) {
 			case 0x71:
@@ -482,24 +484,32 @@ public class protocol extends kermit {
 				break;
 			}
 			
-			if(jcmId == 1)
+			if(jcmId == 1) {
 				PanelDeposito.bussy1 = false;
-			if(jcmId == 2)
+				System.out.println("DEPOSITANDO 1 FALSE");
+				PanelDeposito.depositando1 = false;				
+			}
+			if(jcmId == 2) {
 				PanelDeposito.bussy2 = false;
+				System.out.println("DEPOSITANDO 2 FALSE");
+				PanelDeposito.depositando2 = false;
+			}
 
+			PanelDeposito.depositTimer.restart();
+			
 			break;
 
 		case SR_RETURNING: // 0x18 RETURNING
 			if (mostrar)
 				System.out
-				.println(baitsToString("JCM[" + jcmId + "] <----- processing RETURNING", jcmResponse, jcmResponse[1]));
+				.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RETURNING", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			EventListenerClass.fireMyEvent(new MyEvent("clearbill" + jcmId));
 			break;
 
 		case SR_HOLDING: // 0x19 HOLDING
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing HOLDING", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- HOLDING", jcmResponse, jcmResponse[1]));
 			// guardamos el billete
 			id003_format((byte) 5, (byte) 0x41, jcmMessage, true); // STACK1
 
@@ -515,9 +525,9 @@ public class protocol extends kermit {
 
 		case SR_INHIBIT: // 0x1A DISABLE (INHIBIT)
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing DISABLE (INHIBIT)", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- DISABLE (INHIBIT)", jcmResponse, jcmResponse[1]));
 
-			if (currentOpertion == jcmOperation.Reset) {
+			if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup) {
 				// Pedimos que billetes recicla el JCM
 				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0,jcmMessage);
 			}
@@ -606,7 +616,7 @@ public class protocol extends kermit {
 		case SR_INITIALIZE: // 0x1B INITIALIZE
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing INITIALIZE", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- INITIALIZE", jcmResponse, jcmResponse[1]));
 
 			recycleBoxStatus = "";
 			stackerStatus = "";
@@ -626,19 +636,19 @@ public class protocol extends kermit {
 
 		case SR_PAYING: // 0x20 PAYING
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing PAYING", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- PAYING", jcmResponse, jcmResponse[1]));
 			break;
 
 		case SR_COLLECTING: // 0x21 COLLECTING
 			if (mostrar)
 				System.out
-				.println(baitsToString("JCM[" + jcmId + "] <----- processing COLLETING", jcmResponse, jcmResponse[1]));
+				.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- COLLETING", jcmResponse, jcmResponse[1]));
 			break;
 
 		case SR_COLLECTED: // 0x22 COLLECTED + DATA
 			if (mostrar)
 				System.out
-				.println(baitsToString("JCM[" + jcmId + "] <----- processing COLLECTED", jcmResponse, jcmResponse[1]));
+				.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- COLLECTED", jcmResponse, jcmResponse[1]));
 
 			// Revisamos el status del Collected
 			if ((byte)jcmMessage[3] == 0x01)
@@ -656,7 +666,7 @@ public class protocol extends kermit {
 
 		case SR_PAY_VALID: // 0x23 PAY VALID
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing PAY VALID", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- PAY VALID", jcmResponse, jcmResponse[1]));
 
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 
@@ -676,7 +686,7 @@ public class protocol extends kermit {
 
 		case SR_PAY_STAY: // 0x24 PAY STAY
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing PAY STAY", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- PAY STAY", jcmResponse, jcmResponse[1]));
 			EventListenerClass.fireMyEvent(new MyEvent("presentOk" + jcmId)); //El dinero esta presentado 
 			id003_format((byte) 5, STATUS_REQUEST, jcmMessage, true); // STATUS_REQUEST
 
@@ -684,13 +694,13 @@ public class protocol extends kermit {
 
 		case SR_RETURN_TO_BOX: // 0x25 RETURN TO BOX
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing RETURN TO BOX", jcmResponse, jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RETURN TO BOX", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			break;
 
 		case SR_RETURN_PAY_OUT_NOTE: // 0x26 RETURN PAY OUT NOTE +DATA
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing RETURN PAY OUT NOTE", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RETURN PAY OUT NOTE", jcmResponse,
 						jcmResponse[1]));
 			//Intento dispensar un billete y no pudo
 			EventListenerClass.fireMyEvent(new MyEvent("noteError" + jcmId + "" + dispensingFromCassette));
@@ -701,13 +711,13 @@ public class protocol extends kermit {
 		case SR_RETURN_ERROR: // 0x2F RETURN ERROR
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing RETURN TO BOX", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RETURN TO BOX", jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			break;
 
 		case SR_POWER_UP_WITH_BILL_IN_STACKER: // 0x42 POWER_UP_WITH_BILL_IN_STACKER / MOTOR_ERROR
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_POWER_UP_WITH_BILL_IN_STACKER",
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_POWER_UP_WITH_BILL_IN_STACKER",
 						jcmResponse, jcmResponse[1]));
 
 			// TODO: REVISAR SI ES NORMAL O EXTENDED
@@ -716,7 +726,7 @@ public class protocol extends kermit {
 
 		case SR_ERR_RECYCLER_ERROR: // 0x4C RECYCLER ERROR
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_RECYCLER_ERROR", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_RECYCLER_ERROR", jcmResponse,
 						jcmResponse[1]));
 
 			// Pedimos Informacion del error
@@ -736,27 +746,27 @@ public class protocol extends kermit {
 		case SR_E_UNCONNECTED: // 0x00 UNCONNECTED
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SR_E_UNCONNECTED", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_E_UNCONNECTED", jcmResponse, jcmResponse[1]));
 			break;
 
 		case SR_E_NORMAL: // 0x10 SR_E_NORMAL + DATA
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SR_E_NORMAL", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_E_NORMAL", jcmResponse, jcmResponse[1]));
 			break;
 			/*
 			 * TODO: VALIDAR SI ES EXTENSION case SR_E_EMPTY: //0x11 SR_E_EMPTY if(mostrar)
-			 * System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_E_EMPTY",
+			 * System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_E_EMPTY",
 			 * jcmResponse,jcmResponse[1])); break;
 			 */
 		case SR_ERR_STACKER_FULL: // 0x43 STACKER_FULL
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing STACKER FULL", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- STACKER FULL", jcmResponse, jcmResponse[1]));
 			break;
 		case SR_ERR_STACKER_OPEN: // 0x44 SR_ERR_STACKER_OPEN
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_STACKER_OPEN", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_STACKER_OPEN", jcmResponse,
 						jcmResponse[1]));
 			stackerStatus = "Stacker Open";
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
@@ -765,37 +775,37 @@ public class protocol extends kermit {
 			break;
 		case SR_ERR_JAM_IN_ACCEPTOR: // 0x45 JAM_IN_ACCEPTOR
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_JAM_IN_ACCEPTOR", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_JAM_IN_ACCEPTOR", jcmResponse,
 						jcmResponse[1]));
 			break;
 		case SR_ERR_JAM_IN_STACKER: // 0x46 SR_ERR_JAM_IN_STACKER
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_JAM_IN_STACKER", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_JAM_IN_STACKER", jcmResponse,
 						jcmResponse[1]));
 			break;
 
 		case SR_ERR_PAUSE: // 0x47 SR_ERR_PAUSE
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_PAUSE", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_PAUSE", jcmResponse, jcmResponse[1]));
 			break;
 
 		case SR_ERR_CHEATED: // 0x48 SR_ERR_CHEATED
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_CHEATED", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_CHEATED", jcmResponse, jcmResponse[1]));
 			break;
 
 		case SR_ERR_FAILURE: // 0x49 SR_ERR_FAILURE + DATA
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_FAILURE", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_FAILURE", jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			break;
 
 		case SR_ERR_COMMUNICATION_ERROR: // 0x4A SR_ERR_COMMUNICATION_ERROR
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SR_ERR_COMMUNICATION_ERROR",
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SR_ERR_COMMUNICATION_ERROR",
 						jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			break;
@@ -803,7 +813,7 @@ public class protocol extends kermit {
 		case SCR_ENABLE_DENOM: // 0xC0 SCR_ENABLE_DENOM
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SCR_ENABLE_DENOM", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SCR_ENABLE_DENOM", jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 7, (byte) 0xC1, jcmMessage, true); // CMD_SECURITY_DENOMI
 			break;
@@ -811,34 +821,34 @@ public class protocol extends kermit {
 		case SCR_SECURITY_DENOM: // 0xC1 SCR_SECURITY_DENOM
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SCR_SECURITY_DENOM", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SCR_SECURITY_DENOM", jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 6, (byte) 0xC4, jcmMessage, true); // CMD_DIRECTION
 			break;
 		case SCR_COMMUNICATION_MODE: // 0xC2 CMD_INHIBIT_ACCEPTOR
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing CMD INHIBIT ACCEPTOR", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- CMD INHIBIT ACCEPTOR", jcmResponse,
 						jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 5, (byte) 0x83, jcmMessage, true); // SSR_INHIBIT_ACCEPTOR
 			break;
 		case SCR_INHIBIT: // 0xC3 SCR_INHIBIT
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing CMD SCR_INHIBIT ACCEPTOR", jcmResponse,	jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- CMD SCR_INHIBIT ACCEPTOR", jcmResponse,	jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 5, (byte) 0x83, jcmMessage, true); // SSR_INHIBIT_ACCEPTOR
 			break;
 		case SCR_DIRECTION: // 0xC4 CMD_DIRECTION
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing CMD_DIRECTION", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- CMD_DIRECTION", jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			break;
 		case SCR_OPTIONAL_FUNCTION: // 0xC5 CMD_DIRECTION
 			// TODO: Checar el DATA
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SCR_OPTIONAL_FUNCTION", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SCR_OPTIONAL_FUNCTION", jcmResponse,
 						jcmResponse[1]));
 			break;
 		case SSRR_ENABLE_DENOM: // 0x80 SSR_EN_DIS_DENOMI
@@ -848,7 +858,7 @@ public class protocol extends kermit {
 		case SSRR_SECURITY: // 0x81 SSRR_SECURITY
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SSRR_SECURITY", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SSRR_SECURITY", jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 5, (byte) 0x85, jcmMessage, true); // SSR_OPTIONAL_FUNCTION
 			break;
@@ -858,7 +868,7 @@ public class protocol extends kermit {
 		case (byte) SSRR_INHIBIT: // 0x83 SSR_INHIBIT_ACCEPTOR
 			// TODO: Checar el DATA
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SSR INHIBIT ACCEPTOR", jcmResponse,	jcmResponse[1]));
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SSR INHIBIT ACCEPTOR", jcmResponse,	jcmResponse[1]));
 
 			
 			// Checamos que tipo de operacion estamos haciendo.
@@ -888,7 +898,7 @@ public class protocol extends kermit {
 		case SSRR_DIRECTION: // 0x84 SSRR_DIRECTION
 			if (mostrar)
 				System.out.println(
-						baitsToString("JCM[" + jcmId + "] <----- processing SSRR_DIRECTION", jcmResponse, jcmResponse[1]));
+						baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SSRR_DIRECTION", jcmResponse, jcmResponse[1]));
 			// TODO: Checar el DATA
 			id003_format((byte) 6, (byte) 0xC3, jcmMessage, true); // SSRR_DIRECTION
 			break;
@@ -899,7 +909,7 @@ public class protocol extends kermit {
 		case SSRR_VERSION_INFORMATION: // 0x88 SSRR_VERSION_INFORMATION (FIRMWARE)
 			if (mostrar)
 				System.out
-				.println(baitsToString("JCM[" + jcmId + "] <----- processing FIRMWARE", jcmResponse, jcmResponse[1]));
+				.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- FIRMWARE", jcmResponse, jcmResponse[1]));
 			System.arraycopy(jcmResponse, 3, version, 0, jcmResponse[1] - 5);
 
 			id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, SSR_E_SOFTWARE_VERSION, (byte) 0x00, (byte) 0x0,
@@ -921,13 +931,13 @@ public class protocol extends kermit {
 
 		case 0x40: // POWER_UP 0x40
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing POWER UP", jcmResponse, jcmResponse[1]));			
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- POWER UP", jcmResponse, jcmResponse[1]));			
 				currentOpertion = jcmOperation.PowerUp;
 				id003_format((byte)5, protocol.SSR_VERSION, jcmMessage,true); // 0x88
 				break;
 		case 0x41: // POWER_UP_WITH_BILL_IN_ACCEPTOR * POWER_UP_WITH_BILL_IN_STACKER
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing POWER_UP_WITH_BILL_IN_ACCEPTOR",
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- POWER_UP_WITH_BILL_IN_ACCEPTOR",
 						jcmResponse, jcmResponse[1]));
 			break;
 
@@ -936,7 +946,7 @@ public class protocol extends kermit {
 			switch (jcmResponse[4]) {
 			case (byte) 0xD0: // UNCONNECTED Recycler Unit is not connected.
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing SCR_E_RECYCLE_CURRENCY",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- SCR_E_RECYCLE_CURRENCY",jcmResponse, jcmResponse[1]));
 					byte bill1 = jcmResponse[5];
 					byte bill2 = jcmResponse[8];
 					System.out.println("JCM[" + jcmId + "] " + hexToDenom(bill1) + " - " + hexToDenom(bill2));
@@ -949,7 +959,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x00: // UNCONNECTED Recycler Unit is not connected.
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing UNCONNECTED",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- UNCONNECTED",jcmResponse, jcmResponse[1]));
 			// Mandamos el clear
 			id003_format_ext((byte) 0x9, (byte) 0xf0, (byte) 0x20, (byte) 0x4C, (byte) 0x1, (byte) 0x2, jcmMessage);
 			RaspiAgent.Broadcast(DeviceEvent.DEP_HardwareError, "UNCONNECTED Recycler Unit is not connected.");
@@ -957,7 +967,7 @@ public class protocol extends kermit {
 
 			case (byte) 0x10: // NORMAL
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing NORMAL",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- NORMAL",jcmResponse, jcmResponse[1]));
 			
 			recycleBoxStatus = "";
 			stackerStatus = "";
@@ -976,7 +986,7 @@ public class protocol extends kermit {
 			break;
 
 			case (byte) 0x11: // EMPTY
-				if (mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing EMPTY",jcmResponse, jcmResponse[1]));
+				if (mostrar) System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- EMPTY",jcmResponse, jcmResponse[1]));
 			
 			//TODO: RITCHIE REVISAR EL PROCESO EMPTY COMO QUE SEA EN UNA SOLA LLAMADA.
 			if(currentOpertion == jcmOperation.DispenseFail) {
@@ -998,7 +1008,7 @@ public class protocol extends kermit {
 
 			case (byte) 0x12: // FULL
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing FULL",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- FULL",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
 			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
@@ -1010,7 +1020,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x1F: // BUSY
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing BUSY",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- BUSY",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.DEP_Status, "True");
 			RaspiAgent.Broadcast(DeviceEvent.DEP_DetailStatus, "Online");
@@ -1022,7 +1032,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x40: // RECYCLER JAM
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing RECYCLER JAM",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RECYCLER JAM",jcmResponse, jcmResponse[1]));
 
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "Recycler Jam");
@@ -1034,14 +1044,14 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x41: // DOOR OPEN
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing DOOR OPEN",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- DOOR OPEN",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_DetailStatus, "Door Open");				
 			break;
 			case (byte) 0x42: // MOTOR ERROR
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing MOTOR ERROR",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- MOTOR ERROR",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "Reycler motor malfunction");
@@ -1049,7 +1059,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x43: // EEPROM ERROR
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing EEPROM ERROR",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- EEPROM ERROR",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "EEROM read/write error occurred.");
@@ -1057,7 +1067,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x44: //  PAY OUT NOTE ERROR 
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing  PAY OUT NOTE ERROR ",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <---  PAY OUT NOTE ERROR ",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "Error is detected during note dispensing, such as double notes. ");
@@ -1065,7 +1075,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x45: //  RECYCLE BOX OPEN  
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing  RECYCLE BOX OPEN",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <---  RECYCLE BOX OPEN",jcmResponse, jcmResponse[1]));
 			//id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			id003_format((byte) 5, ACK, jcmMessage, true); // ACK
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
@@ -1076,7 +1086,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0x4A: //HARDWARE ERROR 
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing HARDWARE ERROR",jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- HARDWARE ERROR",jcmResponse, jcmResponse[1]));
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			RaspiAgent.Broadcast(DeviceEvent.AFD_Status, "False");
 			RaspiAgent.Broadcast(DeviceEvent.AFD_HardwareError, "Anormal recycler condition.");
@@ -1084,7 +1094,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0xA0:
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing TOTAL COUNT REQUEST", jcmResponse,
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- TOTAL COUNT REQUEST", jcmResponse,
 							jcmResponse[1]));
 
 			System.out.println("Total number of the stacked notes in Recycle      [" + jcmResponse[5] + "]");
@@ -1095,7 +1105,7 @@ public class protocol extends kermit {
 			break;
 			case (byte) 0xA1:
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing TOTAL COUNT CLEAR ", jcmResponse,
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- TOTAL COUNT CLEAR ", jcmResponse,
 							jcmResponse[1]));
 			switch (jcmResponse[5]) {
 			case 0x0:
@@ -1113,50 +1123,51 @@ public class protocol extends kermit {
 			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 			break;
 			case (byte) 0xA2:
+				
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing CURRENT COUNT REQUEST", jcmResponse,
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- CURRENT COUNT REQUEST", jcmResponse,
 							jcmResponse[1]));
 
-			recyclerContadores = "JCM[" + jcmId + "] Rec1 [" + jcmResponse[5] + "] / Rec2 [" + jcmResponse[7] + "]";
-			System.out.println(recyclerContadores);
+				recyclerContadores = "JCM[" + jcmId + "] Rec1 [" + jcmResponse[5] + "] / Rec2 [" + jcmResponse[7] + "]";
+				System.out.println(recyclerContadores);
+	
+				billCounters.Cass1Available = Byte.toUnsignedInt(jcmResponse[5]);
+				billCounters.Cass2Available = Byte.toUnsignedInt(jcmResponse[7]);
 
-			billCounters.Cass1Available = Byte.toUnsignedInt(jcmResponse[5]);
-			billCounters.Cass2Available = Byte.toUnsignedInt(jcmResponse[7]);
 
+				if(jcmId == 1) {
+					JcmGlobalData.rec1bill1Available = billCounters.Cass1Available;
+					JcmGlobalData.rec1bill2Available = billCounters.Cass2Available;
+	
+					JcmGlobalData.totalCashInRecycler1 = ((JcmGlobalData.rec1bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec1bill2Denom * billCounters.Cass2Available));
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec1bill1Denom , billCounters.Cass1Available);
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec1bill2Denom , billCounters.Cass2Available);
+	
+				}
+				else {
+					JcmGlobalData.rec2bill1Available = billCounters.Cass1Available;
+					JcmGlobalData.rec2bill2Available = billCounters.Cass2Available;
+	
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec2bill1Denom , billCounters.Cass1Available);
+					JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec2bill2Denom , billCounters.Cass2Available);
+	
+					JcmGlobalData.totalCashInRecycler2 = ((JcmGlobalData.rec2bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec2bill2Denom * billCounters.Cass2Available));
+				}
 
-			if(jcmId == 1) {
-				JcmGlobalData.rec1bill1Available = billCounters.Cass1Available;
-				JcmGlobalData.rec1bill2Available = billCounters.Cass2Available;
+				System.out.println("totalCashInRecyclers [" + (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) + "]");
 
-				JcmGlobalData.totalCashInRecycler1 = ((JcmGlobalData.rec1bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec1bill2Denom * billCounters.Cass2Available));
-				JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec1bill1Denom , billCounters.Cass1Available);
-				JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec1bill2Denom , billCounters.Cass2Available);
-
-			}
-			else {
-				JcmGlobalData.rec2bill1Available = billCounters.Cass1Available;
-				JcmGlobalData.rec2bill2Available = billCounters.Cass2Available;
-
-				JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec2bill1Denom , billCounters.Cass1Available);
-				JcmGlobalData.availableBillsForRecycling.put(JcmGlobalData.rec2bill2Denom , billCounters.Cass2Available);
-
-				JcmGlobalData.totalCashInRecycler2 = ((JcmGlobalData.rec2bill1Denom * billCounters.Cass1Available) + (JcmGlobalData.rec2bill2Denom * billCounters.Cass2Available));
-			}
-
-			System.out.println("totalCashInRecyclers [" + (JcmGlobalData.totalCashInRecycler1 + JcmGlobalData.totalCashInRecycler2) + "]");
-
-			waitingForInitialize = false;
-			currentOpertion = jcmOperation.None;
-			recyclerContadoresSet = true;
+				waitingForInitialize = false;
+				currentOpertion = jcmOperation.None;
+				recyclerContadoresSet = true;
 			
-			id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
-			
-			EventListenerClass.fireMyEvent(new MyEvent("recyclerContadores" + jcmId));
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				
+				EventListenerClass.fireMyEvent(new MyEvent("recyclerContadores" + jcmId));
 
 			break;
 			case SSRR_E_RECYCLE_SOFTWARE_VERSION: // 0x93
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing RECYCLER SOFTWARE VERSION REQUEST",
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RECYCLER SOFTWARE VERSION REQUEST",
 							jcmResponse, jcmResponse[1]));
 
 				System.out.println("processingOperation [" + processingOperation + "]");
@@ -1173,7 +1184,7 @@ public class protocol extends kermit {
 					} else {
 
 						if(currentOpertion == jcmOperation.Startup) {
-							System.out.println("STARTUP...");
+							System.out.println("SSRR_E_RECYCLE_SOFTWARE_VERSION  STARTUP...");
 							//Pedimos los conatadores y demas estatus, para no reinicar los jcms si es que estan arriba y bien.
 							id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0x90, (byte) 0x40, (byte) 0x0,jcmMessage);			
 						}
@@ -1201,23 +1212,29 @@ public class protocol extends kermit {
 				break;
 			case (byte) 0x90:
 				if (mostrar)
-					System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing RECYCLE CURRENCY REQUEST",
-							jcmResponse, jcmResponse[1]));
+					System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- RECYCLE CURRENCY REQUEST", jcmResponse, jcmResponse[1]));
 
-			if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup || currentOpertion == jcmOperation.PreIdle) {
+			
+				if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup || currentOpertion == jcmOperation.PreIdle) {
 				
-				System.out.println("CurrentOperation [" + currentOpertion + "]");
-				recyclerContadoresSet = false;
+					System.out.println("CurrentOperation [" + currentOpertion + "]");
+					recyclerContadoresSet = false;
+				}
+			/*
+				if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup || currentOpertion == jcmOperation.PreIdle) {
+					
+					System.out.println("CurrentOperation [" + currentOpertion + "]");
+					recyclerContadoresSet = false;
+					
+					//SSR_E_CURRENT_COUNT request
+					id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcmMessage);			
 				
-				//SSR_E_CURRENT_COUNT request
-				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcmMessage);
-				
-				//TODO HEWEY WHY? id003_format((byte) 5, ACK, jcmMessage, true); // ACK
-
-			} else {
-
-				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
-			}
+	
+				} else {
+	
+					id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+				}
+				*/
 
 			// 0x02:20 0x04:50 0x08:100 0x10:200 0x20:500;
 			// sacamos que billetes esta reciclando:				
@@ -1244,6 +1261,20 @@ public class protocol extends kermit {
 			}
 			System.out.println("Rec1[" + recyclerDenom1 + "] Rec2[" + recyclerDenom2 + "]");
 
+			if (currentOpertion == jcmOperation.Reset || currentOpertion == jcmOperation.Startup || currentOpertion == jcmOperation.PreIdle) {
+				
+				System.out.println("CurrentOperation [" + currentOpertion + "]");
+				//recyclerContadoresSet = false;
+				
+				//SSR_E_CURRENT_COUNT request
+				id003_format_ext((byte) 0x07, (byte) 0xf0, (byte) 0x20, (byte) 0xA2, (byte) 0x00, (byte) 0x0,jcmMessage);			
+			
+
+			} else {
+
+				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
+			}
+						
 			EventListenerClass.fireMyEvent(new MyEvent("recyclerBills" + jcmId));
 
 			break;
@@ -1276,7 +1307,7 @@ public class protocol extends kermit {
 			default:
 				if (mostrar)
 					System.out.println(
-							baitsToString("JCM[" + jcmId + "] <----- processing Algun Extended", jcmResponse, jcmResponse[1]));
+							baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- Algun Extended", jcmResponse, jcmResponse[1]));
 				id003_format((byte) 5, (byte) 0x11, jcmMessage, true); // STATUS_REQUEST
 				break;
 			}
@@ -1284,7 +1315,7 @@ public class protocol extends kermit {
 		break;
 		case (byte) 0x92: // UNIT INFORMATION RESPONSE
 			if (mostrar)
-				System.out.println(baitsToString("JCM[" + jcmId + "] <----- processing UNIT INFORMATION RESPONSE", jcmResponse,
+				System.out.println(baitsToString("JCM[" + jcmId + "] [" + currentOpertion + "] <--- UNIT INFORMATION RESPONSE", jcmResponse,
 						jcmResponse[1]));
 		// TODO: Checar el DATA
 
@@ -1326,12 +1357,13 @@ public class protocol extends kermit {
 	}
 
 	public String baitsToString(String texto, byte[] baits, int total) {
-		String result = "\n" + texto + " " + "CurrentOp [" + currentOpertion + "] ";
-
+		
+		String result = "\n" + texto;
+		
 		int count = 0;
 
 		for (int i = 0; i < baits.length; i++) {
-			result += " [" + Integer.toHexString(baits[i]) + "] ";
+			result += " [" + Integer.toHexString(baits[i] & 0xff) + "]";
 			count++;
 			if (count >= total) {
 				i = baits.length + 1;

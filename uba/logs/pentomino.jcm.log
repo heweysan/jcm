@@ -3462,3 +3462,255 @@
 2020-10-08 11:49:15,220|INFO |p.c.d.Tio|[Tio Thread]|TIO [running]
 2020-10-08 11:49:21,246|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
 2020-10-08 11:49:21,599|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:06:06,160|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:06:06,162|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:06:07,398|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:06:07,410|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:06:07,411|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:06:07,411|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:06:07,411|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:06:07,412|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:06:07,412|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:06:12,455|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:06:12,455|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:06:12,455|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:06:12,455|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:06:12,455|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:06:18,548|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:06:20,177|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:06:31,972|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:06:36,989|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:06:46,294|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 14:06:51,190|WARN |p.c.NetUtils|[Timer-51]|netIsAvailable false
+2020-10-14 14:07:01,159|WARN |p.c.NetUtils|[Timer-59]|netIsAvailable false
+2020-10-14 14:07:11,260|WARN |p.c.NetUtils|[Timer-66]|netIsAvailable false
+2020-10-14 14:07:16,165|WARN |p.c.NetUtils|[Timer-69]|netIsAvailable false
+2020-10-14 14:07:25,442|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:07:26,196|WARN |p.c.NetUtils|[Timer-77]|netIsAvailable false
+2020-10-14 14:07:36,287|WARN |p.c.NetUtils|[Timer-84]|netIsAvailable false
+2020-10-14 14:07:41,241|WARN |p.c.NetUtils|[Timer-87]|netIsAvailable false
+2020-10-14 14:07:51,240|WARN |p.c.NetUtils|[Timer-95]|netIsAvailable false
+2020-10-14 14:07:51,302|WARN |p.c.NetUtils|[Timer-52]|netIsAvailable false
+2020-10-14 14:07:56,210|WARN |p.c.NetUtils|[Timer-56]|netIsAvailable false
+2020-10-14 14:07:56,225|WARN |p.c.NetUtils|[Timer-98]|netIsAvailable false
+2020-10-14 14:08:06,189|WARN |p.c.NetUtils|[Timer-63]|netIsAvailable false
+2020-10-14 14:08:06,266|WARN |p.c.NetUtils|[Timer-106]|netIsAvailable false
+2020-10-14 14:08:16,291|WARN |p.c.NetUtils|[Timer-113]|netIsAvailable false
+2020-10-14 14:08:16,291|WARN |p.c.NetUtils|[Timer-70]|netIsAvailable false
+2020-10-14 14:08:21,195|WARN |p.c.NetUtils|[Timer-74]|netIsAvailable false
+2020-10-14 14:08:25,453|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:08:26,315|WARN |p.c.NetUtils|[Timer-120]|netIsAvailable false
+2020-10-14 14:08:39,269|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:08:39,272|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:08:40,551|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:08:40,557|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:08:40,558|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:08:40,558|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:08:40,558|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:08:40,559|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:08:40,559|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:08:45,604|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:08:45,604|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:08:45,604|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:08:45,605|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:08:45,605|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:08:51,556|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:08:52,156|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:09:09,553|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:09:14,568|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:09:23,779|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 14:10:45,778|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:10:45,781|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:10:47,042|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:10:47,049|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:10:47,049|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:10:47,049|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:10:47,050|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:10:47,051|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:10:47,051|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:10:52,099|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:10:52,099|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:10:52,099|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:10:52,099|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:10:52,100|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:10:58,051|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:10:58,727|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:11:10,525|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:11:15,541|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:11:24,769|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 14:12:04,095|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:12:19,295|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:12:19,297|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:12:20,532|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:12:20,538|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:12:20,538|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:12:20,538|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:12:20,538|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:12:20,539|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:12:20,539|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:12:25,576|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:12:25,576|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:12:25,576|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:12:25,576|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:12:25,576|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:12:31,587|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:12:32,109|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:13:07,396|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:13:12,408|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:13:21,677|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 14:13:37,369|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:14:26,719|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:14:37,371|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:15:26,715|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:15:37,366|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:16:26,705|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:16:37,373|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:17:26,713|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:17:37,372|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:18:26,716|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:18:37,375|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:19:06,674|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:19:11,688|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:19:20,937|WARN |p.c.NetUtils|[Timer-62]|netIsAvailable false
+2020-10-14 14:19:26,707|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:19:37,363|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:20:02,404|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:20:02,407|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:20:03,705|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:20:03,723|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:20:03,723|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:20:03,724|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:20:03,726|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:20:03,729|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:20:03,729|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:20:08,789|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:08,789|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:08,789|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:08,790|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:20:08,791|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:20:14,725|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:15,293|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:20:48,920|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:20:48,923|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:20:50,203|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:20:50,221|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:20:50,221|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:20:50,221|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:20:50,224|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:20:50,227|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:20:50,227|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:20:55,287|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:55,287|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:55,287|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:20:55,288|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:20:55,288|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:21:01,220|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:21:02,221|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:21:31,930|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:21:36,946|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:21:46,271|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 14:22:07,460|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:22:51,290|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 14:23:07,438|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:23:31,301|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 14:23:31,303|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 14:23:32,567|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 14:23:32,582|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 14:23:32,582|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 14:23:32,582|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 14:23:32,584|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 14:23:32,587|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 14:23:32,587|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 14:23:37,634|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:23:37,634|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:23:37,634|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:23:37,635|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 14:23:37,635|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 14:23:43,568|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:23:44,182|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 14:24:04,115|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:24:09,128|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:24:18,314|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 14:24:42,541|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:24:47,550|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 14:24:49,413|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 14:24:56,794|WARN |p.c.NetUtils|[Timer-62]|netIsAvailable false
+2020-10-14 14:25:23,332|WARN |p.c.NetUtils|[Timer-49]|netIsAvailable false
+2020-10-14 16:02:10,877|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 16:02:10,881|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 16:02:12,169|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 16:02:12,181|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 16:02:12,181|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 16:02:12,181|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 16:02:12,184|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 16:02:12,187|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 16:02:12,187|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 16:02:17,242|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:02:17,242|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:02:17,242|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:02:17,243|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 16:02:17,243|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 16:02:23,161|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:02:23,992|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 16:02:40,262|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:02:45,275|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:03:29,274|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 16:03:45,740|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 16:03:45,743|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 16:03:47,112|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 16:03:47,128|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 16:03:47,129|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 16:03:47,129|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 16:03:47,130|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 16:03:47,132|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 16:03:47,132|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 16:03:52,189|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:03:52,189|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:03:52,189|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:03:52,191|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 16:03:52,191|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 16:03:58,135|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:03:58,844|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 16:04:15,424|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:04:20,437|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:04:34,690|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 16:05:04,123|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 16:05:41,851|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 16:05:41,854|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 16:05:43,149|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 16:05:43,165|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 16:05:43,165|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 16:05:43,165|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 16:05:43,167|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 16:05:43,170|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 16:05:43,170|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 16:05:48,218|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:05:48,218|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:05:48,218|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:05:48,222|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 16:05:48,223|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 16:05:54,169|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:05:55,000|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 16:06:08,642|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:06:13,655|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 16:06:37,985|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false
+2020-10-14 17:42:45,550|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-14 17:42:45,553|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-14 17:42:46,870|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-14 17:42:46,876|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-14 17:42:46,876|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-14 17:42:46,876|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-14 17:42:46,877|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-14 17:42:46,877|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-14 17:42:46,877|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-14 17:42:51,919|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 17:42:51,919|ERROR|r.RabbitMQConnection|[cmQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 17:42:51,919|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 17:42:51,920|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-14 17:42:51,920|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-14 17:42:57,888|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 17:42:58,549|WARN |p.c.NetUtils|[AWT-EventQueue-0]|netIsAvailable false
+2020-10-14 17:43:56,217|ERROR|r.RabbitMQConnection|[AWT-EventQueue-0]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 17:44:01,231|ERROR|r.RabbitMQConnection|[agentsQueueThread]|java.net.SocketTimeoutException: connect timed out
+2020-10-14 17:44:03,830|WARN |p.c.NetUtils|[Timer-36]|netIsAvailable false
+2020-10-14 17:44:33,766|WARN |p.c.NetUtils|[Timer-48]|netIsAvailable false

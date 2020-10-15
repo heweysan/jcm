@@ -171,7 +171,6 @@ public class Ptr {
 
 		return true;
 	}
-
 	
 	public static boolean ptrDeposito(DepositOpVO depositOpVO) {
 		
@@ -299,6 +298,200 @@ public class Ptr {
 		return true;
 	}
 	
+	
+	public static boolean ptrContadoresTest() {
+		
+		
+		if (!JcmGlobalData.printerReady) {
+			System.out.println("La impresora no esta bien, ni intentamos imprimir.");
+			return false;
+		}
+		
+		
+		PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
+		attr.add(new MediaPrintableArea(0, 0, 4, 4, MediaPrintableArea.INCH));
+
+		// The area of the printable area
+		PrinterJob pjob = PrinterJob.getPrinterJob();
+		PageFormat pf = pjob.defaultPage();
+		Paper paper = pf.getPaper();
+		System.out.println("paper width " + paper.getWidth());
+		System.out.println("paper height " + paper.getHeight());
+
+		double width = 4d * 72d;
+		double height = 4d * 72d;
+		double margin = 1d * 72d;
+
+		paper.setSize(width, height);
+		paper.setImageableArea(0, 0, width - (margin * 2), height - (margin * 2));
+
+		pf.setPaper(paper);
+
+		pjob.setPrintable(new ContadoresPageTest(), pf);
+		
+		PrintingStatus();
+		
+		
+		try {
+			pjob.print(attr);			
+			
+			// Ahora revisamos si la impresora mando el evento de que si pudo imprimir (por
+			// el movimiento del motoro de impresion)
+			while (printing) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (usbPrintingStatus) {
+				System.out.println("USB print Status OK");
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, "");
+			} else {
+				System.out.println("USB print Status FAIL");				
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+				return false;
+			}
+			
+			
+		} catch (PrinterException e) {
+			System.out.println("PTR EXCEPTION [" + e.getMessage() + "]");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+			return false;
+		}
+
+		return true;
+	}
+	
+	public static boolean ptrDepositoTest() {
+		
+		if (!JcmGlobalData.printerReady) {
+			System.out.println("La impresora no esta bien, ni intentamos imprimir.");
+			return false;
+		}
+		
+		
+		PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
+		attr.add(new MediaPrintableArea(0, 0, 4, 4, MediaPrintableArea.INCH));
+
+		// The area of the printable area
+		PrinterJob pjob = PrinterJob.getPrinterJob();
+		PageFormat pf = pjob.defaultPage();
+		Paper paper = pf.getPaper();
+		System.out.println("paper width " + paper.getWidth());
+		System.out.println("paper height " + paper.getHeight());
+
+		double width = 4d * 72d;
+		double height = 4d * 72d;
+		double margin = 1d * 72d;
+
+		paper.setSize(width, height);
+		paper.setImageableArea(0, 0, width - (margin * 2), height - (margin * 2));
+
+		pf.setPaper(paper);
+
+		pjob.setPrintable(new DepositoPageTest(), pf);
+
+		PrintingStatus();
+		
+		try {
+			pjob.print(attr);			
+			
+			// Ahora revisamos si la impresora mando el evento de que si pudo imprimir (por
+			// el movimiento del motoro de impresion)
+			while (printing) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (usbPrintingStatus) {
+				System.out.println("USB print Status OK");
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, "");
+			} else {
+				System.out.println("USB print Status FAIL");				
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+				return false;
+			}
+			
+			
+		} catch (PrinterException e) {
+			System.out.println("PTR EXCEPTION [" + e.getMessage() + "]");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean ptrRetiroTest() {
+		
+		if (!JcmGlobalData.printerReady) {
+			System.out.println("La impresora no esta bien, ni intentamos imprimir.");
+			return false;
+		}
+
+		PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
+		attr.add(new MediaPrintableArea(0, 0, 4, 4, MediaPrintableArea.INCH));
+
+		// The area of the printable area
+		PrinterJob pjob = PrinterJob.getPrinterJob();
+		PageFormat pf = pjob.defaultPage();
+		Paper paper = pf.getPaper();
+		System.out.println("paper width " + paper.getWidth());
+		System.out.println("paper height " + paper.getHeight());
+
+		double width = 4d * 72d;
+		double height = 4d * 72d;
+		double margin = 1d * 72d;
+
+		paper.setSize(width, height);
+		paper.setImageableArea(0, 0, width - (margin * 2), height - (margin * 2));
+
+		pf.setPaper(paper);
+
+		pjob.setPrintable(new RetiroPageTest(), pf);
+		
+		PrintingStatus();
+		
+		try {
+			pjob.print(attr);			
+			
+			// Ahora revisamos si la impresora mando el evento de que si pudo imprimir (por
+			// el movimiento del motoro de impresion)
+			while (printing) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (usbPrintingStatus) {
+				System.out.println("USB print Status OK");
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, "");
+			} else {
+				System.out.println("USB print Status FAIL");				
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+				return false;
+			}
+			
+			
+		} catch (PrinterException e) {
+			System.out.println("PTR EXCEPTION [" + e.getMessage() + "]");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+			return false;
+		}
+
+		return true;
+	}
+	
+		
 	public static void initializeCupsClient() {
 
 		if (JcmGlobalData.isDebug)
@@ -312,14 +505,15 @@ public class Ptr {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("Inicialiando CUPS client EXCEPTION");
+			System.out.println("[PTR] Inicializando CUPS client EXCEPTION");
 			e.printStackTrace();
 		}
-		System.out.println("Inicialiando CUPS client END");
+		System.out.println("[PTR] Inicializando CUPS client END");
 	}
 
 	public static void BroadcastFullStatus() {
-
+		
+		
 		if (JcmGlobalData.isDebug) {
 			System.out.println("[PTR] BroadcastFullStatus DEBUG");
 			return;
@@ -331,8 +525,13 @@ public class Ptr {
 			return;
 		}
 
+		
+		System.out.println("[PTR] BroadcastFullStatus");
+		
 		boolean existe = false;
 		String line;
+		
+		
 		try {
 
 			Process p = Runtime.getRuntime().exec(new String[] { "sh", "-c", "ps -a | grep ReadSingle" });
@@ -358,7 +557,11 @@ public class Ptr {
 				ex.printStackTrace();
 			}
 		}
+		
+		
 
+		
+		
 		Timer screenTimerPrinterStatus = new Timer();
 
 		JcmGlobalData.printerStatus = "OK";
@@ -368,10 +571,11 @@ public class Ptr {
 			@Override
 			public void run() {
 				try {
-
+					
 					BufferedReader in = new BufferedReader(new FileReader(FIFO));
-
+					
 					while (in.ready()) {
+						
 						String ptrStatus = in.readLine();
 						System.out.println("ptrStatus [" + ptrStatus + "]");
 						logger.info("ptrStatus [" + ptrStatus + "]");
@@ -393,12 +597,12 @@ public class Ptr {
 									System.out.println("NO PAPER");
 									JcmGlobalData.printerReady = false;
 									JcmGlobalData.printerStatus = " SIN PAPEL";
-									RaspiAgent.Broadcast(DeviceEvent.PTR_PaperThreshold, "PAPER OUT");
+									RaspiAgent.Broadcast(DeviceEvent.PTR_PaperThreshold, "PaperOut");
 								}
 								if (arrOfStr[1].toString().equalsIgnoreCase("Near paper end")) {
 									System.out.println("BAJO NIVEL DE PAPEL");
 									JcmGlobalData.printerStatus += " BAJO NIVEL DE PAPEL";
-									RaspiAgent.Broadcast(DeviceEvent.PTR_PaperThreshold, "PAPER LOW");
+									RaspiAgent.Broadcast(DeviceEvent.PTR_PaperThreshold, "PaperLow");
 								}
 							}
 							if (arrOfStr[0].toString().equalsIgnoreCase("OFFLINE")) {
@@ -414,9 +618,11 @@ public class Ptr {
 
 					in.close();
 					screenTimerPrinterStatus.cancel();
+					
 				} catch (IOException ex) {
 					logger.error(ex);
 					System.err.println("IO Exception at buffered read!!");
+					System.out.println("IO EXCEPTION " + ex.getMessage());
 				}
 			}
 		}, TimeUnit.SECONDS.toMillis(1), TimeUnit.SECONDS.toMillis(1));
@@ -895,11 +1101,11 @@ class ContadoresPage implements Printable {
 		g2d.drawString("$500", billetesMargin + 10, 190);
 
 		// Monto
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(total20)), montoMargin + 10, 150);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(total50)), montoMargin + 10, 160);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(total100)), montoMargin + 10, 170);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(total200)), montoMargin + 10, 180);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(total500)), montoMargin + 10, 190);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total20)), montoMargin-10, 150);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total50)), montoMargin-10, 160);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total100)), montoMargin-10, 170);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total200)), montoMargin-10, 180);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total500)), montoMargin-10, 190);
 
 		// Footer
 		g2d.drawString("CORTE:", mIzq, 210);
@@ -908,7 +1114,7 @@ class ContadoresPage implements Printable {
 
 		g2d.drawString(Config.GetPersistence("CorteCount", "-1"), mIzq + 100, 210);
 		g2d.drawString(CurrentUser.loginUser, mIzq + 100, 220);
-		g2d.drawString(CurrentUser.atmId, mIzq + 100, 230);
+		g2d.drawString(JcmGlobalData.atmId, mIzq + 100, 230);
 
 		return Printable.PAGE_EXISTS;
 	}
@@ -1000,11 +1206,11 @@ class DepositoPage implements Printable {
 		g2d.drawString("$500", billetesMargin + 10, 190);
 
 		// Monto
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b20 * 20)), montoMargin + 10, 150);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b50 * 50)), montoMargin + 10, 160);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b100 * 100)), montoMargin + 10, 170);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b200 * 200)), montoMargin + 10, 180);
-		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b500 * 500)), montoMargin + 10, 190);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b20 * 20)), montoMargin - 10, 150);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b50 * 50)), montoMargin - 10, 160);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b100 * 100)), montoMargin - 10, 170);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b200 * 200)), montoMargin - 10, 180);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(depositOpVO.b500 * 500)), montoMargin - 10, 190);
 
 		// Footer
 		g2d.drawString("OPERACION:", mIzq, 210);
@@ -1015,7 +1221,7 @@ class DepositoPage implements Printable {
 		g2d.drawString(Config.GetPersistence("TxCASHMANAGEMENTCounter", "0"), mIzq + 100, 210);
 		g2d.drawString(CurrentUser.movementId, mIzq + 100, 220);
 		g2d.drawString(depositOpVO.userName, mIzq + 100, 230);		
-		g2d.drawString(CurrentUser.atmId, mIzq + 100, 240);
+		g2d.drawString(JcmGlobalData.atmId, mIzq + 100, 240);
 
 		return Printable.PAGE_EXISTS;
 	}
@@ -1077,7 +1283,250 @@ class RetiroPage implements Printable {
 		g2d.drawString(Config.GetPersistence("TxCASHMANAGEMENTCounter", "0"), mIzq + 100, 210);
 		g2d.drawString(CurrentUser.movementId, mIzq + 100, 220);
 		g2d.drawString(currentUser, mIzq + 100, 230);		
-		g2d.drawString(CurrentUser.atmId, mIzq + 100, 240);
+		g2d.drawString(JcmGlobalData.atmId, mIzq + 100, 240);
+
+		return Printable.PAGE_EXISTS;
+	}
+}
+
+
+
+class ContadoresPageTest implements Printable {
+
+	// http://www.java2s.com/Tutorial/Java/0261__2D-Graphics/Printanimageout.htm
+
+	ImageIcon printImage = new javax.swing.ImageIcon("./a.png");
+	static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
+		if (pageIndex >= 1) {
+			return Printable.NO_SUCH_PAGE;
+		}
+
+		Date date = new Date();
+
+		currencyFormat.setMaximumFractionDigits(0);
+
+		int total = 0;
+		int total20 = 0;
+		int total50 = 0;
+		int total100 = 0;
+		int total200 = 0;
+		int total500 = 0;
+
+		int b20 = 0;
+		int b50 = 0;
+		int b100 = 0;
+		int b200 = 0;
+		int b500 = 0;
+	
+
+		total20 = 20 * b20;
+		total50 = 50 * b50;
+		total100 = 100 * b100;
+		total200 = 200 * b200;
+		total500 = 500 * b500;
+
+		total = 0;
+
+		int mIzq = 10;
+
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+		int montoMargin = mIzq + 140;
+		int billetesMargin = mIzq + 70;
+
+		g2d.drawImage(printImage.getImage(), 80, 0, null);
+
+		g2d.drawString("CORTE", 80, 80);
+
+		g2d.drawString("FECHA:", mIzq, 100);
+		g2d.drawString(String.format("%1$-15s", dateFormat.format(date)), mIzq + 60, 100);
+
+		g2d.drawString("HORA:", mIzq, 110);
+		g2d.drawString(String.format("%1$-15s", timeFormat.format(date)), mIzq + 60, 110);
+
+		g2d.drawString("MONTO:", mIzq, 120);
+		g2d.drawString(currencyFormat.format(total), mIzq + 60, 120);
+
+		g2d.drawString("PIEZAS", mIzq, 140);
+		g2d.drawString("BILLETES", billetesMargin, 140);
+		g2d.drawString("MONTO", montoMargin, 140);
+
+		// Piezas
+		g2d.drawString(String.format("%1$-5s", b20), mIzq, 150);
+		g2d.drawString(String.format("%1$-5s", b50), mIzq, 160);
+		g2d.drawString(String.format("%1$-5s", b100), mIzq, 170);
+		g2d.drawString(String.format("%1$-5s", b200), mIzq, 180);
+		g2d.drawString(String.format("%1$-5s", b500), mIzq, 190);
+
+		// Billetes
+		g2d.drawString("$20", billetesMargin + 10, 150);
+		g2d.drawString("$50", billetesMargin + 10, 160);
+		g2d.drawString("$100", billetesMargin + 10, 170);
+		g2d.drawString("$200", billetesMargin + 10, 180);
+		g2d.drawString("$500", billetesMargin + 10, 190);
+
+		// Monto
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total20)), montoMargin-10, 150);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total50)), montoMargin-10, 160);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total100)), montoMargin-10, 170);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total200)), montoMargin-10, 180);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(total500)), montoMargin-10, 190);
+
+		// Footer
+		g2d.drawString("CORTE:", mIzq, 210);
+		g2d.drawString("USUARIO:", mIzq, 220);
+		g2d.drawString("ATMID:", mIzq, 230);
+
+		g2d.drawString("-----", mIzq + 100, 210);
+		g2d.drawString("-----", mIzq + 100, 220);
+		g2d.drawString(JcmGlobalData.atmId, mIzq + 100, 230);
+
+		return Printable.PAGE_EXISTS;
+	}
+}
+
+class DepositoPageTest implements Printable {
+
+	// http://www.java2s.com/Tutorial/Java/0261__2D-Graphics/Printanimageout.htm
+
+	ImageIcon printImage = new javax.swing.ImageIcon("./a.png");
+	static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+    
+	
+	
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
+		if (pageIndex >= 1) {
+			return Printable.NO_SUCH_PAGE;
+		}
+
+		Date date = new Date();
+
+		currencyFormat.setMaximumFractionDigits(0);
+		
+		System.out.println("Ptr.DepositoPageTest");
+
+		currencyFormat.setMaximumFractionDigits(0);
+
+
+
+		int mIzq = 10;
+
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+		int montoMargin = mIzq + 140;
+		int billetesMargin = mIzq + 70;
+
+		g2d.drawImage(printImage.getImage(), 80, 0, null);
+
+		g2d.drawString("DEPOSITO", 80, 80);
+
+		g2d.drawString("FECHA:", mIzq, 100);
+		g2d.drawString(String.format("%1$-15s", dateFormat.format(date)), mIzq + 60, 100);
+
+		g2d.drawString("HORA:", mIzq, 110);
+		g2d.drawString(String.format("%1$-15s", timeFormat.format(date)), mIzq + 60, 110);
+
+		g2d.drawString("MONTO:", mIzq, 120);
+		g2d.drawString(currencyFormat.format(0), mIzq + 60, 120);
+
+		g2d.drawString("PIEZAS", mIzq, 140);
+		g2d.drawString("BILLETES", billetesMargin, 140);
+		g2d.drawString("MONTO", montoMargin, 140);
+
+		// Piezas
+		g2d.drawString(String.format("%1$-5s", 0), mIzq, 150);
+		g2d.drawString(String.format("%1$-5s", 0), mIzq, 160);
+		g2d.drawString(String.format("%1$-5s", 0), mIzq, 170);
+		g2d.drawString(String.format("%1$-5s", 0), mIzq, 180);
+		g2d.drawString(String.format("%1$-5s", 0), mIzq, 190);
+
+		// Billetes
+		g2d.drawString("$20", billetesMargin + 10, 150);
+		g2d.drawString("$50", billetesMargin + 10, 160);
+		g2d.drawString("$100", billetesMargin + 10, 170);
+		g2d.drawString("$200", billetesMargin + 10, 180);
+		g2d.drawString("$500", billetesMargin + 10, 190);
+
+		// Monto
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(0)), montoMargin - 10, 150);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(0)), montoMargin - 10, 160);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(0)), montoMargin - 10, 170);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(0)), montoMargin - 10, 180);
+		g2d.drawString(String.format("%1$9s", currencyFormat.format(0)), montoMargin - 10, 190);
+
+		// Footer
+		g2d.drawString("OPERACION:", mIzq, 210);
+		g2d.drawString("REFERENCIA:", mIzq, 220);
+		g2d.drawString("USUARIO:", mIzq, 230);
+		g2d.drawString("ATMID:", mIzq, 240);
+
+		g2d.drawString("-----", mIzq + 100, 210);
+		g2d.drawString("-----", mIzq + 100, 220);
+		g2d.drawString("-----", mIzq + 100, 230);		
+		g2d.drawString(JcmGlobalData.atmId, mIzq + 100, 240);
+
+		return Printable.PAGE_EXISTS;
+	}
+}
+
+class RetiroPageTest implements Printable {
+
+	// http://www.java2s.com/Tutorial/Java/0261__2D-Graphics/Printanimageout.htm
+
+	ImageIcon printImage = new javax.swing.ImageIcon("./a.png");
+	static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+
+
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
+		if (pageIndex >= 1) {
+			return Printable.NO_SUCH_PAGE;
+		}
+
+		Date date = new Date();
+
+		currencyFormat.setMaximumFractionDigits(0);
+		
+		System.out.println("Ptr.RetiroPageTest");
+
+		int mIzq = 10;
+
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+		g2d.drawImage(printImage.getImage(), 80, 0, null);
+
+		g2d.drawString("RETIRO", 80, 80);
+
+		g2d.drawString("FECHA:", mIzq, 100);
+		g2d.drawString(String.format("%1$-15s", dateFormat.format(date)), mIzq + 60, 100);
+
+		g2d.drawString("HORA:", mIzq, 110);
+		g2d.drawString(String.format("%1$-15s", timeFormat.format(date)), mIzq + 60, 110);
+
+		g2d.drawString("MONTO:", mIzq, 120);
+		g2d.drawString(currencyFormat.format(0), mIzq + 60, 120);
+
+
+		// Footer
+		g2d.drawString("OPERACION:", mIzq, 210);
+		g2d.drawString("REFERENCIA:", mIzq, 220);
+		g2d.drawString("USUARIO:", mIzq, 230);
+		g2d.drawString("ATMID:", mIzq, 240);
+
+		g2d.drawString("-----", mIzq + 100, 210);
+		g2d.drawString("-----", mIzq + 100, 220);
+		g2d.drawString("-----", mIzq + 100, 230);		
+		g2d.drawString(JcmGlobalData.atmId, mIzq + 100, 240);
 
 		return Printable.PAGE_EXISTS;
 	}

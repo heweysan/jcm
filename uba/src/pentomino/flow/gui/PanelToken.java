@@ -214,14 +214,14 @@ public class PanelToken extends ImagePanel implements PinpadListener {
 										Config.SetPersistence("TxRETIROCASHMANAGEMENTCounter","" + dispenseCounter);
 										
 
-										if(!Ptr.printDispense(CurrentUser.WithdrawalDispense,CurrentUser.loginUser)){
+										//if(!Ptr.printDispense(CurrentUser.WithdrawalDispense,CurrentUser.loginUser)){
+										if(!Ptr.ptrRetiro(CurrentUser.WithdrawalDispense,CurrentUser.loginUser)){
 											//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
 											Flow.redirect(Flow.panelNoTicket,5000,Flow.panelTerminamos);											
 										}
 										else {
 											Flow.redirect(Flow.panelTerminamos);
 										}
-
 									}
 								}
 							}, 1000,2000);

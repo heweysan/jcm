@@ -566,6 +566,7 @@ public class Flow {
 					UpdateCountersDeposit(0, Integer.toString(jcm1LastBillInserted),isRecyclable1);
 
 					System.out.println("$" + CurrentUser.totalAmountInserted);
+										
 					PanelDeposito.lblMontoDepositado.setText("$" + CurrentUser.totalAmountInserted);
 					PanelDebug.lblBilleteIngresado1.setText("$" + billType);
 					break;
@@ -814,7 +815,7 @@ public class Flow {
 					break;
 				case "reboot":					
 					System.out.println("reboot");					
-					String command = "shutdown -r +1";
+					String command = "shutdown -r now";
 					Runtime runtime = Runtime.getRuntime();
 					try {
 						runtime.exec(command);
@@ -829,10 +830,10 @@ public class Flow {
 					PanelDispense.dispenseError();
 					break;
 				case "accepting1":
-					PanelDeposito.bussy1 = true;
+					PanelDeposito.bussy1 = true;					
 					break;
 				case "accepting2":
-					PanelDeposito.bussy2 = true;
+					PanelDeposito.bussy2 = true;										
 					break;
 				case "collected11":
 					UpdateCountersCollect(0,Integer.toString(JcmGlobalData.rec1bill1Denom));

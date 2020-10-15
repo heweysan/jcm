@@ -74,12 +74,10 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 	
 	public void serialTx(byte[] msg) {
 		
-        try {
-        
+        try {       
         	
         	byte operacion;
-    		
-			
+    					
     		if(msg[2] == (byte) 0xF0) {  //Es extended command
     			operacion = msg[4];
     		}
@@ -89,7 +87,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
     		
             if(msg[2] != lastTx) {
             	lastTx = operacion;
-            	System.out.println(baitsToString("\nJCM[" + id + "] uart->serialTx", msg, msg[1]));
+            	System.out.println(baitsToString("\nJCM[" + id + "] [" + currentOpertion + "] --->", msg, msg[1]));
             }
             else {
             	tempCont++;
@@ -121,7 +119,7 @@ public class uart extends protocol implements Runnable, SerialPortEventListener{
 		portList =  CommPortIdentifier.getPortIdentifiers();
 		
 		while (portList.hasMoreElements()) {
-			//uart.portId = (CommPortIdentifier) uart.portList.nextElement();
+			
 			portId = (CommPortIdentifier) portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
                 if (portId.getName().equals(prt)) {                

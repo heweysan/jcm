@@ -57,14 +57,16 @@ public class PanelDeposito extends ImagePanel{
 		setBorder(null);
 		setLayout(null);
 	}	
+	
+	public static javax.swing.Timer depositTimer;
 
-
+	public static boolean depositando1 = false;
+	public static boolean depositando2 = false;
 
 	@Override
 	public void ContentPanel() {
 
 
-		//TODO: AQUI
 		JButton btnAceptar = new JButton(Flow.botonAceptar);
 		btnAceptar.setBounds(570, 860, 782, 159);
 		btnAceptar.setContentAreaFilled(false);
@@ -162,7 +164,8 @@ public class PanelDeposito extends ImagePanel{
 					
 					
 					
-					if(!Ptr.printDeposit(depositOpVO)){
+					//if(!Ptr.printDeposit(depositOpVO)){
+					if(!Ptr.ptrDeposito(depositOpVO)){
 						//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
 						Flow.redirect(Flow.panelNoTicket,5000,Flow.panelTerminamos);						
 					}
@@ -201,11 +204,99 @@ public class PanelDeposito extends ImagePanel{
 		Flow.jcms[1].jcmMessage[3] = 0x00;
 		Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
 		
-
+		
+		
+		if(depositTimer == null) {
+			
+			System.out.println("Inicializamos el Timer de Deposito.");
+			
+			depositTimer = new javax.swing.Timer((int) TimeUnit.SECONDS.toMillis(10), new ActionListener() {
+				
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Deposit Timer timeout");
+					
+					String atmId = Config.GetDirective("AtmId", "");
+					
+	
+					System.out.println("JCM1 INHIBIT DESHABILITAMOS ACEPTADOR");
+					Flow.jcms[0].jcmMessage[3] = 0x01;
+					Flow.jcms[0].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[0].jcmMessage, false);
+	
+					System.out.println("JCM2 INHIBIT DESHABILITAMOS ACEPTADOR");
+					Flow.jcms[1].jcmMessage[3] = 0x01;
+					Flow.jcms[1].id003_format((byte) 0x6, (byte) 0xC3, Flow.jcms[1].jcmMessage, false);
+					
+					System.out.println("totalAmountInserted [" + CurrentUser.totalAmountInserted + ")");
+					if(CurrentUser.totalAmountInserted == 0) {
+						Flow.redirect(Flow.panelOperacionCancelada,TimeUnit.SECONDS.toMillis(3),Flow.panelIdle);					
+						return;
+					}
+	
+					//Actualizamos contadores de deposito
+					int depositCounter = Integer.parseInt(Config.GetPersistence("TxCASHMANAGEMENTCounter","0"));
+					depositCounter++;
+					Config.SetPersistence("TxCASHMANAGEMENTCounter","" + depositCounter);
+					
+					//Terminamos el deposito
+					DepositOpVO depositOpVO = new DepositOpVO();
+	
+					depositOpVO.atmId = atmId; 
+					depositOpVO.amount = (long) CurrentUser.totalAmountInserted;
+					depositOpVO.b20 = Flow.depositBillsCounter.x20;
+					depositOpVO.b50 = Flow.depositBillsCounter.x50;
+					depositOpVO.b100 = Flow.depositBillsCounter.x100;
+					depositOpVO.b200 = Flow.depositBillsCounter.x200;
+					depositOpVO.b500 = Flow.depositBillsCounter.x500;
+					depositOpVO.b1000 = 0;
+					depositOpVO.operatorId = Integer.parseInt(CurrentUser.loginUser);
+					depositOpVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+					depositOpVO.userName = CurrentUser.loginUser;										
+	
+					String billetes = "[" + depositOpVO.b20 + "x20|" + depositOpVO.b50 + "x50|" + depositOpVO.b100 + "x100|" + depositOpVO.b200 + "x200|" + depositOpVO.b500 + "x500|" + depositOpVO.b1000 + "x1000]";
+					String billetesNotesValidated = "" + depositOpVO.b20 + "x20;" + depositOpVO.b50 + "x50;" + depositOpVO.b100 + "x100;" + depositOpVO.b200 + "x200;" + depositOpVO.b500 + "x500;" + depositOpVO.b1000 + "x1000";
+	
+					System.out.println("billetes " + billetes);
+					System.out.println("billetesNotesValidated " + billetesNotesValidated);
+					
+					//TODO: HEWEY, Cuando no hay red que se hace?
+					if(JcmGlobalData.netIsAvailable)
+						Transactions.ConfirmaDeposito(depositOpVO);
+	
+					RaspiAgent.Broadcast(DeviceEvent.DEP_TotalAmountInserted,"" + CurrentUser.totalAmountInserted);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_NotesValidated, billetesNotesValidated);
+					RaspiAgent.Broadcast(DeviceEvent.DEP_CashInEndOk, "" + CurrentUser.totalAmountInserted);
+					RaspiAgent.WriteToJournal("CASH MANAGEMENT", CurrentUser.totalAmountInserted,0, CurrentUser.movementId, CurrentUser.loginUser, "PROCESADEPOSITO ConfirmaDeposito " + billetes, AccountType.Administrative, TransactionType.CashManagement);
+					BEA.BusinessEvent(BusinessEvent.DepositEnd, true, false,"");
+				
+					
+					if(!Ptr.ptrDeposito(depositOpVO)){
+						//Si no pudo imprimir lo mandamos a la pantalla de no impresion.
+						Flow.redirect(Flow.panelNoTicket,5000,Flow.panelTerminamos);						
+					}
+					else {
+						Flow.redirect(Flow.panelTerminamos);
+					}					
+					
+				}
+			});
+		}
+		
+        depositTimer.setRepeats(false);
+		depositTimer.start();
+		
+		
 	}
 
 	@Override
 	public void OnUnload() {		
 		//System.out.println("OnUnload [PanelDeposito]");
+		if(depositTimer != null)
+			depositTimer.stop();
 	}
+	
+	
+	
+	
 }

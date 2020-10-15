@@ -3,8 +3,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.SwingConstants;
 
+import pentomino.flow.EventListenerClass;
+import pentomino.flow.MyEvent;
 import pentomino.flow.gui.helpers.ImagePanel;
 
 public class PanelReinicio extends ImagePanel {
@@ -37,8 +41,13 @@ public class PanelReinicio extends ImagePanel {
 
 	@Override
 	public void OnLoad() {
-		// TODO Auto-generated method stub
-		
+		try {
+			Thread.sleep(TimeUnit.SECONDS.toMillis(15));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		EventListenerClass.fireMyEvent(new MyEvent("reboot"));
 	}
 
 	@Override

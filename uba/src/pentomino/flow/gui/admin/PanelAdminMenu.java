@@ -114,7 +114,7 @@ public class PanelAdminMenu extends ImagePanel {
 				Flow.redirect(Flow.panelReinicio);
 
 
-				EventListenerClass.fireMyEvent(new MyEvent("reboot"));
+				//EventListenerClass.fireMyEvent(new MyEvent("reboot"));
 			}
 		});
 		btnAdminMenuReiniciarAtm.setOpaque(false);

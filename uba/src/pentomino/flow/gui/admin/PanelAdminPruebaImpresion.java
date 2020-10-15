@@ -107,7 +107,8 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 	public void imprimeTickets() {
 
 		lblContadores.setVisible(true);
-		if(Ptr.printContadoresTest()) {
+		//if(Ptr.printContadoresTest()) {
+		if(Ptr.ptrContadoresTest()) {
 			System.out.println("printContadoresTest OK");
 			lblContadoresResult.setForeground(Color.WHITE);
 			lblContadoresResult.setText("Impresión exitosa");
@@ -119,7 +120,8 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 
 		
 		lblDeposito.setVisible(true);
-		if(Ptr.printDepositTest()) {
+		//if(Ptr.printDepositTest()) {
+		if(Ptr.ptrDepositoTest()) {
 			lblDepositoResult.setForeground(Color.WHITE);
 			lblDepositoResult.setText("Impresión exitosa");
 		}else {
@@ -128,7 +130,7 @@ public class PanelAdminPruebaImpresion extends ImagePanel {
 		}
 
 		lblRetiro.setVisible(true);
-		if(Ptr.printDispenseTest()) {
+		if(Ptr.ptrRetiroTest()) {
 			lblRetiroResult.setForeground(Color.WHITE);
 			lblRetiroResult.setText("Impresión exitosa");
 		}else {
