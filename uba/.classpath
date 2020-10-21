@@ -31,5 +31,7 @@
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/jpos/jpos1122.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/jpos/jpos1122-controls.jar"/>
 	<classpathentry kind="lib" path="D:/Repos/JavaJars/jpos/xerces.jar"/>
+	<classpathentry kind="lib" path="D:/Repos/JavaJars/commons-io-2.8.0/commons-io-2.8.0.jar"/>
+	<classpathentry kind="lib" path="D:/Repos/JavaJars/commons-io-2.8.0/commons-io-2.8.0-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -10,6 +10,7 @@ import com.rabbitmq.client.AuthenticationFailureException;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+import pentomino.config.Config;
 import pentomino.flow.Flow;
 
 public class RabbitMQConnection {
@@ -28,7 +29,7 @@ public class RabbitMQConnection {
 		factory.setUsername("redblu_administrator");
 		factory.setPassword("4dm1n1str4t0r");
 		factory.setVirtualHost("vh_business");
-		factory.setHost("11.50.0.7");
+		factory.setHost(Config.GetPulsarParam("HostRabbit", "192.168.0.1"));
 		factory.setConnectionTimeout(5000);
 		factory.setPort(5672);
 		factory.setAutomaticRecoveryEnabled(true); 

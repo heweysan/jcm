@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import javax.swing.border.BevelBorder;
 import pentomino.common.Billete;
 import pentomino.common.JcmGlobalData;
 import pentomino.common.jcmOperation;
+import pentomino.core.devices.CertChange;
 import pentomino.core.devices.Tio;
 import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
@@ -860,6 +862,28 @@ public class PanelDebug  extends ImagePanel {
 		btnAbreBoveda.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAbreBoveda.setBounds(1150, 630, 249, 48);
 		panel_comandos.add(btnAbreBoveda);
+		
+		JButton btnPaseProduccion = new JButton("PRODUCCION");
+		btnPaseProduccion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					CertChange.paseProduccion();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnPaseProduccion.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnPaseProduccion.setBackground(Color.RED);
+		btnPaseProduccion.setBounds(1021, 286, 238, 100);
+		panel_comandos.add(btnPaseProduccion);
+		
+		JButton btnPaseQA = new JButton("QA");
+		btnPaseQA.setBackground(Color.CYAN);
+		btnPaseQA.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnPaseQA.setBounds(1482, 284, 238, 100);
+		panel_comandos.add(btnPaseQA);
 
 		JButton btnAdminLogin = new JButton("ADMIN LOGIN");
 		btnAdminLogin.addActionListener(new ActionListener() {

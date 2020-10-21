@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import pentomino.config.Config;
 import pentomino.flow.Flow;
 
 public class NetUtils {
@@ -17,7 +18,7 @@ public class NetUtils {
 	public static boolean netIsAvailable() { 
 		try {			
 			Socket socket = new Socket();
-			socket.connect(new InetSocketAddress("11.50.0.7", 5672), 5000);			
+			socket.connect(new InetSocketAddress(Config.GetPulsarParam("HostRabbit", "192.168.0.1"), 5672), 5000);			
 			socket.close();			
 			JcmGlobalData.netIsAvailable = true;
 			return true;

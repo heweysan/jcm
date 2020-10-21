@@ -567,8 +567,22 @@ public class DTAServer {
 
 
 	private String ExecuteFile(String parameter) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("Parameter [" + parameter + "]");
+		Runtime run = Runtime.getRuntime();
+		String operationResult = "OK";
+		try {
+			run.exec("/home/pi/Desktop/Pentomino/downloads/" + parameter);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			operationResult = "EXCEPTION";
+			e.printStackTrace();
+		}
+		
+		String returnValue = "{\"data\":{\"ReturnValue\":\"" + operationResult + "\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
+
+		return returnValue;
+	
 	}
 
 
@@ -615,9 +629,6 @@ public class DTAServer {
 				operationResult = "EXCEPTION";
 		}
 
-
-
-
 		String returnValue = "{\"data\":{\"ReturnValue\":\"" + operationResult + "\", \"AtmId\":\"" + Config.GetDirective("AtmId", null) + "\"}}";
 
 		return returnValue;
@@ -655,7 +666,7 @@ public class DTAServer {
 
 
 	private String UpdateEvents(String parameter) {
-		// TODO Auto-generated method stub
+				
 		return null;
 	}
 

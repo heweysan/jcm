@@ -8,6 +8,8 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.SftpProgressMonitor;
 
+import pentomino.config.Config;
+
 public class SftpUtils {
 
 	private Session session = null;
@@ -32,7 +34,7 @@ public class SftpUtils {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SftpUtils sftpClient = new SftpUtils("11.50.0.7","22","filemanager",":s0pJG-Ex1eX","retrieve/in");	
+		SftpUtils sftpClient = new SftpUtils(Config.GetPulsarParam("HostRabbit", "192.168.0.1"),"22","filemanager",":s0pJG-Ex1eX","retrieve/in");	
 
 
 		try {

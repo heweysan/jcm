@@ -13,9 +13,7 @@ import pentomino.config.Config;
 import pentomino.core.devices.Ptr;
 import pentomino.core.devices.Tio;
 import pentomino.flow.CurrentUser;
-import pentomino.flow.EventListenerClass;
 import pentomino.flow.Flow;
-import pentomino.flow.MyEvent;
 import pentomino.flow.gui.helpers.ImagePanel;
 import pentomino.jcmagent.BEA;
 
