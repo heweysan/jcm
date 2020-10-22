@@ -168,6 +168,10 @@ public class Flow {
 
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 
+		
+		Transactions.TraeDepositosDelDia();
+		
+		
 		initialize();
 
 		EventQueue.invokeLater(new Runnable() {

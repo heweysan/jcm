@@ -1,9 +1,8 @@
 package pentomino.cashmanagement;
 
-import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -11,6 +10,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
@@ -22,6 +22,9 @@ import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.cashmanagement.vo.CmReverse;
 import pentomino.cashmanagement.vo.CmWithdrawal;
 import pentomino.cashmanagement.vo.DepositOpVO;
+import pentomino.cashmanagement.vo.DepositoDelDia;
+import pentomino.cashmanagement.vo.DepositosDelDiaRequest;
+import pentomino.cashmanagement.vo.DepositosDelDiaVO;
 import pentomino.cashmanagement.vo.ExceptionVO;
 import pentomino.cashmanagement.vo.GenericMessageVO;
 import pentomino.cashmanagement.vo.ResponseObjectVO;
@@ -444,7 +447,6 @@ public class Transactions {
 
 		return returnVO;
 	}
-
 	
 	public static CMUserVO ValidaUsuarioPassword(String idEmp, String password) {
 
@@ -845,6 +847,129 @@ public class Transactions {
 	}
 
 
+	public static void TraeDepositosDelDia()  {
+
+		System.out.println("\n--- TraeDepositosDelDia ---".toUpperCase());
+
+		String corrId = UUID.randomUUID().toString();
+
+		DepositosDelDiaRequest dddVO = new DepositosDelDiaRequest();
+		
+		dddVO.atmId = Config.GetDirective("AtmId", "");
+		dddVO.operatorId =   7007;//Integer.parseInt(CurrentUser.loginUser);
+		dddVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+		
+		GenericMessageVO requestMessage = new GenericMessageVO();
+		requestMessage.data = dddVO;
+		
+		Map<String,Object> map = null;
+		
+		DepositosDelDiaVO returnVO = new DepositosDelDiaVO();    		        		
+
+		try{
+
+			Connection rabbitConn = RabbitMQConnection.getConnection();
+
+			if(rabbitConn == null) {
+				//NO SE PUDO CONECTAR IMPRIMIMOS TICKET DE ERROR
+				
+			}
+			else{
+				Channel channel = rabbitConn.createChannel();  
+
+				map = new HashMap<String,Object>(); 
+				map.put("operation-type","daily-report");         
+
+				String replyQueueName = channel.queueDeclare().getQueue();
+
+				AMQP.BasicProperties props = new AMQP.BasicProperties
+						.Builder()
+						.correlationId(corrId)
+						.replyTo(replyQueueName)
+						.headers(map)
+						.build();
+				
+				channel.basicPublish("ex.cm.topic", "cm.reports.*",true, props, gson.toJson(requestMessage).getBytes());
+				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
+
+
+				
+				
+				
+				//Esperamos la respuesta
+				final BlockingQueue<String> response = new ArrayBlockingQueue<>(1);	                     
+
+				System.out.println("[1]");
+				String ctag = channel.basicConsume(replyQueueName, true, (consumerTag, delivery) -> {
+					if (delivery.getProperties().getCorrelationId().equals(corrId)) {
+						response.offer(new String(delivery.getBody(), "UTF-8"));
+					}
+				}, consumerTag -> {
+				});              	                      
+
+				System.out.println("[2]");
+				
+				
+				String result = response.take();     
+				
+				System.out.println("[3]");
+
+				System.out.println("result [" + result + "]");
+
+				if(!result.isEmpty()) {
+					if(result != ""){
+						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
+						System.out.println("isValid " + (String) responseMap.get("isValid"));
+						
+						if(responseMap.containsKey("exception")){
+							
+							returnVO.message = (String) responseMap.get("exception");
+													
+							
+						}else{
+							returnVO.success = true;
+							returnVO.atm =(String) responseMap.get("atm"); 
+							returnVO.date = (long) Float.parseFloat(responseMap.get("date").toString());		
+							returnVO.depositId =(String) responseMap.get("depositId");
+							returnVO.withdrawalId =(String) responseMap.get("withdrawalId");							
+							returnVO.requestingUser =(String) responseMap.get("requestingUser");
+							
+							returnVO.totalDeposits = (int) Float.parseFloat(responseMap.get("totalDeposits").toString());
+							returnVO.depositsAmount = (long) Float.parseFloat(responseMap.get("depositsAmount").toString());
+							returnVO.totalWithdrawals = (int) Float.parseFloat(responseMap.get("totalWithdrawals").toString());
+							returnVO.withdrawalsAmount = (long) Float.parseFloat(responseMap.get("withdrawalsAmount").toString());
+							returnVO.totalCollections = (long) Float.parseFloat(responseMap.get("datotalCollectionste").toString());
+							returnVO.collectionsAmount = (long) Float.parseFloat(responseMap.get("collectionsAmount").toString());
+							
+							DepositoDelDia[] mcArray =  gson.fromJson((String) responseMap.get("depositsDetail"), DepositoDelDia[].class);
+														
+							returnVO.depositsDetail = Arrays.asList(mcArray);
+							
+
+						}
+
+					}else{
+						//No se pudo traer la info imprimos ticket de error
+					}
+
+				}else {
+					//No se pudo traer la info imprimos ticket de error
+				}
+				logger.info("returning ${JsonOutput.toJson(returnVO)}");
+
+				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
+
+				channel.basicCancel(ctag);
+				channel.close();
+
+			}
+		}catch(Exception e){
+			System.out.println("ValidaUsuario [EXCEPTION]");
+			e.printStackTrace();
+		}
+
+		
+	}
 
 
 	public void close() throws IOException {
