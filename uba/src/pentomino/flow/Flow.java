@@ -171,7 +171,7 @@ public class Flow {
 		MovimientosDelDiaTask.iniciaTarea();
 		
 		initialize();
-		
+		//aqui)
 		//Transactions.TraeMovimientosDelDia();
 		
 		EventQueue.invokeLater(new Runnable() {
