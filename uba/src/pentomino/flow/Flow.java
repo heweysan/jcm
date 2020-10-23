@@ -172,7 +172,7 @@ public class Flow {
 		
 		initialize();
 		
-		Transactions.TraeMovimientosDelDia();
+		//Transactions.TraeMovimientosDelDia();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
