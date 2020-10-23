@@ -1,3 +1,6 @@
 *.gz
 *.class
 /uba/bin/*.class
+/uba/queue/*
+/uba/logs/*
+/uba/downloads/*
