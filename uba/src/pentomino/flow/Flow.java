@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import gnu.io.CommPortIdentifier;
 import pentomino.cashmanagement.CmQueue;
+import pentomino.cashmanagement.MovimientosDelDiaTask;
 import pentomino.cashmanagement.Transactions;
 import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.common.AccountType;
@@ -163,23 +163,17 @@ public class Flow {
 
 	public static void main(String[] args) {
 
-		//System.out.println("->" + TimeUnit.MINUTES.toMillis(10));
-
+		
 		logger.info("----- FLOW MAIN -----");
 
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 
-		
-		try {
-			Transactions.TraeMovimientosDelDia();
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+		MovimientosDelDiaTask.iniciaTarea();
 		
 		initialize();
-
+		
+		Transactions.TraeMovimientosDelDia();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {					
@@ -241,8 +235,6 @@ public class Flow {
 	
 	
 	
-	
-	
 	/**
 	 * FLOW
 	 * 
@@ -262,6 +254,7 @@ public class Flow {
 			JcmMonitor t2 = new JcmMonitor();
 			t2.start();
 		}
+		
 		
 		
 		Thread agentsQueueThread = new Thread(agentsQueue, "agentsQueueThread");

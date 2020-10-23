@@ -849,7 +849,7 @@ public class Transactions {
 	}
 
 
-	public static void TraeMovimientosDelDia() throws ParseException  {
+	public static void TraeMovimientosDelDia()  {
 
 		System.out.println("\n--- TraeMovimientosDelDia ---".toUpperCase());
 
@@ -863,7 +863,13 @@ public class Transactions {
 		
 		String myDate = "2020/10/14 00:01:00"; //"2020/10/14 00:01:00";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = sdf.parse(myDate);
+		Date date = null;
+		try {
+			date = sdf.parse(myDate);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		long millis = date.getTime();
 		
 		dddVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();

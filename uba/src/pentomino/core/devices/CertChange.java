@@ -14,8 +14,6 @@ public class CertChange {
 	
 	private static String certDir = "/etc/openvpn";
 	private static String fallback = "/home/pi/Desktop/Pentomino/CertFallback";
-	private static String certQA = "/home/pi/Desktop/Pentomino/CertQA";
-
 	
 	public static void paseProduccion() throws IOException {
 				

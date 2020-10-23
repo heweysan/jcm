@@ -96,8 +96,7 @@ public class Config {
 		finally{
 			lock.unlock();
 		}
-
-		System.out.println("retVal [" + retVal + "] ");
+		
 		return retVal;
 	}
 

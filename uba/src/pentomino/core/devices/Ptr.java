@@ -36,7 +36,7 @@ import pentomino.core.devices.ptrForms.RetiroForm;
 import pentomino.core.devices.ptrForms.RetiroFormTest;
 import pentomino.jcmagent.RaspiAgent;
 
-public class Ptr {
+public class Ptr{
 
 	private static boolean printing = false;
 
@@ -68,7 +68,7 @@ public class Ptr {
 	
 
 	public static void main(String[] args) {
-		
+
 	}
 
 	public static boolean ptrContadores() {
@@ -463,24 +463,29 @@ public class Ptr {
 			return false;
 		}
 		
+		//Calsulamos el tamaño que necesitamos del papel a partir de los depositos
+		int extra =  (int) Math.ceil(movimientosDelDiaVO.totalDeposits / 5.0);
+		
+		extra = extra + (int) Math.ceil(movimientosDelDiaVO.totalWithdrawals / 5.0);
 		
 		PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
-		attr.add(new MediaPrintableArea(0, 0, 4, 4, MediaPrintableArea.INCH));
+		attr.add(new MediaPrintableArea(0, 0, 4, 4 + extra, MediaPrintableArea.INCH));
 
 		// The area of the printable area
 		PrinterJob pjob = PrinterJob.getPrinterJob();
 		PageFormat pf = pjob.defaultPage();
 		Paper paper = pf.getPaper();
-		System.out.println("paper width " + paper.getWidth());
-		System.out.println("paper height " + paper.getHeight());
+		System.out.println("paper width [" + paper.getWidth() + "] height [" + paper.getHeight() + "]");
+
+		
 
 		double width = 4d * 72d;
-		double height = 4d * 72d;
+		double height = (4d + extra) * 72d;
 		double margin = 1d * 72d;
 
 		paper.setSize(width, height);
 		paper.setImageableArea(0, 0, width - (margin * 2), height - (margin * 2));
-
+		
 		pf.setPaper(paper);
 
 		pjob.setPrintable(new MovimientosDelDiaForm(movimientosDelDiaVO), pf);
