@@ -3721,3 +3721,93 @@
 2020-10-21 19:53:03,400|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
 2020-10-21 20:29:06,545|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
 2020-10-21 20:30:51,124|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:16:06,203|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:26:56,401|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:33:27,297|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-22 15:33:28,090|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-22 15:33:28,125|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-22 15:33:28,126|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-22 15:33:28,126|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-22 15:33:28,132|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-22 15:33:28,136|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-22 15:33:28,136|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-22 15:33:28,431|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-22 15:33:28,431|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-22 15:35:06,912|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:35:57,544|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:36:28,690|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-22 15:36:29,033|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-22 15:36:29,052|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-22 15:36:29,052|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-22 15:36:29,052|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-22 15:36:29,054|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-22 15:36:29,057|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-22 15:36:29,057|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-22 15:36:29,348|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-22 15:36:29,349|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-22 15:37:06,531|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:37:57,436|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:41:50,931|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:43:32,729|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:43:34,404|INFO |p.c.Transactions|[main]|returning ${JsonOutput.toJson(returnVO)}
+2020-10-22 15:43:34,544|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-22 15:43:34,884|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-22 15:43:34,895|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-22 15:43:34,895|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-22 15:43:34,895|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-22 15:43:34,897|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-22 15:43:34,900|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-22 15:43:34,900|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-22 15:43:35,217|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-22 15:43:35,217|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-22 15:44:04,112|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:51:41,810|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:51:43,471|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-22 15:51:43,809|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-22 15:51:43,827|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-22 15:51:43,827|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-22 15:51:43,827|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-22 15:51:43,829|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-22 15:51:43,831|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-22 15:51:43,831|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-22 15:51:44,122|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-22 15:51:44,122|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-22 15:53:27,879|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:54:48,896|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 15:59:46,705|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:00:01,154|INFO |p.c.Transactions|[main]|returning ${JsonOutput.toJson(returnVO)}
+2020-10-22 16:00:01,316|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-22 16:00:01,641|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-22 16:00:01,653|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-22 16:00:01,653|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-22 16:00:01,654|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-22 16:00:01,656|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-22 16:00:01,658|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-22 16:00:01,658|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-22 16:00:01,965|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-22 16:00:01,965|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-22 16:01:01,670|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:05:31,900|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:06:38,284|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:07:32,553|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:07:54,924|INFO |p.f.Flow|[main]|INITIALIZE...
+2020-10-22 16:07:55,248|INFO |p.f.Flow|[AWT-EventQueue-0]|Inicializando JCMS
+2020-10-22 16:07:55,268|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [1]
+2020-10-22 16:07:55,269|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart constructor [2]
+2020-10-22 16:07:55,269|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM3]
+2020-10-22 16:07:55,270|DEBUG|p.f.uart|[AWT-EventQueue-0]|uart->openPort [COM4]
+2020-10-22 16:07:55,272|INFO |p.c.CmQueue|[cmQueueThread]|CmQueue [running]
+2020-10-22 16:07:55,272|INFO |p.j.AgentsQueue|[agentsQueueThread]|AgentsQueue [running]
+2020-10-22 16:07:55,566|DEBUG|p.f.Flow|[AWT-EventQueue-0]|loadGuiElements
+2020-10-22 16:07:55,566|INFO |p.c.d.Tio|[Tio Thread]|[TIO] running
+2020-10-22 16:13:30,913|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:14:01,327|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:16:33,514|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:19:43,288|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:22:18,814|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:22:20,397|ERROR|p.c.Transactions|[main]|No se pudieron obtener los datos de los movimientos [Error al obtener consecutivo en CM-Auth]
+2020-10-22 16:23:27,085|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:24:03,385|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:54:03,052|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 16:59:35,202|INFO |p.f.Flow|[main]|----- FLOW MAIN -----
+2020-10-22 17:09:22,103|INFO |p.f.Flow|[main]|----- FLOW MAIN -----

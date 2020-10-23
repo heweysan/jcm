@@ -24,12 +24,14 @@ import org.apache.logging.log4j.Logger;
 import org.cups4j.CupsClient;
 
 import pentomino.cashmanagement.vo.DepositOpVO;
+import pentomino.cashmanagement.vo.MovimientosDelDiaVO;
 import pentomino.common.DeviceEvent;
 import pentomino.common.JcmGlobalData;
 import pentomino.core.devices.ptrForms.ContadoresForm;
 import pentomino.core.devices.ptrForms.ContadoresFormTest;
 import pentomino.core.devices.ptrForms.DepositoForm;
 import pentomino.core.devices.ptrForms.DepositoFormTest;
+import pentomino.core.devices.ptrForms.MovimientosDelDiaForm;
 import pentomino.core.devices.ptrForms.RetiroForm;
 import pentomino.core.devices.ptrForms.RetiroFormTest;
 import pentomino.jcmagent.RaspiAgent;
@@ -66,8 +68,6 @@ public class Ptr {
 	
 
 	public static void main(String[] args) {
-
-		
 		
 	}
 
@@ -455,6 +455,71 @@ public class Ptr {
 		return true;
 	}
 			
+	public static boolean ptrMovimientosDelDia(MovimientosDelDiaVO movimientosDelDiaVO) {
+		
+		
+		if (!JcmGlobalData.printerReady) {
+			System.out.println("La impresora no esta bien, ni intentamos imprimir.");
+			return false;
+		}
+		
+		
+		PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
+		attr.add(new MediaPrintableArea(0, 0, 4, 4, MediaPrintableArea.INCH));
+
+		// The area of the printable area
+		PrinterJob pjob = PrinterJob.getPrinterJob();
+		PageFormat pf = pjob.defaultPage();
+		Paper paper = pf.getPaper();
+		System.out.println("paper width " + paper.getWidth());
+		System.out.println("paper height " + paper.getHeight());
+
+		double width = 4d * 72d;
+		double height = 4d * 72d;
+		double margin = 1d * 72d;
+
+		paper.setSize(width, height);
+		paper.setImageableArea(0, 0, width - (margin * 2), height - (margin * 2));
+
+		pf.setPaper(paper);
+
+		pjob.setPrintable(new MovimientosDelDiaForm(movimientosDelDiaVO), pf);
+
+		PrintingStatus();
+		
+		try {
+			pjob.print(attr);			
+			
+			// Ahora revisamos si la impresora mando el evento de que si pudo imprimir (por
+			// el movimiento del motoro de impresion)
+			while (printing) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (usbPrintingStatus) {
+				System.out.println("USB print Status OK");
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintOk, "");
+			} else {
+				System.out.println("USB print Status FAIL");				
+				RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+				return false;
+			}
+			
+			
+		} catch (PrinterException e) {
+			System.out.println("PTR EXCEPTION [" + e.getMessage() + "]");
+			RaspiAgent.Broadcast(DeviceEvent.PTR_PrintFailed, "Could not print");
+			return false;
+		}
+		return true;
+	}
+	
+	
 	public static void initializeCupsClient() {
 
 		if (JcmGlobalData.isDebug)

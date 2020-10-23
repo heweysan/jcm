@@ -1,8 +1,10 @@
 package pentomino.cashmanagement;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,13 +24,13 @@ import pentomino.cashmanagement.vo.CashInOpVO;
 import pentomino.cashmanagement.vo.CmReverse;
 import pentomino.cashmanagement.vo.CmWithdrawal;
 import pentomino.cashmanagement.vo.DepositOpVO;
-import pentomino.cashmanagement.vo.DepositoDelDia;
-import pentomino.cashmanagement.vo.DepositosDelDiaRequest;
-import pentomino.cashmanagement.vo.DepositosDelDiaVO;
+import pentomino.cashmanagement.vo.MovimientosDelDiaRequest;
+import pentomino.cashmanagement.vo.MovimientosDelDiaVO;
 import pentomino.cashmanagement.vo.ExceptionVO;
 import pentomino.cashmanagement.vo.GenericMessageVO;
 import pentomino.cashmanagement.vo.ResponseObjectVO;
 import pentomino.config.Config;
+import pentomino.core.devices.Ptr;
 import pentomino.flow.CurrentUser;
 import rabbitClient.RabbitMQConnection;
 
@@ -847,24 +849,42 @@ public class Transactions {
 	}
 
 
-	public static void TraeDepositosDelDia()  {
+	public static void TraeMovimientosDelDia() throws ParseException  {
 
-		System.out.println("\n--- TraeDepositosDelDia ---".toUpperCase());
+		System.out.println("\n--- TraeMovimientosDelDia ---".toUpperCase());
 
 		String corrId = UUID.randomUUID().toString();
 
-		DepositosDelDiaRequest dddVO = new DepositosDelDiaRequest();
+		MovimientosDelDiaRequest dddVO = new MovimientosDelDiaRequest();
 		
 		dddVO.atmId = Config.GetDirective("AtmId", "");
-		dddVO.operatorId =   7007;//Integer.parseInt(CurrentUser.loginUser);
-		dddVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+		dddVO.operatorId =  7007;//Integer.parseInt(CurrentUser.loginUser);
 		
+		
+		String myDate = "2020/10/14 00:01:00"; //"2020/10/14 00:01:00";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = sdf.parse(myDate);
+		long millis = date.getTime();
+		
+		dddVO.operationDateTimeMilliseconds = java.lang.System.currentTimeMillis();
+		dddVO.operationDateTimeMilliseconds = millis;
+		
+		/* 
+		 	CON ERROR		 
+			{"success":false,"message":"Error al obtener consecutivo en CM-Auth","exception":{"message":"Error al obtener consecutivo en CM-Auth","className":"ReportssHandler"}}
+			
+			SIN DATOS
+			{"message":"Éxito","success":true,"atm":"WM01AT0001","date":1603342860000,"depositId":"06818909","withdrawalId":"06818909","requestingUser":7007,"totalDeposits":0,"depositsAmount":0,"totalWithdrawals":0,"withdrawalsAmount":0,"totalCollections":0,"collectionsAmount":0,"depositsDetail":[],"withdrawalsDetail":[]}
+			
+			CON DATOS
+			{"message":"Éxito","success":true,"atm":"WM01AT0001","date":1602651660000,"depositId":"06828909","withdrawalId":"06828909","requestingUser":7007,"totalDeposits":21,"depositsAmount":4830.0,"totalWithdrawals":0,"withdrawalsAmount":0,"totalCollections":0,"collectionsAmount":0,"depositsDetail":[{"amount":510.0,"cashier":"007007","datetime":1602721289767},{"amount":50.0,"cashier":"007007","datetime":1602720842102},{"amount":50.0,"cashier":"007007","datetime":1602720476405},{"amount":50.0,"cashier":"007007","datetime":1602719144395},{"amount":20.0,"cashier":"007007","datetime":1602717685941},{"amount":20.0,"cashier":"007007","datetime":1602717043609},{"amount":370.0,"cashier":"007007","datetime":1602716507011},{"amount":370.0,"cashier":"007007","datetime":1602713187438},{"amount":440.0,"cashier":"007007","datetime":1602711919590},{"amount":300.0,"cashier":"007007","datetime":1602710512597},{"amount":50.0,"cashier":"007007","datetime":1602709756080},{"amount":50.0,"cashier":"007007","datetime":1602708981049},{"amount":70.0,"cashier":"007007","datetime":1602706198901},{"amount":750.0,"cashier":"007007","datetime":1602705864402},{"amount":20.0,"cashier":"007007","datetime":1602705687786},{"amount":720.0,"cashier":"007007","datetime":1602705071465},{"amount":500.0,"cashier":"007007","datetime":1602702876140},{"amount":20.0,"cashier":"003805","datetime":1602701591758},{"amount":150.0,"cashier":"007007","datetime":1602701333900},{"amount":200.0,"cashier":"007007","datetime":1602700839995},{"amount":120.0,"cashier":"007007","datetime":1602699429813}],"withdrawalsDetail":[]}
+		*/
 		GenericMessageVO requestMessage = new GenericMessageVO();
 		requestMessage.data = dddVO;
 		
 		Map<String,Object> map = null;
 		
-		DepositosDelDiaVO returnVO = new DepositosDelDiaVO();    		        		
+		MovimientosDelDiaVO returnVO = new MovimientosDelDiaVO();    		        		
 
 		try{
 
@@ -890,10 +910,7 @@ public class Transactions {
 						.build();
 				
 				channel.basicPublish("ex.cm.topic", "cm.reports.*",true, props, gson.toJson(requestMessage).getBytes());
-				System.out.println("Sent [" + gson.toJson(requestMessage) + "]");
-
-
-				
+				System.out.println("---> [" + gson.toJson(requestMessage) + "]");				
 				
 				
 				//Esperamos la respuesta
@@ -907,56 +924,29 @@ public class Transactions {
 				}, consumerTag -> {
 				});              	                      
 
-				System.out.println("[2]");
-				
-				
-				String result = response.take();     
-				
-				System.out.println("[3]");
-
-				System.out.println("result [" + result + "]");
-
-				if(!result.isEmpty()) {
-					if(result != ""){
-						Map<?, ?> responseMap = gson.fromJson(result, Map.class);
-						System.out.println("isValid " + (String) responseMap.get("isValid"));
 						
-						if(responseMap.containsKey("exception")){
-							
-							returnVO.message = (String) responseMap.get("exception");
-													
-							
-						}else{
-							returnVO.success = true;
-							returnVO.atm =(String) responseMap.get("atm"); 
-							returnVO.date = (long) Float.parseFloat(responseMap.get("date").toString());		
-							returnVO.depositId =(String) responseMap.get("depositId");
-							returnVO.withdrawalId =(String) responseMap.get("withdrawalId");							
-							returnVO.requestingUser =(String) responseMap.get("requestingUser");
-							
-							returnVO.totalDeposits = (int) Float.parseFloat(responseMap.get("totalDeposits").toString());
-							returnVO.depositsAmount = (long) Float.parseFloat(responseMap.get("depositsAmount").toString());
-							returnVO.totalWithdrawals = (int) Float.parseFloat(responseMap.get("totalWithdrawals").toString());
-							returnVO.withdrawalsAmount = (long) Float.parseFloat(responseMap.get("withdrawalsAmount").toString());
-							returnVO.totalCollections = (long) Float.parseFloat(responseMap.get("datotalCollectionste").toString());
-							returnVO.collectionsAmount = (long) Float.parseFloat(responseMap.get("collectionsAmount").toString());
-							
-							DepositoDelDia[] mcArray =  gson.fromJson((String) responseMap.get("depositsDetail"), DepositoDelDia[].class);
-														
-							returnVO.depositsDetail = Arrays.asList(mcArray);
-							
+				
+				String result = response.take();     				
+			
+				System.out.println("<--- [" + result + "]");
 
-						}
-
-					}else{
-						//No se pudo traer la info imprimos ticket de error
+				if(!result.isEmpty() || result != "") {
+					returnVO = gson.fromJson(result, MovimientosDelDiaVO.class);	
+					System.out.println("succes [" + returnVO.success + "]");
+						
+					if(!returnVO.success){							
+						//TODO: Mandar el broadcasta a journal
+						logger.error("No se pudieron obtener los datos de los movimientos [" + returnVO.message + "]");
 					}
+					//Mandamo imprimir el tique
+					Ptr.ptrMovimientosDelDia(returnVO);
 
 				}else {
 					//No se pudo traer la info imprimos ticket de error
+					//TODO: Mandar el broadcasta a journal
+					logger.error("No se pudieron obtener los datos de los movimientos respuesta vacia");
 				}
-				logger.info("returning ${JsonOutput.toJson(returnVO)}");
-
+				
 				System.out.println("returnVO [" + gson.toJson(returnVO) + "]");
 
 				channel.basicCancel(ctag);
@@ -964,7 +954,7 @@ public class Transactions {
 
 			}
 		}catch(Exception e){
-			System.out.println("ValidaUsuario [EXCEPTION]");
+			System.out.println("TraeMovimientosDelDia [EXCEPTION]");
 			e.printStackTrace();
 		}
 

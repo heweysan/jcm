@@ -1,6 +1,6 @@
 package pentomino.cashmanagement.vo;
 
-public class DepositosDelDiaRequest {
+public class MovimientosDelDiaRequest {
 
     public String atmId;
     public int operatorId;

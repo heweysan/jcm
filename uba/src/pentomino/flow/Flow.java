@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -169,7 +170,12 @@ public class Flow {
 		JcmGlobalData.isDebug = System.getProperty("os.name").toLowerCase().contains("windows");
 
 		
-		Transactions.TraeDepositosDelDia();
+		try {
+			Transactions.TraeMovimientosDelDia();
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		
 		initialize();
